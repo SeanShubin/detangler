@@ -2,8 +2,8 @@ package com.seanshubin.detangler.console
 
 import java.nio.charset.{Charset, StandardCharsets}
 
-import com.seanshubin.devon.core.devon.{DefaultDevonMarshaller, DevonMarshaller}
 import com.seanshubin.detangler.core._
+import com.seanshubin.devon.core.devon.{DefaultDevonMarshaller, DevonMarshaller}
 import com.seanshubin.utility.filesystem.{FileSystemIntegration, FileSystemIntegrationImpl}
 
 trait LauncherWiring {
