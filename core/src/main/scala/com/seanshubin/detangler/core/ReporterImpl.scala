@@ -20,19 +20,19 @@ class ReporterImpl(reportDir: Path,
   private class Delegate(detangled: Detangled) {
     def generateReports(): Unit = {
       fileSystem.createDirectories(reportDir)
-      val rootNodes = detangled.topLevelUnits()
-      generateNodesReport(reportDir, rootNodes)
+      val rootUnits = detangled.topLevelUnits()
+      generateUnitsReport(reportDir, rootUnits)
     }
 
-    def generateNodesReport(path: Path, unitIds: Set[UnitId]): Unit = {
-      val nodesReportPath = path.resolve("nodes.txt")
+    def generateUnitsReport(path: Path, unitIds: Set[UnitId]): Unit = {
+      val unitsReportPath = path.resolve("units.txt")
       val arrows = detangled.arrowsFor(unitIds)
       generateArrowsReport(path, arrows)
       val unitInfos = unitIds.toSeq.sorted.map(detangled.map)
       val lines = unitInfos.flatMap(unitInfoToLines)
       val javaLines = JavaConversions.asJavaIterable(lines)
-      fileSystem.write(nodesReportPath, javaLines, charset)
-      unitIds.foreach(generateNodeReport(path, _))
+      fileSystem.write(unitsReportPath, javaLines, charset)
+      unitIds.foreach(generateUnitReport(path, _))
     }
 
     def unitInfoToLines(unitInfo: UnitInfo): Seq[String] = {
@@ -50,14 +50,13 @@ class ReporterImpl(reportDir: Path,
       devonMarshaller.valueToPretty(arrow)
     }
 
-    def generateNodeReport(path: Path, unitId: UnitId): Unit = {
-      val nodes = detangled.map(unitId).composedOf
-      if (nodes.nonEmpty) {
+    def generateUnitReport(path: Path, unitId: UnitId): Unit = {
+      val units = detangled.map(unitId).composedOf
+      if (units.nonEmpty) {
         val dir = path.resolve(unitId.paths.head.toSeq.sorted.mkString("-"))
         fileSystem.createDirectories(dir)
-        generateNodesReport(dir, nodes)
+        generateUnitsReport(dir, units)
       }
     }
   }
-
 }
