@@ -21,10 +21,10 @@ class ReporterImpl(reportDir: Path,
     def generateReports(): Unit = {
       fileSystem.createDirectories(reportDir)
       val rootUnits = detangled.topLevelUnits()
-      generateUnitsReport(reportDir, rootUnits)
+      generateReport(reportDir, rootUnits)
     }
 
-    def generateUnitsReport(path: Path, unitIds: Set[UnitId]): Unit = {
+    def generateReport(path: Path, unitIds: Set[UnitId]): Unit = {
       val unitsReportPath = path.resolve("units.txt")
       val arrows = detangled.arrowsFor(unitIds)
       generateArrowsReport(path, arrows)
@@ -32,7 +32,7 @@ class ReporterImpl(reportDir: Path,
       val lines = unitInfos.flatMap(unitInfoToLines)
       val javaLines = JavaConversions.asJavaIterable(lines)
       fileSystem.write(unitsReportPath, javaLines, charset)
-      unitIds.foreach(generateUnitReport(path, _))
+      unitIds.foreach(generateDependencyReport(path, _))
     }
 
     def unitInfoToLines(unitInfo: UnitInfo): Seq[String] = {
@@ -50,12 +50,12 @@ class ReporterImpl(reportDir: Path,
       devonMarshaller.valueToPretty(arrow)
     }
 
-    def generateUnitReport(path: Path, unitId: UnitId): Unit = {
+    def generateDependencyReport(path: Path, unitId: UnitId): Unit = {
       val units = detangled.map(unitId).composedOf
       if (units.nonEmpty) {
         val dir = path.resolve(unitId.paths.head.toSeq.sorted.mkString("-"))
         fileSystem.createDirectories(dir)
-        generateUnitsReport(dir, units)
+        generateReport(dir, units)
       }
     }
   }
