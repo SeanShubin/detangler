@@ -19,6 +19,6 @@ class UnitIdTest extends FunSuite {
 
   test("id string") {
     val unitId = UnitId.complex(Set("a", "b"), Set("c"), Set("d", "e", "f"))
-    assert(unitId.idAsString === "a-b--c--d-e-f")
+    assert(unitId.qualifiedName === "a-b--c--d-e-f")
   }
 }

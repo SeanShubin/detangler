@@ -5,9 +5,13 @@ case class UnitId(paths: Seq[Set[String]]) extends Ordered[UnitId] {
     compareSeqSetString(this.paths, that.paths)
   }
 
-  def idAsString: String = {
+  def qualifiedName: String = {
     def partAsString(part: Set[String]) = part.toSeq.sorted.mkString("-")
     paths.map(partAsString).mkString("--")
+  }
+
+  def name: String = {
+    paths.last.mkString("-")
   }
 
   private def compareSeqSetString(left: Seq[Set[String]], right: Seq[Set[String]]): Int = {

@@ -1,5 +1,6 @@
 package com.seanshubin.detangler.core
 
+import java.io.BufferedWriter
 import java.nio.charset.Charset
 import java.nio.file.Path
 
@@ -33,6 +34,20 @@ class ReporterImpl(reportDir: Path,
       val javaLines = JavaConversions.asJavaIterable(lines)
       fileSystem.write(unitsReportPath, javaLines, charset)
       unitIds.foreach(generateDependencyReport(path, _))
+      val htmlReportPath = path.resolve("index.html")
+      withOutputStream(htmlReportPath) {
+        out =>
+          new HtmlGenerator(out, detangled).generateIndex(unitInfos, arrows)
+      }
+    }
+
+    private def withOutputStream(path: Path)(f: BufferedWriter => Unit) = {
+      val out = fileSystem.newBufferedWriter(path, charset)
+      try {
+        f(out)
+      } finally {
+        out.close()
+      }
     }
 
     def unitInfoToLines(unitInfo: UnitInfo): Seq[String] = {
@@ -59,4 +74,5 @@ class ReporterImpl(reportDir: Path,
       }
     }
   }
+
 }
