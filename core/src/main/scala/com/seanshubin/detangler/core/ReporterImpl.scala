@@ -1,6 +1,6 @@
 package com.seanshubin.detangler.core
 
-import java.io.BufferedWriter
+import java.io.{PrintWriter, BufferedWriter}
 import java.nio.charset.Charset
 import java.nio.file.Path
 
@@ -37,7 +37,7 @@ class ReporterImpl(reportDir: Path,
       val htmlReportPath = path.resolve("index.html")
       withOutputStream(htmlReportPath) {
         out =>
-          new HtmlGenerator(out, detangled).generateIndex(unitInfos, arrows)
+          new HtmlGenerator(new PrintWriter(out), detangled).generateIndex(unitInfos, arrows)
       }
     }
 
