@@ -53,11 +53,13 @@ class HtmlGenerator(out:Writer, detangled:Detangled) {
       |        <th>name</th>
       |        <th>depth</th>
       |        <th>complexity</th>
+      |        <th>composed of</th>
       |    </tr>
       |    <tr>
       |        <td>${info.id.name}</td>
       |        <td>${info.depth}</td>
       |        <td>${info.complexity}</td>
+      |        <td><a href="${info.id.fileSystemName}">parts</a></td>
       |    </tr>
       |    </thead>
       |    <tbody>
@@ -66,24 +68,24 @@ class HtmlGenerator(out:Writer, detangled:Detangled) {
       |<ul>""".stripMargin
     val footer = "</ul>"
     out.write(header)
-    indexInfoDependsOn(info.dependsOn)
-//    indexInfoDependedOnBy(info.dependedOnBy)
-//    indexInfoComposedOf(info.composedOf)
+    indexInfoDependency("depends on", info.dependsOn)
+    indexInfoDependency("depended on by", info.dependedOnBy)
     out.write(footer)
   }
 
-  def indexInfoDependsOn(dependsOn: Set[UnitId]): Unit = {
+  def indexInfoDependency(caption:String, dependencies: Set[UnitId]): Unit = {
      val header =
        s"""    <li>
-         |        <table class="report-entry-depends-on">
+         |        <table>
          |            <thead>
          |            <tr>
-         |                <th colspan="4">depends on (${dependsOn.size})</th>
+         |                <th colspan="4">${caption} (${dependencies.size})</th>
          |            </tr>
          |            <tr>
          |                <th>name</th>
          |                <th>depth</th>
          |                <th>complexity</th>
+         |                <th>composed of</th>
          |            </tr>
          |            </thead>
          |            <tbody>""".stripMargin
@@ -92,17 +94,18 @@ class HtmlGenerator(out:Writer, detangled:Detangled) {
          |        </table>
          |    </li>""".stripMargin
     out.write(header)
-    dependsOn.foreach(indexInfoDependsOnEntry)
+    dependencies.foreach(indexInfoDependencyEntry)
     out.write(footer)
   }
 
-  def indexInfoDependsOnEntry(unitId:UnitId):Unit = {
+  def indexInfoDependencyEntry(unitId:UnitId):Unit = {
     val unitInfo = detangled.map(unitId)
     val body =
     s"""<tr>
       |  <td>${unitId.name}</td>
       |  <td>${unitInfo.depth}</td>
       |  <td>${unitInfo.complexity}</td>
+      |  <td><a href="${unitId.fileSystemName}">parts</a></td>
       |</tr>
     """.stripMargin
     out.write(body)

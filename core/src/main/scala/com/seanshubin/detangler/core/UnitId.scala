@@ -14,6 +14,11 @@ case class UnitId(paths: Seq[Set[String]]) extends Ordered[UnitId] {
     paths.last.mkString("-")
   }
 
+  def fileSystemName: String = {
+    val safePaths = paths.map(_.map(_.map(UnitId.makeFileSystemSafe)))
+    safePaths.last.mkString("-")
+  }
+
   private def compareSeqSetString(left: Seq[Set[String]], right: Seq[Set[String]]): Int = {
     if (left.size != right.size) throw new RuntimeException(s"left has size ${left.size}, right has size ${right.size}")
     if (left.isEmpty && right.isEmpty) {
@@ -51,4 +56,11 @@ object UnitId {
   def simple(ids: String*) = UnitId(ids.map(Set(_)))
 
   def complex(parts: Set[String]*) = UnitId(parts)
+
+  val FileSystemCharacters = "/\\?%*:|\"<>. "
+
+  def makeFileSystemSafe(c:Char): Char = {
+    if(FileSystemCharacters.contains(c)) '_'
+    else c
+  }
 }

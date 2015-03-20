@@ -68,7 +68,7 @@ class ReporterImpl(reportDir: Path,
     def generateDependencyReport(path: Path, unitId: UnitId): Unit = {
       val units = detangled.map(unitId).composedOf
       if (units.nonEmpty) {
-        val dir = path.resolve(unitId.paths.head.toSeq.sorted.mkString("-"))
+        val dir = path.resolve(unitId.fileSystemName)
         fileSystem.createDirectories(dir)
         generateReport(dir, units)
       }

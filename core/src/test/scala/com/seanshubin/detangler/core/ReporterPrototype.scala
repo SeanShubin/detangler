@@ -7,15 +7,15 @@ import com.seanshubin.devon.core.devon.DefaultDevonMarshaller
 import com.seanshubin.utility.filesystem.FileSystemIntegrationImpl
 
 object ReporterPrototype extends App {
-  private val idGroupA = UnitId.simple("group-a")
-  private val idGroupB = UnitId.simple("group-b")
-  private val idPackageA = UnitId.simple("group-a", "package-a")
-  private val idPackageB = UnitId.simple("group-a", "package-b")
-  private val idPackageC = UnitId.simple("group-b", "package-c")
-  private val idClassA = UnitId.simple("group-a", "package-a", "class-a")
-  private val idClassB = UnitId.simple("group-a", "package-a", "class-b")
-  private val idClassC = UnitId.simple("group-a", "package-b", "class-c")
-  private val idClassD = UnitId.simple("group-b", "package-c", "class-d")
+  private val idGroupA = UnitId.simple("group/a")
+  private val idGroupB = UnitId.simple("group/b")
+  private val idPackageA = UnitId.simple("group/a", "package/a")
+  private val idPackageB = UnitId.simple("group/a", "package/b")
+  private val idPackageC = UnitId.simple("group/b", "package/c")
+  private val idClassA = UnitId.simple("group/a", "package/a", "class/a")
+  private val idClassB = UnitId.simple("group/a", "package/a", "class/b")
+  private val idClassC = UnitId.simple("group/a", "package/b", "class/c")
+  private val idClassD = UnitId.simple("group/b", "package/c", "class/d")
   private val detangled = Detangled(Map(
     idGroupA -> UnitInfo(
       idGroupA,
