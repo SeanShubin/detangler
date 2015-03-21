@@ -1,6 +1,6 @@
 package com.seanshubin.detangler.core
 
-import java.io.{PrintWriter, BufferedWriter}
+import java.io.{BufferedWriter, PrintWriter}
 import java.nio.charset.Charset
 import java.nio.file.Path
 

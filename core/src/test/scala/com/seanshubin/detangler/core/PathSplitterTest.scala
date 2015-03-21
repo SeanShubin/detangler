@@ -8,7 +8,7 @@ class PathSplitterTest extends FunSuite {
     val s2 = "com/seanshubin/utility/filesystem/FileSystemIntegration$bar"
     val pattern = """com/seanshubin/([^/]+)/(.*)/([^$]+).*"""
     val pathSplitter = new PathSplitter(pattern)
-    assert(pathSplitter.split(s1) === Seq("devon","core/devon","DevonMarshaller"))
-    assert(pathSplitter.split(s2) === Seq("utility","filesystem","FileSystemIntegration"))
+    assert(pathSplitter.split(s1) === Seq("devon", "core/devon", "DevonMarshaller"))
+    assert(pathSplitter.split(s2) === Seq("utility", "filesystem", "FileSystemIntegration"))
   }
 }

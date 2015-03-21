@@ -1,12 +1,12 @@
 package com.seanshubin.detangler.core
 
-import java.io.{PrintWriter, Writer}
+import java.io.PrintWriter
 
 class HtmlGenerator(out: PrintWriter, detangled: Detangled) {
   def generateIndex(infos: Seq[UnitInfo], arrows: Seq[Arrow]): Unit = {
     indexHeader()
     infos.foreach(indexInfo)
-    //    arrows.foreach(indexArrow(out, _))
+    arrows.foreach(emitArrow)
     indexFooter()
   }
 
@@ -20,8 +20,12 @@ class HtmlGenerator(out: PrintWriter, detangled: Detangled) {
 
   private def indexInfo(info: UnitInfo): Unit = {
     emitTableHeader(info.id.qualifiedName, Seq(
-      Seq("name", "depth", "complexity", "composed of"),
-      Seq(info.id.name, info.depth.toString, info.complexity.toString, info.id.fileSystemName)))
+      Seq("name", "depth", "complexity", "composed of")))
+    emitDataRow(Seq(
+      info.id.name,
+      info.depth.toString,
+      info.complexity.toString,
+      partsLink(info.id)))
     emitTableFooter()
     out.println("<ul>")
     indexInfoDependency("depends on", info.dependsOn)
@@ -29,23 +33,24 @@ class HtmlGenerator(out: PrintWriter, detangled: Detangled) {
     out.println("</ul>")
   }
 
-  def indexInfoDependency(caption: String, dependencies: Set[UnitId]): Unit = {
+  private def indexInfoDependency(caption: String, dependencies: Set[UnitId]): Unit = {
+    if (dependencies.size == 0) return
     val part1 =
       s"""    <li>
-         |       <table>
-         |           <thead>
-         |           <tr>
-         |               <th colspan="4">""".stripMargin
+         |     <table>
+         |         <thead>
+         |         <tr>
+         |             <th colspan="4">""".stripMargin
     val part2 =
       s"""           </tr>
-         |           <tr>
-         |               <th>name</th>
-         |               <th>depth</th>
-         |               <th>complexity</th>
-         |               <th>composed of</th>
-         |           </tr>
-         |           </thead>
-         |           <tbody>""".stripMargin
+         |         <tr>
+         |             <th>name</th>
+         |             <th>depth</th>
+         |             <th>complexity</th>
+         |             <th>composed of</th>
+         |         </tr>
+         |         </thead>
+         |         <tbody>""".stripMargin
     val part3 =
       """|            </tbody>
         |        </table>
@@ -60,10 +65,18 @@ class HtmlGenerator(out: PrintWriter, detangled: Detangled) {
   def indexInfoDependencyEntry(unitId: UnitId): Unit = {
     val unitInfo = detangled.map(unitId)
     emitDataRow(Seq(
-      unitId.name,
+      nameLink(unitId),
       unitInfo.depth.toString,
       unitInfo.complexity.toString,
-      unitId.fileSystemName))
+      partsLink(unitId)))
+  }
+
+  private def partsLink(unitId: UnitId): String = {
+    s"""<a href="${unitId.fileSystemName}">parts</a>"""
+  }
+
+  private def nameLink(unitId: UnitId): String = {
+    s"""<a href="#${unitId.name}">${unitId.name}</a>"""
   }
 
   private def emitHtmlHeader(title: String): Unit = {
@@ -105,6 +118,22 @@ class HtmlGenerator(out: PrintWriter, detangled: Detangled) {
     out.println(part1)
   }
 
+  private def emitArrow(arrow: Arrow): Unit = {
+    val id = arrow.from.name + "_" + arrow.to.name
+    emitTableHeader(id, Seq(Seq("from", "to")))
+    emitDataRow(Seq(arrowLink(arrow.from), arrowLink(arrow.to)))
+    emitTableFooter()
+    out.println("<ul>")
+    arrow.reasons.foreach(emitArrowListItem)
+    out.println("</ul>")
+  }
+
+  private def emitArrowListItem(arrow: Arrow): Unit = {
+    out.println("<li>")
+    emitArrow(arrow)
+    out.println("</li>")
+  }
+
   private def emitTableHeader(id: String, headerRows: Seq[Seq[String]]): Unit = {
     val part1 = """<table id="""".stripMargin
     val part2 =
@@ -118,6 +147,10 @@ class HtmlGenerator(out: PrintWriter, detangled: Detangled) {
     out.println(part2)
     emitHeaderRows(headerRows)
     out.println(part3)
+  }
+
+  private def arrowLink(id: UnitId): String = {
+    s"""<a href="${id.anchor}">${id.name}</a>"""
   }
 
   private def emitHtmlFooter(): Unit = {

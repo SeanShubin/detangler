@@ -19,6 +19,15 @@ case class UnitId(paths: Seq[Set[String]]) extends Ordered[UnitId] {
     safePaths.last.mkString("-")
   }
 
+  def anchor: String = {
+    if (paths.size == 1) {
+      "#" + name
+    } else {
+      val safePaths = paths.map(_.map(_.map(UnitId.makeFileSystemSafe)))
+      safePaths.init.map(_.mkString("-")).mkString("/") + "#" + name
+    }
+  }
+
   private def compareSeqSetString(left: Seq[Set[String]], right: Seq[Set[String]]): Int = {
     if (left.size != right.size) throw new RuntimeException(s"left has size ${left.size}, right has size ${right.size}")
     if (left.isEmpty && right.isEmpty) {
@@ -59,8 +68,8 @@ object UnitId {
 
   val FileSystemCharacters = "/\\?%*:|\"<>. "
 
-  def makeFileSystemSafe(c:Char): Char = {
-    if(FileSystemCharacters.contains(c)) '_'
+  def makeFileSystemSafe(c: Char): Char = {
+    if (FileSystemCharacters.contains(c)) '_'
     else c
   }
 }
