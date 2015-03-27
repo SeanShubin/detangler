@@ -46,4 +46,13 @@ class ReportTransformerTest extends FunSuite {
     assert(classAtoClassD.to.link === "index.html#group/b_package/c_class/d")
     assert(classAtoClassD.reasons.size === 0)
   }
+
+  ignore("html strings") {
+    val reportTransformer: ReportTransformer = new ReportTransformerImpl()
+    val classLevelUnitId = UnitId.complex(Set("g/a"), Set("p/b", "p/c", "p/d"), Set("c/e", "c/f"))
+    assert(reportTransformer.htmlId(classLevelUnitId) === "g/a--p/b-p/c-p/d--c/e-c/f")
+    assert(reportTransformer.htmlName(classLevelUnitId) === "c/e-c/f")
+    assert(reportTransformer.htmlAnchor(classLevelUnitId) === "g_a--p_b-p_c-p_d--c_e-c_f.html#g/a--p/b-p/c-p/d--c/e-c/f")
+    val packageLevelUnitId = UnitId.complex(Set("g/a"), Set("p/b", "p/c", "p/d"))
+  }
 }
