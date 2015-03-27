@@ -8,15 +8,27 @@ class ReportTransformerImpl extends ReportTransformer {
   }
 
   override def htmlId(unitId: UnitId): String = {
-    def htmlIdForSetOfString(setOfString: Set[String]): String = {
-      setOfString.toSeq.sorted.mkString("-")
-    }
     unitId.paths.map(htmlIdForSetOfString).mkString("--")
   }
 
-  override def htmlName(unitId: UnitId): String = ???
+  override def htmlName(unitId: UnitId): String = {
+    unitId.paths.last.toSeq.sorted.mkString("-")
+  }
 
-  override def htmlAnchor(unitId: UnitId): String = ???
+  override def htmlAnchor(unitId: UnitId): String = {
+    val path = htmlFileName(unitId)
+    val fragment = htmlId(unitId)
+    s"$path#$fragment"
+  }
+
+  override def htmlFileName(unitId: UnitId): String = {
+    val htmlFileName = if (unitId.paths.size == 1) {
+      "index.html"
+    } else {
+      unitId.paths.init.map(htmlIdForSetOfString).mkString("--").map(makeFileSystemSafe) + ".html"
+    }
+    htmlFileName
+  }
 
   private def partsAnchorFor(unitId: UnitId): HtmlAnchor = {
     val name = "parts"
@@ -24,6 +36,9 @@ class ReportTransformerImpl extends ReportTransformer {
     HtmlAnchor(name, link)
   }
 
+  private def htmlIdForSetOfString(setOfString: Set[String]): String = {
+    setOfString.toSeq.sorted.mkString("-")
+  }
 
   private def toHtmlUnitLink(unitId: UnitId): HtmlUnitLink = {
     val anchor: HtmlAnchor = ???

@@ -47,12 +47,30 @@ class ReportTransformerTest extends FunSuite {
     assert(classAtoClassD.reasons.size === 0)
   }
 
-  ignore("html strings") {
+  test("class level html strings") {
     val reportTransformer: ReportTransformer = new ReportTransformerImpl()
-    val classLevelUnitId = UnitId.complex(Set("g/a"), Set("p/b", "p/c", "p/d"), Set("c/e", "c/f"))
-    assert(reportTransformer.htmlId(classLevelUnitId) === "g/a--p/b-p/c-p/d--c/e-c/f")
-    assert(reportTransformer.htmlName(classLevelUnitId) === "c/e-c/f")
-    assert(reportTransformer.htmlAnchor(classLevelUnitId) === "g_a--p_b-p_c-p_d--c_e-c_f.html#g/a--p/b-p/c-p/d--c/e-c/f")
-    val packageLevelUnitId = UnitId.complex(Set("g/a"), Set("p/b", "p/c", "p/d"))
+    val unitId = UnitId.complex(Set("g/a"), Set("p/b", "p/c", "p/d"), Set("c/e", "c/f"))
+    assert(reportTransformer.htmlId(unitId) === "g/a--p/b-p/c-p/d--c/e-c/f")
+    assert(reportTransformer.htmlName(unitId) === "c/e-c/f")
+    assert(reportTransformer.htmlAnchor(unitId) === "g_a--p_b-p_c-p_d.html#g/a--p/b-p/c-p/d--c/e-c/f")
+    assert(reportTransformer.htmlFileName(unitId) === "g_a--p_b-p_c-p_d.html")
+  }
+
+  test("package level html strings") {
+    val reportTransformer: ReportTransformer = new ReportTransformerImpl()
+    val unitId = UnitId.complex(Set("g/a"), Set("p/b", "p/c", "p/d"))
+    assert(reportTransformer.htmlId(unitId) === "g/a--p/b-p/c-p/d")
+    assert(reportTransformer.htmlName(unitId) === "p/b-p/c-p/d")
+    assert(reportTransformer.htmlAnchor(unitId) === "g_a.html#g/a--p/b-p/c-p/d")
+    assert(reportTransformer.htmlFileName(unitId) === "g_a.html")
+  }
+
+  test("top level html strings") {
+    val reportTransformer: ReportTransformer = new ReportTransformerImpl()
+    val unitId = UnitId.complex(Set("g/a"))
+    assert(reportTransformer.htmlId(unitId) === "g/a")
+    assert(reportTransformer.htmlName(unitId) === "g/a")
+    assert(reportTransformer.htmlAnchor(unitId) === "index.html#g/a")
+    assert(reportTransformer.htmlFileName(unitId) === "index.html")
   }
 }
