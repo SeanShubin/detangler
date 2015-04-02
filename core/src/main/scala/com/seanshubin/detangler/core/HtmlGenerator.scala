@@ -37,20 +37,20 @@ class HtmlGenerator(out: PrintWriter, detangled: Detangled) {
     if (dependencies.size == 0) return
     val part1 =
       s"""    <li>
-         |    <table>
-         |        <thead>
-         |        <tr>
-         |            <th colspan="4">""".stripMargin
+         |  <table>
+         |      <thead>
+         |      <tr>
+         |          <th colspan="4">""".stripMargin
     val part2 =
       s"""           </tr>
-         |        <tr>
-         |            <th>name</th>
-         |            <th>depth</th>
-         |            <th>complexity</th>
-         |            <th>composed of</th>
-         |        </tr>
-         |        </thead>
-         |        <tbody>""".stripMargin
+         |      <tr>
+         |          <th>name</th>
+         |          <th>depth</th>
+         |          <th>complexity</th>
+         |          <th>composed of</th>
+         |      </tr>
+         |      </thead>
+         |      <tbody>""".stripMargin
     val part3 =
       """|            </tbody>
         |        </table>

@@ -12,4 +12,8 @@ trait ReportTransformer {
   def htmlAnchor(unitId: UnitId): String
 
   def htmlFileName(unitId: UnitId): String
+
+  def arrowId(from: UnitId, to: UnitId): String
+
+  def arrowName(from: UnitId, to: UnitId): String
 }
