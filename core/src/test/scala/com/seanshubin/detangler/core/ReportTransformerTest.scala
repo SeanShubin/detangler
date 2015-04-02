@@ -25,7 +25,7 @@ class ReportTransformerTest extends FunSuite {
     assert(groupB.depth === "3")
     assert(groupB.complexity === "4")
     assert(groupB.reasonAnchor.name === "reason")
-    assert(groupB.reasonAnchor.link === "index.html#group/a_group/b")
+    assert(groupB.reasonAnchor.link === "index.html#group/a---group/b")
     assert(page.reasons.size === 1)
     val groupAtoGroupB = page.reasons.head
     assert(groupAtoGroupB.from.name === "group/a")
@@ -35,15 +35,15 @@ class ReportTransformerTest extends FunSuite {
     assert(groupAtoGroupB.reasons.size === 1)
     val packageAtoPackageB = groupAtoGroupB.reasons.head
     assert(packageAtoPackageB.from.name === "package/a")
-    assert(packageAtoPackageB.from.link === "index.html#group/a_package/a")
-    assert(packageAtoPackageB.to.name === "package/b")
-    assert(packageAtoPackageB.to.link === "index.html#group/b_package/c")
+    assert(packageAtoPackageB.from.link === "group_a.html#group/a--package/a")
+    assert(packageAtoPackageB.to.name === "package/c")
+    assert(packageAtoPackageB.to.link === "group_b.html#group/b--package/c")
     assert(packageAtoPackageB.reasons.size === 1)
     val classAtoClassD = packageAtoPackageB.reasons.head
     assert(classAtoClassD.from.name === "class/a")
-    assert(classAtoClassD.from.link === "index.html#group/a_package/a_class/a")
-    assert(classAtoClassD.to.name === "class/b")
-    assert(classAtoClassD.to.link === "index.html#group/b_package/c_class/d")
+    assert(classAtoClassD.from.link === "group_a--package_a.html#group/a--package/a--class/a")
+    assert(classAtoClassD.to.name === "class/d")
+    assert(classAtoClassD.to.link === "group_b--package_c.html#group/b--package/c--class/d")
     assert(classAtoClassD.reasons.size === 0)
   }
 

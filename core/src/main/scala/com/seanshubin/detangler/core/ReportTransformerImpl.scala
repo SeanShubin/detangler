@@ -44,31 +44,19 @@ class ReportTransformerImpl extends ReportTransformer {
 
   private def arrowAnchor(from: UnitId, to: UnitId): HtmlAnchor = {
     val name = arrowName(from, to)
-    val link = "#" + arrowId(from, to)
+    val link = "index.html#" + arrowId(from, to)
     val anchor = HtmlAnchor(name, link)
     anchor
   }
 
   private def partsAnchorFor(unitId: UnitId): HtmlAnchor = {
     val name = "parts"
-    val link = htmlId(unitId).map(makeFileSystemSafe)
+    val link = htmlId(unitId).map(makeFileSystemSafe) + ".html"
     HtmlAnchor(name, link)
   }
 
   private def htmlIdForSetOfString(setOfString: Set[String]): String = {
     setOfString.toSeq.sorted.mkString("-")
-  }
-
-  private def unitInfoToHtmlUnitLink(unitInfo: UnitInfo): HtmlUnitLink = {
-    val name = ""
-    val link = ""
-    val anchor: HtmlAnchor = HtmlAnchor(name, link)
-    val depth: String = unitInfo.depth.toString
-    val complexity: String = unitInfo.complexity.toString
-    val reasonName = ""
-    val reasonLink = ""
-    val reasonAnchor: HtmlAnchor = HtmlAnchor(reasonName, reasonLink)
-    HtmlUnitLink(anchor, depth, complexity, reasonAnchor)
   }
 
   val FileSystemCharacters = "/\\?%*:|\"<>. "
@@ -112,10 +100,10 @@ class ReportTransformerImpl extends ReportTransformer {
       val depth = unit.depth.toString
       val complexity = unit.complexity.toString
       val partsAnchor = partsAnchorFor(unitId)
-      val dependsOn = unit.dependsOn.toSeq.sorted.map(detangled.map).map(unitInfoToHtmlUnitLink)
-      val dependedOnBy = unit.dependedOnBy.toSeq.sorted.map(detangled.map).map(unitInfoToHtmlUnitLink)
-      val dependsOnExternal = unit.dependsOnExternal.toSeq.sorted.map(detangled.map).map(unitInfoToHtmlUnitLink)
-      val dependedOnByExternal = unit.dependedOnByExternal.toSeq.sorted.map(detangled.map).map(unitInfoToHtmlUnitLink)
+      val dependsOn = unit.dependsOn.toSeq.sorted.map(toHtmlUnitLink)
+      val dependedOnBy = unit.dependedOnBy.toSeq.sorted.map(toHtmlUnitLink)
+      val dependsOnExternal = unit.dependsOnExternal.toSeq.sorted.map(toHtmlUnitLink)
+      val dependedOnByExternal = unit.dependedOnByExternal.toSeq.sorted.map(toHtmlUnitLink)
       HtmlUnit(id,
         name,
         depth,
