@@ -9,7 +9,7 @@ trait ReportTransformer {
 
   def htmlName(unitId: UnitId): String
 
-  def htmlAnchor(unitId: UnitId): String
+  def htmlLink(unitId: UnitId): String
 
   def htmlFileName(unitId: UnitId): String
 

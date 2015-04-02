@@ -52,7 +52,7 @@ class ReportTransformerTest extends FunSuite {
     val unitId = UnitId.complex(Set("g/a"), Set("p/b", "p/c", "p/d"), Set("c/e", "c/f"))
     assert(reportTransformer.htmlId(unitId) === "g/a--p/b-p/c-p/d--c/e-c/f")
     assert(reportTransformer.htmlName(unitId) === "c/e-c/f")
-    assert(reportTransformer.htmlAnchor(unitId) === "g_a--p_b-p_c-p_d.html#g/a--p/b-p/c-p/d--c/e-c/f")
+    assert(reportTransformer.htmlLink(unitId) === "g_a--p_b-p_c-p_d.html#g/a--p/b-p/c-p/d--c/e-c/f")
     assert(reportTransformer.htmlFileName(unitId) === "g_a--p_b-p_c-p_d.html")
   }
 
@@ -61,7 +61,7 @@ class ReportTransformerTest extends FunSuite {
     val unitId = UnitId.complex(Set("g/a"), Set("p/b", "p/c", "p/d"))
     assert(reportTransformer.htmlId(unitId) === "g/a--p/b-p/c-p/d")
     assert(reportTransformer.htmlName(unitId) === "p/b-p/c-p/d")
-    assert(reportTransformer.htmlAnchor(unitId) === "g_a.html#g/a--p/b-p/c-p/d")
+    assert(reportTransformer.htmlLink(unitId) === "g_a.html#g/a--p/b-p/c-p/d")
     assert(reportTransformer.htmlFileName(unitId) === "g_a.html")
   }
 
@@ -70,7 +70,7 @@ class ReportTransformerTest extends FunSuite {
     val unitId = UnitId.complex(Set("g/a"))
     assert(reportTransformer.htmlId(unitId) === "g/a")
     assert(reportTransformer.htmlName(unitId) === "g/a")
-    assert(reportTransformer.htmlAnchor(unitId) === "index.html#g/a")
+    assert(reportTransformer.htmlLink(unitId) === "index.html#g/a")
     assert(reportTransformer.htmlFileName(unitId) === "index.html")
   }
 

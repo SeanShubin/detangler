@@ -15,7 +15,7 @@ class ReportTransformerImpl extends ReportTransformer {
     unitId.paths.last.toSeq.sorted.mkString("-")
   }
 
-  override def htmlAnchor(unitId: UnitId): String = {
+  override def htmlLink(unitId: UnitId): String = {
     val path = htmlFileName(unitId)
     val fragment = htmlId(unitId)
     s"$path#$fragment"
@@ -35,6 +35,12 @@ class ReportTransformerImpl extends ReportTransformer {
   }
 
   override def arrowName(from: UnitId, to: UnitId): String = "reason"
+
+  private def unitIdToAnchor(unitId: UnitId): HtmlAnchor = {
+    val name = htmlName(unitId)
+    val link = htmlLink(unitId)
+    HtmlAnchor(name, link)
+  }
 
   private def arrowAnchor(from: UnitId, to: UnitId): HtmlAnchor = {
     val name = arrowName(from, to)
@@ -92,7 +98,10 @@ class ReportTransformerImpl extends ReportTransformer {
     }
 
     private def arrowToHtmlReason(arrow: Arrow): HtmlReason = {
-      ???
+      val from = unitIdToAnchor(arrow.from)
+      val to = unitIdToAnchor(arrow.to)
+      val reasons = arrow.reasons.map(arrowToHtmlReason)
+      HtmlReason(from, to, reasons)
     }
 
     def rootUnit(unitId: UnitId): HtmlUnit = {
@@ -118,12 +127,12 @@ class ReportTransformerImpl extends ReportTransformer {
         dependedOnByExternal)
     }
 
-    def toUnitInfo(unitId:UnitId) = detangled.map(unitId)
+    def toUnitInfo(unitId: UnitId) = detangled.map(unitId)
 
     private def relationToHtmlUnitLink(from: UnitId, to: UnitId): HtmlUnitLink = {
       val unitInfo = detangled.map(to)
       val anchorName = htmlName(to)
-      val anchorLink = htmlAnchor(to)
+      val anchorLink = htmlLink(to)
       val anchor: HtmlAnchor = HtmlAnchor(anchorName, anchorLink)
       val depth: String = unitInfo.depth.toString
       val complexity: String = unitInfo.complexity.toString
@@ -131,4 +140,5 @@ class ReportTransformerImpl extends ReportTransformer {
       HtmlUnitLink(anchor, depth, complexity, reasonAnchor)
     }
   }
+
 }
