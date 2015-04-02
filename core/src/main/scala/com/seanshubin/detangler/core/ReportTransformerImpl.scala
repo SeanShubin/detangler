@@ -40,11 +40,15 @@ class ReportTransformerImpl extends ReportTransformer {
     setOfString.toSeq.sorted.mkString("-")
   }
 
-  private def toHtmlUnitLink(unitId: UnitId): HtmlUnitLink = {
-    val anchor: HtmlAnchor = ???
-    val depth: String = ???
-    val complexity: String = ???
-    val reasonAnchor: HtmlAnchor = ???
+  private def unitInfoToHtmlUnitLink(unitInfo: UnitInfo): HtmlUnitLink = {
+    val name = ""
+    val link = ""
+    val anchor: HtmlAnchor = HtmlAnchor(name, link)
+    val depth: String = unitInfo.depth.toString
+    val complexity: String = unitInfo.complexity.toString
+    val reasonName = ""
+    val reasonLink = ""
+    val reasonAnchor: HtmlAnchor = HtmlAnchor(reasonName, reasonLink)
     HtmlUnitLink(anchor, depth, complexity, reasonAnchor)
   }
 
@@ -78,10 +82,10 @@ class ReportTransformerImpl extends ReportTransformer {
       val depth = unit.depth.toString
       val complexity = unit.complexity.toString
       val partsAnchor = partsAnchorFor(unitId)
-      val dependsOn = unit.dependsOn.toSeq.sorted.map(toHtmlUnitLink)
-      val dependedOnBy = unit.dependedOnBy.toSeq.sorted.map(toHtmlUnitLink)
-      val dependsOnExternal = unit.dependsOnExternal.toSeq.sorted.map(toHtmlUnitLink)
-      val dependedOnByExternal = unit.dependedOnByExternal.toSeq.sorted.map(toHtmlUnitLink)
+      val dependsOn = unit.dependsOn.toSeq.sorted.map(detangled.map).map(unitInfoToHtmlUnitLink)
+      val dependedOnBy = unit.dependedOnBy.toSeq.sorted.map(detangled.map).map(unitInfoToHtmlUnitLink)
+      val dependsOnExternal = unit.dependsOnExternal.toSeq.sorted.map(detangled.map).map(unitInfoToHtmlUnitLink)
+      val dependedOnByExternal = unit.dependedOnByExternal.toSeq.sorted.map(detangled.map).map(unitInfoToHtmlUnitLink)
       HtmlUnit(id,
         name,
         depth,
@@ -92,6 +96,8 @@ class ReportTransformerImpl extends ReportTransformer {
         dependsOnExternal,
         dependedOnByExternal)
     }
+
+    def toUnitInfo(unitId:UnitId) = detangled.map(unitId)
   }
 
 }

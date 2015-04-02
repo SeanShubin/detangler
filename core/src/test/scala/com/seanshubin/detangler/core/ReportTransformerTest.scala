@@ -3,7 +3,7 @@ package com.seanshubin.detangler.core
 import org.scalatest.FunSuite
 
 class ReportTransformerTest extends FunSuite {
-  ignore("root report") {
+  test("root report") {
     val reportTransformer: ReportTransformer = new ReportTransformerImpl()
     val page = reportTransformer.rootReport(SampleData.detangled)
     assert(page.fileName === "index.html")
