@@ -4,7 +4,7 @@ import com.seanshubin.detangler.core.html._
 
 class ReportTransformerImpl extends ReportTransformer {
   override def pageFor(detangled: Detangled, unitId: UnitId): HtmlPage = {
-    new RootTransformerDelegate(detangled).rootReport()
+    new RootTransformerDelegate(detangled).pageFor(unitId)
   }
 
   override def htmlId(unitId: UnitId): String = {
@@ -67,21 +67,21 @@ class ReportTransformerImpl extends ReportTransformer {
   }
 
   private class RootTransformerDelegate(detangled: Detangled) {
-    def rootReport(): HtmlPage = {
+    def pageFor(unitId: UnitId): HtmlPage = {
       val fileName = rootFileName()
-      val units = rootUnits()
-      val reasons = rootReasons()
+      val units = unitsFor(unitId)
+      val reasons = reasonsFor(unitId)
       HtmlPage(fileName, units, reasons)
     }
 
     def rootFileName(): String = "index.html"
 
-    def rootUnits(): Seq[HtmlUnit] = {
-      detangled.topLevelUnits().toSeq.sorted.map(rootUnit)
+    def unitsFor(unitId: UnitId): Seq[HtmlUnit] = {
+      detangled.map(unitId).composedOf.toSeq.sorted.map(unitIdToHtmlUnit)
     }
 
-    def rootReasons(): Seq[HtmlReason] = {
-      val topLevelArrows = detangled.topLevelArrows()
+    def reasonsFor(unitId: UnitId): Seq[HtmlReason] = {
+      val topLevelArrows = detangled.arrowsFor(unitId)
       topLevelArrows.map(arrowToHtmlReason)
     }
 
@@ -92,7 +92,7 @@ class ReportTransformerImpl extends ReportTransformer {
       HtmlReason(from, to, reasons)
     }
 
-    def rootUnit(unitId: UnitId): HtmlUnit = {
+    def unitIdToHtmlUnit(unitId: UnitId): HtmlUnit = {
       def toHtmlUnitLink(otherUnitId: UnitId) = relationToHtmlUnitLink(unitId, otherUnitId)
       val unit = detangled.map(unitId)
       val id = htmlId(unitId)

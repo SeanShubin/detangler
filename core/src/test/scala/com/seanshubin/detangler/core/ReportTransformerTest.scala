@@ -47,7 +47,7 @@ class ReportTransformerTest extends FunSuite {
     assert(classAtoClassD.reasons.size === 0)
   }
 
-  ignore("middle report") {
+  test("middle report") {
     val reportTransformer: ReportTransformer = new ReportTransformerImpl()
     val page = reportTransformer.pageFor(SampleData.detangled, SampleData.idGroupA)
     assert(page.fileName === "group_a.html")

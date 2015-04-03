@@ -62,6 +62,8 @@ case class UnitId(paths: Seq[Set[String]]) extends Ordered[UnitId] {
 }
 
 object UnitId {
+  val Root = simple()
+
   def simple(ids: String*) = UnitId(ids.map(Set(_)))
 
   def complex(parts: Set[String]*) = UnitId(parts)

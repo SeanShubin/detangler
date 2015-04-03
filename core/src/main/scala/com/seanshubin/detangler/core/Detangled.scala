@@ -1,12 +1,12 @@
 package com.seanshubin.detangler.core
 
 case class Detangled(map: Map[UnitId, UnitInfo]) {
-  def topLevelUnits(): Set[UnitId] = {
-    map.keySet.filter(_.paths.size == 1)
-  }
+  //  def topLevelUnits(): Set[UnitId] = {
+  //    map.keySet.filter(_.paths.size == 1)
+  //  }
 
-  def topLevelArrows(): Seq[Arrow] = {
-    arrowsFor(topLevelUnits())
+  def arrowsFor(unitId: UnitId): Seq[Arrow] = {
+    arrowsFor(map(unitId).composedOf)
   }
 
   def arrowsFor(parts: Set[UnitId]): Seq[Arrow] = {

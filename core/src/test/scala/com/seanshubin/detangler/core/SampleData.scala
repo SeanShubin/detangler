@@ -12,6 +12,15 @@ object SampleData {
   val idClassC = UnitId.simple("group/a", "package/b", "class/c")
   val idClassD = UnitId.simple("group/b", "package/c", "class/d")
   val detangled = Detangled(Map(
+    idRoot -> UnitInfo(
+      idRoot,
+      dependsOn = Set(),
+      dependedOnBy = Set(),
+      dependsOnExternal = Set(),
+      dependedOnByExternal = Set(),
+      composedOf = Set(idGroupA, idGroupB),
+      depth = 0,
+      complexity = 0),
     idGroupA -> UnitInfo(
       idGroupA,
       dependsOn = Set(idGroupB),

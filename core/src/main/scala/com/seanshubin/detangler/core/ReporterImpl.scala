@@ -21,7 +21,7 @@ class ReporterImpl(reportDir: Path,
   private class Delegate(detangled: Detangled) {
     def generateReports(): Unit = {
       fileSystem.createDirectories(reportDir)
-      val rootUnits = detangled.topLevelUnits()
+      val rootUnits = detangled.map(UnitId.Root).composedOf
       generateReport(reportDir, rootUnits)
     }
 
