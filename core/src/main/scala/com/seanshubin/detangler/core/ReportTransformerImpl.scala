@@ -3,7 +3,7 @@ package com.seanshubin.detangler.core
 import com.seanshubin.detangler.core.html._
 
 class ReportTransformerImpl extends ReportTransformer {
-  override def rootReport(detangled: Detangled): HtmlPage = {
+  override def pageFor(detangled: Detangled, unitId: UnitId): HtmlPage = {
     new RootTransformerDelegate(detangled).rootReport()
   }
 

@@ -3,9 +3,9 @@ package com.seanshubin.detangler.core
 import org.scalatest.FunSuite
 
 class ReportTransformerTest extends FunSuite {
-  test("root report") {
+  test("top report") {
     val reportTransformer: ReportTransformer = new ReportTransformerImpl()
-    val page = reportTransformer.rootReport(SampleData.detangled)
+    val page = reportTransformer.pageFor(SampleData.detangled, SampleData.idRoot)
     assert(page.fileName === "index.html")
     assert(page.units.size === 2)
     val groupA = page.units.head
@@ -45,6 +45,65 @@ class ReportTransformerTest extends FunSuite {
     assert(classAtoClassD.to.name === "class/d")
     assert(classAtoClassD.to.link === "group_b--package_c.html#group/b--package/c--class/d")
     assert(classAtoClassD.reasons.size === 0)
+  }
+
+  ignore("middle report") {
+    val reportTransformer: ReportTransformer = new ReportTransformerImpl()
+    val page = reportTransformer.pageFor(SampleData.detangled, SampleData.idGroupA)
+    assert(page.fileName === "group_a.html")
+    assert(page.units.size === 2)
+    val packageA = page.units.head
+    assert(packageA.id === "group/a--package/a")
+    assert(packageA.name === "package/a")
+    assert(packageA.depth === "5")
+    assert(packageA.complexity === "6")
+    assert(packageA.partsAnchor.name === "parts")
+    assert(packageA.partsAnchor.link === "group_a--package_a.html")
+    assert(packageA.dependsOn.size === 2)
+    assert(packageA.dependedOnBy.size === 0)
+    assert(packageA.dependsOnExternal.size === 0)
+    assert(packageA.dependedOnByExternal.size === 0)
+    val packageB = packageA.dependsOn.head
+    assert(packageB.anchor.name === "package/b")
+    assert(packageB.anchor.link === "#group/b--package/b")
+    assert(packageB.depth === "7")
+    assert(packageB.complexity === "8")
+    assert(packageB.reasonAnchor.name === "reason")
+    assert(packageB.reasonAnchor.link === "#group/a--package/a---group/b--package/b")
+    assert(page.reasons.size === 1)
+    val packageAToPackageB = page.reasons.head
+    assert(packageAToPackageB.from.name === "package/a")
+    assert(packageAToPackageB.from.link === "#group/a--package/a")
+    assert(packageAToPackageB.to.name === "package/b")
+    assert(packageAToPackageB.to.link === "#group/b--package/b")
+    assert(packageAToPackageB.reasons.size === 1)
+    val classAtoClassD = packageAToPackageB.reasons.head
+    assert(classAtoClassD.from.name === "class/a")
+    assert(classAtoClassD.from.link === "group_a--package_a.html#group/a--package/a--class/a")
+    assert(classAtoClassD.to.name === "class/d")
+    assert(classAtoClassD.to.link === "group_b--package_c.html#group/b--package/c--class/d")
+    assert(classAtoClassD.reasons.size === 0)
+  }
+
+  ignore("bottom report") {
+    val reportTransformer: ReportTransformer = new ReportTransformerImpl()
+    val page = reportTransformer.pageFor(SampleData.detangled, SampleData.idPackageA)
+    assert(page.fileName === "group_a--package_a.html")
+    assert(page.units.size === 2)
+    val classA = page.units.head
+    assert(classA.id === "group/a--package/a--class/a")
+    assert(classA.name === "class/a")
+    assert(classA.depth === "11")
+    assert(classA.complexity === "12")
+    assert(classA.dependsOn.size === 3)
+    assert(classA.dependedOnBy.size === 0)
+    assert(classA.dependsOnExternal.size === 0)
+    assert(classA.dependedOnByExternal.size === 0)
+    val classB = classA.dependsOn.head
+    assert(classB.anchor.name === "class/b")
+    assert(classB.anchor.link === "#group/b--package/b--class/b")
+    assert(classB.depth === "13")
+    assert(classB.complexity === "14")
   }
 
   test("class level unit html strings") {

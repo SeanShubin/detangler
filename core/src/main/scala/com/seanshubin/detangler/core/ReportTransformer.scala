@@ -3,7 +3,7 @@ package com.seanshubin.detangler.core
 import com.seanshubin.detangler.core.html.HtmlPage
 
 trait ReportTransformer {
-  def rootReport(detangled: Detangled): HtmlPage
+  def pageFor(detangled: Detangled, unitId: UnitId): HtmlPage
 
   def htmlId(unitId: UnitId): String
 

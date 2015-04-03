@@ -1,15 +1,16 @@
 package com.seanshubin.detangler.core
 
 object SampleData {
-  private val idGroupA = UnitId.simple("group/a")
-  private val idGroupB = UnitId.simple("group/b")
-  private val idPackageA = UnitId.simple("group/a", "package/a")
-  private val idPackageB = UnitId.simple("group/a", "package/b")
-  private val idPackageC = UnitId.simple("group/b", "package/c")
-  private val idClassA = UnitId.simple("group/a", "package/a", "class/a")
-  private val idClassB = UnitId.simple("group/a", "package/a", "class/b")
-  private val idClassC = UnitId.simple("group/a", "package/b", "class/c")
-  private val idClassD = UnitId.simple("group/b", "package/c", "class/d")
+  val idRoot = UnitId.simple()
+  val idGroupA = UnitId.simple("group/a")
+  val idGroupB = UnitId.simple("group/b")
+  val idPackageA = UnitId.simple("group/a", "package/a")
+  val idPackageB = UnitId.simple("group/a", "package/b")
+  val idPackageC = UnitId.simple("group/b", "package/c")
+  val idClassA = UnitId.simple("group/a", "package/a", "class/a")
+  val idClassB = UnitId.simple("group/a", "package/a", "class/b")
+  val idClassC = UnitId.simple("group/a", "package/b", "class/c")
+  val idClassD = UnitId.simple("group/b", "package/c", "class/d")
   val detangled = Detangled(Map(
     idGroupA -> UnitInfo(
       idGroupA,
