@@ -5,6 +5,10 @@ case class UnitId(paths: Seq[Set[String]]) extends Ordered[UnitId] {
     compareSeqSetString(this.paths, that.paths)
   }
 
+  def isRoot: Boolean = paths.isEmpty
+
+  def parent: UnitId = UnitId(paths.init)
+
   def qualifiedName: String = {
     def partAsString(part: Set[String]) = part.toSeq.sorted.mkString("-")
     paths.map(partAsString).mkString("--")

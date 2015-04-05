@@ -107,39 +107,32 @@ class ReportTransformerTest extends FunSuite {
   }
 
   test("class level unit html strings") {
-    val reportTransformer: ReportTransformer = new ReportTransformerImpl()
     val unitId = UnitId.complex(Set("g/a"), Set("p/b", "p/c", "p/d"), Set("c/e", "c/f"))
-    assert(reportTransformer.htmlId(unitId) === "g/a--p/b-p/c-p/d--c/e-c/f")
-    assert(reportTransformer.htmlName(unitId) === "c/e-c/f")
-    assert(reportTransformer.htmlLinkRelative(unitId) === "#g/a--p/b-p/c-p/d--c/e-c/f")
-    assert(reportTransformer.htmlLinkAbsolute(unitId) === "g_a--p_b-p_c-p_d.html#g/a--p/b-p/c-p/d--c/e-c/f")
-    assert(reportTransformer.htmlFileName(unitId) === "g_a--p_b-p_c-p_d.html")
+    val parent = unitId.parent
+    assert(HtmlUtil.htmlId(unitId) === "g/a--p/b-p/c-p/d--c/e-c/f")
+    assert(HtmlUtil.htmlName(unitId) === "c/e-c/f")
+    assert(HtmlUtil.htmlLink(parent, unitId) === "#g/a--p/b-p/c-p/d--c/e-c/f")
+    assert(HtmlUtil.htmlLink(UnitId.Root, unitId) === "g_a--p_b-p_c-p_d.html#g/a--p/b-p/c-p/d--c/e-c/f")
   }
 
   test("package level unit html strings") {
-    val reportTransformer: ReportTransformer = new ReportTransformerImpl()
     val unitId = UnitId.complex(Set("g/a"), Set("p/b", "p/c", "p/d"))
-    assert(reportTransformer.htmlId(unitId) === "g/a--p/b-p/c-p/d")
-    assert(reportTransformer.htmlName(unitId) === "p/b-p/c-p/d")
-    assert(reportTransformer.htmlLinkRelative(unitId) === "#g/a--p/b-p/c-p/d")
-    assert(reportTransformer.htmlLinkAbsolute(unitId) === "g_a.html#g/a--p/b-p/c-p/d")
-    assert(reportTransformer.htmlFileName(unitId) === "g_a.html")
-  }
-
-  test("root level unit html strings") {
-    val reportTransformer: ReportTransformer = new ReportTransformerImpl()
-    val unitId = SampleData.idRoot
-    assert(reportTransformer.htmlFileName(unitId) === "index.html")
+    val parent = unitId.parent
+    assert(HtmlUtil.htmlId(unitId) === "g/a--p/b-p/c-p/d")
+    assert(HtmlUtil.htmlName(unitId) === "p/b-p/c-p/d")
+    assert(HtmlUtil.htmlLink(parent, unitId) === "#g/a--p/b-p/c-p/d")
+    assert(HtmlUtil.htmlLink(UnitId.Root, unitId) === "g_a.html#g/a--p/b-p/c-p/d")
+    assert(HtmlUtil.fileNameFor(unitId) === "g_a--p_b-p_c-p_d.html")
   }
 
   ignore("top level unit html strings") {
-    val reportTransformer: ReportTransformer = new ReportTransformerImpl()
     val unitId = SampleData.idGroupA
-    assert(reportTransformer.htmlId(unitId) === "group/a")
-    assert(reportTransformer.htmlName(unitId) === "group/a")
-    assert(reportTransformer.htmlLinkRelative(unitId) === "#group/a")
-    assert(reportTransformer.htmlLinkAbsolute(unitId) === "index.html#group/a")
-    assert(reportTransformer.htmlFileName(unitId) === "index.html")
+    assert(HtmlUtil.htmlId(SampleData.idGroupA) === "group/a")
+    assert(HtmlUtil.htmlName(SampleData.idGroupA) === "group/a")
+    assert(HtmlUtil.htmlLink(UnitId.Root, SampleData.idGroupA) === "#group/a")
+    assert(HtmlUtil.htmlLink(SampleData.idGroupB, SampleData.idGroupA) === "index.html#group/a")
+    assert(HtmlUtil.fileNameFor(unitId) === "g_a.html")
+    assert(HtmlUtil.fileNameFor(UnitId.Root) === "index.html")
   }
 
   test("class level arrow html strings") {
