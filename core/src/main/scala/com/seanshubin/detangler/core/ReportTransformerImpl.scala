@@ -7,17 +7,6 @@ class ReportTransformerImpl extends ReportTransformer {
     new RootTransformerDelegate(detangled).pageFor(unitId)
   }
 
-  //  override def htmlLinkAbsolute(unitId: UnitId): String = {
-  //    val path = HtmlUtil.fileNameFor(unitId)
-  //    val fragment = htmlLinkRelative(unitId)
-  //    s"$path$fragment"
-  //  }
-  //
-  //  override def htmlLinkRelative(unitId: UnitId): String = {
-  //    val fragment = HtmlUtil.htmlId(unitId)
-  //    s"#$fragment"
-  //  }
-
   override def arrowId(from: UnitId, to: UnitId): String = {
     HtmlUtil.htmlId(from) + "---" + HtmlUtil.htmlId(to)
   }
@@ -29,12 +18,6 @@ class ReportTransformerImpl extends ReportTransformer {
     val link = HtmlUtil.htmlLink(parent, unitId)
     HtmlAnchor(name, link)
   }
-
-  //  private def shouldUseRelativeLink(parent: UnitId, child: UnitId): Boolean = {
-  //    val exactlyOneLevelLower = parent.paths.size == child.paths.size - 1
-  //    val isChild = child.paths.startsWith(parent.paths)
-  //    exactlyOneLevelLower && isChild
-  //  }
 
   private def arrowAnchor(from: UnitId, to: UnitId): HtmlAnchor = {
     val name = arrowName(from, to)
@@ -80,7 +63,7 @@ class ReportTransformerImpl extends ReportTransformer {
       def toHtmlUnitLink(otherUnitId: UnitId) = relationToHtmlUnitLink(parent, unitId, otherUnitId)
       val unit = detangled.map(unitId)
       val id = HtmlUtil.htmlId(unitId)
-      val name = id
+      val name = HtmlUtil.htmlName(unitId)
       val depth = unit.depth.toString
       val complexity = unit.complexity.toString
       val partsAnchor = partsAnchorFor(unitId)

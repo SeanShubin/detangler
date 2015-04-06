@@ -47,7 +47,7 @@ class ReportTransformerTest extends FunSuite {
     assert(classAtoClassD.reasons.size === 0)
   }
 
-  ignore("middle report") {
+  test("middle report") {
     val reportTransformer: ReportTransformer = new ReportTransformerImpl()
     val page = reportTransformer.pageFor(SampleData.detangled, SampleData.idGroupA)
     assert(page.fileName === "group_a.html")
@@ -65,11 +65,11 @@ class ReportTransformerTest extends FunSuite {
     assert(packageA.dependedOnByExternal.size === 0)
     val packageB = packageA.dependsOn.head
     assert(packageB.anchor.name === "package/b")
-    assert(packageB.anchor.link === "#group/b--package/b")
+    assert(packageB.anchor.link === "#group/a--package/b")
     assert(packageB.depth === "7")
     assert(packageB.complexity === "8")
     assert(packageB.reasonAnchor.name === "reason")
-    assert(packageB.reasonAnchor.link === "#group/a--package/a---group/b--package/b")
+    assert(packageB.reasonAnchor.link === "#group/a--package/a---group/a--package/b")
     assert(page.reasons.size === 1)
     val packageAToPackageB = page.reasons.head
     assert(packageAToPackageB.from.name === "package/a")
@@ -125,13 +125,13 @@ class ReportTransformerTest extends FunSuite {
     assert(HtmlUtil.fileNameFor(unitId) === "g_a--p_b-p_c-p_d.html")
   }
 
-  ignore("top level unit html strings") {
+  test("top level unit html strings") {
     val unitId = SampleData.idGroupA
     assert(HtmlUtil.htmlId(SampleData.idGroupA) === "group/a")
     assert(HtmlUtil.htmlName(SampleData.idGroupA) === "group/a")
     assert(HtmlUtil.htmlLink(UnitId.Root, SampleData.idGroupA) === "#group/a")
     assert(HtmlUtil.htmlLink(SampleData.idGroupB, SampleData.idGroupA) === "index.html#group/a")
-    assert(HtmlUtil.fileNameFor(unitId) === "g_a.html")
+    assert(HtmlUtil.fileNameFor(unitId) === "group_a.html")
     assert(HtmlUtil.fileNameFor(UnitId.Root) === "index.html")
   }
 
