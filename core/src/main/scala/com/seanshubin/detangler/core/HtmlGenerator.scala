@@ -3,7 +3,7 @@ package com.seanshubin.detangler.core
 import java.io.PrintWriter
 
 class HtmlGenerator(out: PrintWriter, detangled: Detangled) {
-  def generateIndex(infos: Seq[UnitInfo], arrows: Seq[Arrow]): Unit = {
+  def generateIndex(infos: Seq[UnitId], arrows: Seq[Arrow]): Unit = {
     indexHeader()
     infos.foreach(indexInfo)
     arrows.foreach(emitArrow)
@@ -18,22 +18,22 @@ class HtmlGenerator(out: PrintWriter, detangled: Detangled) {
     emitHtmlFooter()
   }
 
-  private def indexInfo(info: UnitInfo): Unit = {
-    emitTableHeader(info.id.qualifiedName, Seq(
+  private def indexInfo(id: UnitId): Unit = {
+    emitTableHeader(id.qualifiedName, Seq(
       Seq("name", "depth", "complexity", "composed of")))
     emitDataRow(Seq(
-      info.id.name,
-      info.depth.toString,
-      info.complexity.toString,
-      partsLink(info.id)))
+      id.name,
+      detangled.depth(id).toString,
+      detangled.complexity(id).toString,
+      partsLink(id)))
     emitTableFooter()
     out.println("<ul>")
-    indexInfoDependency("depends on", info.dependsOn)
-    indexInfoDependency("depended on by", info.dependedOnBy)
+    indexInfoDependency("depends on", detangled.dependsOn(id))
+    indexInfoDependency("depended on by", detangled.dependedOnBy(id))
     out.println("</ul>")
   }
 
-  private def indexInfoDependency(caption: String, dependencies: Set[UnitId]): Unit = {
+  private def indexInfoDependency(caption: String, dependencies: Seq[UnitId]): Unit = {
     if (dependencies.size == 0) return
     val part1 =
       s"""    <li>
@@ -63,11 +63,12 @@ class HtmlGenerator(out: PrintWriter, detangled: Detangled) {
   }
 
   def indexInfoDependencyEntry(unitId: UnitId): Unit = {
-    val unitInfo = detangled.map(unitId)
+    val depth = detangled.depth(unitId)
+    val complexity = detangled.complexity(unitId)
     emitDataRow(Seq(
       nameLink(unitId),
-      unitInfo.depth.toString,
-      unitInfo.complexity.toString,
+      depth.toString,
+      complexity.toString,
       partsLink(unitId)))
   }
 

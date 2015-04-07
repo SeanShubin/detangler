@@ -42,7 +42,7 @@ class ReportTransformerImpl extends ReportTransformer {
 
     def unitsFor(parent: UnitId, unitId: UnitId): Seq[HtmlUnit] = {
       def unitIdToHtmlUnit(x: UnitId) = parentAndUnitIdToHtmlUnit(parent, x)
-      detangled.map(unitId).composedOf.toSeq.sorted.map(unitIdToHtmlUnit)
+      detangled.composedOf(unitId).map(unitIdToHtmlUnit)
     }
 
     def reasonsFor(unitId: UnitId): Seq[HtmlReason] = {
@@ -61,16 +61,15 @@ class ReportTransformerImpl extends ReportTransformer {
 
     def parentAndUnitIdToHtmlUnit(parent: UnitId, unitId: UnitId): HtmlUnit = {
       def toHtmlUnitLink(otherUnitId: UnitId) = relationToHtmlUnitLink(parent, unitId, otherUnitId)
-      val unit = detangled.map(unitId)
       val id = HtmlUtil.htmlId(unitId)
       val name = HtmlUtil.htmlName(unitId)
-      val depth = unit.depth.toString
-      val complexity = unit.complexity.toString
+      val depth = detangled.depth(unitId).toString
+      val complexity = detangled.complexity(unitId).toString
       val partsAnchor = partsAnchorFor(unitId)
-      val dependsOn = unit.dependsOn.toSeq.sorted.map(toHtmlUnitLink)
-      val dependedOnBy = unit.dependedOnBy.toSeq.sorted.map(toHtmlUnitLink)
-      val dependsOnExternal = unit.dependsOnExternal.toSeq.sorted.map(toHtmlUnitLink)
-      val dependedOnByExternal = unit.dependedOnByExternal.toSeq.sorted.map(toHtmlUnitLink)
+      val dependsOn = detangled.dependsOn(unitId).map(toHtmlUnitLink)
+      val dependedOnBy = detangled.dependedOnBy(unitId).map(toHtmlUnitLink)
+      val dependsOnExternal = detangled.dependsOnExternal(unitId).map(toHtmlUnitLink)
+      val dependedOnByExternal = detangled.dependedOnByExternal(unitId).map(toHtmlUnitLink)
       HtmlUnit(id,
         name,
         depth,
@@ -82,13 +81,10 @@ class ReportTransformerImpl extends ReportTransformer {
         dependedOnByExternal)
     }
 
-    def toUnitInfo(unitId: UnitId) = detangled.map(unitId)
-
     private def relationToHtmlUnitLink(parent: UnitId, from: UnitId, to: UnitId): HtmlUnitLink = {
-      val unitInfo = detangled.map(to)
       val anchor: HtmlAnchor = parentAndUnitIdToAnchor(parent, to)
-      val depth: String = unitInfo.depth.toString
-      val complexity: String = unitInfo.complexity.toString
+      val depth: String = detangled.depth(to).toString
+      val complexity: String = detangled.complexity(to).toString
       val reasonAnchor: HtmlAnchor = arrowAnchor(from, to)
       HtmlUnitLink(anchor, depth, complexity, reasonAnchor)
     }

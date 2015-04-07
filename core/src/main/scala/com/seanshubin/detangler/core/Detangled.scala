@@ -1,21 +1,13 @@
 package com.seanshubin.detangler.core
 
-case class Detangled(map: Map[UnitId, UnitInfo]) {
-  def arrowsFor(unitId: UnitId): Seq[Arrow] = {
-    arrowsFor(map(unitId).composedOf)
-  }
-
-  def arrowsFor(parts: Set[UnitId]): Seq[Arrow] = {
-    arrowsFor(parts, parts)
-  }
-
-  private def arrowsFor(leftParts: Set[UnitId], rightParts: Set[UnitId]): Seq[Arrow] = {
-    for {
-      fromPart <- leftParts.toSeq.sorted
-      toPart <- map(fromPart).dependsOn.toSeq.sorted
-      if rightParts.contains(toPart)
-    } yield {
-      Arrow(fromPart, toPart, arrowsFor(map(fromPart).composedOf, map(toPart).composedOf))
-    }
-  }
+trait Detangled {
+  def depth(unitId:UnitId):Int
+  def complexity(unitId:UnitId):Int
+  def composedOf(unitId:UnitId):Seq[UnitId]
+  def dependsOn(unitId:UnitId):Seq[UnitId]
+  def dependedOnBy(unitId:UnitId):Seq[UnitId]
+  def dependsOnExternal(unitId:UnitId):Seq[UnitId]
+  def dependedOnByExternal(unitId:UnitId):Seq[UnitId]
+  def arrowsFor(unitId: UnitId): Seq[Arrow]
+  def arrowsFor(parts: Seq[UnitId]): Seq[Arrow]
 }

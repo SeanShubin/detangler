@@ -27,7 +27,7 @@ class ReporterImpl(reportDir: Path,
     val page = reportTransformer.pageFor(detangled, unitId)
     println(page.fileName)
     for {
-      child <- detangled.map(unitId).composedOf
+      child <- detangled.composedOf(unitId)
     } {
       generateReportForUnit(detangled, child)
     }
@@ -36,23 +36,18 @@ class ReporterImpl(reportDir: Path,
   private class Delegate(detangled: Detangled) {
     def generateReports(): Unit = {
       fileSystem.createDirectories(reportDir)
-      val rootUnits = detangled.map(UnitId.Root).composedOf
+      val rootUnits = detangled.composedOf(UnitId.Root)
       generateReport(reportDir, rootUnits)
     }
 
-    def generateReport(path: Path, unitIds: Set[UnitId]): Unit = {
-      val unitsReportPath = path.resolve("units.txt")
+    def generateReport(path: Path, unitIds: Seq[UnitId]): Unit = {
       val arrows = detangled.arrowsFor(unitIds)
       generateArrowsReport(path, arrows)
-      val unitInfos = unitIds.toSeq.sorted.map(detangled.map)
-      val lines = unitInfos.flatMap(unitInfoToLines)
-      val javaLines = JavaConversions.asJavaIterable(lines)
-      fileSystem.write(unitsReportPath, javaLines, charset)
       unitIds.foreach(generateDependencyReport(path, _))
       val htmlReportPath = path.resolve("index.html")
       withOutputStream(htmlReportPath) {
         out =>
-          new HtmlGenerator(new PrintWriter(out), detangled).generateIndex(unitInfos, arrows)
+          new HtmlGenerator(new PrintWriter(out), detangled).generateIndex(unitIds, arrows)
       }
     }
 
@@ -81,7 +76,7 @@ class ReporterImpl(reportDir: Path,
     }
 
     def generateDependencyReport(path: Path, unitId: UnitId): Unit = {
-      val units = detangled.map(unitId).composedOf
+      val units = detangled.composedOf(unitId)
       if (units.nonEmpty) {
         val dir = path.resolve(unitId.fileSystemName)
         fileSystem.createDirectories(dir)
