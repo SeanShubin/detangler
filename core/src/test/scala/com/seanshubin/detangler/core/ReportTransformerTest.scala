@@ -25,7 +25,7 @@ class ReportTransformerTest extends FunSuite {
     assert(groupB.depth === "3")
     assert(groupB.complexity === "4")
     assert(groupB.reasonAnchor.name === "reason")
-    assert(groupB.reasonAnchor.link === "index.html#group/a---group/b")
+    assert(groupB.reasonAnchor.link === "#group/a---group/b")
     assert(page.reasons.size === 1)
     val groupAtoGroupB = page.reasons.head
     assert(groupAtoGroupB.from.name === "group/a")
@@ -75,17 +75,17 @@ class ReportTransformerTest extends FunSuite {
     assert(packageAToPackageB.from.name === "package/a")
     assert(packageAToPackageB.from.link === "#group/a--package/a")
     assert(packageAToPackageB.to.name === "package/b")
-    assert(packageAToPackageB.to.link === "#group/b--package/b")
+    assert(packageAToPackageB.to.link === "#group/a--package/b")
     assert(packageAToPackageB.reasons.size === 1)
-    val classAtoClassD = packageAToPackageB.reasons.head
-    assert(classAtoClassD.from.name === "class/a")
-    assert(classAtoClassD.from.link === "group_a--package_a.html#group/a--package/a--class/a")
-    assert(classAtoClassD.to.name === "class/d")
-    assert(classAtoClassD.to.link === "group_b--package_c.html#group/b--package/c--class/d")
-    assert(classAtoClassD.reasons.size === 0)
+    val classAtoClassC = packageAToPackageB.reasons.head
+    assert(classAtoClassC.from.name === "class/a")
+    assert(classAtoClassC.from.link === "group_a--package_a.html#group/a--package/a--class/a")
+    assert(classAtoClassC.to.name === "class/c")
+    assert(classAtoClassC.to.link === "group_a--package_b.html#group/a--package/b--class/c")
+    assert(classAtoClassC.reasons.size === 0)
   }
 
-  ignore("bottom report") {
+  test("bottom report") {
     val reportTransformer: ReportTransformer = new ReportTransformerImpl()
     val page = reportTransformer.pageFor(SampleData.detangled, SampleData.idPackageA)
     assert(page.fileName === "group_a--package_a.html")
@@ -101,7 +101,7 @@ class ReportTransformerTest extends FunSuite {
     assert(classA.dependedOnByExternal.size === 0)
     val classB = classA.dependsOn.head
     assert(classB.anchor.name === "class/b")
-    assert(classB.anchor.link === "#group/b--package/b--class/b")
+    assert(classB.anchor.link === "#group/a--package/a--class/b")
     assert(classB.depth === "13")
     assert(classB.complexity === "14")
   }

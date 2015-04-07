@@ -21,7 +21,7 @@ class ReportTransformerImpl extends ReportTransformer {
 
   private def arrowAnchor(from: UnitId, to: UnitId): HtmlAnchor = {
     val name = arrowName(from, to)
-    val link = "index.html#" + arrowId(from, to)
+    val link = "#" + arrowId(from, to)
     val anchor = HtmlAnchor(name, link)
     anchor
   }
@@ -93,4 +93,5 @@ class ReportTransformerImpl extends ReportTransformer {
       HtmlUnitLink(anchor, depth, complexity, reasonAnchor)
     }
   }
+
 }
