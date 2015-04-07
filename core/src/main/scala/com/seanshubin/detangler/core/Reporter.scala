@@ -1,5 +1,6 @@
 package com.seanshubin.detangler.core
 
 trait Reporter {
-  def generateReports(detangled: Detangled)
+  def generateReportsOne(detangled: Detangled)
+  def generateReportsTwo(detangled: Detangled)
 }

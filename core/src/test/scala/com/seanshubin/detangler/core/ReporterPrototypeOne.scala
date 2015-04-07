@@ -6,13 +6,14 @@ import java.nio.file.Paths
 import com.seanshubin.devon.core.devon.DefaultDevonMarshaller
 import com.seanshubin.utility.filesystem.FileSystemIntegrationImpl
 
-object ReporterPrototype extends App {
+object ReporterPrototypeOne extends App {
   val reporter = new ReporterImpl(
-    reportDir = Paths.get("generated", "reports"),
+    reportDir = Paths.get("generated", "reports", "1"),
     fileSystem = new FileSystemIntegrationImpl,
     devonMarshaller = DefaultDevonMarshaller,
-    StandardCharsets.UTF_8
+    StandardCharsets.UTF_8,
+    new ReportTransformerImpl
   )
 
-  reporter.generateReports(SampleData.detangled)
+  reporter.generateReportsOne(SampleData.detangled)
 }

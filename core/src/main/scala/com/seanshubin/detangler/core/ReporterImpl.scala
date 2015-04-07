@@ -12,10 +12,25 @@ import scala.collection.JavaConversions
 class ReporterImpl(reportDir: Path,
                    fileSystem: FileSystemIntegration,
                    devonMarshaller: DevonMarshaller,
-                   charset: Charset) extends Reporter {
+                   charset: Charset,
+                   reportTransformer: ReportTransformer) extends Reporter {
 
-  override def generateReports(detangled: Detangled): Unit = {
+  override def generateReportsOne(detangled: Detangled): Unit = {
     new Delegate(detangled).generateReports()
+  }
+
+  override def generateReportsTwo(detangled: Detangled): Unit = {
+    generateReportForUnit(detangled, UnitId.Root)
+  }
+
+  private def generateReportForUnit(detangled:Detangled, unitId:UnitId): Unit = {
+    val page = reportTransformer.pageFor(detangled, unitId)
+    println(page.fileName)
+    for {
+      child <- detangled.map(unitId).composedOf
+    } {
+      generateReportForUnit(detangled, child)
+    }
   }
 
   private class Delegate(detangled: Detangled) {
