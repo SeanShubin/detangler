@@ -12,7 +12,8 @@ object ReporterPrototypeOne extends App {
     fileSystem = new FileSystemIntegrationImpl,
     devonMarshaller = DefaultDevonMarshaller,
     StandardCharsets.UTF_8,
-    new ReportTransformerImpl
+    new ReportTransformerImpl,
+    new PageGeneratorImpl
   )
 
   reporter.generateReportsOne(SampleData.detangled)

@@ -13,7 +13,8 @@ class ReporterImpl(reportDir: Path,
                    fileSystem: FileSystemIntegration,
                    devonMarshaller: DevonMarshaller,
                    charset: Charset,
-                   reportTransformer: ReportTransformer) extends Reporter {
+                   reportTransformer: ReportTransformer,
+                   pageGenerator: PageGenerator) extends Reporter {
 
   override def generateReportsOne(detangled: Detangled): Unit = {
     new Delegate(detangled).generateReports()
@@ -25,7 +26,7 @@ class ReporterImpl(reportDir: Path,
 
   private def generateReportForUnit(detangled:Detangled, unitId:UnitId): Unit = {
     val page = reportTransformer.pageFor(detangled, unitId)
-    println(page.fileName)
+    pageGenerator.generatePage(page)
     for {
       child <- detangled.composedOf(unitId)
     } {
