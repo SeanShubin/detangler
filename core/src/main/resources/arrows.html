@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>arrows</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<ul>
+    <li>
+        <span>-</span>
+        <a href="#group/a">group/a</a>
+        <span>-></span>
+        <a href="#group/b">group/b</a>
+        <ul>
+            <li>
+                <span>+</span>
+                <a href="group_a#package/a">package/a</a>
+                <span>-></span>
+                <a href="group_b#package/b">package/b</a>
+            </li>
+            <li>
+                <span>-</span>
+                <a href="group_a#package/a">package/a</a>
+                <span>-></span>
+                <a href="group_b#package/c">package/c</a>
+                <ul>
+                    <li>
+                        <a href="group_a/package_a#class/a">class/a</a>
+                        <span>-></span>
+                        <a href="group_b/package_c#class/d">class/d</a>
+                    </li>
+                    <li>
+                        <a href="group_a/package_a#class/a">class/a</a>
+                        <span>-></span>
+                        <a href="group_b/package_c#class/e">class/e</a>
+                    </li>
+                    <li>
+                        <a href="group_a/package_a#class/b">class/b</a>
+                        <span>-></span>
+                        <a href="group_b/package_c#class/c">class/c</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <span>+</span>
+        <a href="#group/a">group/a</a>
+        <span>-></span>
+        <a href="#group/c">group/c</a>
+    </li>
+</ul>
+</body>
+</html>
