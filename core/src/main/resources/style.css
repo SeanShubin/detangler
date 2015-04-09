@@ -19,4 +19,6 @@ li {
 span {
     font-family: monospace;
     font-weight: bold;
+    vertical-align: middle;
+    font-size: 2em;
 }
