@@ -21,12 +21,15 @@ class ReporterImpl(reportDir: Path,
   }
 
   override def generateReportsTwo(detangled: Detangled): Unit = {
+    fileSystem.createDirectories(reportDir)
     generateReportForUnit(detangled, UnitId.Root)
   }
 
-  private def generateReportForUnit(detangled:Detangled, unitId:UnitId): Unit = {
+  private def generateReportForUnit(detangled: Detangled, unitId: UnitId): Unit = {
     val page = reportTransformer.pageFor(detangled, unitId)
-    pageGenerator.generatePage(page)
+    val pageText = pageGenerator.generatePageText(page)
+    val pagePath = reportDir.resolve(page.fileName)
+    fileSystem.write(pagePath, pageText.getBytes(charset))
     for {
       child <- detangled.composedOf(unitId)
     } {

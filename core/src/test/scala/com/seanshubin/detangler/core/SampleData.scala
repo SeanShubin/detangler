@@ -11,7 +11,7 @@ object SampleData {
   val idClassB = UnitId.simple("group/a", "package/a", "class/b")
   val idClassC = UnitId.simple("group/a", "package/b", "class/c")
   val idClassD = UnitId.simple("group/b", "package/c", "class/d")
-  val detangled:Detangled = DetangledImpl(Map(
+  val detangled: Detangled = DetangledImpl(Map(
     idRoot -> UnitInfo(
       idRoot,
       dependsOn = Set(),
