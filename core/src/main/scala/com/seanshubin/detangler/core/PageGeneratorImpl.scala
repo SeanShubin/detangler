@@ -11,15 +11,18 @@ class PageGeneratorImpl(resourceLoader: ResourceLoader) extends PageGenerator {
     val pageTemplate = loadTemplate("page")
     val unitSummaryTemplate = loadTemplate("unit-summary")
     val unitSummaryTable = exactlyOneElement(unitSummaryTemplate, "body table")
-    val unitSummaries = page.units.map(htmlUnit => generateUnitSummary(htmlUnit, unitSummaryTemplate))
-    unitSummaries.foreach(unitSummaryTable.appendChild)
-    pageTemplate.body().appendChild(unitSummaryTable)
+    val unitSummaries = page.units.map(htmlUnit => generateUnitSummary(htmlUnit, unitSummaryTable))
+    unitSummaries.foreach(pageTemplate.body().appendChild)
     pageTemplate.toString
   }
 
   private def generateUnitSummary(htmlUnit: HtmlUnit, unitSummaryTemplate: Element): Element = {
     val unitSummaryClone = unitSummaryTemplate.clone()
-    setText(unitSummaryClone, "table tbody tr td:eq(0)", htmlUnit.name)
+    exactlyOneElement(unitSummaryClone, "tbody tr td:eq(0)").text(htmlUnit.name)
+    exactlyOneElement(unitSummaryClone, "tbody tr td:eq(1)").text(htmlUnit.depth)
+    exactlyOneElement(unitSummaryClone, "tbody tr td:eq(2)").text(htmlUnit.complexity)
+    exactlyOneElement(unitSummaryClone, "tbody tr td:eq(3) a").text(htmlUnit.partsAnchor.name)
+    exactlyOneElement(unitSummaryClone, "tbody tr td:eq(3) a").attr("href", htmlUnit.partsAnchor.link)
     unitSummaryClone
   }
 

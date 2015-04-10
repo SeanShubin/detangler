@@ -22,7 +22,8 @@ trait PrototypeWiring {
     DefaultDevonMarshaller,
     StandardCharsets.UTF_8,
     reportTransformer,
-    pageGenerator
+    pageGenerator,
+    resourceLoader
   )
 
 }

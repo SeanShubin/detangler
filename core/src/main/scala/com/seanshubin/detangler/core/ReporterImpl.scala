@@ -14,15 +14,24 @@ class ReporterImpl(reportDir: Path,
                    devonMarshaller: DevonMarshaller,
                    charset: Charset,
                    reportTransformer: ReportTransformer,
-                   pageGenerator: PageGenerator) extends Reporter {
+                   pageGenerator: PageGenerator,
+                   resourceLoader: ResourceLoader) extends Reporter {
 
   override def generateReportsOne(detangled: Detangled): Unit = {
     new Delegate(detangled).generateReports()
   }
 
   override def generateReportsTwo(detangled: Detangled): Unit = {
-    fileSystem.createDirectories(reportDir)
+    initDestinationDirectory()
     generateReportForUnit(detangled, UnitId.Root)
+  }
+
+  private def initDestinationDirectory(): Unit = {
+    fileSystem.createDirectories(reportDir)
+    val in = resourceLoader.inputStreamFor("style.css")
+    val styleSheetPath = reportDir.resolve("style.css")
+    val out = fileSystem.newOutputStream(styleSheetPath)
+    IoUtil.copyInputStreamToOutputStream(in, out)
   }
 
   private def generateReportForUnit(detangled: Detangled, unitId: UnitId): Unit = {
