@@ -15,9 +15,13 @@ class ReportTransformerTest extends FunSuite {
     assert(groupA.complexity === "2")
     assert(groupA.partsAnchor.name === "parts")
     assert(groupA.partsAnchor.link === "group_a.html")
+    assert(groupA.dependsOnCaption === "depends on (1)")
     assert(groupA.dependsOn.size === 1)
+    assert(groupA.dependedOnByCaption === "depended on by (0)")
     assert(groupA.dependedOnBy.size === 0)
+    assert(groupA.dependsOnExternalCaption === "depends on external (0)")
     assert(groupA.dependsOnExternal.size === 0)
+    assert(groupA.dependedOnByExternalCaption === "depended on by external (0)")
     assert(groupA.dependedOnByExternal.size === 0)
     val groupB = groupA.dependsOn.head
     assert(groupB.anchor.name === "group/b")
