@@ -3,7 +3,7 @@ package com.seanshubin.detangler.core
 import java.nio.charset.StandardCharsets
 import java.nio.file.Paths
 
-import com.seanshubin.devon.core.devon.DefaultDevonMarshaller
+import com.seanshubin.devon.core.devon.DevonMarshallerWiring
 import com.seanshubin.utility.filesystem.FileSystemIntegrationImpl
 
 trait PrototypeWiring {
@@ -19,7 +19,7 @@ trait PrototypeWiring {
   lazy val reporter = new ReporterImpl(
     reportDir,
     fileSystem,
-    DefaultDevonMarshaller,
+    DevonMarshallerWiring.Default,
     StandardCharsets.UTF_8,
     reportTransformer,
     pageGenerator,

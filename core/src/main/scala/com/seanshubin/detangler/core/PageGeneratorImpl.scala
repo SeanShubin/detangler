@@ -18,7 +18,7 @@ class PageGeneratorImpl(resourceLoader: ResourceLoader) extends PageGenerator {
     pageTemplate.toString
   }
 
-  private def generateUnitSummary(htmlUnit: HtmlUnit, unitSummaryTemplate: Element, unitDetailTemplate:Element): Element = {
+  private def generateUnitSummary(htmlUnit: HtmlUnit, unitSummaryTemplate: Element, unitDetailTemplate: Element): Element = {
     val unitSummaryClone = unitSummaryTemplate.clone()
     val unitDetailTemplateClone = unitDetailTemplate.clone()
     unitSummaryClone.attr("id", htmlUnit.id)
@@ -32,12 +32,12 @@ class PageGeneratorImpl(resourceLoader: ResourceLoader) extends PageGenerator {
     unitSummaryClone
   }
 
-  private def attachUnitDetail(target:Element, htmlUnit:HtmlUnit, unitDetail:Element): Unit ={
+  private def attachUnitDetail(target: Element, htmlUnit: HtmlUnit, unitDetail: Element): Unit = {
     text(unitDetail, "li table thead tr:eq(0) th", htmlUnit.dependsOnCaption)
     target.appendChild(unitDetail)
   }
 
-  private def text(target:Element, cssSelector:String, value:String): Unit ={
+  private def text(target: Element, cssSelector: String, value: String): Unit = {
     exactlyOneElement(target, cssSelector).text(value)
   }
 
