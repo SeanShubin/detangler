@@ -13,14 +13,13 @@ class PageGeneratorImpl(resourceLoader: ResourceLoader) extends PageGenerator {
     val unitDetailTemplate = loadTemplate("unit-detail")
     val unitSummaryTable = exactlyOneElement(unitSummaryTemplate, "body table")
     val unitDetailList = exactlyOneElement(unitDetailTemplate, "body ul")
-    val unitSummaries = page.units.map(htmlUnit => generateUnitSummary(htmlUnit, unitSummaryTable, unitDetailList))
-    unitSummaries.foreach(pageTemplate.body().appendChild)
+    page.units.foreach(attachUnitSummary(pageTemplate.body(), _, unitSummaryTable, unitDetailList))
+    pageTemplate.outputSettings().indentAmount(2)
     pageTemplate.toString
   }
 
-  private def generateUnitSummary(htmlUnit: HtmlUnit, unitSummaryTemplate: Element, unitDetailTemplate: Element): Element = {
+  private def attachUnitSummary(target: Element, htmlUnit: HtmlUnit, unitSummaryTemplate: Element, unitDetailTemplate: Element): Unit = {
     val unitSummaryClone = unitSummaryTemplate.clone()
-    val unitDetailTemplateClone = unitDetailTemplate.clone()
     unitSummaryClone.attr("id", htmlUnit.id)
     exactlyOneElement(unitSummaryClone, "tbody tr td:eq(0)").text(htmlUnit.name)
     exactlyOneElement(unitSummaryClone, "tbody tr td:eq(0)").text(htmlUnit.name)
@@ -28,13 +27,11 @@ class PageGeneratorImpl(resourceLoader: ResourceLoader) extends PageGenerator {
     exactlyOneElement(unitSummaryClone, "tbody tr td:eq(2)").text(htmlUnit.complexity)
     exactlyOneElement(unitSummaryClone, "tbody tr td:eq(3) a").text(htmlUnit.partsAnchor.name)
     exactlyOneElement(unitSummaryClone, "tbody tr td:eq(3) a").attr("href", htmlUnit.partsAnchor.link)
-    attachUnitDetail(unitSummaryClone, htmlUnit, unitDetailTemplateClone)
-    unitSummaryClone
-  }
+    target.appendChild(unitSummaryClone)
 
-  private def attachUnitDetail(target: Element, htmlUnit: HtmlUnit, unitDetail: Element): Unit = {
-    text(unitDetail, "li table thead tr:eq(0) th", htmlUnit.dependsOnCaption)
-    target.appendChild(unitDetail)
+    val unitDetailTemplateClone = unitDetailTemplate.clone()
+    text(unitDetailTemplateClone, "li table thead tr:eq(0) th", htmlUnit.dependsOnCaption)
+    target.appendChild(unitDetailTemplateClone)
   }
 
   private def text(target: Element, cssSelector: String, value: String): Unit = {
