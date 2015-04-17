@@ -18,6 +18,8 @@ class PageGeneratorImpl(resourceLoader: ResourceLoader) extends PageGenerator {
     pageTemplate.toString
   }
 
+  override def pageForId(detangled:Detangled, id: UnitId): String = ???
+
   private def attachUnitSummary(target: Element, htmlUnit: HtmlUnit, unitSummaryTemplate: Element, unitDetailTemplate: Element): Unit = {
     val unitSummaryClone = unitSummaryTemplate.clone()
     unitSummaryClone.attr("id", htmlUnit.id)

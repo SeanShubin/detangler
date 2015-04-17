@@ -38,8 +38,4 @@ class HtmlUtilTest extends FunSuite {
     assert(HtmlUtil.htmlLink(SampleData.idPackageB, SampleData.idPackageA) === "group_a.html#group/a--package/a")
     assert(HtmlUtil.htmlLink(SampleData.idPackageB, SampleData.idClassA) === "group_a--package_a.html#group/a--package/a--class/a")
   }
-  /*
-    assert(reportTransformer.htmlLinkRelative(unitId) === "#g/a--p/b-p/c-p/d--c/e-c/f")
-    assert(reportTransformer.htmlLinkAbsolute(unitId) === "g_a--p_b-p_c-p_d.html#g/a--p/b-p/c-p/d--c/e-c/f")
-   */
 }
