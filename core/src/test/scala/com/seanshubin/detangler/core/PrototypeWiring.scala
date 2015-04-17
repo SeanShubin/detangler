@@ -15,7 +15,8 @@ trait PrototypeWiring {
   lazy val classLoader = this.getClass.getClassLoader
   lazy val classLoaderIntegration = new ClassLoaderIntegrationImpl(classLoader)
   lazy val resourceLoader = new ResourceLoaderImpl(classLoaderIntegration)
-  lazy val pageGenerator = new PageGeneratorImpl(resourceLoader)
+  lazy val detangled:Detangled = SampleData.detangled
+  lazy val pageGenerator = new PageGeneratorImpl(detangled, resourceLoader)
   lazy val reporter = new ReporterImpl(
     reportDir,
     fileSystem,

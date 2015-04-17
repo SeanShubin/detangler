@@ -10,7 +10,7 @@ object HtmlUtil {
   }
 
   def htmlId(unitId: UnitId): String = {
-    unitId.paths.map(htmlIdForSetOfString).mkString("--")
+    unitId.paths.map(htmlIdForSetOfString).mkString("--").map(makeCssSelectorSafe)
   }
 
   def htmlName(unitId: UnitId): String = {
@@ -26,9 +26,15 @@ object HtmlUtil {
   }
 
   private val FileSystemCharacters = "/\\?%*:|\"<>. "
+  private val CssSelectorCharacters = "~!@$%^&*()+=,./';:\"?><[]\\{}|`#"
 
   private def makeFileSystemSafe(c: Char): Char = {
     if (FileSystemCharacters.contains(c)) '_'
+    else c
+  }
+
+  private def makeCssSelectorSafe(c: Char): Char = {
+    if (CssSelectorCharacters.contains(c)) '_'
     else c
   }
 

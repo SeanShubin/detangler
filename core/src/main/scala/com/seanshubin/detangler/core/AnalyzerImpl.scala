@@ -1,5 +1,5 @@
 package com.seanshubin.detangler.core
 
-class RunnerImpl(target: String, emitLine: String => Unit) extends Runner {
+class AnalyzerImpl(target: String, emitLine: String => Unit) extends Analyzer {
   override def run(): Unit = emitLine(s"Hello, $target!")
 }

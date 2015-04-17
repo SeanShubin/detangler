@@ -39,9 +39,9 @@ class LauncherImplTest extends FunSuite with EasyMockSugar {
     val errorLines = Seq("error")
     val validationFailure = Left(errorLines)
     val configurationFactory = mock[ConfigurationFactory]
-    val runnerFactory = mock[RunnerFactory]
+    val runnerFactory = mock[AnalyzerFactory]
     val notifications = mock[Notifications]
-    val runner = mock[Runner]
+    val runner = mock[Analyzer]
     val launcher = new LauncherImpl(args, configurationFactory, runnerFactory, notifications)
 
     def expecting: () => Unit

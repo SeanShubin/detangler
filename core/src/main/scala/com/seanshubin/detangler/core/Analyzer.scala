@@ -1,5 +1,5 @@
 package com.seanshubin.detangler.core
 
-trait Runner {
+trait Analyzer {
   def run()
 }
