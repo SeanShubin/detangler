@@ -24,7 +24,8 @@ trait PrototypeWiring {
     StandardCharsets.UTF_8,
     reportTransformer,
     pageGenerator,
-    resourceLoader
+    resourceLoader,
+    detangled
   )
 
 }

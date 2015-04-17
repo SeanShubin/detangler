@@ -16,7 +16,7 @@ trait ConfigurationWiring {
   lazy val notifications: Notifications = new LineEmittingNotifications(devonMarshaller, emitLine)
   lazy val configurationFactory: ConfigurationFactory = new ConfigurationFactoryImpl(
     fileSystem, devonMarshaller, charset)
-  lazy val runnerFactory: AnalyzerFactory = new AnalyzerFactoryImpl()
+  lazy val analyzerFactory: AnalyzerFactory = new AnalyzerFactoryImpl()
   lazy val launcher: Launcher = new LauncherImpl(
-    commandLineArguments, configurationFactory, runnerFactory, notifications)
+    commandLineArguments, configurationFactory, analyzerFactory, notifications)
 }

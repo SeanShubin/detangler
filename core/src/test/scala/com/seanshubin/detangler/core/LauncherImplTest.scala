@@ -1,5 +1,7 @@
 package com.seanshubin.detangler.core
 
+import java.nio.file.Paths
+
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
 
@@ -9,7 +11,7 @@ class LauncherImplTest extends FunSuite with EasyMockSugar {
       override def expecting = () => {
         configurationFactory.validate(args).andReturn(validationSuccess)
         notifications.effectiveConfiguration(validConfiguration)
-        runnerFactory.createRunner(validConfiguration).andReturn(runner)
+        runnerFactory.createAnalyzer(validConfiguration).andReturn(runner)
         runner.run()
       }
 
@@ -34,7 +36,7 @@ class LauncherImplTest extends FunSuite with EasyMockSugar {
 
   trait Helper {
     val args: Seq[String] = Seq("arg1")
-    val validConfiguration = Configuration("world")
+    val validConfiguration = Configuration(Paths.get("generated", "report"))
     val validationSuccess = Right(validConfiguration)
     val errorLines = Seq("error")
     val validationFailure = Left(errorLines)

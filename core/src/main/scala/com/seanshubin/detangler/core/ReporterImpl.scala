@@ -15,13 +15,14 @@ class ReporterImpl(reportDir: Path,
                    charset: Charset,
                    reportTransformer: ReportTransformer,
                    pageGenerator: PageGenerator,
-                   resourceLoader: ResourceLoader) extends Reporter {
+                   resourceLoader: ResourceLoader,
+                   detangled: Detangled) extends Reporter {
 
-  override def generateReportsOne(detangled: Detangled): Unit = {
+  override def generateReportsOne(): Unit = {
     new Delegate(detangled).generateReports()
   }
 
-  override def generateReportsTwo(detangled: Detangled): Unit = {
+  override def generateReportsTwo(): Unit = {
     initDestinationDirectory()
     generateReportForUnit(detangled, UnitId.Root)
   }

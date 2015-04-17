@@ -10,7 +10,7 @@ class ConfigurationFactoryImpl(fileSystem: FileSystemIntegration,
                                devonMarshaller: DevonMarshaller,
                                charset: Charset) extends ConfigurationFactory {
   private val sampleConfiguration: Configuration = Configuration(
-    greetingTarget = "world"
+    reportDir = Paths.get("report-dir")
   )
 
   override def validate(args: Seq[String]): Either[Seq[String], Configuration] = {
