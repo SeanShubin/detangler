@@ -13,7 +13,7 @@ class ConfigurationFactoryImplTest extends FunSuite with EasyMockSugar {
     new Helper {
       override def content =
         """{
-          |  greetingTarget world
+          |  reportDir generated/report
           |}
           | """.stripMargin
 
