@@ -4,7 +4,7 @@ import org.jsoup.Jsoup
 import org.scalatest.FunSuite
 
 class PageGeneratorTest extends FunSuite {
-  test("top page") {
+  test("top page summary") {
     val classLoader:ClassLoader = this.getClass.getClassLoader
     val classLoaderIntegration:ClassLoaderIntegration = new ClassLoaderIntegrationImpl(classLoader)
     val resourceLoader:ResourceLoader = new ResourceLoaderImpl(classLoaderIntegration)
@@ -12,6 +12,8 @@ class PageGeneratorTest extends FunSuite {
     val page = pageGenerator.pageForId(SampleData.idRoot)
     val document = Jsoup.parse(page)
     assert(document.select("#group_a").size() === 1)
+    assert(document.select("#group_b").size() === 1)
+    assert(document.select("#group_c").size() === 0)
     //document.querySelectorAll('#group_a thead tr th').item(0).textContent
     assert(document.select("#group_a thead tr th").get(0).text() === "name")
     assert(document.select("#group_a thead tr th").get(1).text() === "depth")

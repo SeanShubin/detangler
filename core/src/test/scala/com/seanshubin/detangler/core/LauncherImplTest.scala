@@ -12,7 +12,7 @@ class LauncherImplTest extends FunSuite with EasyMockSugar {
         configurationFactory.validate(args).andReturn(validationSuccess)
         notifications.effectiveConfiguration(validConfiguration)
         runnerFactory.createAnalyzer(validConfiguration).andReturn(runner)
-        runner.run()
+        runner.analyze()
       }
 
       override def whenExecuting = () => {

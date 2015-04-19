@@ -10,7 +10,7 @@ class LauncherImpl(args: Seq[String],
       case Left(error) => notifications.configurationError(error)
       case Right(configuration) =>
         notifications.effectiveConfiguration(configuration)
-        analyzerFactory.createAnalyzer(configuration).run()
+        analyzerFactory.createAnalyzer(configuration).analyze()
     }
   }
 }

@@ -3,7 +3,7 @@ package com.seanshubin.detangler.core
 import java.nio.file.Path
 
 class AnalyzerImpl(reporterFactory: ReporterFactory, reportDir:Path) extends Analyzer {
-  override def run(): Unit = {
+  override def analyze(): Unit = {
     val idRoot = UnitId.simple()
     val idGroupA = UnitId.simple("group/a")
     val idGroupB = UnitId.simple("group/b")
@@ -106,6 +106,6 @@ class AnalyzerImpl(reporterFactory: ReporterFactory, reportDir:Path) extends Ana
         depth = 17,
         complexity = 18)
     ))
-    reporterFactory.createReporter(detangled, reportDir).generateReportsTwo()
+    reporterFactory.createReporter(detangled, reportDir).generateReportsThree()
   }
 }

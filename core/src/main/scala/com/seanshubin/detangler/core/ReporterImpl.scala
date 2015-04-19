@@ -27,6 +27,12 @@ class ReporterImpl(reportDir: Path,
     generateReportForUnit(detangled, UnitId.Root)
   }
 
+
+  override def generateReportsThree(): Unit = {
+    initDestinationDirectory()
+    generateReportForUnit2(detangled, UnitId.Root)
+  }
+
   private def initDestinationDirectory(): Unit = {
     fileSystem.createDirectories(reportDir)
     val in = resourceLoader.inputStreamFor("style.css")
@@ -44,6 +50,21 @@ class ReporterImpl(reportDir: Path,
       child <- detangled.composedOf(unitId)
     } {
       generateReportForUnit(detangled, child)
+    }
+  }
+
+  private def generateReportForUnit2(detangled: Detangled, unitId: UnitId): Unit = {
+    val composedOf = detangled.composedOf(unitId)
+    if (composedOf.nonEmpty) {
+      val fileName = HtmlUtil.fileNameFor(unitId)
+      val pageText = pageGenerator.pageForId(unitId)
+      val pagePath = reportDir.resolve(fileName)
+      fileSystem.write(pagePath, pageText.getBytes(charset))
+      for {
+        child <- composedOf
+      } {
+        generateReportForUnit2(detangled, child)
+      }
     }
   }
 

@@ -21,7 +21,6 @@ class JsoupTest extends FunSuite {
     pageDocument.body().appendChild(table)
     rows.foreach(_.remove())
     tableBody.appendChild(row)
-    println(pageDocument)
 
     assert(pageDocument.select("body table tbody tr").size() === 1, "only one row")
     assert(pageDocument.select("body table tbody tr td").size() === 3, "three cells in the row")

@@ -4,4 +4,6 @@ trait Reporter {
   def generateReportsOne()
 
   def generateReportsTwo()
+
+  def generateReportsThree()
 }
