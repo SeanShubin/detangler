@@ -20,34 +20,35 @@ class PageGeneratorImpl(detangled:Detangled, resourceLoader: ResourceLoader) ext
 
   override def pageForId(id: UnitId): String = {
     val pageTemplate = loadTemplate("page")
+    val unitTemplate = loadTemplate("unit")
+    val unitSummaryTable = exactlyOneElement(unitTemplate, "body > div > table")
+    val unitDetailList = exactlyOneElement(unitTemplate, "body > div > ul")
     val unitIds = detangled.composedOf(id)
     val pageBody = pageTemplate.body()
-    unitIds.foreach(appendUnitInfo(_, pageBody))
+    unitIds.foreach(appendUnitInfo(_, pageBody, unitSummaryTable, unitDetailList))
     pageTemplate.toString
   }
 
-  private def appendUnitInfo(unitId:UnitId, element:Element): Unit = {
-    appendUnitSummary(unitId, element)
-    appendUnitDetail(unitId, element)
+  private def appendUnitInfo(unitId:UnitId, element:Element, unitSummaryTable:Element, unitDetailList:Element): Unit = {
+    appendUnitSummary(unitId, element, unitSummaryTable)
+    appendUnitDetail(unitId, element, unitDetailList)
   }
 
-  private def appendUnitSummary(unitId:UnitId, element:Element):Unit ={
-    val unitSummaryTemplate = loadTemplate("unit-summary")
-    val unitSummaryTable = exactlyOneElement(unitSummaryTemplate, "body table")
-    unitSummaryTable.attr("id", HtmlUtil.htmlId(unitId))
-    exactlyOneElement(unitSummaryTable, "tbody tr td:eq(0)").text(HtmlUtil.htmlName(unitId))
-    exactlyOneElement(unitSummaryTable, "tbody tr td:eq(1)").text(detangled.depth(unitId).toString)
-    exactlyOneElement(unitSummaryTable, "tbody tr td:eq(2)").text(detangled.complexity(unitId).toString)
-    exactlyOneElement(unitSummaryTable, "tbody tr td:eq(3) a").text("parts")
-    exactlyOneElement(unitSummaryTable, "tbody tr td:eq(3) a").attr("href", HtmlUtil.fileNameFor(unitId))
-    element.appendChild(unitSummaryTable)
+  private def appendUnitSummary(unitId:UnitId, element:Element, unitSummaryTable:Element):Unit ={
+    val unitSummaryTableClone = unitSummaryTable.clone()
+    unitSummaryTableClone.attr("id", HtmlUtil.htmlId(unitId))
+    exactlyOneElement(unitSummaryTableClone, "tbody tr td:eq(0)").text(HtmlUtil.htmlName(unitId))
+    exactlyOneElement(unitSummaryTableClone, "tbody tr td:eq(1)").text(detangled.depth(unitId).toString)
+    exactlyOneElement(unitSummaryTableClone, "tbody tr td:eq(2)").text(detangled.complexity(unitId).toString)
+    exactlyOneElement(unitSummaryTableClone, "tbody tr td:eq(3) a").text("parts")
+    exactlyOneElement(unitSummaryTableClone, "tbody tr td:eq(3) a").attr("href", HtmlUtil.fileNameFor(unitId))
+    element.appendChild(unitSummaryTableClone)
   }
 
-  private def appendUnitDetail(unitId:UnitId, element:Element):Unit ={
-    val unitDetailTemplate = loadTemplate("unit-detail")
-    val unitDetailList = exactlyOneElement(unitDetailTemplate, "body ul")
-    text(unitDetailList, "li table thead tr:eq(0) th", dependsOnCaption(unitId))
-    element.appendChild(unitDetailList)
+  private def appendUnitDetail(unitId:UnitId, element:Element, unitDetailList:Element):Unit ={
+    val unitDetailListClone = unitDetailList.clone()
+    text(unitDetailListClone, "li table thead tr:eq(0) th", dependsOnCaption(unitId))
+    element.appendChild(unitDetailListClone)
   }
 
   private def dependsOnCaption(unitId:UnitId):String = {
