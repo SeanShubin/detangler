@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head lang="en">
     <meta charset="UTF-8">
     <title>dependency report</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-<div id="sample_group">
-    <table>
+<div class="unit-div">
+    <table class="unit-summary">
         <thead>
         <tr>
             <th>name</th>
@@ -18,14 +18,14 @@
         </thead>
         <tbody>
         <tr>
-            <td>sample/group</td>
-            <td>depth number</td>
-            <td>complexity number</td>
-            <td><a href="sample_group_parts">parts</a></td>
+            <td class="name">sample/group</td>
+            <td class="depth">depth number</td>
+            <td class="complexity">complexity number</td>
+            <td><a class="composed-of" href="sample_group_parts">parts</a></td>
         </tr>
         </tbody>
     </table>
-    <ul>
+    <ul class="unit-depends-on">
         <li>
             <table>
                 <thead>
@@ -41,10 +41,10 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td><a href="#other_group">other/group</a></td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td><a href="other_group_parts">parts</a></td>
+                    <td><a class="name" href="#other_group">other/group</a></td>
+                    <td class="depth">3</td>
+                    <td class="complexity">4</td>
+                    <td><a class="composed-of" href="other_group_parts">parts</a></td>
                 </tr>
                 </tbody>
             </table>

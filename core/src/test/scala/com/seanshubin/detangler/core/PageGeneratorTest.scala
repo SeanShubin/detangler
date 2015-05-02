@@ -7,6 +7,7 @@ import org.scalatest.FunSuite
 class PageGeneratorTest extends FunSuite {
   test("top page summary") {
     val document = documentFor(SampleData.idRoot)
+    document.outputSettings().indentAmount(2)
     assert(document.select("#group_a").size() === 1)
     assert(document.select("#group_b").size() === 1)
     assert(document.select("#group_c").size() === 0)

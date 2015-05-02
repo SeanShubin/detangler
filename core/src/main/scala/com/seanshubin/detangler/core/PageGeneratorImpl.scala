@@ -6,7 +6,7 @@ import com.seanshubin.detangler.core.html.{HtmlPage, HtmlUnit}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 
-class PageGeneratorImpl(detangled:Detangled, resourceLoader: ResourceLoader) extends PageGenerator {
+class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader) extends PageGenerator {
   override def generatePageText(page: HtmlPage): String = {
     val pageTemplate = loadTemplate("page")
     val unitSummaryTemplate = loadTemplate("unit-summary")
@@ -19,39 +19,46 @@ class PageGeneratorImpl(detangled:Detangled, resourceLoader: ResourceLoader) ext
   }
 
   override def pageForId(id: UnitId): String = {
-    val pageTemplate = loadTemplate("page")
     val unitTemplate = loadTemplate("unit")
-    val unitSummaryTable = exactlyOneElement(unitTemplate, "body > div > table")
-    val unitDetailList = exactlyOneElement(unitTemplate, "body > div > ul")
+    val unitDependsOn = JsoupUtil.extractFragment(unitTemplate, "unit-depends-on")
+    val unitSummary = JsoupUtil.extractFragment(unitTemplate, "unit-summary")
+    val unitDiv = JsoupUtil.extractFragment(unitTemplate, "unit-div")
     val unitIds = detangled.composedOf(id)
-    val pageBody = pageTemplate.body()
-    unitIds.foreach(appendUnitInfo(_, pageBody, unitSummaryTable, unitDetailList))
-    pageTemplate.toString
+    val pageBody = unitTemplate.body()
+    unitIds.foreach(appendUnitInfo(_, pageBody, unitDiv, unitSummary, unitDependsOn))
+    unitTemplate.outputSettings().indentAmount(2)
+    unitTemplate.toString
   }
 
-  private def appendUnitInfo(unitId:UnitId, element:Element, unitSummaryTable:Element, unitDetailList:Element): Unit = {
-    appendUnitSummary(unitId, element, unitSummaryTable)
-    appendUnitDetail(unitId, element, unitDetailList)
+  private def appendUnitInfo(unitId: UnitId,
+                             appendTo: Element,
+                             unitDivOriginal: Element,
+                             unitSummaryOriginal: Element,
+                             unitDependsOnOriginal: Element): Unit = {
+    val unitDiv = unitDivOriginal.clone()
+    val unitSummary = unitSummaryOriginal.clone()
+    val unitDependsOn = unitDependsOnOriginal.clone()
+    unitDiv.attr("id", HtmlUtil.htmlId(unitId))
+    appendUnitSummary(unitId, unitDiv, unitSummary)
+    appendUnitDetail(unitId, unitDiv, unitDependsOn)
+    appendTo.appendChild(unitDiv)
   }
 
-  private def appendUnitSummary(unitId:UnitId, element:Element, unitSummaryTable:Element):Unit ={
-    val unitSummaryTableClone = unitSummaryTable.clone()
-    unitSummaryTableClone.attr("id", HtmlUtil.htmlId(unitId))
-    exactlyOneElement(unitSummaryTableClone, "tbody tr td:eq(0)").text(HtmlUtil.htmlName(unitId))
-    exactlyOneElement(unitSummaryTableClone, "tbody tr td:eq(1)").text(detangled.depth(unitId).toString)
-    exactlyOneElement(unitSummaryTableClone, "tbody tr td:eq(2)").text(detangled.complexity(unitId).toString)
-    exactlyOneElement(unitSummaryTableClone, "tbody tr td:eq(3) a").text("parts")
-    exactlyOneElement(unitSummaryTableClone, "tbody tr td:eq(3) a").attr("href", HtmlUtil.fileNameFor(unitId))
-    element.appendChild(unitSummaryTableClone)
+  private def appendUnitSummary(unitId: UnitId, appendTo: Element, unitSummary: Element): Unit = {
+    JsoupUtil.setText(unitSummary, "name", HtmlUtil.htmlName(unitId))
+    JsoupUtil.setText(unitSummary, "depth", detangled.depth(unitId).toString)
+    JsoupUtil.setText(unitSummary, "complexity", detangled.complexity(unitId).toString)
+    JsoupUtil.setAnchor(unitSummary, "composed-of", "parts", HtmlUtil.fileNameFor(unitId))
+    appendTo.appendChild(unitSummary)
   }
 
-  private def appendUnitDetail(unitId:UnitId, element:Element, unitDetailList:Element):Unit ={
+  private def appendUnitDetail(unitId: UnitId, element: Element, unitDetailList: Element): Unit = {
     val unitDetailListClone = unitDetailList.clone()
     text(unitDetailListClone, "li table thead tr:eq(0) th", dependsOnCaption(unitId))
     element.appendChild(unitDetailListClone)
   }
 
-  private def dependsOnCaption(unitId:UnitId):String = {
+  private def dependsOnCaption(unitId: UnitId): String = {
     val dependsOn = detangled.dependsOn(unitId)
     s"depends on (${dependsOn.size})"
   }
@@ -95,3 +102,19 @@ class PageGeneratorImpl(detangled:Detangled, resourceLoader: ResourceLoader) ext
     else throw new RuntimeException(s"Expected exactly one element from '$cssQuery', got $size\n$element")
   }
 }
+
+/*
+Types of things to do with templates
+
+What do we append to at the top level?
+load the top level page, append to its body, convert the top level page to a string
+
+What do we append at the top level?
+load the relevant section from a template by id, then remove the id
+
+What do we append to?
+clone the template
+
+
+
+*/
