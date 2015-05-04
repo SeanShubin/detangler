@@ -1,11 +1,10 @@
 package com.seanshubin.detangler.core
 
-import java.io.{OutputStream, ByteArrayOutputStream, InputStream, ByteArrayInputStream}
-import java.nio.charset.{StandardCharsets, Charset}
-import java.nio.file.{Paths, Path}
+import java.nio.charset.{Charset, StandardCharsets}
+import java.nio.file.{Path, Paths}
 
-import com.seanshubin.devon.core.devon.{DevonMarshallerWiring, DevonMarshaller}
-import com.seanshubin.utility.filesystem.{FileSystemIntegrationNotImplemented, FileSystemIntegration}
+import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
+import com.seanshubin.utility.filesystem.FileSystemIntegration
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
 

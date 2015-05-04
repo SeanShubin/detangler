@@ -1,6 +1,6 @@
 package com.seanshubin.detangler.core
 
-import java.io.{InputStream, ByteArrayInputStream, ByteArrayOutputStream, OutputStream}
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream, OutputStream}
 import java.nio.charset.Charset
 
 class FakeFile(text: String, charset: Charset) {

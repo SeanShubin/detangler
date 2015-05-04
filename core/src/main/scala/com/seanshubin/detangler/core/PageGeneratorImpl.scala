@@ -2,10 +2,10 @@ package com.seanshubin.detangler.core
 
 import java.nio.charset.StandardCharsets
 
+import com.seanshubin.detangler.core.JsoupUtil.exactlyOneElement
 import com.seanshubin.detangler.core.html.{HtmlPage, HtmlUnit}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
-import JsoupUtil.exactlyOneElement
 
 class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader) extends PageGenerator {
   override def generatePageText(page: HtmlPage): String = {
@@ -37,7 +37,7 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader) ex
                              unitDivOriginal: Element,
                              unitSummaryOriginal: Element,
                              unitDependsOnOriginal: Element,
-                              unitDependsOnRowOriginal:Element): Unit = {
+                             unitDependsOnRowOriginal: Element): Unit = {
     val unitDiv = unitDivOriginal.clone()
     val unitSummary = unitSummaryOriginal.clone()
     val unitDependsOn = unitDependsOnOriginal.clone()
@@ -56,7 +56,7 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader) ex
     appendTo.appendChild(unitSummary)
   }
 
-  private def appendUnitDetail(unitId: UnitId, element: Element, unitDetailListOriginal: Element, unitDependsOnRow:Element): Unit = {
+  private def appendUnitDetail(unitId: UnitId, element: Element, unitDetailListOriginal: Element, unitDependsOnRow: Element): Unit = {
     val unitDetailList = unitDetailListOriginal.clone()
     val dependsOnUnits = detangled.dependsOn(unitId)
     val size = dependsOnUnits.size
@@ -66,12 +66,12 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader) ex
     element.appendChild(unitDetailList)
   }
 
-  private def appendUnitDetailRow(unitId:UnitId, from:UnitId, element:Element, unitDependsOnRowOriginal:Element):Unit ={
+  private def appendUnitDetailRow(unitId: UnitId, from: UnitId, element: Element, unitDependsOnRowOriginal: Element): Unit = {
     val unitDependsOnRow = unitDependsOnRowOriginal.clone()
-    JsoupUtil.setAnchor(unitDependsOnRow,"name", HtmlUtil.htmlName(unitId), HtmlUtil.htmlLink(unitId, unitId))
-    JsoupUtil.setText(unitDependsOnRow,"depth", detangled.depth(unitId).toString)
-    JsoupUtil.setText(unitDependsOnRow,"complexity", detangled.complexity(unitId).toString)
-    JsoupUtil.setAnchor(unitDependsOnRow,"reason", HtmlUtil.arrowName(from, unitId), HtmlUtil.arrowLink(from, unitId))
+    JsoupUtil.setAnchor(unitDependsOnRow, "name", HtmlUtil.htmlName(unitId), HtmlUtil.htmlLink(unitId, unitId))
+    JsoupUtil.setText(unitDependsOnRow, "depth", detangled.depth(unitId).toString)
+    JsoupUtil.setText(unitDependsOnRow, "complexity", detangled.complexity(unitId).toString)
+    JsoupUtil.setAnchor(unitDependsOnRow, "reason", HtmlUtil.arrowName(from, unitId), HtmlUtil.arrowLink(from, unitId))
     element.appendChild(unitDependsOnRow)
   }
 

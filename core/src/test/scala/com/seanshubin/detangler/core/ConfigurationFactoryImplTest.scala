@@ -17,7 +17,7 @@ class ConfigurationFactoryImplTest extends FunSuite with EasyMockSugar {
           |}
           | """.stripMargin
 
-      override def expected = Right(Configuration(Paths.get("generated","report")))
+      override def expected = Right(Configuration(Paths.get("generated", "report")))
 
       override def expecting = () => {
         mockFileSystem.exists(configFilePath).andReturn(true)

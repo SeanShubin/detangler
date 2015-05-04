@@ -1,7 +1,7 @@
 package com.seanshubin.detangler.core
 
 import org.jsoup.Jsoup
-import org.jsoup.nodes.{Element, Document}
+import org.jsoup.nodes.{Document, Element}
 import org.scalatest.FunSuite
 
 class JsoupUtilTest extends FunSuite {
@@ -18,14 +18,14 @@ class JsoupUtilTest extends FunSuite {
         |  <div class="foo">bar</div>
         |</body>
         |</html>
-        |""".stripMargin
-    val document:Document = Jsoup.parse(sample)
-    val element:Element = JsoupUtil.extractFragment(document, "foo")
+        | """.stripMargin
+    val document: Document = Jsoup.parse(sample)
+    val element: Element = JsoupUtil.extractFragment(document, "foo")
     assert(document.select(".foo").size() === 0)
     assert(element.attributes().size() === 0)
   }
 
-  def debug(document:Document, element:Element): Unit = {
+  def debug(document: Document, element: Element): Unit = {
     document.outputSettings().indentAmount(2)
     println("DOCUMENT")
     println(document)
@@ -47,9 +47,9 @@ class JsoupUtilTest extends FunSuite {
         |  <div class="aaa bbb">bar</div>
         |</body>
         |</html>
-        |""".stripMargin
-    val document:Document = Jsoup.parse(sample)
-    val element:Element = JsoupUtil.extractFragment(document, "aaa")
+        | """.stripMargin
+    val document: Document = Jsoup.parse(sample)
+    val element: Element = JsoupUtil.extractFragment(document, "aaa")
     assert(document.select(".foo").size() === 0)
     assert(element.attributes().size() === 1)
     assert(element.classNames().size() === 1)
@@ -70,9 +70,11 @@ class JsoupUtilTest extends FunSuite {
         |  <div class="foo">bar</div>
         |</body>
         |</html>
-        |""".stripMargin
+        | """.stripMargin
     val document = Jsoup.parse(sample)
-    val exception = intercept[RuntimeException] {JsoupUtil.extractFragment(document, "foo")}
+    val exception = intercept[RuntimeException] {
+      JsoupUtil.extractFragment(document, "foo")
+    }
     assert(exception.getMessage.contains("Expected exactly one element matching '.foo', got 2"))
   }
 
@@ -89,8 +91,8 @@ class JsoupUtilTest extends FunSuite {
         |  <div class="foo">bar</div>
         |</body>
         |</html>
-        |""".stripMargin
-    val document:Document = Jsoup.parse(sample)
+        | """.stripMargin
+    val document: Document = Jsoup.parse(sample)
     JsoupUtil.setText(document, "foo", "baz")
     assert(document.select("div").size() === 1)
     val element = document.select("div").get(0)
@@ -111,8 +113,8 @@ class JsoupUtilTest extends FunSuite {
         |  <a class="foo">bar</a>
         |</body>
         |</html>
-        |""".stripMargin
-    val document:Document = Jsoup.parse(sample)
+        | """.stripMargin
+    val document: Document = Jsoup.parse(sample)
     JsoupUtil.setAnchor(document, "foo", "baz", "baz-link")
     assert(document.select("a").size() === 1)
     val element = document.select("a").get(0)

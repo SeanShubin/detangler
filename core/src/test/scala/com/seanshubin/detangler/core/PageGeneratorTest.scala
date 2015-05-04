@@ -1,9 +1,9 @@
 package com.seanshubin.detangler.core
 
+import com.seanshubin.detangler.core.JsoupUtil.exactlyOneElement
 import org.jsoup.Jsoup
-import org.jsoup.nodes.{Element, Document}
+import org.jsoup.nodes.{Document, Element}
 import org.scalatest.FunSuite
-import JsoupUtil.exactlyOneElement
 
 class PageGeneratorTest extends FunSuite {
   test("top page summary") {
@@ -30,25 +30,26 @@ class PageGeneratorTest extends FunSuite {
     assert(exactlyOneElement(table, ".reason").attr("href") === "#group_a---group_b")
   }
 
-  def assertText(element:Element, expected:String): Unit = {
+  def assertText(element: Element, expected: String): Unit = {
     assert(element.text() === expected)
   }
 
-  def assertAnchor(element:Element, expectedText:String, expectedLink:String): Unit = {
+  def assertAnchor(element: Element, expectedText: String, expectedLink: String): Unit = {
     assert(element.text() === expectedText)
     assert(element.attr("href") === expectedLink)
   }
 
-  def documentFor(unitId:UnitId):Document = {
-    val classLoader:ClassLoader = this.getClass.getClassLoader
-    val classLoaderIntegration:ClassLoaderIntegration = new ClassLoaderIntegrationImpl(classLoader)
-    val resourceLoader:ResourceLoader = new ResourceLoaderImpl(classLoaderIntegration)
-    val pageGenerator:PageGenerator = new PageGeneratorImpl(SampleData.detangled, resourceLoader)
+  def documentFor(unitId: UnitId): Document = {
+    val classLoader: ClassLoader = this.getClass.getClassLoader
+    val classLoaderIntegration: ClassLoaderIntegration = new ClassLoaderIntegrationImpl(classLoader)
+    val resourceLoader: ResourceLoader = new ResourceLoaderImpl(classLoaderIntegration)
+    val pageGenerator: PageGenerator = new PageGeneratorImpl(SampleData.detangled, resourceLoader)
     val page = pageGenerator.pageForId(SampleData.idRoot)
     val document = Jsoup.parse(page)
     document
   }
 }
+
 /*
 Sample javascript selectors, useful for debugging from the browser
 
