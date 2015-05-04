@@ -5,8 +5,8 @@
     <title>dependency report</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body>
-<div class="unit-div">
+<body class="attach-unit">
+<div class="unit-root">
     <table class="unit-summary">
         <thead>
         <tr>
@@ -30,7 +30,7 @@
             <table>
                 <thead>
                 <tr>
-                    <th colspan="4">depends on (number)</th>
+                    <th class="depends-on-caption" colspan="4">depends on (number)</th>
                 </tr>
                 <tr>
                     <th>name</th>
@@ -39,12 +39,12 @@
                     <th>composed of</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
+                <tbody class="attach-unit-depends-on-row">
+                <tr class="unit-depends-on-row">
                     <td><a class="name" href="#other_group">other/group</a></td>
                     <td class="depth">3</td>
                     <td class="complexity">4</td>
-                    <td><a class="composed-of" href="other_group_parts">parts</a></td>
+                    <td><a class="reason" href="other_group_parts">parts</a></td>
                 </tr>
                 </tbody>
             </table>

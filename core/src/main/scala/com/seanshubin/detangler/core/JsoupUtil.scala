@@ -23,17 +23,21 @@ object JsoupUtil {
     element.attr("href", href)
   }
 
-  private def exactlyOneElementWithClass(template:Element, className:String):Element = {
-    val selector = s".$className"
+  def exactlyOneElement(template:Element, selector:String):Element = {
     val elements = template.select(selector)
     if(elements.size == 1) elements.get(0)
     else throw new RuntimeException(s"Expected exactly one element matching '$selector', got ${elements.size}\n$template")
   }
 
+  private def exactlyOneElementWithClass(template:Element, className:String):Element = {
+    val selector = s".$className"
+    exactlyOneElement(template, selector)
+  }
+
   private def removeClass(element:Element, className:String): Unit ={
-    element.removeClass(className)
-    if(element.classNames().size == 0) {
-      element.removeAttr("class")
-    }
+//    element.removeClass(className)
+//    if(element.classNames().size == 0) {
+//      element.removeAttr("class")
+//    }
   }
 }

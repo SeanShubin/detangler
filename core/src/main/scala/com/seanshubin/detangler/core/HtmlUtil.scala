@@ -25,6 +25,17 @@ object HtmlUtil {
     }
   }
 
+  def arrowId(from: UnitId, to: UnitId): String = {
+    htmlId(from) + "---" + HtmlUtil.htmlId(to)
+  }
+
+  def arrowLink(from: UnitId, to: UnitId): String = {
+    "#" + arrowId(from, to)
+  }
+
+  def arrowName(from: UnitId, to: UnitId): String = "reason"
+
+
   private val FileSystemCharacters = "/\\?%*:|\"<>. "
   private val CssSelectorCharacters = "~!@$%^&*()+=,./';:\"?><[]\\{}|`#"
 

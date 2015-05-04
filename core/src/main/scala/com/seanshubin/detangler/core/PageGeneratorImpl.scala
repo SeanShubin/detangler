@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets
 import com.seanshubin.detangler.core.html.{HtmlPage, HtmlUnit}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
+import JsoupUtil.exactlyOneElement
 
 class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader) extends PageGenerator {
   override def generatePageText(page: HtmlPage): String = {
@@ -20,12 +21,13 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader) ex
 
   override def pageForId(id: UnitId): String = {
     val unitTemplate = loadTemplate("unit")
+    val unitDependsOnRow = JsoupUtil.extractFragment(unitTemplate, "unit-depends-on-row")
     val unitDependsOn = JsoupUtil.extractFragment(unitTemplate, "unit-depends-on")
     val unitSummary = JsoupUtil.extractFragment(unitTemplate, "unit-summary")
     val unitDiv = JsoupUtil.extractFragment(unitTemplate, "unit-div")
     val unitIds = detangled.composedOf(id)
     val pageBody = unitTemplate.body()
-    unitIds.foreach(appendUnitInfo(_, pageBody, unitDiv, unitSummary, unitDependsOn))
+    unitIds.foreach(appendUnitInfo(_, pageBody, unitDiv, unitSummary, unitDependsOn, unitDependsOnRow))
     unitTemplate.outputSettings().indentAmount(2)
     unitTemplate.toString
   }
@@ -34,13 +36,15 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader) ex
                              appendTo: Element,
                              unitDivOriginal: Element,
                              unitSummaryOriginal: Element,
-                             unitDependsOnOriginal: Element): Unit = {
+                             unitDependsOnOriginal: Element,
+                              unitDependsOnRowOriginal:Element): Unit = {
     val unitDiv = unitDivOriginal.clone()
     val unitSummary = unitSummaryOriginal.clone()
     val unitDependsOn = unitDependsOnOriginal.clone()
+    val unitDependsOnRow = unitDependsOnRowOriginal.clone()
     unitDiv.attr("id", HtmlUtil.htmlId(unitId))
     appendUnitSummary(unitId, unitDiv, unitSummary)
-    appendUnitDetail(unitId, unitDiv, unitDependsOn)
+    appendUnitDetail(unitId, unitDiv, unitDependsOn, unitDependsOnRow)
     appendTo.appendChild(unitDiv)
   }
 
@@ -52,10 +56,23 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader) ex
     appendTo.appendChild(unitSummary)
   }
 
-  private def appendUnitDetail(unitId: UnitId, element: Element, unitDetailList: Element): Unit = {
-    val unitDetailListClone = unitDetailList.clone()
-    text(unitDetailListClone, "li table thead tr:eq(0) th", dependsOnCaption(unitId))
-    element.appendChild(unitDetailListClone)
+  private def appendUnitDetail(unitId: UnitId, element: Element, unitDetailListOriginal: Element, unitDependsOnRow:Element): Unit = {
+    val unitDetailList = unitDetailListOriginal.clone()
+    val dependsOnUnits = detangled.dependsOn(unitId)
+    val size = dependsOnUnits.size
+    JsoupUtil.setText(unitDetailList, "depends-on-caption", s"$size")
+    val attachRowsTo = exactlyOneElement(unitDetailList, "attach-unit-depends-on-row")
+    dependsOnUnits.foreach(appendUnitDetailRow(_, unitId, attachRowsTo, unitDependsOnRow))
+    element.appendChild(unitDetailList)
+  }
+
+  private def appendUnitDetailRow(unitId:UnitId, from:UnitId, element:Element, unitDependsOnRowOriginal:Element):Unit ={
+    val unitDependsOnRow = unitDependsOnRowOriginal.clone()
+    JsoupUtil.setAnchor(unitDependsOnRow,"name", HtmlUtil.htmlName(unitId), HtmlUtil.htmlLink(unitId, unitId))
+    JsoupUtil.setText(unitDependsOnRow,"depth", detangled.depth(unitId).toString)
+    JsoupUtil.setText(unitDependsOnRow,"complexity", detangled.complexity(unitId).toString)
+    JsoupUtil.setAnchor(unitDependsOnRow,"reason", HtmlUtil.arrowName(from, unitId), HtmlUtil.arrowLink(from, unitId))
+    element.appendChild(unitDependsOnRow)
   }
 
   private def dependsOnCaption(unitId: UnitId): String = {
@@ -93,13 +110,6 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader) ex
 
   private def setText(element: Element, cssSelector: String, value: String): Unit = {
     exactlyOneElement(element, cssSelector).text(value)
-  }
-
-  private def exactlyOneElement(element: Element, cssQuery: String): Element = {
-    val elements = element.select(cssQuery)
-    val size = elements.size
-    if (size == 1) elements.get(0)
-    else throw new RuntimeException(s"Expected exactly one element from '$cssQuery', got $size\n$element")
   }
 }
 

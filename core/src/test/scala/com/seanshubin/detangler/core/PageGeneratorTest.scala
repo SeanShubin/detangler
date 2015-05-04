@@ -1,64 +1,42 @@
 package com.seanshubin.detangler.core
 
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import org.jsoup.nodes.{Element, Document}
 import org.scalatest.FunSuite
+import JsoupUtil.exactlyOneElement
 
 class PageGeneratorTest extends FunSuite {
   test("top page summary") {
     val document = documentFor(SampleData.idRoot)
     document.outputSettings().indentAmount(2)
-    assert(document.select("#group_a").size() === 1)
-    assert(document.select("#group_b").size() === 1)
-    assert(document.select("#group_c").size() === 0)
-
-    //group a
-    assert(document.select("#group_a thead tr th").get(0).text() === "name")
-    assert(document.select("#group_a thead tr th").get(1).text() === "depth")
-    assert(document.select("#group_a thead tr th").get(2).text() === "complexity")
-    assert(document.select("#group_a thead tr th").get(3).text() === "composed of")
-    assert(document.select("#group_a tbody tr td").get(0).text() === "group/a")
-    assert(document.select("#group_a tbody tr td").get(1).text() === "1")
-    assert(document.select("#group_a tbody tr td").get(2).text() === "2")
-    assert(document.select("#group_a tbody tr td").get(3).select("a").text() === "parts")
-    assert(document.select("#group_a tbody tr td").get(3).select("a").attr("href") === "group_a.html")
-
-    //group b
-    assert(document.select("#group_b thead tr th").get(0).text() === "name")
-    assert(document.select("#group_b thead tr th").get(1).text() === "depth")
-    assert(document.select("#group_b thead tr th").get(2).text() === "complexity")
-    assert(document.select("#group_b thead tr th").get(3).text() === "composed of")
-    assert(document.select("#group_b tbody tr td").get(0).text() === "group/b")
-    assert(document.select("#group_b tbody tr td").get(1).text() === "3")
-    assert(document.select("#group_b tbody tr td").get(2).text() === "4")
-    assert(document.select("#group_b tbody tr td").get(3).select("a").text() === "parts")
-    assert(document.select("#group_b tbody tr td").get(3).select("a").attr("href") === "group_b.html")
+    assert(document.select(".unit-div").size() === 2)
+    val table = exactlyOneElement(document, "#group_a .unit-summary")
+    assert(exactlyOneElement(table, ".name").text() === "group/a")
+    assert(exactlyOneElement(table, ".depth").text() === "1")
+    assert(exactlyOneElement(table, ".complexity").text() === "2")
+    assert(exactlyOneElement(table, ".composed-of").text() === "parts")
+    assert(exactlyOneElement(table, ".composed-of").attr("href") === "group_a.html")
   }
 
-  test("top page detail") {
+  test("top page depends on") {
     val document = documentFor(SampleData.idRoot)
+    val table = exactlyOneElement(document, "#group_a .unit-depends-on")
+    assert(exactlyOneElement(table, ".depends-on-caption").text() === "depends on (1)")
+    assert(exactlyOneElement(table, ".name").text() === "group/b")
+    assert(exactlyOneElement(table, ".name").attr("href") === "#group_b")
+    assert(exactlyOneElement(table, ".depth").text() === "3")
+    assert(exactlyOneElement(table, ".complexity").text() === "4")
+    assert(exactlyOneElement(table, ".reason").text() === "reason")
+    assert(exactlyOneElement(table, ".reason").attr("href") === "#group_a---group_b")
+  }
 
-    //group a
-    assert(document.select("#group_a thead tr th").get(0).text() === "name")
-    assert(document.select("#group_a thead tr th").get(1).text() === "depth")
-    assert(document.select("#group_a thead tr th").get(2).text() === "complexity")
-    assert(document.select("#group_a thead tr th").get(3).text() === "composed of")
-    assert(document.select("#group_a tbody tr td").get(0).text() === "group/a")
-    assert(document.select("#group_a tbody tr td").get(1).text() === "1")
-    assert(document.select("#group_a tbody tr td").get(2).text() === "2")
-    assert(document.select("#group_a tbody tr td").get(3).select("a").text() === "parts")
-    assert(document.select("#group_a tbody tr td").get(3).select("a").attr("href") === "group_a.html")
+  def assertText(element:Element, expected:String): Unit = {
+    assert(element.text() === expected)
+  }
 
-    //group b
-    assert(document.select("#group_b thead tr th").get(0).text() === "name")
-    assert(document.select("#group_b thead tr th").get(1).text() === "depth")
-    assert(document.select("#group_b thead tr th").get(2).text() === "complexity")
-    assert(document.select("#group_b thead tr th").get(3).text() === "composed of")
-    assert(document.select("#group_b tbody tr td").get(0).text() === "group/b")
-    assert(document.select("#group_b tbody tr td").get(1).text() === "3")
-    assert(document.select("#group_b tbody tr td").get(2).text() === "4")
-    assert(document.select("#group_b tbody tr td").get(3).select("a").text() === "parts")
-    assert(document.select("#group_b tbody tr td").get(3).select("a").attr("href") === "group_b.html")
+  def assertAnchor(element:Element, expectedText:String, expectedLink:String): Unit = {
+    assert(element.text() === expectedText)
+    assert(element.attr("href") === expectedLink)
   }
 
   def documentFor(unitId:UnitId):Document = {
