@@ -6,10 +6,11 @@ import org.jsoup.nodes.{Document, Element}
 import org.scalatest.FunSuite
 
 class PageGeneratorTest extends FunSuite {
+  val shouldRemoveClass = false
   test("top page summary") {
     val document = documentFor(SampleData.idRoot)
     document.outputSettings().indentAmount(2)
-    assert(document.select(".unit-div").size() === 2)
+    assert(document.select(".unit-root").size() === 2)
     val table = exactlyOneElement(document, "#group_a .unit-summary")
     assert(exactlyOneElement(table, ".name").text() === "group/a")
     assert(exactlyOneElement(table, ".depth").text() === "1")
@@ -43,7 +44,7 @@ class PageGeneratorTest extends FunSuite {
     val classLoader: ClassLoader = this.getClass.getClassLoader
     val classLoaderIntegration: ClassLoaderIntegration = new ClassLoaderIntegrationImpl(classLoader)
     val resourceLoader: ResourceLoader = new ResourceLoaderImpl(classLoaderIntegration)
-    val pageGenerator: PageGenerator = new PageGeneratorImpl(SampleData.detangled, resourceLoader)
+    val pageGenerator: PageGenerator = new PageGeneratorImpl(SampleData.detangled, resourceLoader, shouldRemoveClass)
     val page = pageGenerator.pageForId(SampleData.idRoot)
     val document = Jsoup.parse(page)
     document
