@@ -3,20 +3,20 @@ package com.seanshubin.detangler.core
 import org.jsoup.nodes.Element
 
 object JsoupUtil {
-  def extractFragment(template: Element, className: String, shouldRemoveClass:Boolean): Element = {
+  def extractFragment(template: Element, className: String, shouldRemoveClass: Boolean): Element = {
     val element = exactlyOneElementWithClass(template, className)
     removeClassIf(element, className, shouldRemoveClass)
     element.remove()
     element
   }
 
-  def setText(template: Element, className: String, text: String, shouldRemoveClass:Boolean): Unit = {
+  def setText(template: Element, className: String, text: String, shouldRemoveClass: Boolean): Unit = {
     val element = exactlyOneElementWithClass(template, className)
     removeClassIf(element, className, shouldRemoveClass)
     element.text(text)
   }
 
-  def setAnchor(template: Element, className: String, text: String, href: String, shouldRemoveClass:Boolean): Unit = {
+  def setAnchor(template: Element, className: String, text: String, href: String, shouldRemoveClass: Boolean): Unit = {
     val element = exactlyOneElementWithClass(template, className)
     removeClassIf(element, className, shouldRemoveClass)
     element.text(text)
@@ -34,8 +34,8 @@ object JsoupUtil {
     exactlyOneElement(template, selector)
   }
 
-  private def removeClassIf(element: Element, className: String, shouldRemoveClass:Boolean): Unit = {
-    if(!shouldRemoveClass) return
+  private def removeClassIf(element: Element, className: String, shouldRemoveClass: Boolean): Unit = {
+    if (!shouldRemoveClass) return
     element.removeClass(className)
     if (element.classNames().size == 0) {
       element.removeAttr("class")

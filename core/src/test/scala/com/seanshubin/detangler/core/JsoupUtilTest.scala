@@ -26,14 +26,14 @@ class JsoupUtilTest extends FunSuite {
     assert(element.attributes().size() === 0)
   }
 
-//  def debug(document: Document, element: Element): Unit = {
-//    document.outputSettings().indentAmount(2)
-//    println("DOCUMENT")
-//    println(document)
-//    println("ELEMENT")
-//    println(element)
-//    Thread.sleep(100)
-//  }
+  //  def debug(document: Document, element: Element): Unit = {
+  //    document.outputSettings().indentAmount(2)
+  //    println("DOCUMENT")
+  //    println(document)
+  //    println("ELEMENT")
+  //    println(element)
+  //    Thread.sleep(100)
+  //  }
 
   test("extract fragment with multiple classes") {
     val sample =

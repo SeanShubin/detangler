@@ -7,7 +7,7 @@ import com.seanshubin.detangler.core.html.{HtmlPage, HtmlUnit}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 
-class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, removeClasses:Boolean) extends PageGenerator {
+class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, removeClasses: Boolean) extends PageGenerator {
   override def generatePageText(page: HtmlPage): String = {
     val pageTemplate = loadTemplate("page")
     val unitSummaryTemplate = loadTemplate("unit-summary")
@@ -33,7 +33,7 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
   }
 
   private def appendUnitInfo(unitId: UnitId,
-                             pageUnitId:UnitId,
+                             pageUnitId: UnitId,
                              appendTo: Element,
                              unitDivOriginal: Element,
                              unitSummaryOriginal: Element,
@@ -60,27 +60,27 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
     appendTo.appendChild(unitSummary)
   }
 
-  private def appendDependsOn(unitId: UnitId, pageUnitId:UnitId, element: Element, unitDetailListOriginal: Element, unitDependsOnRow: Element): Unit = {
+  private def appendDependsOn(unitId: UnitId, pageUnitId: UnitId, element: Element, unitDetailListOriginal: Element, unitDependsOnRow: Element): Unit = {
     val caption = "depends on"
     val dependencyUnits = detangled.dependsOn(unitId)
     appendDependencies(unitId, pageUnitId, element, unitDetailListOriginal, unitDependsOnRow, caption, dependencyUnits)
   }
 
-  private def appendDependedOnBy(unitId: UnitId, pageUnitId:UnitId, element: Element, unitDetailListOriginal: Element, unitDependsOnRow: Element): Unit = {
+  private def appendDependedOnBy(unitId: UnitId, pageUnitId: UnitId, element: Element, unitDetailListOriginal: Element, unitDependsOnRow: Element): Unit = {
     val caption = "depended on by"
     val dependencyUnits = detangled.dependedOnBy(unitId)
     appendDependencies(unitId, pageUnitId, element, unitDetailListOriginal, unitDependsOnRow, caption, dependencyUnits)
   }
 
   private def appendDependencies(unitId: UnitId,
-                                 pageUnitId:UnitId,
+                                 pageUnitId: UnitId,
                                  element: Element,
                                  unitDetailListOriginal: Element,
                                  unitDependsOnRow: Element,
-                                 caption:String,
-                                  dependencyUnits:Seq[UnitId]): Unit = {
+                                 caption: String,
+                                 dependencyUnits: Seq[UnitId]): Unit = {
     val size = dependencyUnits.size
-    if(size > 0) {
+    if (size > 0) {
       val unitDetailList = unitDetailListOriginal.clone()
       JsoupUtil.setText(unitDetailList, "caption", s"$caption ($size)", removeClasses)
       val attachRowsTo = exactlyOneElement(unitDetailList, ".attach-unit-dependency-row")
@@ -89,7 +89,7 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
     }
   }
 
-  private def appendUnitDetailRow(unitId: UnitId, from: UnitId, pageUnitId:UnitId, element: Element, unitDependsOnRowOriginal: Element): Unit = {
+  private def appendUnitDetailRow(unitId: UnitId, from: UnitId, pageUnitId: UnitId, element: Element, unitDependsOnRowOriginal: Element): Unit = {
     val unitDependsOnRow = unitDependsOnRowOriginal.clone()
     JsoupUtil.setAnchor(unitDependsOnRow, "name", HtmlUtil.htmlName(unitId), HtmlUtil.htmlLink(pageUnitId, unitId), removeClasses)
     JsoupUtil.setText(unitDependsOnRow, "depth", detangled.depth(unitId).toString, removeClasses)

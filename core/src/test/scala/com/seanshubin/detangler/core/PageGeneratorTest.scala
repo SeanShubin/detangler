@@ -40,8 +40,9 @@ class PageGeneratorTest extends FunSuite {
     assert(exactlyOneElement(table, ".depth").text() === "1")
     assert(exactlyOneElement(table, ".complexity").text() === "2")
     assert(exactlyOneElement(table, ".reason").text() === "reason")
-//    assert(exactlyOneElement(table, ".reason").attr("href") === "#group_a---group_b")
+    //    assert(exactlyOneElement(table, ".reason").attr("href") === "#group_a---group_b")
   }
+
   /*
     val groupB = groupA.dependsOn.head
     assert(groupB.anchor.name === "group/b")
