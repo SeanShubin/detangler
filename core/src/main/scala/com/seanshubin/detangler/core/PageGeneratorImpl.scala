@@ -63,13 +63,13 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
   private def appendDependsOn(unitId: UnitId, pageUnitId: UnitId, element: Element, unitDetailListOriginal: Element, unitDependsOnRow: Element): Unit = {
     val caption = "depends on"
     val dependencyUnits = detangled.dependsOn(unitId)
-    appendDependencies(unitId, pageUnitId, element, unitDetailListOriginal, unitDependsOnRow, caption, dependencyUnits)
+    appendDependencies(unitId, pageUnitId, element, unitDetailListOriginal, unitDependsOnRow, caption, dependencyUnits, arrowDirection = true)
   }
 
   private def appendDependedOnBy(unitId: UnitId, pageUnitId: UnitId, element: Element, unitDetailListOriginal: Element, unitDependsOnRow: Element): Unit = {
     val caption = "depended on by"
     val dependencyUnits = detangled.dependedOnBy(unitId)
-    appendDependencies(unitId, pageUnitId, element, unitDetailListOriginal, unitDependsOnRow, caption, dependencyUnits)
+    appendDependencies(unitId, pageUnitId, element, unitDetailListOriginal, unitDependsOnRow, caption, dependencyUnits, arrowDirection = false)
   }
 
   private def appendDependencies(unitId: UnitId,
@@ -78,23 +78,29 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
                                  unitDetailListOriginal: Element,
                                  unitDependsOnRow: Element,
                                  caption: String,
-                                 dependencyUnits: Seq[UnitId]): Unit = {
+                                 dependencyUnits: Seq[UnitId],
+                                 arrowDirection: Boolean): Unit = {
     val size = dependencyUnits.size
     if (size > 0) {
       val unitDetailList = unitDetailListOriginal.clone()
       JsoupUtil.setText(unitDetailList, "caption", s"$caption ($size)", removeClasses)
       val attachRowsTo = exactlyOneElement(unitDetailList, ".attach-unit-dependency-row")
-      dependencyUnits.foreach(appendUnitDetailRow(_, unitId, pageUnitId, attachRowsTo, unitDependsOnRow))
+      dependencyUnits.foreach(appendUnitDetailRow(_, unitId, pageUnitId, attachRowsTo, unitDependsOnRow, arrowDirection))
       element.appendChild(unitDetailList)
     }
   }
 
-  private def appendUnitDetailRow(unitId: UnitId, from: UnitId, pageUnitId: UnitId, element: Element, unitDependsOnRowOriginal: Element): Unit = {
+  private def appendUnitDetailRow(unitId: UnitId, from: UnitId, pageUnitId: UnitId, element: Element, unitDependsOnRowOriginal: Element, arrowDirection: Boolean): Unit = {
+    val (arrowName, arrowLink) = if (arrowDirection) {
+      (HtmlUtil.arrowName(from, unitId), HtmlUtil.arrowLink(from, unitId))
+    } else {
+      (HtmlUtil.arrowName(unitId, from), HtmlUtil.arrowLink(unitId, from))
+    }
     val unitDependsOnRow = unitDependsOnRowOriginal.clone()
     JsoupUtil.setAnchor(unitDependsOnRow, "name", HtmlUtil.htmlName(unitId), HtmlUtil.htmlLink(pageUnitId, unitId), removeClasses)
     JsoupUtil.setText(unitDependsOnRow, "depth", detangled.depth(unitId).toString, removeClasses)
     JsoupUtil.setText(unitDependsOnRow, "complexity", detangled.complexity(unitId).toString, removeClasses)
-    JsoupUtil.setAnchor(unitDependsOnRow, "reason", HtmlUtil.arrowName(from, unitId), HtmlUtil.arrowLink(from, unitId), removeClasses)
+    JsoupUtil.setAnchor(unitDependsOnRow, "reason", arrowName, arrowLink, removeClasses)
     element.appendChild(unitDependsOnRow)
   }
 
