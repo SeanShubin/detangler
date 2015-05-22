@@ -1,1 +1,11 @@
-breadcrumbs
+report
+    arrows (reasons)
+    leaf pages don't drill down
+    breadcrumbs
+    cycles
+    graphs
+        work when graphvis installed
+        generate graphvis instructions when graphvis not installed
+    depends on external
+    depended on by external
+implementation
