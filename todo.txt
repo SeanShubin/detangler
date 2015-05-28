@@ -1,6 +1,6 @@
 report
     arrows (reasons)
-    leaf pages don't drill down
+    leaf pages should not drill down
     breadcrumbs
     cycles
     graphs
