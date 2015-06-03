@@ -43,34 +43,25 @@ class PageGeneratorTest extends FunSuite {
     assert(exactlyOneElement(table, ".reason").attr("href") === "#group_a---group_b")
   }
 
-  /*
-    val groupB = groupA.dependsOn.head
-    assert(groupB.anchor.name === "group/b")
-    assert(groupB.anchor.link === "#group_b")
-    assert(groupB.depth === "3")
-    assert(groupB.complexity === "4")
-    assert(groupB.reasonAnchor.name === "reason")
-    assert(groupB.reasonAnchor.link === "#group_a---group_b")
-    assert(page.reasons.size === 1)
-    val groupAtoGroupB = page.reasons.head
-    assert(groupAtoGroupB.from.name === "group/a")
-    assert(groupAtoGroupB.from.link === "#group_a")
-    assert(groupAtoGroupB.to.name === "group/b")
-    assert(groupAtoGroupB.to.link === "#group_b")
-    assert(groupAtoGroupB.reasons.size === 1)
-    val packageAtoPackageB = groupAtoGroupB.reasons.head
-    assert(packageAtoPackageB.from.name === "package/a")
-    assert(packageAtoPackageB.from.link === "group_a.html#group_a--package_a")
-    assert(packageAtoPackageB.to.name === "package/c")
-    assert(packageAtoPackageB.to.link === "group_b.html#group_b--package_c")
-    assert(packageAtoPackageB.reasons.size === 1)
-    val classAtoClassD = packageAtoPackageB.reasons.head
-    assert(classAtoClassD.from.name === "class/a")
-    assert(classAtoClassD.from.link === "group_a--package_a.html#group_a--package_a--class_a")
-    assert(classAtoClassD.to.name === "class/d")
-    assert(classAtoClassD.to.link === "group_b--package_c.html#group_b--package_c--class_d")
-    assert(classAtoClassD.reasons.size === 0)
-   */
+  test("top page arrows") {
+    val document = documentFor(SampleData.idRoot)
+    val reasons = exactlyOneElement(document, "#reasons")
+
+    assert(exactlyOneElement(reasons, "#group_a---group_b .from").text() === "group/a")
+    assert(exactlyOneElement(reasons, "#group_a---group_b .from").attr("href") === "#group_a")
+    assert(exactlyOneElement(reasons, "#group_a---group_b .to").text() === "group/b")
+    assert(exactlyOneElement(reasons, "#group_a---group_b .to").attr("href") === "#group_b")
+
+    assert(exactlyOneElement(reasons, "#group_a--package_a---group_b--package_c .from").text() === "package/a")
+    assert(exactlyOneElement(reasons, "#group_a--package_a---group_b--package_c .from").attr("href") === "group_a.html#group_a--package_a")
+    assert(exactlyOneElement(reasons, "#group_a--package_a---group_b--package_c .to").text() === "package/c")
+    assert(exactlyOneElement(reasons, "#group_a--package_a---group_b--package_c .to").attr("href") === "group_b.html#group_b--package_c")
+
+    assert(exactlyOneElement(reasons, "#group_a--package_a--class_a---group_b--package_c--class_d .from").text() === "class/a")
+    assert(exactlyOneElement(reasons, "#group_a--package_a--class_a---group_b--package_c--class_d .from").attr("href") === "group_a--package_a.html#group_a--package_a--class_a")
+    assert(exactlyOneElement(reasons, "#group_a--package_a--class_a---group_b--package_c--class_d .to").text() === "class/d")
+    assert(exactlyOneElement(reasons, "#group_a--package_a--class_a---group_b--package_c--class_d .to").attr("href") === "group_b--package_c.html#group_b--package_c--class_d")
+  }
 
   def assertText(element: Element, expected: String): Unit = {
     assert(element.text() === expected)
