@@ -1,6 +1,7 @@
 package com.seanshubin.detangler.core
 
 import java.nio.charset.StandardCharsets
+import java.security.cert.CertPathValidatorException.Reason
 
 import com.seanshubin.detangler.core.JsoupUtil.exactlyOneElement
 import com.seanshubin.detangler.core.html.{HtmlPage, HtmlUnit}
@@ -21,13 +22,11 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
 
   override def pageForId(id: UnitId): String = {
     val unitTemplate = loadTemplate("unit")
-    val unitDependencyRow = JsoupUtil.extractFragment(unitTemplate, "unit-dependency-row", removeClasses)
-    val unitDependency = JsoupUtil.extractFragment(unitTemplate, "unit-dependency", removeClasses)
-    val unitSummary = JsoupUtil.extractFragment(unitTemplate, "unit-summary", removeClasses)
-    val unitDiv = JsoupUtil.extractFragment(unitTemplate, "unit-root", removeClasses)
+    val templates = Templates.fromDocument(unitTemplate, removeClasses)
     val unitIds = detangled.composedOf(id)
     val attachUnit = exactlyOneElement(unitTemplate.body(), ".attach-unit")
-    unitIds.foreach(appendUnitInfo(_, id, attachUnit, unitDiv, unitSummary, unitDependency, unitDependencyRow))
+    unitIds.foreach(appendUnitInfo(_, id, attachUnit, templates))
+    appendReasons(unitTemplate.body(), id, id, templates.reasons, templates.reason)
     unitTemplate.outputSettings().indentAmount(2)
     unitTemplate.toString
   }
@@ -35,16 +34,13 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
   private def appendUnitInfo(unitId: UnitId,
                              pageUnitId: UnitId,
                              appendTo: Element,
-                             unitDivOriginal: Element,
-                             unitSummaryOriginal: Element,
-                             unitDependency: Element,
-                             unitDependencyRow: Element): Unit = {
-    val unitDiv = unitDivOriginal.clone()
-    val unitSummary = unitSummaryOriginal.clone()
-    val unitDependsOn = unitDependency.clone()
-    val unitDependsOnRow = unitDependencyRow.clone()
-    val unitDependedOnBy = unitDependency.clone()
-    val unitDependedOnByRow = unitDependencyRow.clone()
+                             templates:Templates): Unit = {
+    val unitDiv = templates.unitDiv.clone()
+    val unitSummary = templates.unitSummary.clone()
+    val unitDependsOn = templates.unitDependency.clone()
+    val unitDependsOnRow = templates.unitDependencyRow.clone()
+    val unitDependedOnBy = templates.unitDependency.clone()
+    val unitDependedOnByRow = templates.unitDependencyRow.clone()
     unitDiv.attr("id", HtmlUtil.htmlId(unitId))
     appendUnitSummary(unitId, unitDiv, unitSummary)
     appendDependsOn(unitId, pageUnitId, unitDiv, unitDependsOn, unitDependsOnRow)
@@ -104,6 +100,29 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
     element.appendChild(unitDependsOnRow)
   }
 
+  private def appendReasons(target: Element, context:UnitId, unitId:UnitId, reasonsOriginal:Element, reasonOriginal:Element): Unit = {
+    val arrows = detangled.arrowsFor(unitId)
+    appendArrows(target, context, arrows, reasonsOriginal, reasonOriginal)
+  }
+
+  private def appendArrows(target: Element, context:UnitId, arrows:Seq[Arrow], reasonsOriginal:Element, reasonOriginal:Element): Unit = {
+    val reasons = reasonsOriginal.clone()
+    arrows.foreach(arrow => appendArrow(reasons, context, arrow, reasonOriginal, reasonOriginal))
+    target.appendChild(reasons)
+  }
+
+  private def appendArrow(target: Element, context:UnitId, arrow:Arrow, reasonsOriginal:Element, reasonOriginal:Element): Unit = {
+    val reason = reasonOriginal.clone()
+    val arrowFromLink = HtmlUtil.htmlLink(context, arrow.from)
+    val arrowFromName = HtmlUtil.htmlName(arrow.from)
+    val arrowToLink = HtmlUtil.htmlLink(context, arrow.to)
+    val arrowToName = HtmlUtil.htmlName(arrow.to)
+    JsoupUtil.setAnchor(reason, "from", arrowFromName, arrowFromLink, removeClasses)
+    JsoupUtil.setAnchor(reason, "to", arrowToName, arrowToLink, removeClasses)
+    appendArrows(reason, context, arrow.reasons, reasonsOriginal, reasonOriginal)
+    target.appendChild(reason)
+  }
+
   private def attachUnitSummary(target: Element, htmlUnit: HtmlUnit, unitSummaryTemplate: Element, unitDetailTemplate: Element): Unit = {
     val unitSummaryClone = unitSummaryTemplate.clone()
     unitSummaryClone.attr("id", htmlUnit.id)
@@ -148,7 +167,4 @@ load the relevant section from a template by id, then remove the id
 
 What do we append to?
 clone the template
-
-
-
 */
