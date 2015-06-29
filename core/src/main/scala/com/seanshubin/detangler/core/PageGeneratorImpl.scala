@@ -26,7 +26,7 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
     val unitIds = detangled.composedOf(id)
     val attachUnit = exactlyOneElement(unitTemplate.body(), ".attach-unit")
     unitIds.foreach(appendUnitInfo(_, id, attachUnit, templates))
-    appendReasons(unitTemplate.body(), id, id, templates.reasons, templates.reason)
+    appendReasons(unitTemplate, templates.reasons, templates.reason, id)
     unitTemplate.outputSettings().indentAmount(2)
     unitTemplate.toString
   }
@@ -100,28 +100,53 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
     element.appendChild(unitDependsOnRow)
   }
 
-  private def appendReasons(target: Element, context:UnitId, unitId:UnitId, reasonsOriginal:Element, reasonOriginal:Element): Unit = {
-    val arrows = detangled.arrowsFor(unitId)
-    appendArrows(target, context, arrows, reasonsOriginal, reasonOriginal)
+  private def appendReasons(template: Document, listTemplate: Element, elementTemplate: Element, id:UnitId): Unit = {
+    val arrows = detangled.arrowsFor(id)
+    val arrowsList = buildArrowsList(listTemplate, elementTemplate, arrows)
+    template.body().appendChild(arrowsList)
   }
 
-  private def appendArrows(target: Element, context:UnitId, arrows:Seq[Arrow], reasonsOriginal:Element, reasonOriginal:Element): Unit = {
-    val reasons = reasonsOriginal.clone()
-    arrows.foreach(arrow => appendArrow(reasons, context, arrow, reasonOriginal, reasonOriginal))
-    target.appendChild(reasons)
+  private def addNestedArrows(template: Document, listTemplate: Element, elementTemplate: Element, arrows: Seq[Arrow]) = {
+    val arrowsList = buildArrowsList(listTemplate, elementTemplate, arrows)
+    template.body().appendChild(arrowsList)
   }
 
-  private def appendArrow(target: Element, context:UnitId, arrow:Arrow, reasonsOriginal:Element, reasonOriginal:Element): Unit = {
-    val reason = reasonOriginal.clone()
-    val arrowFromLink = HtmlUtil.htmlLink(context, arrow.from)
-    val arrowFromName = HtmlUtil.htmlName(arrow.from)
-    val arrowToLink = HtmlUtil.htmlLink(context, arrow.to)
-    val arrowToName = HtmlUtil.htmlName(arrow.to)
-    JsoupUtil.setAnchor(reason, "from", arrowFromName, arrowFromLink, removeClasses)
-    JsoupUtil.setAnchor(reason, "to", arrowToName, arrowToLink, removeClasses)
-    appendArrows(reason, context, arrow.reasons, reasonsOriginal, reasonOriginal)
-    target.appendChild(reason)
+  private def buildArrowsList(listTemplateOriginal: Element, elementTemplate: Element, arrows: Seq[Arrow]): Element = {
+    val arrowElements = arrows.map(arrow => buildArrowElement(listTemplateOriginal, elementTemplate, arrow))
+    val listTemplate = listTemplateOriginal.clone()
+    arrowElements.foreach(arrowElement => listTemplate.appendChild(arrowElement))
+    listTemplate
   }
+
+  private def buildArrowElement(listTemplate: Element, elementTemplateOriginal: Element, arrow: Arrow): Element = {
+    val elementTemplate = elementTemplateOriginal.clone()
+    JsoupUtil.setText(elementTemplate, "content", HtmlUtil.arrowId(arrow.from, arrow.to), shouldRemoveClass = true)
+    elementTemplate.appendChild(buildArrowsList(listTemplate, elementTemplateOriginal, arrow.reasons))
+    elementTemplate
+  }
+
+//  private def appendReasons(target: Element, context:UnitId, unitId:UnitId, reasonsOriginal:Element, reasonOriginal:Element): Unit = {
+//    val arrows = detangled.arrowsFor(unitId)
+//    appendArrows(target, context, arrows, reasonsOriginal, reasonOriginal)
+//  }
+//
+//  private def appendArrows(target: Element, context:UnitId, arrows:Seq[Arrow], reasonsOriginal:Element, reasonOriginal:Element): Unit = {
+//    val reasons = reasonsOriginal.clone()
+//    arrows.foreach(arrow => appendArrow(reasons, context, arrow, reasonOriginal, reasonOriginal))
+//    target.appendChild(reasons)
+//  }
+//
+//  private def appendArrow(target: Element, context:UnitId, arrow:Arrow, reasonsOriginal:Element, reasonOriginal:Element): Unit = {
+//    val reason = reasonOriginal.clone()
+//    val arrowFromLink = HtmlUtil.htmlLink(context, arrow.from)
+//    val arrowFromName = HtmlUtil.htmlName(arrow.from)
+//    val arrowToLink = HtmlUtil.htmlLink(context, arrow.to)
+//    val arrowToName = HtmlUtil.htmlName(arrow.to)
+//    JsoupUtil.setAnchor(reason, "from", arrowFromName, arrowFromLink, removeClasses)
+//    JsoupUtil.setAnchor(reason, "to", arrowToName, arrowToLink, removeClasses)
+//    appendArrows(reason, context, arrow.reasons, reasonsOriginal, reasonOriginal)
+//    target.appendChild(reason)
+//  }
 
   private def attachUnitSummary(target: Element, htmlUnit: HtmlUnit, unitSummaryTemplate: Element, unitDetailTemplate: Element): Unit = {
     val unitSummaryClone = unitSummaryTemplate.clone()
