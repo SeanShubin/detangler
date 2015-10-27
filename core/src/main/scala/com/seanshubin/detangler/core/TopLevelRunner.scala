@@ -1,5 +1,5 @@
 package com.seanshubin.detangler.core
 
-trait Analyzer {
-  def analyze()
+trait TopLevelRunner {
+  def apply()
 }

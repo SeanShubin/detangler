@@ -7,14 +7,20 @@
     ]
   ],
   "scrubGroupingPattern": "com/seanshubin/([^/]+).*",
-  "styleSheet": ["dependency.css"],
+  "styleSheet": [
+    "dependency.css"
+  ],
   "relevantDependencyPattern": {
-    "includeRegex": ["com/seanshubin/detangler/.*"],
+    "includeRegex": [
+      "com/seanshubin/detangler/.*"
+    ],
     "excludeRegex": []
   },
   "trimRegex": "^com/seanshubin/detangler/",
   "classFileNamePattern": {
-    "includeRegex": [".*\\.class"],
+    "includeRegex": [
+      ".*\\.class"
+    ],
     "excludeRegex": []
   },
   "zipFileNamePattern": {

@@ -2,8 +2,8 @@ package com.seanshubin.detangler.core
 
 import java.nio.file.Path
 
-class AnalyzerImpl(reporterFactory: ReporterFactory, reportDir: Path) extends Analyzer {
-  override def analyze(): Unit = {
+class AfterConfigurationRunnerImpl(reporterFactory: ReporterFactory, reportDir: Path) extends Runnable {
+  override def run(): Unit = {
     val idRoot = UnitId.simple()
     val idGroupA = UnitId.simple("group/a")
     val idGroupB = UnitId.simple("group/b")

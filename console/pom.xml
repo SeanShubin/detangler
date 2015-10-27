@@ -9,7 +9,7 @@
     <name>${project.groupId}:${project.artifactId}</name>
     <dependencies>
         <dependency>
-            <groupId>com.seanshubin</groupId>
+            <groupId>com.seanshubin.detangler</groupId>
             <artifactId>detangler-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

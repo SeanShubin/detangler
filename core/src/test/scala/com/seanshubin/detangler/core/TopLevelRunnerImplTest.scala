@@ -5,18 +5,18 @@ import java.nio.file.Paths
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
 
-class LauncherImplTest extends FunSuite with EasyMockSugar {
+class TopLevelRunnerImplTest extends FunSuite with EasyMockSugar {
   test("valid configuration") {
     new Helper {
       override def expecting = () => {
         configurationFactory.validate(args).andReturn(validationSuccess)
         notifications.effectiveConfiguration(validConfiguration)
-        runnerFactory.createAnalyzer(validConfiguration).andReturn(runner)
-        runner.analyze()
+        runnerFactory(validConfiguration).andReturn(runner)
+        runner.run()
       }
 
       override def whenExecuting = () => {
-        launcher.launch()
+        launcher.apply()
       }
     }
   }
@@ -29,7 +29,7 @@ class LauncherImplTest extends FunSuite with EasyMockSugar {
       }
 
       override def whenExecuting = () => {
-        launcher.launch()
+        launcher.apply()
       }
     }
   }
@@ -41,10 +41,10 @@ class LauncherImplTest extends FunSuite with EasyMockSugar {
     val errorLines = Seq("error")
     val validationFailure = Left(errorLines)
     val configurationFactory = mock[ConfigurationFactory]
-    val runnerFactory = mock[AnalyzerFactory]
+    val runnerFactory = mock[Configuration => Runnable]
     val notifications = mock[Notifications]
-    val runner = mock[Analyzer]
-    val launcher = new LauncherImpl(args, configurationFactory, runnerFactory, notifications)
+    val runner = mock[Runnable]
+    val launcher = new TopLevelRunnerImpl(args, configurationFactory, runnerFactory, notifications)
 
     def expecting: () => Unit
 
