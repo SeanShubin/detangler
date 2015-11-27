@@ -20,10 +20,7 @@ class ReporterImpl(reportDir: Path,
 
   override def run(): Unit = {
     initDestinationDirectory()
-    generateReportForUnit2(detangled, UnitId.Root)
-  }
-
-  private def generateReportsThree(): Unit = {
+    generateReportForUnit(detangled, UnitId.Root)
   }
 
   private def initDestinationDirectory(): Unit = {
@@ -35,18 +32,6 @@ class ReporterImpl(reportDir: Path,
   }
 
   private def generateReportForUnit(detangled: Detangled, unitId: UnitId): Unit = {
-    val page = reportTransformer.pageFor(detangled, unitId)
-    val pageText = pageGenerator.generatePageText(page)
-    val pagePath = reportDir.resolve(page.fileName)
-    fileSystem.write(pagePath, pageText.getBytes(charset))
-    for {
-      child <- detangled.composedOf(unitId)
-    } {
-      generateReportForUnit(detangled, child)
-    }
-  }
-
-  private def generateReportForUnit2(detangled: Detangled, unitId: UnitId): Unit = {
     val composedOf = detangled.composedOf(unitId)
     if (composedOf.nonEmpty) {
       val fileName = HtmlUtil.fileNameFor(unitId)
@@ -56,7 +41,7 @@ class ReporterImpl(reportDir: Path,
       for {
         child <- composedOf
       } {
-        generateReportForUnit2(detangled, child)
+        generateReportForUnit(detangled, child)
       }
     }
   }
