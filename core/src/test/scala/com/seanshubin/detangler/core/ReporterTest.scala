@@ -48,7 +48,7 @@ class ReporterTest extends FunSuite with EasyMockSugar {
       expectPageWrite(SampleData.idPackageC, "group_b--package_c.html")
     }
     whenExecuting(fileSystem, pageGenerator, resourceLoader) {
-      reporter.generateReportsThree()
+      reporter.run()
     }
   }
 }

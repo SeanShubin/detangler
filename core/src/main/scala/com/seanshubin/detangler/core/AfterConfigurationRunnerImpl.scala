@@ -2,7 +2,7 @@ package com.seanshubin.detangler.core
 
 import java.nio.file.Path
 
-class AfterConfigurationRunnerImpl(reporterFactory: ReporterFactory, reportDir: Path) extends Runnable {
+class AfterConfigurationRunnerImpl(createReporter: (Detangled, Path) => Runnable, reportDir: Path) extends Runnable {
   override def run(): Unit = {
     val idRoot = UnitId.simple()
     val idGroupA = UnitId.simple("group/a")
@@ -106,6 +106,6 @@ class AfterConfigurationRunnerImpl(reporterFactory: ReporterFactory, reportDir: 
         depth = 17,
         complexity = 18)
     ))
-    reporterFactory.createReporter(detangled, reportDir).generateReportsThree()
+    createReporter(detangled, reportDir).run()
   }
 }

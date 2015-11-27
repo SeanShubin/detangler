@@ -7,6 +7,11 @@ import com.seanshubin.detangler.core._
 trait AfterConfigurationWiring {
   def reportDir: Path
 
-  lazy val reporterFactory: ReporterFactory = new ReporterFactoryImpl
-  lazy val analyzer: Runnable = new AfterConfigurationRunnerImpl(reporterFactory, reportDir)
+  lazy val createReporter: (Detangled, Path) => Runnable = (theDetangled, theReportDir) => new ReporterWiring {
+    override def detangled: Detangled = theDetangled
+
+    override def reportDir: Path = theReportDir
+  }.reporter
+
+  lazy val analyzer: Runnable = new AfterConfigurationRunnerImpl(createReporter, reportDir)
 }
