@@ -32,7 +32,8 @@ class NestedArrowsTest extends FunSuite {
         |    </ul>
         |  </body>
         |</html>""".stripMargin
-    assert(actual === expected)
+    val linesDifference = LinesDifference.compare(actual, expected)
+    assert(linesDifference.isSame, linesDifference.detailLines.mkString("\n"))
   }
 
   def addNestedArrows(template: Document, listTemplate: Element, elementTemplate: Element, arrows: Seq[Arrow]) = {
