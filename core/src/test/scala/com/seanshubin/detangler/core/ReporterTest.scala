@@ -4,14 +4,13 @@ import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.{Path, Paths}
 
 import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
-import com.seanshubin.utility.filesystem.FileSystemIntegration
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
 
 class ReporterTest extends FunSuite with EasyMockSugar {
   test("generate html pages") {
     val reportDir: Path = Paths.get("sample", "path")
-    val fileSystem: FileSystemIntegration = mock[FileSystemIntegration]
+    val files: FilesContract = mock[FilesContract]
     val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
     val charset: Charset = StandardCharsets.UTF_8
     val reportTransformer: ReportTransformer = null
@@ -22,7 +21,7 @@ class ReporterTest extends FunSuite with EasyMockSugar {
     val outputStylePath = reportDir.resolve("style.css")
     val reporter = new ReporterImpl(
       reportDir,
-      fileSystem,
+      files,
       devonMarshaller,
       charset,
       reportTransformer,
@@ -33,13 +32,13 @@ class ReporterTest extends FunSuite with EasyMockSugar {
     def expectPageWrite(id: UnitId, name: String): Unit = {
       val text = "content"
       pageGenerator.pageForId(id).andReturn(text)
-      fileSystem.write(reportDir.resolve(name), text.getBytes(charset)).andReturn(null)
+      files.write(reportDir.resolve(name), text.getBytes(charset)).andReturn(null)
     }
 
     expecting {
-      fileSystem.createDirectories(reportDir).andReturn(reportDir)
+      files.createDirectories(reportDir).andReturn(reportDir)
       resourceLoader.inputStreamFor("style.css").andReturn(styleCss.createInputStream())
-      fileSystem.newOutputStream(outputStylePath).andReturn(styleCss.createOutputStream())
+      files.newOutputStream(outputStylePath).andReturn(styleCss.createOutputStream())
       expectPageWrite(SampleData.idRoot, "index.html")
       expectPageWrite(SampleData.idGroupA, "group_a.html")
       expectPageWrite(SampleData.idPackageA, "group_a--package_a.html")
@@ -47,7 +46,7 @@ class ReporterTest extends FunSuite with EasyMockSugar {
       expectPageWrite(SampleData.idGroupB, "group_b.html")
       expectPageWrite(SampleData.idPackageC, "group_b--package_c.html")
     }
-    whenExecuting(fileSystem, pageGenerator, resourceLoader) {
+    whenExecuting(files, pageGenerator, resourceLoader) {
       reporter.run()
     }
   }

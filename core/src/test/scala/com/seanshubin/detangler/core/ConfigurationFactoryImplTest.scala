@@ -4,7 +4,6 @@ import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.Paths
 
 import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
-import com.seanshubin.utility.filesystem.FileSystemIntegration
 import org.scalatest.FunSuite
 import org.scalatest.mock.EasyMockSugar
 
@@ -78,7 +77,7 @@ class ConfigurationFactoryImplTest extends FunSuite with EasyMockSugar {
 
     val configFileName: String = "environment.txt"
     val args = Seq(configFileName)
-    val mockFileSystem: FileSystemIntegration = mock[FileSystemIntegration]
+    val mockFileSystem: FilesContract = mock[FilesContract]
     val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
     val charset: Charset = StandardCharsets.UTF_8
     val configurationFactory = new ConfigurationFactoryImpl(mockFileSystem, devonMarshaller, charset)

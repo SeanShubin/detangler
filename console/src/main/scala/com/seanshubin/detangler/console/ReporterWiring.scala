@@ -5,14 +5,13 @@ import java.nio.file.Path
 
 import com.seanshubin.detangler.core._
 import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
-import com.seanshubin.utility.filesystem.{FileSystemIntegration, FileSystemIntegrationImpl}
 
 trait ReporterWiring {
   def detangled: Detangled
 
   def reportDir: Path
 
-  lazy val fileSystem: FileSystemIntegration = new FileSystemIntegrationImpl
+  lazy val files: FilesContract = FilesDelegate
   lazy val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
   lazy val charset: Charset = StandardCharsets.UTF_8
   lazy val reportTransformer: ReportTransformer = new ReportTransformerImpl
@@ -23,7 +22,7 @@ trait ReporterWiring {
   lazy val pageGenerator: PageGenerator = new PageGeneratorImpl(detangled, resourceLoader, removeClasses)
   lazy val reporter: Runnable = new ReporterImpl(
     reportDir,
-    fileSystem,
+    files,
     devonMarshaller,
     charset,
     reportTransformer,

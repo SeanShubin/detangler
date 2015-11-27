@@ -5,12 +5,11 @@ import java.nio.charset.Charset
 import java.nio.file.Path
 
 import com.seanshubin.devon.core.devon.DevonMarshaller
-import com.seanshubin.utility.filesystem.FileSystemIntegration
 
 import scala.collection.JavaConversions
 
 class ReporterImpl(reportDir: Path,
-                   fileSystem: FileSystemIntegration,
+                   files: FilesContract,
                    devonMarshaller: DevonMarshaller,
                    charset: Charset,
                    reportTransformer: ReportTransformer,
@@ -24,10 +23,10 @@ class ReporterImpl(reportDir: Path,
   }
 
   private def initDestinationDirectory(): Unit = {
-    fileSystem.createDirectories(reportDir)
+    files.createDirectories(reportDir)
     val in = resourceLoader.inputStreamFor("style.css")
     val styleSheetPath = reportDir.resolve("style.css")
-    val out = fileSystem.newOutputStream(styleSheetPath)
+    val out = files.newOutputStream(styleSheetPath)
     IoUtil.copyInputStreamToOutputStream(in, out)
   }
 
@@ -37,7 +36,8 @@ class ReporterImpl(reportDir: Path,
       val fileName = HtmlUtil.fileNameFor(unitId)
       val pageText = pageGenerator.pageForId(unitId)
       val pagePath = reportDir.resolve(fileName)
-      fileSystem.write(pagePath, pageText.getBytes(charset))
+      val bytes = pageText.getBytes(charset)
+      files.write(pagePath, bytes)
       for {
         child <- composedOf
       } {
@@ -48,7 +48,7 @@ class ReporterImpl(reportDir: Path,
 
   private class Delegate(detangled: Detangled) {
     def generateReports(): Unit = {
-      fileSystem.createDirectories(reportDir)
+      files.createDirectories(reportDir)
       val rootUnits = detangled.composedOf(UnitId.Root)
       generateReport(reportDir, rootUnits)
     }
@@ -65,7 +65,7 @@ class ReporterImpl(reportDir: Path,
     }
 
     private def withOutputStream(path: Path)(f: BufferedWriter => Unit) = {
-      val out = fileSystem.newBufferedWriter(path, charset)
+      val out = files.newBufferedWriter(path, charset)
       try {
         f(out)
       } finally {
@@ -81,7 +81,7 @@ class ReporterImpl(reportDir: Path,
       val arrowsReportPath = path.resolve("arrows.txt")
       val lines = arrows.flatMap(arrowToLines)
       val javaLines = JavaConversions.asJavaIterable(lines)
-      fileSystem.write(arrowsReportPath, javaLines, charset)
+      files.write(arrowsReportPath, javaLines, charset)
     }
 
     def arrowToLines(arrow: Arrow): Seq[String] = {
@@ -92,7 +92,7 @@ class ReporterImpl(reportDir: Path,
       val units = detangled.composedOf(unitId)
       if (units.nonEmpty) {
         val dir = path.resolve(unitId.fileSystemName)
-        fileSystem.createDirectories(dir)
+        files.createDirectories(dir)
         generateReport(dir, units)
       }
     }
