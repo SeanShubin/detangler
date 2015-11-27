@@ -6,6 +6,7 @@ import java.nio.file.Path
 import com.seanshubin.detangler.core._
 import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
 import com.seanshubin.utility.filesystem.{FileSystemIntegration, FileSystemIntegrationImpl}
+import com.sun.tools.internal.jxc.SchemaGenerator.Runner
 
 trait TopLevelWiring {
   def commandLineArguments: Seq[String]
@@ -22,6 +23,6 @@ trait TopLevelWiring {
       override def reportDir: Path = configuration.reportDir
     }.analyzer
 
-  lazy val launcher: TopLevelRunner = new TopLevelRunnerImpl(
+  lazy val launcher: Runnable = new TopLevelRunnerImpl(
     commandLineArguments, configurationFactory, createRunner, notifications)
 }

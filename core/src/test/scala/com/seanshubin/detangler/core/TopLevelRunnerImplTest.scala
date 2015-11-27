@@ -16,7 +16,7 @@ class TopLevelRunnerImplTest extends FunSuite with EasyMockSugar {
       }
 
       override def whenExecuting = () => {
-        launcher.apply()
+        launcher.run()
       }
     }
   }
@@ -29,7 +29,7 @@ class TopLevelRunnerImplTest extends FunSuite with EasyMockSugar {
       }
 
       override def whenExecuting = () => {
-        launcher.apply()
+        launcher.run()
       }
     }
   }
