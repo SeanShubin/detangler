@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>dependency report</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<ul class="attach-unit">
+    <li id="group_a--package_c--class_f">
+        <table>
+            <thead>
+            <tr>
+                <th>name</th>
+                <th>depth</th>
+                <th>complexity</th>
+                <th>composed of</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>class/f</td>
+                <td>11</td>
+                <td>12</td>
+                <td><a href="group_a--package_c--class_f.html">parts</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <ul>
+            <li>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="4">depends on (3)</th>
+                    </tr>
+                    <tr>
+                        <th>name</th>
+                        <th>depth</th>
+                        <th>complexity</th>
+                        <th>reason</th>
+                    </tr>
+                    </thead>
+                    <tbody class="attach-unit-dependency-row">
+                    <tr>
+                        <td><a href="#group_a--package_c--class_g">class/g</a></td>
+                        <td>13</td>
+                        <td>14</td>
+                        <td><a href="#group_a--package_c--class_f---group_a--package_c--class_g">reason</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="group_a--package_d.html#group_a--package_d--class_h">class/h</a></td>
+                        <td>15</td>
+                        <td>16</td>
+                        <td><a href="#group_a--package_c--class_f---group_a--package_d--class_h">reason</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="group_b--package_e.html#group_b--package_e--class_i">class/i</a></td>
+                        <td>17</td>
+                        <td>18</td>
+                        <td><a href="#group_a--package_c--class_f---group_b--package_e--class_i">reason</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </li>
+        </ul>
+    </li>
+    <li id="group_a--package_c--class_g">
+        <table>
+            <thead>
+            <tr>
+                <th>name</th>
+                <th>depth</th>
+                <th>complexity</th>
+                <th>composed of</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>class/g</td>
+                <td>13</td>
+                <td>14</td>
+                <td><a href="group_a--package_c--class_g.html">parts</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <ul>
+            <li>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="4">depended on by (1)</th>
+                    </tr>
+                    <tr>
+                        <th>name</th>
+                        <th>depth</th>
+                        <th>complexity</th>
+                        <th>reason</th>
+                    </tr>
+                    </thead>
+                    <tbody class="attach-unit-dependency-row">
+                    <tr>
+                        <td><a href="#group_a--package_c--class_f">class/f</a></td>
+                        <td>11</td>
+                        <td>12</td>
+                        <td><a href="#group_a--package_c--class_f---group_a--package_c--class_g">reason</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </li>
+        </ul>
+    </li>
+</ul>
+<ul> 
+    <li id="group_a--package_c--class_f---group_a--package_c--class_g"> 
+        <a href="#group_a--package_c--class_f">group/a package/c class/f</a> 
+        <span>&rarr;</span>
+        <a href="#group_a--package_c--class_g">group/a package/c class/g</a> 
+    </li>
+</ul>
+</body>
+</html>

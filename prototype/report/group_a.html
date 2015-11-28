@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>dependency report</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<ul class="attach-unit">
+    <li id="group_a--package_c">
+        <table>
+            <thead>
+            <tr>
+                <th>name</th>
+                <th>depth</th>
+                <th>complexity</th>
+                <th>composed of</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>package/c</td>
+                <td>5</td>
+                <td>6</td>
+                <td><a href="group_a--package_c.html">parts</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <ul>
+            <li>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="4">depends on (2)</th>
+                    </tr>
+                    <tr>
+                        <th>name</th>
+                        <th>depth</th>
+                        <th>complexity</th>
+                        <th>reason</th>
+                    </tr>
+                    </thead>
+                    <tbody class="attach-unit-dependency-row">
+                    <tr>
+                        <td><a href="#group_a--package_d">package/d</a></td>
+                        <td>7</td>
+                        <td>8</td>
+                        <td><a href="#group_a--package_c---group_a--package_d">reason</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="group_b.html#group_b--package_e">package/e</a></td>
+                        <td>9</td>
+                        <td>10</td>
+                        <td><a href="#group_a--package_c---group_b--package_e">reason</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </li>
+        </ul>
+    </li>
+    <li id="group_a--package_d">
+        <table>
+            <thead>
+            <tr>
+                <th>name</th>
+                <th>depth</th>
+                <th>complexity</th>
+                <th>composed of</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>package/d</td>
+                <td>7</td>
+                <td>8</td>
+                <td><a href="group_a--package_d.html">parts</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <ul>
+            <li>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="4">depended on by (1)</th>
+                    </tr>
+                    <tr>
+                        <th>name</th>
+                        <th>depth</th>
+                        <th>complexity</th>
+                        <th>reason</th>
+                    </tr>
+                    </thead>
+                    <tbody class="attach-unit-dependency-row">
+                    <tr>
+                        <td><a href="#group_a--package_c">package/c</a></td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td><a href="#group_a--package_c---group_a--package_d">reason</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </li>
+        </ul>
+    </li>
+</ul>
+<ul> 
+    <li id="group_a--package_c---group_a--package_d"> 
+        <a href="#group_a--package_c">group/a package/c</a> 
+        <span>&rarr;</span>
+        <a href="#group_a--package_d">group/a package/d</a> 
+        <ul> 
+            <li id="group_a--package_c--class_f---group_a--package_d--class_h"> 
+                <a href="group_a--package_c.html#class_f">group/a package/c class/f</a>
+                <span>&rarr;</span> 
+                <a href="group_a--package_d.html#class_h">group/a package/d class/h</a> 
+            </li>
+        </ul>
+    </li>
+</ul>
+</body>
+</html>
