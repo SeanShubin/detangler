@@ -7,6 +7,43 @@
 </head>
 <body>
 <ul>
+    <li id="group_a-group_b">
+        <table>
+            <thead>
+            <tr>
+                <th>size</th>
+                <th>depth</th>
+                <th>complexity</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2</td>
+                <td>1</td>
+                <td>2</td>
+            </tr>
+            </tbody>
+        </table>
+        <ul>
+            <li>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>parts</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><a href="#group_a">group/a</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#group_b">group/b</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </li>
+        </ul>
+    </li>
     <li id="group_a">
         <table>
             <thead>
@@ -19,7 +56,7 @@
             </thead>
             <tbody>
             <tr>
-                <td>group/a</td>
+                <td><a href="#group_a-group_b">&lt;cycle&gt;</a> group/a</td>
                 <td>1</td>
                 <td>2</td>
                 <td><a href="group_a.html">parts</a></td>
@@ -50,6 +87,29 @@
                     </tbody>
                 </table>
             </li>
+            <li>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="4">depended on by (1)</th>
+                    </tr>
+                    <tr>
+                        <th>name</th>
+                        <th>depth</th>
+                        <th>complexity</th>
+                        <th>reason</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><a href="#group_b">group/b</a></td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td><a href="#group_a---group_b">reason</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </li>
         </ul>
     </li>
     <li id="group_b">
@@ -64,7 +124,7 @@
             </thead>
             <tbody>
             <tr>
-                <td>group/b</td>
+                <td><a href="#group_a-group_b">&lt;cycle&gt;</a> group/b</td>
                 <td>3</td>
                 <td>4</td>
                 <td><a href="group_b.html">parts</a></td>
@@ -72,6 +132,29 @@
             </tbody>
         </table>
         <ul>
+            <li>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="4">depends on (1)</th>
+                    </tr>
+                    <tr>
+                        <th>name</th>
+                        <th>depth</th>
+                        <th>complexity</th>
+                        <th>reason</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><a href="#group_a">group/a</a></td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td><a href="#group_a---group_b">reason</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </li>
             <li>
                 <table>
                     <thead>
@@ -113,6 +196,25 @@
                         <a href="group_a--package_c.html#group_a--package_c--class_f">group/a package/c class/f</a>
                         <span>&rarr;</span> 
                         <a href="group_b--package_e.html#group_b--package_e--class_i">group/b package/e class/i</a> 
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li id="group_b---group_a"> 
+        <a href="#group_b">group/b</a> 
+        <span>&rarr;</span> 
+        <a href="#group_a">group/a</a> 
+        <ul> 
+            <li id="group_b--package_e---group_a--package_c"> 
+                <a href="group_b.html#group_b--package_e">group/b package/e</a> 
+                <span>&rarr;</span>
+                <a href="group_a.html#group_a--package_c">group/a package/c</a> 
+                <ul> 
+                    <li id="group_b--package_e--class_i---group_a--package_c--class_f"> 
+                        <a href="group_b--package_e.html#group_b--package_e--class_i">group/b package/e class/i</a> 
+                        <span>&rarr;</span> 
+                        <a href="group_a--package_c.html#group_a--package_c--class_f">group/a package/c class/f</a>
                     </li>
                 </ul>
             </li>
