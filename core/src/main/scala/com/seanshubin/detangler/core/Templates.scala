@@ -11,12 +11,13 @@ case class Templates(unitDependencyRow: Element,
 
 object Templates {
   def fromDocument(document: Document, shouldRemoveClass: Boolean): Templates = {
-    val unitDependencyRow = JsoupUtil.extractFragment(document, "unit-dependency-row", shouldRemoveClass)
-    val unitDependency = JsoupUtil.extractFragment(document, "unit-dependency", shouldRemoveClass)
-    val unitSummary = JsoupUtil.extractFragment(document, "unit-summary", shouldRemoveClass)
-    val unitDiv = JsoupUtil.extractFragment(document, "unit-root", shouldRemoveClass)
-    val reason = JsoupUtil.extractFragment(document, "reason", shouldRemoveClass)
-    val reasons = JsoupUtil.extractFragment(document, "reasons", shouldRemoveClass)
+    val jsoupUtil = new JsoupUtil(shouldRemoveClass)
+    val unitDependencyRow = jsoupUtil.extractFragment(document, "unit-dependency-row")
+    val unitDependency = jsoupUtil.extractFragment(document, "unit-dependency")
+    val unitSummary = jsoupUtil.extractFragment(document, "unit-summary")
+    val unitDiv = jsoupUtil.extractFragment(document, "unit-root")
+    val reason = jsoupUtil.extractFragment(document, "reason")
+    val reasons = jsoupUtil.extractFragment(document, "reasons")
     Templates(unitDependencyRow, unitDependency, unitSummary, unitDiv, reasons, reason)
   }
 }

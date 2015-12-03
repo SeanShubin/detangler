@@ -5,11 +5,13 @@ import org.jsoup.nodes.{Document, Element}
 import org.scalatest.FunSuite
 
 class NestedArrowsTest extends FunSuite {
+  val shouldRemoveClass = true
+  val jsoupUtil = new JsoupUtil(shouldRemoveClass)
   test("nested arrows") {
     val source = """<html><body><ul class="list"><li class="element content"></li></ul></body></html>"""
     val template = Jsoup.parse(source, "")
-    val elementTemplate = JsoupUtil.extractFragment(template, "element", shouldRemoveClass = true)
-    val listTemplate = JsoupUtil.extractFragment(template, "list", shouldRemoveClass = true)
+    val elementTemplate = jsoupUtil.extractFragment(template, "element")
+    val listTemplate = jsoupUtil.extractFragment(template, "list")
     val classArrows: Seq[Arrow] = Seq(Arrow(SampleData.idClassF, SampleData.idClassG, Nil))
     val packageArrows: Seq[Arrow] = Seq(Arrow(SampleData.idPackageC, SampleData.idPackageD, classArrows))
     val groupArrows: Seq[Arrow] = Seq(Arrow(SampleData.idGroupA, SampleData.idGroupB, packageArrows))
@@ -50,7 +52,7 @@ class NestedArrowsTest extends FunSuite {
 
   def buildArrowElement(listTemplate: Element, elementTemplateOriginal: Element, arrow: Arrow): Element = {
     val elementTemplate = elementTemplateOriginal.clone()
-    JsoupUtil.setText(elementTemplate, "content", HtmlUtil.arrowId(arrow.from, arrow.to), shouldRemoveClass = true)
+    jsoupUtil.setText(elementTemplate, "content", HtmlUtil.arrowId(arrow.from, arrow.to))
     elementTemplate.appendChild(buildArrowsList(listTemplate, elementTemplateOriginal, arrow.reasons))
     elementTemplate
   }

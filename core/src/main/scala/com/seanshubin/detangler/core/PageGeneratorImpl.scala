@@ -8,6 +8,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 
 class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, removeClasses: Boolean) extends PageGenerator {
+  private val jsoupUtil = new JsoupUtil(removeClasses)
   override def generatePageText(page: HtmlPage): String = {
     val pageTemplate = loadTemplate("page")
     val unitSummaryTemplate = loadTemplate("unit-summary")
@@ -48,10 +49,10 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
   }
 
   private def appendUnitSummary(unitId: UnitId, appendTo: Element, unitSummary: Element): Unit = {
-    JsoupUtil.setText(unitSummary, "name", HtmlUtil.htmlName(unitId), removeClasses)
-    JsoupUtil.setText(unitSummary, "depth", detangled.depth(unitId).toString, removeClasses)
-    JsoupUtil.setText(unitSummary, "complexity", detangled.complexity(unitId).toString, removeClasses)
-    JsoupUtil.setAnchor(unitSummary, "composed-of", "parts", HtmlUtil.fileNameFor(unitId), removeClasses)
+    jsoupUtil.setText(unitSummary, "name", HtmlUtil.htmlName(unitId))
+    jsoupUtil.setText(unitSummary, "depth", detangled.depth(unitId).toString)
+    jsoupUtil.setText(unitSummary, "complexity", detangled.complexity(unitId).toString)
+    jsoupUtil.setAnchor(unitSummary, "composed-of", "parts", HtmlUtil.fileNameFor(unitId))
     appendTo.appendChild(unitSummary)
   }
 
@@ -78,7 +79,7 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
     val size = dependencyUnits.size
     if (size > 0) {
       val unitDetailList = unitDetailListOriginal.clone()
-      JsoupUtil.setText(unitDetailList, "caption", s"$caption ($size)", removeClasses)
+      jsoupUtil.setText(unitDetailList, "caption", s"$caption ($size)")
       val attachRowsTo = exactlyOneElement(unitDetailList, ".attach-unit-dependency-row")
       dependencyUnits.foreach(appendUnitDetailRow(_, unitId, pageUnitId, attachRowsTo, unitDependsOnRow, arrowDirection))
       element.appendChild(unitDetailList)
@@ -92,10 +93,10 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
       (HtmlUtil.arrowName(unitId, from), HtmlUtil.arrowLink(unitId, from))
     }
     val unitDependsOnRow = unitDependsOnRowOriginal.clone()
-    JsoupUtil.setAnchor(unitDependsOnRow, "name", HtmlUtil.htmlName(unitId), HtmlUtil.htmlLink(pageUnitId, unitId), removeClasses)
-    JsoupUtil.setText(unitDependsOnRow, "depth", detangled.depth(unitId).toString, removeClasses)
-    JsoupUtil.setText(unitDependsOnRow, "complexity", detangled.complexity(unitId).toString, removeClasses)
-    JsoupUtil.setAnchor(unitDependsOnRow, "reason", arrowName, arrowLink, removeClasses)
+    jsoupUtil.setAnchor(unitDependsOnRow, "name", HtmlUtil.htmlName(unitId), HtmlUtil.htmlLink(pageUnitId, unitId))
+    jsoupUtil.setText(unitDependsOnRow, "depth", detangled.depth(unitId).toString)
+    jsoupUtil.setText(unitDependsOnRow, "complexity", detangled.complexity(unitId).toString)
+    jsoupUtil.setAnchor(unitDependsOnRow, "reason", arrowName, arrowLink)
     element.appendChild(unitDependsOnRow)
   }
 
@@ -119,7 +120,7 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
 
   private def buildArrowElement(listTemplate: Element, elementTemplateOriginal: Element, arrow: Arrow): Element = {
     val elementTemplate = elementTemplateOriginal.clone()
-    JsoupUtil.setText(elementTemplate, "content", HtmlUtil.arrowId(arrow.from, arrow.to), shouldRemoveClass = true)
+    jsoupUtil.setText(elementTemplate, "content", HtmlUtil.arrowId(arrow.from, arrow.to))
     elementTemplate.appendChild(buildArrowsList(listTemplate, elementTemplateOriginal, arrow.reasons))
     elementTemplate
   }
