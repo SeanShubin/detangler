@@ -43,4 +43,9 @@ object JsoupUtil {
     if (elements.size == 1) elements.get(0)
     else throw new RuntimeException(s"Expected exactly one element matching '$selector', got ${elements.size}\n$template")
   }
+  def firstElement(template: Element, selector: String): Element = {
+    val elements = template.select(selector)
+    if (elements.size > 0) elements.get(0)
+    else throw new RuntimeException(s"Expected at least one element matching '$selector', got ${elements.size}\n$template")
+  }
 }
