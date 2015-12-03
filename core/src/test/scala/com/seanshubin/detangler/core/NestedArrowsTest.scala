@@ -23,9 +23,9 @@ class NestedArrowsTest extends FunSuite {
         |    <ul>
         |      <li>group_a---group_b
         |        <ul>
-        |          <li>group_a--package_a---group_a--package_b
+        |          <li>group_a--package_c---group_a--package_d
         |            <ul>
-        |              <li>group_a--package_a--class_a---group_a--package_a--class_b
+        |              <li>group_a--package_c--class_f---group_a--package_c--class_g
         |                <ul></ul></li>
         |            </ul></li>
         |        </ul></li>

@@ -4,13 +4,13 @@ object SampleData {
   val idRoot = UnitId.simple()
   val idGroupA = UnitId.simple("group/a")
   val idGroupB = UnitId.simple("group/b")
-  val idPackageA = UnitId.simple("group/a", "package/a")
-  val idPackageB = UnitId.simple("group/a", "package/b")
-  val idPackageC = UnitId.simple("group/b", "package/c")
-  val idClassA = UnitId.simple("group/a", "package/a", "class/a")
-  val idClassB = UnitId.simple("group/a", "package/a", "class/b")
-  val idClassC = UnitId.simple("group/a", "package/b", "class/c")
-  val idClassD = UnitId.simple("group/b", "package/c", "class/d")
+  val idPackageA = UnitId.simple("group/a", "package/c")
+  val idPackageB = UnitId.simple("group/a", "package/d")
+  val idPackageC = UnitId.simple("group/b", "package/e")
+  val idClassA = UnitId.simple("group/a", "package/c", "class/f")
+  val idClassB = UnitId.simple("group/a", "package/c", "class/g")
+  val idClassC = UnitId.simple("group/a", "package/d", "class/h")
+  val idClassD = UnitId.simple("group/b", "package/e", "class/i")
   val detangled: Detangled = DetangledImpl(Map(
     idRoot -> UnitInfo(
       idRoot,

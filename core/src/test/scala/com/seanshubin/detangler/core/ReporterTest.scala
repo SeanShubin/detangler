@@ -41,10 +41,10 @@ class ReporterTest extends FunSuite with EasyMockSugar {
       files.newOutputStream(outputStylePath).andReturn(styleCss.createOutputStream())
       expectPageWrite(SampleData.idRoot, "index.html")
       expectPageWrite(SampleData.idGroupA, "group_a.html")
-      expectPageWrite(SampleData.idPackageA, "group_a--package_a.html")
-      expectPageWrite(SampleData.idPackageB, "group_a--package_b.html")
+      expectPageWrite(SampleData.idPackageA, "group_a--package_c.html")
+      expectPageWrite(SampleData.idPackageB, "group_a--package_d.html")
       expectPageWrite(SampleData.idGroupB, "group_b.html")
-      expectPageWrite(SampleData.idPackageC, "group_b--package_c.html")
+      expectPageWrite(SampleData.idPackageC, "group_b--package_e.html")
     }
     whenExecuting(files, pageGenerator, resourceLoader) {
       reporter.run()
