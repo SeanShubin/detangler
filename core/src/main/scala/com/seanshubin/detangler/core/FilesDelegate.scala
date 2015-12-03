@@ -1,14 +1,14 @@
 package com.seanshubin.detangler.core
 
-import java.io.{BufferedWriter, BufferedReader, OutputStream, InputStream}
+import java.io.{BufferedReader, BufferedWriter, InputStream, OutputStream}
 import java.nio.channels.SeekableByteChannel
 import java.nio.charset.Charset
 import java.nio.file.DirectoryStream.Filter
-import java.nio.file.attribute._
 import java.nio.file._
+import java.nio.file.attribute._
 import java.util.function.BiPredicate
-import java.{lang, util}
 import java.util.stream
+import java.{lang, util}
 
 object FilesDelegate extends FilesContract {
   override def newInputStream(path: Path, options: OpenOption*): InputStream = Files.newInputStream(path, options: _*)

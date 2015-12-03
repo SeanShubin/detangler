@@ -2,7 +2,7 @@ package com.seanshubin.detangler.core
 
 import org.jsoup.nodes.Element
 
-class JsoupUtil(shouldRemoveClass:Boolean) {
+class JsoupUtil(shouldRemoveClass: Boolean) {
   def extractFragment(template: Element, className: String): Element = {
     val element = exactlyOneElementWithClass(template, className)
     removeClassIf(element, className)
@@ -43,6 +43,7 @@ object JsoupUtil {
     if (elements.size == 1) elements.get(0)
     else throw new RuntimeException(s"Expected exactly one element matching '$selector', got ${elements.size}\n$template")
   }
+
   def firstElement(template: Element, selector: String): Element = {
     val elements = template.select(selector)
     if (elements.size > 0) elements.get(0)

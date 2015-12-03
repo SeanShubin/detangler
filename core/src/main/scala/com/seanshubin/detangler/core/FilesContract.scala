@@ -1,10 +1,10 @@
 package com.seanshubin.detangler.core
 
-import java.io.{BufferedWriter, BufferedReader, OutputStream, InputStream}
+import java.io.{BufferedReader, BufferedWriter, InputStream, OutputStream}
 import java.nio.channels.SeekableByteChannel
 import java.nio.charset.Charset
-import java.nio.file.attribute._
 import java.nio.file._
+import java.nio.file.attribute._
 import java.util.function.BiPredicate
 import java.util.stream
 import java.{lang, util}

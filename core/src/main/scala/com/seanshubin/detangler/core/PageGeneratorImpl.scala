@@ -9,6 +9,7 @@ import org.jsoup.nodes.{Document, Element}
 
 class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, removeClasses: Boolean) extends PageGenerator {
   private val jsoupUtil = new JsoupUtil(removeClasses)
+
   override def generatePageText(page: HtmlPage): String = {
     val pageTemplate = loadTemplate("page")
     val unitSummaryTemplate = loadTemplate("unit-summary")
