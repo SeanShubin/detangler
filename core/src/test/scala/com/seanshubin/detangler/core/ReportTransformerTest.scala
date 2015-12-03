@@ -91,7 +91,7 @@ class ReportTransformerTest extends FunSuite {
 
   test("bottom report") {
     val reportTransformer: ReportTransformer = new ReportTransformerImpl()
-    val page = reportTransformer.pageFor(SampleData.detangled, SampleData.idPackageA)
+    val page = reportTransformer.pageFor(SampleData.detangled, SampleData.idPackageC)
     assert(page.fileName === "group_a--package_c.html")
     assert(page.units.size === 2)
     val classA = page.units.head

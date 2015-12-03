@@ -4,13 +4,13 @@ object SampleData {
   val idRoot = UnitId.simple()
   val idGroupA = UnitId.simple("group/a")
   val idGroupB = UnitId.simple("group/b")
-  val idPackageA = UnitId.simple("group/a", "package/c")
-  val idPackageB = UnitId.simple("group/a", "package/d")
-  val idPackageC = UnitId.simple("group/b", "package/e")
-  val idClassA = UnitId.simple("group/a", "package/c", "class/f")
-  val idClassB = UnitId.simple("group/a", "package/c", "class/g")
-  val idClassC = UnitId.simple("group/a", "package/d", "class/h")
-  val idClassD = UnitId.simple("group/b", "package/e", "class/i")
+  val idPackageC = UnitId.simple("group/a", "package/c")
+  val idPackageD = UnitId.simple("group/a", "package/d")
+  val idPackageE = UnitId.simple("group/b", "package/e")
+  val idClassF = UnitId.simple("group/a", "package/c", "class/f")
+  val idClassG = UnitId.simple("group/a", "package/c", "class/g")
+  val idClassH = UnitId.simple("group/a", "package/d", "class/h")
+  val idClassI = UnitId.simple("group/b", "package/e", "class/i")
   val detangled: Detangled = DetangledImpl(Map(
     idRoot -> UnitInfo(
       idRoot,
@@ -27,7 +27,7 @@ object SampleData {
       dependedOnBy = Set(),
       dependsOnExternal = Set(),
       dependedOnByExternal = Set(),
-      composedOf = Set(idPackageA, idPackageB),
+      composedOf = Set(idPackageC, idPackageD),
       depth = 1,
       complexity = 2),
     idGroupB -> UnitInfo(
@@ -36,67 +36,67 @@ object SampleData {
       dependedOnBy = Set(idGroupA),
       dependsOnExternal = Set(),
       dependedOnByExternal = Set(),
-      composedOf = Set(idPackageC),
+      composedOf = Set(idPackageE),
       depth = 3,
       complexity = 4),
-    idPackageA -> UnitInfo(
-      idPackageA,
-      dependsOn = Set(idPackageB, idPackageC),
+    idPackageC -> UnitInfo(
+      idPackageC,
+      dependsOn = Set(idPackageD, idPackageE),
       dependedOnBy = Set(),
       dependsOnExternal = Set(),
       dependedOnByExternal = Set(),
-      composedOf = Set(idClassA, idClassB),
+      composedOf = Set(idClassF, idClassG),
       depth = 5,
       complexity = 6),
-    idPackageB -> UnitInfo(
-      idPackageB,
+    idPackageD -> UnitInfo(
+      idPackageD,
       dependsOn = Set(),
-      dependedOnBy = Set(idPackageA),
+      dependedOnBy = Set(idPackageC),
       dependsOnExternal = Set(),
       dependedOnByExternal = Set(),
-      composedOf = Set(idClassC),
+      composedOf = Set(idClassH),
       depth = 7,
       complexity = 8),
-    idPackageC -> UnitInfo(
-      idPackageC,
+    idPackageE -> UnitInfo(
+      idPackageE,
       dependsOn = Set(),
-      dependedOnBy = Set(idPackageA),
+      dependedOnBy = Set(idPackageC),
       dependsOnExternal = Set(),
       dependedOnByExternal = Set(),
-      composedOf = Set(idClassD),
+      composedOf = Set(idClassI),
       depth = 9,
       complexity = 10),
-    idClassA -> UnitInfo(
-      idClassA,
-      dependsOn = Set(idClassB, idClassC, idClassD),
+    idClassF -> UnitInfo(
+      idClassF,
+      dependsOn = Set(idClassG, idClassH, idClassI),
       dependedOnBy = Set(),
       dependsOnExternal = Set(),
       dependedOnByExternal = Set(),
       composedOf = Set(),
       depth = 11,
       complexity = 12),
-    idClassB -> UnitInfo(
-      idClassB,
+    idClassG -> UnitInfo(
+      idClassG,
       dependsOn = Set(),
-      dependedOnBy = Set(idClassA),
+      dependedOnBy = Set(idClassF),
       dependsOnExternal = Set(),
       dependedOnByExternal = Set(),
       composedOf = Set(),
       depth = 13,
       complexity = 14),
-    idClassC -> UnitInfo(
-      idClassC,
+    idClassH -> UnitInfo(
+      idClassH,
       dependsOn = Set(),
-      dependedOnBy = Set(idClassA),
+      dependedOnBy = Set(idClassF),
       dependsOnExternal = Set(),
       dependedOnByExternal = Set(),
       composedOf = Set(),
       depth = 15,
       complexity = 16),
-    idClassD -> UnitInfo(
-      idClassD,
+    idClassI -> UnitInfo(
+      idClassI,
       dependsOn = Set(),
-      dependedOnBy = Set(idClassA),
+      dependedOnBy = Set(idClassF),
       dependsOnExternal = Set(),
       dependedOnByExternal = Set(),
       composedOf = Set(),
