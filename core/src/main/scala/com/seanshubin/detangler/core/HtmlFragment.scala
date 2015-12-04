@@ -57,11 +57,19 @@ class HtmlFragment(originalElement: Element) {
     new HtmlFragment(element)
   }
 
+  def attr(cssQuery:String, name: String): String = {
+    findExactlyOne(cssQuery, originalElement).attr(name)
+  }
+
   def text(cssQuery: String, text: String): HtmlFragment = {
     val element = originalElement.clone()
     val toModify = findExactlyOne(cssQuery, element)
     toModify.text(text)
     new HtmlFragment(element)
+  }
+
+  def text(cssQuery:String):String = {
+    findExactlyOne(cssQuery, originalElement).text()
   }
 
   def updateAnchor(cssQuery: String, href: String, text: String): HtmlFragment = {
