@@ -6,8 +6,7 @@ case class Templates(unitDependencyRow: Element,
                      unitDependency: Element,
                      unitSummary: Element,
                      unitDiv: Element,
-                     reasons: Element,
-                     reason: Element)
+                     reasons: Element)
 
 object Templates {
   def fromDocument(document: Document, shouldRemoveClass: Boolean): Templates = {
@@ -16,8 +15,7 @@ object Templates {
     val unitDependency = jsoupUtil.extractFragment(document, "unit-dependency")
     val unitSummary = jsoupUtil.extractFragment(document, "unit-summary")
     val unitDiv = jsoupUtil.extractFragment(document, "unit-root")
-    val reason = jsoupUtil.extractFragment(document, "reason")
     val reasons = jsoupUtil.extractFragment(document, "reasons")
-    Templates(unitDependencyRow, unitDependency, unitSummary, unitDiv, reasons, reason)
+    Templates(unitDependencyRow, unitDependency, unitSummary, unitDiv, reasons)
   }
 }

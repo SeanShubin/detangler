@@ -22,7 +22,8 @@ class ArrowsTemplateTest extends FunSuite {
       Seq(Arrow(SampleData.idGroupA, SampleData.idGroupB,
         Seq(Arrow(SampleData.idPackageC, SampleData.idPackageE,
           Seq(Arrow(SampleData.idClassF, SampleData.idClassI, Seq()))))))
-    val replacedText = TemplateUtil.arrows(templateText, context, arrows)
+    val arrowsTemplate = new ArrowsTemplate(templateText, context)
+    val replacedText = arrowsTemplate.generate(arrows)
     val replacedDocument = Jsoup.parse(replacedText)
 
     val groupElement = exactlyOneElement(replacedDocument, "#group_a---group_b")

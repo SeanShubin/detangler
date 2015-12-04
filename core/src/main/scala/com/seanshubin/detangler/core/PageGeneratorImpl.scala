@@ -27,7 +27,13 @@ class PageGeneratorImpl(detangled: Detangled, resourceLoader: ResourceLoader, re
     val unitIds = detangled.composedOf(id)
     val attachUnit = exactlyOneElement(unitTemplate.body(), ".attach-unit")
     unitIds.foreach(appendUnitInfo(_, id, attachUnit, templates))
-    appendReasons(unitTemplate, templates.reasons, templates.reason, id)
+    val reasonsTemplateText = templates.reasons.outerHtml()
+    val reasonsTemplate = new ArrowsTemplate(reasonsTemplateText, id)
+    val arrows = detangled.arrowsFor(id)
+    val reasonsText = reasonsTemplate.generate(arrows)
+    val reasonsFragment = HtmlFragment.fromText(reasonsText)
+    unitTemplate.appendChild(reasonsFragment.clonedElement)
+    //    appendReasons(unitTemplate, templates.reasons, templates.reason, id)
     unitTemplate.outputSettings().indentAmount(2)
     unitTemplate.toString
   }
