@@ -26,7 +26,7 @@ class UnitSummaryTemplateTest extends FunSuite {
         |</table>
         |""".stripMargin
     val unit = SampleData.idGroupA
-    val unitSummaryTemplate = new UnitSummaryTemplate(templateText)
+    val unitSummaryTemplate = new UnitSummaryTemplate(templateText, SampleData.detangled)
     val replacedText = unitSummaryTemplate.generate(unit)
     val actual = HtmlFragment.fromText(replacedText)
 
