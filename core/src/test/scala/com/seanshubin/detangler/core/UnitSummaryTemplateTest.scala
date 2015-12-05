@@ -3,7 +3,6 @@ package com.seanshubin.detangler.core
 import org.scalatest.FunSuite
 
 class UnitSummaryTemplateTest extends FunSuite {
-
   test("unit summary template") {
     val templateText =
       """<table class="unit-summary">

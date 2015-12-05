@@ -72,6 +72,12 @@ class HtmlFragment(originalElement: Element) {
     findExactlyOne(cssQuery, originalElement).text()
   }
 
+  def delete(cssQuery:String):HtmlFragment = {
+    val element = originalElement.clone()
+    findExactlyOne(cssQuery, originalElement.clone()).remove()
+    new HtmlFragment(element)
+  }
+
   def updateAnchor(cssQuery: String, href: String, text: String): HtmlFragment = {
     val element = originalElement.clone()
     val toModify = findExactlyOne(cssQuery, element)
