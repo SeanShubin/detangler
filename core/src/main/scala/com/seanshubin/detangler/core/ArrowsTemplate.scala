@@ -1,7 +1,6 @@
 package com.seanshubin.detangler.core
 
-class ArrowsTemplate(templateText: String, context: UnitId) {
-  private val template = HtmlFragment.fromText(templateText)
+class ArrowsTemplate(template: HtmlFragment, context: UnitId) {
   private val reasons = template.one(".reasons").remove(".reason")
   private val reason = template.one(".reason")
 

@@ -24,8 +24,9 @@ class UnitSummaryTemplateTest extends FunSuite {
         |    </tbody>
         |</table>
         | """.stripMargin
+    val template = HtmlFragment.fromText(templateText)
     val unit = SampleData.idGroupA
-    val unitSummaryTemplate = new UnitSummaryTemplate(templateText, SampleData.detangled)
+    val unitSummaryTemplate = new UnitSummaryTemplate(template, SampleData.detangled)
     val actual = unitSummaryTemplate.generate(unit)
 
     assert(actual.attr(".unit-summary", "id") === "group_a")

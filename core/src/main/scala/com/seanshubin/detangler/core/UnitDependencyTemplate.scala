@@ -1,13 +1,12 @@
 package com.seanshubin.detangler.core
 
-class UnitDependencyTemplate(templateText: String,
+class UnitDependencyTemplate(template: HtmlFragment,
                              pageUnitId: UnitId,
                              parentUnitId: UnitId,
                              arrowDirection: ArrowDirection,
                              detangled: Detangled) {
-  private val originalTemplate = HtmlFragment.fromText(templateText)
-  private val parentTemplate = originalTemplate.remove(".unit-dependency-row-inner")
-  private val childTemplate = originalTemplate.one(".unit-dependency-row-inner")
+  private val parentTemplate = template.remove(".unit-dependency-row-inner")
+  private val childTemplate = template.one(".unit-dependency-row-inner")
 
   def generate(): HtmlFragment = {
     val childUnits = arrowDirection.dependencies(detangled, parentUnitId)

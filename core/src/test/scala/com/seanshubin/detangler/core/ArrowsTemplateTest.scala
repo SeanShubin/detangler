@@ -13,12 +13,13 @@ class ArrowsTemplateTest extends FunSuite {
         |    </li>
         |</ul>
         | """.stripMargin
+    val template = HtmlFragment.fromText(templateText)
     val context = SampleData.idRoot
     val arrows =
       Seq(Arrow(SampleData.idGroupA, SampleData.idGroupB,
         Seq(Arrow(SampleData.idPackageC, SampleData.idPackageE,
           Seq(Arrow(SampleData.idClassF, SampleData.idClassI, Seq()))))))
-    val arrowsTemplate = new ArrowsTemplate(templateText, context)
+    val arrowsTemplate = new ArrowsTemplate(template, context)
     val actual = arrowsTemplate.generate(arrows)
 
     val groupElement = actual.one("#group_a---group_b")
