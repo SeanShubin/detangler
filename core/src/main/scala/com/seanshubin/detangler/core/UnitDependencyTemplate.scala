@@ -1,54 +1,31 @@
 package com.seanshubin.detangler.core
 
 class UnitDependencyTemplate(templateText: String,
-                             parentUnitId:UnitId,
-                             caption:String,
-                             dependencyFunction:UnitId => Seq[UnitId],
-                             detangled:Detangled) {
+                             pageUnitId: UnitId,
+                             parentUnitId: UnitId,
+                             arrowDirection: ArrowDirection,
+                             detangled: Detangled) {
   private val originalTemplate = HtmlFragment.fromText(templateText)
   private val parentTemplate = originalTemplate.delete(".unit-dependency-row-inner")
   private val childTemplate = originalTemplate.one(".unit-dependency-row-inner")
 
   def generate(): String = {
-    /*
-                    <tbody class="attach-unit-dependency-row">
-                    <tr class="unit-dependency-row">
-                        <td><a class="name" href="#other_group">other/group</a></td>
-                        <td class="depth">3</td>
-                        <td class="complexity">4</td>
-                        <td><a class="reason" href="other_group_parts">reason</a></td>
-                    </tr>
-                    </tbody>
-
-    jsoupUtil.setText(unitDetailList, "caption", s"$caption ($size)")
-        val (arrowName, arrowLink) = if (arrowDirection) {
-      (HtmlUtil.arrowName(from, unitId), HtmlUtil.arrowLink(from, unitId))
-    } else {
-      (HtmlUtil.arrowName(unitId, from), HtmlUtil.arrowLink(unitId, from))
-    }
-    val unitDependsOnRow = unitDependsOnRowOriginal.clone()
-    jsoupUtil.setAnchor(unitDependsOnRow, "name", HtmlUtil.htmlName(unitId), HtmlUtil.htmlLink(pageUnitId, unitId))
-    jsoupUtil.setText(unitDependsOnRow, "depth", detangled.depth(unitId).toString)
-    jsoupUtil.setText(unitDependsOnRow, "complexity", detangled.complexity(unitId).toString)
-    jsoupUtil.setAnchor(unitDependsOnRow, "reason", arrowName, arrowLink)
-
-     */
-    val childUnits = dependencyFunction(parentUnitId)
+    val childUnits = arrowDirection.dependencies(detangled, parentUnitId)
     val rows = childUnits.map(generateRow)
 
-    println("-" * 100)
-    println(parentTemplate.text)
-    println("-" * 100)
-    println(childTemplate.text)
-    println("-" * 100)
-
-    parentTemplate.
-      text(".caption", s"$caption (${childUnits.size})").
-      appendAll(".unit-dependency-row-outer", rows).
-      text
+    val result = parentTemplate.
+      text(".caption", s"${arrowDirection.caption} (${childUnits.size})").
+      appendAll(".unit-dependency-row-outer", rows)
+    result.text
   }
 
-  private def generateRow(childUnitId:UnitId):HtmlFragment = {
-    childTemplate
+  private def generateRow(childUnitId: UnitId): HtmlFragment = {
+    val arrowName = arrowDirection.arrowName(parentUnitId, childUnitId)
+    val arrowLink = arrowDirection.arrowLink(parentUnitId, childUnitId)
+    childTemplate.
+      updateAnchor(".name", HtmlUtil.htmlLink(pageUnitId, childUnitId), HtmlUtil.htmlName(childUnitId)).
+      text(".depth", detangled.depth(childUnitId).toString).
+      text(".complexity", detangled.complexity(childUnitId).toString).
+      updateAnchor(".reason", arrowLink, arrowName)
   }
 }

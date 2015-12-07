@@ -32,8 +32,8 @@ class HtmlFragment(originalElement: Element) {
     val elements = for {
       index <- 0 until matching.size()
     } yield {
-      matching.get(index)
-    }
+        matching.get(index)
+      }
     val fragments = elements.map(new HtmlFragment(_))
     fragments
   }
@@ -50,7 +50,7 @@ class HtmlFragment(originalElement: Element) {
     new HtmlFragment(child)
   }
 
-  def appendAll(cssQuery:String, fragments:Seq[HtmlFragment]):HtmlFragment= {
+  def appendAll(cssQuery: String, fragments: Seq[HtmlFragment]): HtmlFragment = {
     val element = originalElement.clone()
     val attachTo = findExactlyOne(cssQuery, element)
     for {
@@ -68,7 +68,7 @@ class HtmlFragment(originalElement: Element) {
     new HtmlFragment(element)
   }
 
-  def attr(cssQuery:String, name: String): String = {
+  def attr(cssQuery: String, name: String): String = {
     findExactlyOne(cssQuery, originalElement).attr(name)
   }
 
@@ -79,13 +79,13 @@ class HtmlFragment(originalElement: Element) {
     new HtmlFragment(element)
   }
 
-  def text(cssQuery:String):String = {
+  def text(cssQuery: String): String = {
     findExactlyOne(cssQuery, originalElement).text()
   }
 
-  def delete(cssQuery:String):HtmlFragment = {
+  def delete(cssQuery: String): HtmlFragment = {
     val element = originalElement.clone()
-    findExactlyOne(cssQuery, originalElement.clone()).remove()
+    findExactlyOne(cssQuery, element).remove()
     new HtmlFragment(element)
   }
 
