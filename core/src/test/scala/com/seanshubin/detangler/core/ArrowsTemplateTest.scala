@@ -1,12 +1,8 @@
 package com.seanshubin.detangler.core
 
-import org.jsoup.Jsoup
 import org.scalatest.FunSuite
 
 class ArrowsTemplateTest extends FunSuite {
-
-  import JsoupUtil.{exactlyOneElement, firstElement}
-
   test("arrows template") {
     val templateText =
       """<ul class="reasons">
@@ -23,25 +19,24 @@ class ArrowsTemplateTest extends FunSuite {
         Seq(Arrow(SampleData.idPackageC, SampleData.idPackageE,
           Seq(Arrow(SampleData.idClassF, SampleData.idClassI, Seq()))))))
     val arrowsTemplate = new ArrowsTemplate(templateText, context)
-    val replacedText = arrowsTemplate.generate(arrows)
-    val replacedDocument = Jsoup.parse(replacedText)
+    val actual = arrowsTemplate.generate(arrows)
 
-    val groupElement = exactlyOneElement(replacedDocument, "#group_a---group_b")
-    assert(firstElement(groupElement, ".from").attr("href") === "#group_a")
-    assert(firstElement(groupElement, ".from").text() === "group/a")
-    assert(firstElement(groupElement, ".to").attr("href") === "#group_b")
-    assert(firstElement(groupElement, ".to").text() === "group/b")
+    val groupElement = actual.one("#group_a---group_b")
+    assert(groupElement.firstAttr(".from", "href") === "#group_a")
+    assert(groupElement.firstText(".from") === "group/a")
+    assert(groupElement.firstAttr(".to", "href") === "#group_b")
+    assert(groupElement.firstText(".to") === "group/b")
 
-    val packageElement = exactlyOneElement(replacedDocument, "#group_a--package_c---group_b--package_e")
-    assert(firstElement(packageElement, ".from").attr("href") === "group_a.html#group_a--package_c")
-    assert(firstElement(packageElement, ".from").text() === "package/c")
-    assert(firstElement(packageElement, ".to").attr("href") === "group_b.html#group_b--package_e")
-    assert(firstElement(packageElement, ".to").text() === "package/e")
+    val packageElement = actual.one("#group_a--package_c---group_b--package_e")
+    assert(packageElement.firstAttr(".from", "href") === "group_a.html#group_a--package_c")
+    assert(packageElement.firstText(".from") === "package/c")
+    assert(packageElement.firstAttr(".to", "href") === "group_b.html#group_b--package_e")
+    assert(packageElement.firstText(".to") === "package/e")
 
-    val classElement = exactlyOneElement(replacedDocument, "#group_a--package_c--class_f---group_b--package_e--class_i")
-    assert(firstElement(classElement, ".from").attr("href") === "group_a--package_c.html#group_a--package_c--class_f")
-    assert(firstElement(classElement, ".from").text() === "class/f")
-    assert(firstElement(classElement, ".to").attr("href") === "group_b--package_e.html#group_b--package_e--class_i")
-    assert(firstElement(classElement, ".to").text() === "class/i")
+    val classElement = actual.one("#group_a--package_c--class_f---group_b--package_e--class_i")
+    assert(classElement.firstAttr(".from", "href") === "group_a--package_c.html#group_a--package_c--class_f")
+    assert(classElement.firstText(".from") === "class/f")
+    assert(classElement.firstAttr(".to", "href") === "group_b--package_e.html#group_b--package_e--class_i")
+    assert(classElement.firstText(".to") === "class/i")
   }
 }

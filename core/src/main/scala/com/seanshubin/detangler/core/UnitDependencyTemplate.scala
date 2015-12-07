@@ -6,7 +6,7 @@ class UnitDependencyTemplate(templateText: String,
                              arrowDirection: ArrowDirection,
                              detangled: Detangled) {
   private val originalTemplate = HtmlFragment.fromText(templateText)
-  private val parentTemplate = originalTemplate.delete(".unit-dependency-row-inner")
+  private val parentTemplate = originalTemplate.remove(".unit-dependency-row-inner")
   private val childTemplate = originalTemplate.one(".unit-dependency-row-inner")
 
   def generate(): HtmlFragment = {

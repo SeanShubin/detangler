@@ -72,6 +72,10 @@ class HtmlFragment(originalElement: Element) {
     findExactlyOne(cssQuery, originalElement).attr(name)
   }
 
+  def firstAttr(cssQuery: String, name: String): String = {
+    findFirst(cssQuery, originalElement).attr(name)
+  }
+
   def text(cssQuery: String, text: String): HtmlFragment = {
     val element = originalElement.clone()
     val toModify = findExactlyOne(cssQuery, element)
@@ -83,7 +87,11 @@ class HtmlFragment(originalElement: Element) {
     findExactlyOne(cssQuery, originalElement).text()
   }
 
-  def delete(cssQuery: String): HtmlFragment = {
+  def firstText(cssQuery: String): String = {
+    findFirst(cssQuery, originalElement).text()
+  }
+
+  def remove(cssQuery: String): HtmlFragment = {
     val element = originalElement.clone()
     findExactlyOne(cssQuery, element).remove()
     new HtmlFragment(element)

@@ -1,45 +1,31 @@
 package com.seanshubin.detangler.core
 
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
-
 class ArrowsTemplate(templateText: String, context: UnitId) {
-  private val template = Jsoup.parseBodyFragment(templateText)
-  private val reasons: Element = template.select(".reasons").get(0)
-  private val reason: Element = reasons.select(".reason").get(0)
-  reasons.removeAttr("class")
-  reasons.remove()
-  reason.removeAttr("class")
-  reason.remove()
+  private val template = HtmlFragment.fromText(templateText)
+  private val reasons = template.one(".reasons").remove(".reason")
+  private val reason = template.one(".reason")
 
-  def generate(arrows: Seq[Arrow]): String = {
+  def generate(arrows: Seq[Arrow]): HtmlFragment = {
     val result = composeArrows(arrows)
-    result.outerHtml()
-  }
-
-  private def composeArrows(arrows: Seq[Arrow]): Element = {
-    val result = reasons.clone()
-    for {
-      arrow <- arrows
-    } yield {
-      val child = composeArrow(arrow)
-      result.appendChild(child)
-    }
     result
   }
 
-  private def composeArrow(arrow: Arrow): Element = {
-    val result = reason.clone()
-    result.attr("id", HtmlUtil.arrowId(arrow.from, arrow.to))
-    val fromElement = result.select(".from").get(0)
-    fromElement.attr("href", HtmlUtil.htmlLink(context, arrow.from))
-    fromElement.text(HtmlUtil.htmlName(arrow.from))
-    val toElement = result.select(".to").get(0)
-    toElement.attr("href", HtmlUtil.htmlLink(context, arrow.to))
-    toElement.text(HtmlUtil.htmlName(arrow.to))
-    if (arrow.reasons.nonEmpty) {
+  private def composeArrows(arrows: Seq[Arrow]): HtmlFragment = {
+    val children = arrows.map(composeArrow)
+    val result = reasons.appendAll(".reasons", children)
+    result
+  }
+
+  private def composeArrow(arrow: Arrow): HtmlFragment = {
+    val withoutSubReasons = reason.
+      attr(".reason", "id", HtmlUtil.arrowId(arrow.from, arrow.to)).
+      anchor(".from", HtmlUtil.htmlLink(context, arrow.from), HtmlUtil.htmlName(arrow.from)).
+      anchor(".to", HtmlUtil.htmlLink(context, arrow.to), HtmlUtil.htmlName(arrow.to))
+    val result = if (arrow.reasons.isEmpty) {
+      withoutSubReasons
+    } else {
       val subReasons = composeArrows(arrow.reasons)
-      result.appendChild(subReasons)
+      withoutSubReasons.appendChild(subReasons)
     }
     result
   }
