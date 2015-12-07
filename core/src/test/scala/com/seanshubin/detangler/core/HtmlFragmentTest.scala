@@ -12,9 +12,9 @@ class HtmlFragmentTest extends FunSuite {
   test("build list of links from template") {
     val template = HtmlFragment.fromText("<ul class=\"outer\"><li class=\"inner\"><a class=\"anchor\" href=\"link\">text</a></li></ul>")
     val (list, item) = template.splitOneIntoOuterAndInner("li")
-    val itemA = item.updateAnchor(".anchor", "linkA", "textA")
-    val itemB = item.updateAnchor(".anchor", "linkB", "textB")
-    val itemC = item.updateAnchor(".anchor", "linkC", "textC")
+    val itemA = item.anchor(".anchor", "linkA", "textA")
+    val itemB = item.anchor(".anchor", "linkB", "textB")
+    val itemC = item.anchor(".anchor", "linkC", "textC")
     val composed = list.appendChild(itemA).appendChild(itemB).appendChild(itemC)
     val expected =
       """<ul class="outer">

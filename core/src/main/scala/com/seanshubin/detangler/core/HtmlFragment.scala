@@ -89,7 +89,7 @@ class HtmlFragment(originalElement: Element) {
     new HtmlFragment(element)
   }
 
-  def updateAnchor(cssQuery: String, href: String, text: String): HtmlFragment = {
+  def anchor(cssQuery: String, href: String, text: String): HtmlFragment = {
     val element = originalElement.clone()
     val toModify = findExactlyOne(cssQuery, element)
     toModify.attr("href", href)

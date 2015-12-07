@@ -9,23 +9,23 @@ class UnitDependencyTemplate(templateText: String,
   private val parentTemplate = originalTemplate.delete(".unit-dependency-row-inner")
   private val childTemplate = originalTemplate.one(".unit-dependency-row-inner")
 
-  def generate(): String = {
+  def generate(): HtmlFragment = {
     val childUnits = arrowDirection.dependencies(detangled, parentUnitId)
     val rows = childUnits.map(generateRow)
 
     val result = parentTemplate.
       text(".caption", s"${arrowDirection.caption} (${childUnits.size})").
       appendAll(".unit-dependency-row-outer", rows)
-    result.text
+    result
   }
 
   private def generateRow(childUnitId: UnitId): HtmlFragment = {
     val arrowName = arrowDirection.arrowName(parentUnitId, childUnitId)
     val arrowLink = arrowDirection.arrowLink(parentUnitId, childUnitId)
     childTemplate.
-      updateAnchor(".name", HtmlUtil.htmlLink(pageUnitId, childUnitId), HtmlUtil.htmlName(childUnitId)).
+      anchor(".name", HtmlUtil.htmlLink(pageUnitId, childUnitId), HtmlUtil.htmlName(childUnitId)).
       text(".depth", detangled.depth(childUnitId).toString).
       text(".complexity", detangled.complexity(childUnitId).toString).
-      updateAnchor(".reason", arrowLink, arrowName)
+      anchor(".reason", arrowLink, arrowName)
   }
 }

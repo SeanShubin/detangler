@@ -34,8 +34,7 @@ class UnitDependencyTemplateTest extends FunSuite {
   test("unit depends on template") {
     val unit = SampleData.idGroupA
     val unitSummaryTemplate = new UnitDependencyTemplate(templateText, SampleData.idRoot, unit, ArrowDirection.TowardDependsOn, SampleData.detangled)
-    val replacedText = unitSummaryTemplate.generate()
-    val actual = HtmlFragment.fromText(replacedText)
+    val actual = unitSummaryTemplate.generate()
 
     assert(actual.text(".caption") === "depends on (1)")
     assert(actual.text(".name") === "group/b")
@@ -49,8 +48,7 @@ class UnitDependencyTemplateTest extends FunSuite {
   test("unit depended on by on template") {
     val unit = SampleData.idGroupB
     val unitSummaryTemplate = new UnitDependencyTemplate(templateText, SampleData.idRoot, unit, ArrowDirection.TowardDependedOnBy, SampleData.detangled)
-    val replacedText = unitSummaryTemplate.generate()
-    val actual = HtmlFragment.fromText(replacedText)
+    val actual = unitSummaryTemplate.generate()
 
     assert(actual.text(".caption") === "depended on by (1)")
     assert(actual.text(".name") === "group/a")
