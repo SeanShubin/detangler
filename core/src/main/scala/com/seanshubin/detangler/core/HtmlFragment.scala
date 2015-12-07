@@ -50,6 +50,17 @@ class HtmlFragment(originalElement: Element) {
     new HtmlFragment(child)
   }
 
+  def appendAll(cssQuery:String, fragments:Seq[HtmlFragment]):HtmlFragment= {
+    val element = originalElement.clone()
+    val attachTo = findExactlyOne(cssQuery, element)
+    for {
+      fragment <- fragments
+    } {
+      attachTo.appendChild(fragment.clonedElement)
+    }
+    new HtmlFragment(element)
+  }
+
   def attr(cssQuery: String, name: String, value: String): HtmlFragment = {
     val element = originalElement.clone()
     val toModify = findExactlyOne(cssQuery, element)

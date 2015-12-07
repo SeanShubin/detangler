@@ -1,11 +1,15 @@
 package com.seanshubin.detangler.core
 
-class UnitDependencyTemplate(templateText: String, detangled:Detangled) {
-  private val original = HtmlFragment.fromText(templateText)
-  private val innerTemplate = original.one(".unit-dependency-row-inner")
-  private val outerTemplate = original.delete(".unit-dependency-row-inner")
+class UnitDependencyTemplate(templateText: String,
+                             parentUnitId:UnitId,
+                             caption:String,
+                             dependencyFunction:UnitId => Seq[UnitId],
+                             detangled:Detangled) {
+  private val originalTemplate = HtmlFragment.fromText(templateText)
+  private val parentTemplate = originalTemplate.delete(".unit-dependency-row-inner")
+  private val childTemplate = originalTemplate.one(".unit-dependency-row-inner")
 
-  def generate(unit:UnitId): String = {
+  def generate(): String = {
     /*
                     <tbody class="attach-unit-dependency-row">
                     <tr class="unit-dependency-row">
@@ -29,10 +33,22 @@ class UnitDependencyTemplate(templateText: String, detangled:Detangled) {
     jsoupUtil.setAnchor(unitDependsOnRow, "reason", arrowName, arrowLink)
 
      */
-    val dependencyUnits = detangled.dependsOn(unit)
+    val childUnits = dependencyFunction(parentUnitId)
+    val rows = childUnits.map(generateRow)
 
-    outerTemplate.
-      text(".caption", s"depends on (${dependencyUnits.size})").
+    println("-" * 100)
+    println(parentTemplate.text)
+    println("-" * 100)
+    println(childTemplate.text)
+    println("-" * 100)
+
+    parentTemplate.
+      text(".caption", s"$caption (${childUnits.size})").
+      appendAll(".unit-dependency-row-outer", rows).
       text
+  }
+
+  private def generateRow(childUnitId:UnitId):HtmlFragment = {
+    childTemplate
   }
 }
