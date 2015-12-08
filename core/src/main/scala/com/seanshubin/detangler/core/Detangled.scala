@@ -7,13 +7,13 @@ trait Detangled {
 
   def composedOf(unitId: UnitId): Seq[UnitId]
 
-  def dependsOn(unitId: UnitId): Seq[UnitId]
+  def dependsOn(context:UnitId, unitId: UnitId): Seq[UnitId]
 
-  def dependedOnBy(unitId: UnitId): Seq[UnitId]
+  def dependedOnBy(context:UnitId, unitId: UnitId): Seq[UnitId]
 
-  def dependsOnExternal(unitId: UnitId): Seq[UnitId]
+  def dependsOnExternal(context: UnitId, unitId: UnitId): Seq[UnitId]
 
-  def dependedOnByExternal(unitId: UnitId): Seq[UnitId]
+  def dependedOnByExternal(context: UnitId, unitId: UnitId): Seq[UnitId]
 
   def arrowsFor(unitId: UnitId): Seq[Arrow]
 

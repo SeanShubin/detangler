@@ -9,7 +9,7 @@ sealed abstract case class ArrowDirection(caption: String) {
 
   def arrowLink(left: UnitId, right: UnitId): String
 
-  def dependencies(detangled: Detangled, unit: UnitId): Seq[UnitId]
+  def dependencies(detangled: Detangled, context:UnitId, unit: UnitId): Seq[UnitId]
 }
 
 object ArrowDirection {
@@ -20,13 +20,13 @@ object ArrowDirection {
 
     override def arrowLink(left: UnitId, right: UnitId): String = HtmlUtil.arrowLink(left, right)
 
-    override def dependencies(detangled: Detangled, unit: UnitId): Seq[UnitId] = detangled.dependsOn(unit)
+    override def dependencies(detangled: Detangled, context:UnitId, unit: UnitId): Seq[UnitId] = detangled.dependsOn(context, unit)
   }
   val TowardDependedOnBy = new ArrowDirection("depended on by") {
     override def arrowName(left: UnitId, right: UnitId): String = HtmlUtil.arrowName(right, left)
 
     override def arrowLink(left: UnitId, right: UnitId): String = HtmlUtil.arrowLink(right, left)
 
-    override def dependencies(detangled: Detangled, unit: UnitId): Seq[UnitId] = detangled.dependedOnBy(unit)
+    override def dependencies(detangled: Detangled, context:UnitId, unit: UnitId): Seq[UnitId] = detangled.dependedOnBy(context, unit)
   }
 }

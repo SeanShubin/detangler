@@ -13,24 +13,24 @@ case class DetangledImpl(map: Map[UnitId, UnitInfo]) extends Detangled {
     map(unitId).depth
   }
 
-  override def dependedOnBy(unitId: UnitId): Seq[UnitId] = {
-    map(unitId).dependedOnBy.toSeq.sorted
+  override def dependedOnBy(context:UnitId, unitId: UnitId): Seq[UnitId] = {
+    map(unitId).dependedOnBy.filter(_.parent == context).toSeq.sorted
   }
 
-  override def dependsOnExternal(unitId: UnitId): Seq[UnitId] = {
-    map(unitId).dependsOnExternal.toSeq.sorted
+  override def dependsOnExternal(context: UnitId, unitId: UnitId): Seq[UnitId] = {
+    map(unitId).dependsOnExternal.filter(_.parent != context).toSeq.sorted
   }
 
   override def complexity(unitId: UnitId): Int = {
     map(unitId).complexity
   }
 
-  override def dependsOn(unitId: UnitId): Seq[UnitId] = {
-    map(unitId).dependsOn.toSeq.sorted
+  override def dependsOn(context:UnitId, unitId: UnitId): Seq[UnitId] = {
+    map(unitId).dependsOn.filter(_.parent == context).toSeq.sorted
   }
 
-  override def dependedOnByExternal(unitId: UnitId): Seq[UnitId] = {
-    map(unitId).dependedOnByExternal.toSeq.sorted
+  override def dependedOnByExternal(context: UnitId, unitId: UnitId): Seq[UnitId] = {
+    map(unitId).dependedOnByExternal.filter(_.parent != context).toSeq.sorted
   }
 
   override def composedOf(unitId: UnitId): Seq[UnitId] = {

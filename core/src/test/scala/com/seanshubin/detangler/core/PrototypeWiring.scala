@@ -10,7 +10,6 @@ trait PrototypeWiring {
 
   lazy val reportDir = Paths.get("generated", "reports", dirName)
   lazy val files = FilesDelegate
-  lazy val reportTransformer = new ReportTransformerImpl
   lazy val classLoader = this.getClass.getClassLoader
   lazy val classLoaderIntegration = new ClassLoaderIntegrationImpl(classLoader)
   lazy val resourceLoader = new ResourceLoaderImpl(classLoaderIntegration)
@@ -22,10 +21,8 @@ trait PrototypeWiring {
     files,
     DevonMarshallerWiring.Default,
     StandardCharsets.UTF_8,
-    reportTransformer,
     pageGenerator,
     resourceLoader,
     detangled
   )
-
 }

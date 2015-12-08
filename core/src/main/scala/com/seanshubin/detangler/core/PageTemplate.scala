@@ -28,12 +28,12 @@ class PageTemplate(unit: UnitId,
   }
 
   def generateDependsOn(unitId: UnitId): HtmlFragment = {
-    val dependsOnTemplate = new UnitDependencyTemplate(dependencyFragment, unitId, unitId, ArrowDirection.TowardDependsOn, detangled)
+    val dependsOnTemplate = new UnitDependencyTemplate(dependencyFragment, unit, unitId, ArrowDirection.TowardDependsOn, detangled)
     dependsOnTemplate.generate()
   }
 
   def generateDependedOnBy(unitId: UnitId): HtmlFragment = {
-    val dependsOnTemplate = new UnitDependencyTemplate(dependencyFragment, unitId, unitId, ArrowDirection.TowardDependedOnBy, detangled)
+    val dependsOnTemplate = new UnitDependencyTemplate(dependencyFragment, unit, unitId, ArrowDirection.TowardDependedOnBy, detangled)
     dependsOnTemplate.generate()
   }
 

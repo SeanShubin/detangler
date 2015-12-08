@@ -13,7 +13,6 @@ class ReporterTest extends FunSuite with EasyMockSugar {
     val files: FilesContract = mock[FilesContract]
     val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
     val charset: Charset = StandardCharsets.UTF_8
-    val reportTransformer: ReportTransformer = null
     val pageGenerator: PageGenerator = mock[PageGenerator]
     val resourceLoader: ResourceLoader = mock[ResourceLoader]
     val detangled: Detangled = SampleData.detangled
@@ -24,7 +23,6 @@ class ReporterTest extends FunSuite with EasyMockSugar {
       files,
       devonMarshaller,
       charset,
-      reportTransformer,
       pageGenerator,
       resourceLoader,
       detangled)

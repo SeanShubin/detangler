@@ -12,7 +12,6 @@ class ReporterImpl(reportDir: Path,
                    files: FilesContract,
                    devonMarshaller: DevonMarshaller,
                    charset: Charset,
-                   reportTransformer: ReportTransformer,
                    pageGenerator: PageGenerator,
                    resourceLoader: ResourceLoader,
                    detangled: Detangled) extends Runnable {
@@ -45,57 +44,4 @@ class ReporterImpl(reportDir: Path,
       }
     }
   }
-
-  private class Delegate(detangled: Detangled) {
-    def generateReports(): Unit = {
-      files.createDirectories(reportDir)
-      val rootUnits = detangled.composedOf(UnitId.Root)
-      generateReport(reportDir, rootUnits)
-    }
-
-    def generateReport(path: Path, unitIds: Seq[UnitId]): Unit = {
-      val arrows = detangled.arrowsFor(unitIds)
-      generateArrowsReport(path, arrows)
-      unitIds.foreach(generateDependencyReport(path, _))
-      val htmlReportPath = path.resolve("index.html")
-      withOutputStream(htmlReportPath) {
-        out =>
-          new HtmlGenerator(new PrintWriter(out), detangled).generateIndex(unitIds, arrows)
-      }
-    }
-
-    private def withOutputStream(path: Path)(f: BufferedWriter => Unit) = {
-      val out = files.newBufferedWriter(path, charset)
-      try {
-        f(out)
-      } finally {
-        out.close()
-      }
-    }
-
-    def unitInfoToLines(unitInfo: UnitInfo): Seq[String] = {
-      devonMarshaller.valueToPretty(unitInfo)
-    }
-
-    def generateArrowsReport(path: Path, arrows: Seq[Arrow]): Unit = {
-      val arrowsReportPath = path.resolve("arrows.txt")
-      val lines = arrows.flatMap(arrowToLines)
-      val javaLines = JavaConversions.asJavaIterable(lines)
-      files.write(arrowsReportPath, javaLines, charset)
-    }
-
-    def arrowToLines(arrow: Arrow): Seq[String] = {
-      devonMarshaller.valueToPretty(arrow)
-    }
-
-    def generateDependencyReport(path: Path, unitId: UnitId): Unit = {
-      val units = detangled.composedOf(unitId)
-      if (units.nonEmpty) {
-        val dir = path.resolve(unitId.fileSystemName)
-        files.createDirectories(dir)
-        generateReport(dir, units)
-      }
-    }
-  }
-
 }

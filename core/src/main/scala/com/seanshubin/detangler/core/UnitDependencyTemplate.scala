@@ -9,7 +9,7 @@ class UnitDependencyTemplate(template: HtmlFragment,
   private val childTemplate = template.one(".dependency-row-inner")
 
   def generate(): HtmlFragment = {
-    val childUnits = arrowDirection.dependencies(detangled, parentUnitId)
+    val childUnits = arrowDirection.dependencies(detangled, pageUnitId, parentUnitId)
     if(childUnits.isEmpty) {
       HtmlFragment.Empty
     } else {
