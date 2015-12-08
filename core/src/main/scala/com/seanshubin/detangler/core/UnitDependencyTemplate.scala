@@ -10,12 +10,15 @@ class UnitDependencyTemplate(template: HtmlFragment,
 
   def generate(): HtmlFragment = {
     val childUnits = arrowDirection.dependencies(detangled, parentUnitId)
-    val rows = childUnits.map(generateRow)
-
-    val result = parentTemplate.
-      text(".caption", s"${arrowDirection.caption} (${childUnits.size})").
-      appendAll(".dependency-row-outer", rows)
-    result
+    if(childUnits.isEmpty) {
+      HtmlFragment.Empty
+    } else {
+      val rows = childUnits.map(generateRow)
+      val result = parentTemplate.
+        text(".caption", s"${arrowDirection.caption} (${childUnits.size})").
+        appendAll(".dependency-row-outer", rows)
+      result
+    }
   }
 
   private def generateRow(childUnitId: UnitId): HtmlFragment = {

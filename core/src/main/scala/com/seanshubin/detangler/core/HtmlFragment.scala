@@ -7,50 +7,75 @@ import org.jsoup.nodes.Element
 Jsoup is designed to deal with full documents as mutable entities, which makes composition difficult
 This class hides the complexity incurred by mutability, and makes it easier to deal with fragments rather than full documents
  */
-class HtmlFragment(originalElement: Element) {
+sealed trait HtmlFragment {
+  def text: String
+  def clonedElement: Element
+  def one(cssQuery: String): HtmlFragment
+  def first(cssQuery: String): HtmlFragment
+  def all(cssQuery: String): Seq[HtmlFragment]
+  def splitOneIntoOuterAndInner(cssQuery: String): (HtmlFragment, HtmlFragment)
+  def appendChild(that: HtmlFragment): HtmlFragment
+  def appendAll(cssQuery: String, fragments: Seq[HtmlFragment]): HtmlFragment
+  def attr(cssQuery: String, name: String, value: String): HtmlFragment
+  def attr(cssQuery: String, name: String): String
+  def firstAttr(cssQuery: String, name: String): String
+  def text(cssQuery: String, text: String): HtmlFragment
+  def text(cssQuery: String): String
+  def firstText(cssQuery: String): String
+  def remove(cssQuery: String): HtmlFragment
+  def anchor(cssQuery: String, href: String, text: String): HtmlFragment
+  def becomeChildOf(that:HtmlFragment):HtmlFragment
+}
+
+class SingleElementHtmlFragment(originalElement: Element) extends HtmlFragment {
 
   import HtmlFragment._
 
-  def text: String = originalElement.toString
+  override def text: String = originalElement.toString
 
-  def clonedElement: Element = originalElement.clone()
+  override def clonedElement: Element = originalElement.clone()
 
   override def toString: String = text
 
-  def one(cssQuery: String): HtmlFragment = {
+  override def one(cssQuery: String): HtmlFragment = {
     val element = findExactlyOne(cssQuery, originalElement)
-    new HtmlFragment(element)
+    new SingleElementHtmlFragment(element)
   }
 
-  def first(cssQuery: String): HtmlFragment = {
+  override def first(cssQuery: String): HtmlFragment = {
     val element = findFirst(cssQuery, originalElement)
-    new HtmlFragment(element)
+    new SingleElementHtmlFragment(element)
   }
 
-  def all(cssQuery: String): Seq[HtmlFragment] = {
+  override def all(cssQuery: String): Seq[HtmlFragment] = {
     val matching = originalElement.select(cssQuery)
     val elements = for {
       index <- 0 until matching.size()
     } yield {
-      matching.get(index)
-    }
-    val fragments = elements.map(new HtmlFragment(_))
+        matching.get(index)
+      }
+    val fragments = elements.map(new SingleElementHtmlFragment(_))
     fragments
   }
 
-  def splitOneIntoOuterAndInner(cssQuery: String): (HtmlFragment, HtmlFragment) = {
+  override def splitOneIntoOuterAndInner(cssQuery: String): (HtmlFragment, HtmlFragment) = {
     val outer = originalElement.clone()
     val inner = findExactlyOne(cssQuery, outer)
     inner.remove()
-    (new HtmlFragment(outer), HtmlFragment.fromText(inner.outerHtml()))
+    (new SingleElementHtmlFragment(outer), HtmlFragment.fromText(inner.outerHtml()))
   }
 
-  def appendChild(that: HtmlFragment): HtmlFragment = {
-    val child: Element = originalElement.clone().appendChild(that.clonedElement)
-    new HtmlFragment(child)
+  override def appendChild(that: HtmlFragment): HtmlFragment = {
+    that.becomeChildOf(this)
   }
 
-  def appendAll(cssQuery: String, fragments: Seq[HtmlFragment]): HtmlFragment = {
+  override def becomeChildOf(that:HtmlFragment):HtmlFragment = {
+    val child: Element = that.clonedElement.appendChild(this.clonedElement)
+    new SingleElementHtmlFragment(child)
+
+  }
+
+  override def appendAll(cssQuery: String, fragments: Seq[HtmlFragment]): HtmlFragment = {
     val element = originalElement.clone()
     val attachTo = findExactlyOne(cssQuery, element)
     for {
@@ -58,56 +83,92 @@ class HtmlFragment(originalElement: Element) {
     } {
       attachTo.appendChild(fragment.clonedElement)
     }
-    new HtmlFragment(element)
+    new SingleElementHtmlFragment(element)
   }
 
-  def attr(cssQuery: String, name: String, value: String): HtmlFragment = {
+  override def attr(cssQuery: String, name: String, value: String): HtmlFragment = {
     val element = originalElement.clone()
     val toModify = findExactlyOne(cssQuery, element)
     toModify.attr(name, value)
-    new HtmlFragment(element)
+    new SingleElementHtmlFragment(element)
   }
 
-  def attr(cssQuery: String, name: String): String = {
+  override def attr(cssQuery: String, name: String): String = {
     findExactlyOne(cssQuery, originalElement).attr(name)
   }
 
-  def firstAttr(cssQuery: String, name: String): String = {
+  override def firstAttr(cssQuery: String, name: String): String = {
     findFirst(cssQuery, originalElement).attr(name)
   }
 
-  def text(cssQuery: String, text: String): HtmlFragment = {
+  override def text(cssQuery: String, text: String): HtmlFragment = {
     val element = originalElement.clone()
     val toModify = findExactlyOne(cssQuery, element)
     toModify.text(text)
-    new HtmlFragment(element)
+    new SingleElementHtmlFragment(element)
   }
 
-  def text(cssQuery: String): String = {
+  override def text(cssQuery: String): String = {
     findExactlyOne(cssQuery, originalElement).text()
   }
 
-  def firstText(cssQuery: String): String = {
+  override def firstText(cssQuery: String): String = {
     findFirst(cssQuery, originalElement).text()
   }
 
-  def remove(cssQuery: String): HtmlFragment = {
+  override def remove(cssQuery: String): HtmlFragment = {
     val element = originalElement.clone()
     findExactlyOne(cssQuery, element).remove()
-    new HtmlFragment(element)
+    new SingleElementHtmlFragment(element)
   }
 
-  def anchor(cssQuery: String, href: String, text: String): HtmlFragment = {
+  override def anchor(cssQuery: String, href: String, text: String): HtmlFragment = {
     val element = originalElement.clone()
     val toModify = findExactlyOne(cssQuery, element)
     toModify.attr("href", href)
     toModify.text(text)
-    new HtmlFragment(element)
-
+    new SingleElementHtmlFragment(element)
   }
 }
 
+class EmptyHtmlFragment extends HtmlFragment {
+  override def text: String = ???
+
+  override def text(cssQuery: String, text: String): HtmlFragment = ???
+
+  override def text(cssQuery: String): String = ???
+
+  override def splitOneIntoOuterAndInner(cssQuery: String): (HtmlFragment, HtmlFragment) = ???
+
+  override def one(cssQuery: String): HtmlFragment = ???
+
+  override def firstAttr(cssQuery: String, name: String): String = ???
+
+  override def appendAll(cssQuery: String, fragments: Seq[HtmlFragment]): HtmlFragment = ???
+
+  override def firstText(cssQuery: String): String = ???
+
+  override def clonedElement: Element = ???
+
+  override def all(cssQuery: String): Seq[HtmlFragment] = ???
+
+  override def anchor(cssQuery: String, href: String, text: String): HtmlFragment = ???
+
+  override def remove(cssQuery: String): HtmlFragment = ???
+
+  override def appendChild(that: HtmlFragment): HtmlFragment = ???
+
+  override def attr(cssQuery: String, name: String, value: String): HtmlFragment = ???
+
+  override def attr(cssQuery: String, name: String): String = ???
+
+  override def first(cssQuery: String): HtmlFragment = ???
+
+  override def becomeChildOf(that: HtmlFragment): HtmlFragment = that
+}
+
 object HtmlFragment {
+  val Empty = new EmptyHtmlFragment
   def fromText(text: String): HtmlFragment = {
     val document = Jsoup.parse(text)
     val body = document.body()
@@ -115,7 +176,7 @@ object HtmlFragment {
     if (children.size() != 1)
       throw new RuntimeException(s"Expected only a single element in:\n$text\ngot ${children.size()}")
     val element = children.get(0)
-    val fragment = new HtmlFragment(element)
+    val fragment = new SingleElementHtmlFragment(element)
     fragment
   }
 
