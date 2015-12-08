@@ -1,6 +1,6 @@
 table {
     border-collapse: collapse;
-    margin-bottom: 2em;
+    margin-top: 2em;
 }
 
 table, th, td {
@@ -10,14 +10,6 @@ table, th, td {
 
 ul {
     list-style: none;
-}
-
-li {
-    margin-left: 0;
-}
-
-span {
-    font-family: monospace;
-    font-weight: bold;
-    font-size: 2em;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }

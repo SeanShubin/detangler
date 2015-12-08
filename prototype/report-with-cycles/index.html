@@ -56,7 +56,7 @@
             </thead>
             <tbody>
             <tr>
-                <td><a href="#group_a-group_b">&lt;cycle&gt;</a> group/a</td>
+                <td><a href="#group_a-group_b">&orarr;</a> group/a</td>
                 <td>1</td>
                 <td>2</td>
                 <td><a href="group_a.html">parts</a></td>
@@ -124,7 +124,7 @@
             </thead>
             <tbody>
             <tr>
-                <td><a href="#group_a-group_b">&lt;cycle&gt;</a> group/b</td>
+                <td><a href="#group_a-group_b">&orarr;</a> group/b</td>
                 <td>3</td>
                 <td>4</td>
                 <td><a href="group_b.html">parts</a></td>
@@ -181,39 +181,39 @@
         </ul>
     </li>
 </ul>
-<ul> 
-    <li id="group_a---group_b"> 
-        <a href="#group_a">group/a</a> 
-        <span>&rarr;</span> 
-        <a href="#group_b">group/b</a> 
-        <ul> 
-            <li id="group_a--package_c---group_b--package_e"> 
-                <a href="group_a.html#group_a--package_c">package/c</a> 
-                <span>&rarr;</span>
-                <a href="group_b.html#group_b--package_e">package/e</a> 
-                <ul> 
-                    <li id="group_a--package_c--class_f---group_b--package_e--class_i"> 
+<ul>
+    <li id="group_a---group_b">
+        <a href="#group_a">group/a</a>
+        <span>&xrarr;</span>
+        <a href="#group_b">group/b</a>
+        <ul>
+            <li id="group_a--package_c---group_b--package_e">
+                <a href="group_a.html#group_a--package_c">package/c</a>
+                <span>&xrarr;</span>
+                <a href="group_b.html#group_b--package_e">package/e</a>
+                <ul>
+                    <li id="group_a--package_c--class_f---group_b--package_e--class_i">
                         <a href="group_a--package_c.html#group_a--package_c--class_f">class/f</a>
-                        <span>&rarr;</span> 
-                        <a href="group_b--package_e.html#group_b--package_e--class_i">class/i</a> 
+                        <span>&xrarr;</span>
+                        <a href="group_b--package_e.html#group_b--package_e--class_i">class/i</a>
                     </li>
                 </ul>
             </li>
         </ul>
     </li>
-    <li id="group_b---group_a"> 
-        <a href="#group_b">group/b</a> 
-        <span>&rarr;</span> 
-        <a href="#group_a">group/a</a> 
-        <ul> 
-            <li id="group_b--package_e---group_a--package_c"> 
-                <a href="group_b.html#group_b--package_e">package/e</a> 
-                <span>&rarr;</span>
-                <a href="group_a.html#group_a--package_c">package/c</a> 
-                <ul> 
-                    <li id="group_b--package_e--class_i---group_a--package_c--class_f"> 
-                        <a href="group_b--package_e.html#group_b--package_e--class_i">class/i</a> 
-                        <span>&rarr;</span> 
+    <li id="group_b---group_a">
+        <a href="#group_b">group/b</a>
+        <span>&xrarr;</span>
+        <a href="#group_a">group/a</a>
+        <ul>
+            <li id="group_b--package_e---group_a--package_c">
+                <a href="group_b.html#group_b--package_e">package/e</a>
+                <span>&xrarr;</span>
+                <a href="group_a.html#group_a--package_c">package/c</a>
+                <ul>
+                    <li id="group_b--package_e--class_i---group_a--package_c--class_f">
+                        <a href="group_b--package_e.html#group_b--package_e--class_i">class/i</a>
+                        <span>&xrarr;</span>
                         <a href="group_a--package_c.html#group_a--package_c--class_f">class/f</a>
                     </li>
                 </ul>
@@ -221,6 +221,6 @@
         </ul>
     </li>
 </ul>
- 
+
 </body>
 </html>
