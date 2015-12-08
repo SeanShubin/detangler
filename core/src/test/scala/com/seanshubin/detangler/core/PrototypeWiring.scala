@@ -15,7 +15,7 @@ trait PrototypeWiring {
   lazy val resourceLoader = new ResourceLoaderImpl(classLoaderIntegration)
   lazy val detangled: Detangled = SampleData.detangled
   lazy val shouldRemoveClass: Boolean = true
-  lazy val pageGenerator = new PageGeneratorImpl(detangled, resourceLoader, shouldRemoveClass)
+  lazy val pageGenerator = new PageGeneratorImpl(detangled, resourceLoader)
   lazy val reporter = new ReporterImpl(
     reportDir,
     files,

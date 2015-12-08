@@ -29,7 +29,8 @@ class ReporterTest extends FunSuite with EasyMockSugar {
 
     def expectPageWrite(id: UnitId, name: String): Unit = {
       val text = "content"
-      pageGenerator.pageForId(id).andReturn(text)
+      val dummyTemplate: HtmlFragment = null
+      pageGenerator.pageForId(id, dummyTemplate).andReturn(text)
       files.write(reportDir.resolve(name), text.getBytes(charset)).andReturn(null)
     }
 

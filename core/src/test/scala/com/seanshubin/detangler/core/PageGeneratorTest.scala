@@ -6,7 +6,6 @@ import org.jsoup.nodes.{Document, Element}
 import org.scalatest.FunSuite
 
 class PageGeneratorTest extends FunSuite {
-  val shouldRemoveClass = false
   test("top page summary") {
     val document = documentFor(SampleData.idRoot)
     document.outputSettings().indentAmount(2)
@@ -96,8 +95,9 @@ class PageGeneratorTest extends FunSuite {
     val classLoader: ClassLoader = this.getClass.getClassLoader
     val classLoaderIntegration: ClassLoaderIntegration = new ClassLoaderIntegrationImpl(classLoader)
     val resourceLoader: ResourceLoader = new ResourceLoaderImpl(classLoaderIntegration)
-    val pageGenerator: PageGenerator = new PageGeneratorImpl(SampleData.detangled, resourceLoader, shouldRemoveClass)
-    val page = pageGenerator.pageForId(SampleData.idRoot)
+    val pageGenerator: PageGenerator = new PageGeneratorImpl(SampleData.detangled, resourceLoader)
+    val dummyTemplate: HtmlFragment = null
+    val page = pageGenerator.pageForId(SampleData.idRoot, dummyTemplate)
     val document = Jsoup.parse(page)
     document
   }

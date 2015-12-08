@@ -7,9 +7,9 @@ trait Detangled {
 
   def composedOf(unitId: UnitId): Seq[UnitId]
 
-  def dependsOn(context:UnitId, unitId: UnitId): Seq[UnitId]
+  def dependsOn(context: UnitId, unitId: UnitId): Seq[UnitId]
 
-  def dependedOnBy(context:UnitId, unitId: UnitId): Seq[UnitId]
+  def dependedOnBy(context: UnitId, unitId: UnitId): Seq[UnitId]
 
   def dependsOnExternal(context: UnitId, unitId: UnitId): Seq[UnitId]
 

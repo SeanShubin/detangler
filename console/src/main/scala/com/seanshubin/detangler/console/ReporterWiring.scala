@@ -14,18 +14,16 @@ trait ReporterWiring {
   lazy val files: FilesContract = FilesDelegate
   lazy val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
   lazy val charset: Charset = StandardCharsets.UTF_8
-  lazy val reportTransformer: ReportTransformer = new ReportTransformerImpl
   lazy val classLoader: ClassLoader = this.getClass.getClassLoader
   lazy val classLoaderIntegration: ClassLoaderIntegration = new ClassLoaderIntegrationImpl(classLoader)
   lazy val resourceLoader: ResourceLoader = new ResourceLoaderImpl(classLoaderIntegration)
   lazy val removeClasses: Boolean = false
-  lazy val pageGenerator: PageGenerator = new PageGeneratorImpl(detangled, resourceLoader, removeClasses)
+  lazy val pageGenerator: PageGenerator = new PageGeneratorImpl(detangled, resourceLoader)
   lazy val reporter: Runnable = new ReporterImpl(
     reportDir,
     files,
     devonMarshaller,
     charset,
-    reportTransformer,
     pageGenerator,
     resourceLoader,
     detangled)

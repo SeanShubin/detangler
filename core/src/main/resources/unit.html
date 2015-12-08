@@ -6,59 +6,61 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-<ul class="attach-unit">
-    <li class="unit-root">
-        <table class="unit-summary">
-            <thead>
-            <tr>
-                <th>name</th>
-                <th>depth</th>
-                <th>complexity</th>
-                <th>composed of</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td class="name">sample/group</td>
-                <td class="depth">depth number</td>
-                <td class="complexity">complexity number</td>
-                <td><a class="composed-of" href="sample_group_parts">parts</a></td>
-            </tr>
-            </tbody>
-        </table>
-        <ul class="unit-dependency">
-            <li>
-                <table>
-                    <thead>
-                    <tr>
-                        <th class="caption" colspan="4">depends on (number)</th>
-                    </tr>
-                    <tr>
-                        <th>name</th>
-                        <th>depth</th>
-                        <th>complexity</th>
-                        <th>reason</th>
-                    </tr>
-                    </thead>
-                    <tbody class="attach-unit-dependency-row">
-                    <tr class="unit-dependency-row">
-                        <td><a class="name" href="#other_group">other/group</a></td>
-                        <td class="depth">3</td>
-                        <td class="complexity">4</td>
-                        <td><a class="reason" href="other_group_parts">reason</a></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </li>
-        </ul>
-    </li>
-</ul>
-<ul class="reasons">
-    <li class="reason">
-        <a class="from" href="group_a/package_a#class/a">class/a</a>
-        <span>&rarr;</span>
-        <a class="to" href="group_b/package_c#class/d">class/d</a>
-    </li>
-</ul>
+<div>
+    <ul class="units">
+        <li class="unit">
+            <table class="summary">
+                <thead>
+                <tr>
+                    <th>name</th>
+                    <th>depth</th>
+                    <th>complexity</th>
+                    <th>composed of</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="name">sample/group</td>
+                    <td class="depth">depth number</td>
+                    <td class="complexity">complexity number</td>
+                    <td><a class="composed-of" href="sample_group_parts">parts</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <ul class="dependency">
+                <li>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="caption" colspan="4">depends on (number)</th>
+                        </tr>
+                        <tr>
+                            <th>name</th>
+                            <th>depth</th>
+                            <th>complexity</th>
+                            <th>reason</th>
+                        </tr>
+                        </thead>
+                        <tbody class="dependency-row-outer">
+                        <tr class="dependency-row-inner">
+                            <td><a class="name" href="#other_group">other/group</a></td>
+                            <td class="depth">depth</td>
+                            <td class="complexity">complexity</td>
+                            <td><a class="reason" href="#other_group_parts">reason</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="reasons">
+        <li class="reason">
+            <a class="from" href="replace-me">replace-me</a>
+            <span>&rarr;</span>
+            <a class="to" href="replace-me">replace-me</a>
+        </li>
+    </ul>
+</div>
 </body>
 </html>

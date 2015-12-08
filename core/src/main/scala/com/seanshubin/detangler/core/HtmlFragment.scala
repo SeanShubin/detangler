@@ -1,5 +1,8 @@
 package com.seanshubin.detangler.core
 
+import java.io.InputStream
+import java.nio.charset.Charset
+
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 
@@ -9,22 +12,38 @@ This class hides the complexity incurred by mutability, and makes it easier to d
  */
 sealed trait HtmlFragment {
   def text: String
+
   def clonedElement: Element
+
   def one(cssQuery: String): HtmlFragment
+
   def first(cssQuery: String): HtmlFragment
+
   def all(cssQuery: String): Seq[HtmlFragment]
+
   def splitOneIntoOuterAndInner(cssQuery: String): (HtmlFragment, HtmlFragment)
+
   def appendChild(that: HtmlFragment): HtmlFragment
+
   def appendAll(cssQuery: String, fragments: Seq[HtmlFragment]): HtmlFragment
+
   def attr(cssQuery: String, name: String, value: String): HtmlFragment
+
   def attr(cssQuery: String, name: String): String
+
   def firstAttr(cssQuery: String, name: String): String
+
   def text(cssQuery: String, text: String): HtmlFragment
+
   def text(cssQuery: String): String
+
   def firstText(cssQuery: String): String
+
   def remove(cssQuery: String): HtmlFragment
+
   def anchor(cssQuery: String, href: String, text: String): HtmlFragment
-  def becomeChildOf(that:HtmlFragment):HtmlFragment
+
+  def becomeChildOf(that: HtmlFragment): HtmlFragment
 }
 
 class SingleElementHtmlFragment(originalElement: Element) extends HtmlFragment {
@@ -69,7 +88,7 @@ class SingleElementHtmlFragment(originalElement: Element) extends HtmlFragment {
     that.becomeChildOf(this)
   }
 
-  override def becomeChildOf(that:HtmlFragment):HtmlFragment = {
+  override def becomeChildOf(that: HtmlFragment): HtmlFragment = {
     val child: Element = that.clonedElement.appendChild(this.clonedElement)
     new SingleElementHtmlFragment(child)
 
@@ -169,6 +188,7 @@ class EmptyHtmlFragment extends HtmlFragment {
 
 object HtmlFragment {
   val Empty = new EmptyHtmlFragment
+
   def fromText(text: String): HtmlFragment = {
     val document = Jsoup.parse(text)
     val body = document.body()
@@ -178,6 +198,11 @@ object HtmlFragment {
     val element = children.get(0)
     val fragment = new SingleElementHtmlFragment(element)
     fragment
+  }
+
+  def fromInputStream(inputStream: InputStream, charset: Charset): HtmlFragment = {
+    val text = IoUtil.inputStreamToString(inputStream, charset)
+    fromText(text)
   }
 
   def findExactlyOne(cssQuery: String, element: Element): Element = {

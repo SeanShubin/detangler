@@ -13,7 +13,7 @@ case class DetangledImpl(map: Map[UnitId, UnitInfo]) extends Detangled {
     map(unitId).depth
   }
 
-  override def dependedOnBy(context:UnitId, unitId: UnitId): Seq[UnitId] = {
+  override def dependedOnBy(context: UnitId, unitId: UnitId): Seq[UnitId] = {
     map(unitId).dependedOnBy.filter(_.parent == context).toSeq.sorted
   }
 
@@ -25,7 +25,7 @@ case class DetangledImpl(map: Map[UnitId, UnitInfo]) extends Detangled {
     map(unitId).complexity
   }
 
-  override def dependsOn(context:UnitId, unitId: UnitId): Seq[UnitId] = {
+  override def dependsOn(context: UnitId, unitId: UnitId): Seq[UnitId] = {
     map(unitId).dependsOn.filter(_.parent == context).toSeq.sorted
   }
 
