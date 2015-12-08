@@ -11,10 +11,6 @@ trait Detangled {
 
   def dependedOnBy(context: UnitId, unitId: UnitId): Seq[UnitId]
 
-  def dependsOnExternal(context: UnitId, unitId: UnitId): Seq[UnitId]
-
-  def dependedOnByExternal(context: UnitId, unitId: UnitId): Seq[UnitId]
-
   def arrowsFor(unitId: UnitId): Seq[Arrow]
 
   def arrowsFor(parts: Seq[UnitId]): Seq[Arrow]

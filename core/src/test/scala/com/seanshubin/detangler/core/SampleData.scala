@@ -11,13 +11,15 @@ object SampleData {
   val idClassG = UnitId.simple("group/a", "package/c", "class/g")
   val idClassH = UnitId.simple("group/a", "package/d", "class/h")
   val idClassI = UnitId.simple("group/b", "package/e", "class/i")
+  val cycleAB = UnitId.complex(Set("group/a", "group/b"))
+  val cycleCD = UnitId.complex(Set("group/a"), Set("package/c", "package/d"))
+  val cycleFG = UnitId.complex(Set("group/a"), Set("package/c"), Set("class/f", "class/g"))
+
   val detangled: Detangled = DetangledImpl(Map(
     idRoot -> UnitInfo(
       idRoot,
       dependsOn = Set(),
       dependedOnBy = Set(),
-      dependsOnExternal = Set(),
-      dependedOnByExternal = Set(),
       composedOf = Set(idGroupA, idGroupB),
       depth = 0,
       complexity = 0),
@@ -25,8 +27,6 @@ object SampleData {
       idGroupA,
       dependsOn = Set(idGroupB),
       dependedOnBy = Set(),
-      dependsOnExternal = Set(),
-      dependedOnByExternal = Set(),
       composedOf = Set(idPackageC, idPackageD),
       depth = 1,
       complexity = 2),
@@ -34,8 +34,6 @@ object SampleData {
       idGroupB,
       dependsOn = Set(),
       dependedOnBy = Set(idGroupA),
-      dependsOnExternal = Set(),
-      dependedOnByExternal = Set(),
       composedOf = Set(idPackageE),
       depth = 3,
       complexity = 4),
@@ -43,8 +41,6 @@ object SampleData {
       idPackageC,
       dependsOn = Set(idPackageD, idPackageE),
       dependedOnBy = Set(),
-      dependsOnExternal = Set(),
-      dependedOnByExternal = Set(),
       composedOf = Set(idClassF, idClassG),
       depth = 5,
       complexity = 6),
@@ -52,8 +48,6 @@ object SampleData {
       idPackageD,
       dependsOn = Set(),
       dependedOnBy = Set(idPackageC),
-      dependsOnExternal = Set(),
-      dependedOnByExternal = Set(),
       composedOf = Set(idClassH),
       depth = 7,
       complexity = 8),
@@ -61,8 +55,6 @@ object SampleData {
       idPackageE,
       dependsOn = Set(),
       dependedOnBy = Set(idPackageC),
-      dependsOnExternal = Set(),
-      dependedOnByExternal = Set(),
       composedOf = Set(idClassI),
       depth = 9,
       complexity = 10),
@@ -70,8 +62,6 @@ object SampleData {
       idClassF,
       dependsOn = Set(idClassG, idClassH, idClassI),
       dependedOnBy = Set(),
-      dependsOnExternal = Set(),
-      dependedOnByExternal = Set(),
       composedOf = Set(),
       depth = 11,
       complexity = 12),
@@ -79,8 +69,6 @@ object SampleData {
       idClassG,
       dependsOn = Set(),
       dependedOnBy = Set(idClassF),
-      dependsOnExternal = Set(),
-      dependedOnByExternal = Set(),
       composedOf = Set(),
       depth = 13,
       complexity = 14),
@@ -88,8 +76,6 @@ object SampleData {
       idClassH,
       dependsOn = Set(),
       dependedOnBy = Set(idClassF),
-      dependsOnExternal = Set(),
-      dependedOnByExternal = Set(),
       composedOf = Set(),
       depth = 15,
       complexity = 16),
@@ -97,11 +83,8 @@ object SampleData {
       idClassI,
       dependsOn = Set(),
       dependedOnBy = Set(idClassF),
-      dependsOnExternal = Set(),
-      dependedOnByExternal = Set(),
       composedOf = Set(),
       depth = 17,
       complexity = 18)
   ))
-
 }
