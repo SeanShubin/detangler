@@ -1,5 +1,6 @@
 package com.seanshubin.detangler.core
 
+//move back to test package once we start using real data
 object SampleData {
   val idRoot = UnitId.simple()
   val idGroupA = UnitId.simple("group/a")
@@ -15,7 +16,7 @@ object SampleData {
   val cycleCD = UnitId.complex(Set("group/a"), Set("package/c", "package/d"))
   val cycleFG = UnitId.complex(Set("group/a"), Set("package/c"), Set("class/f", "class/g"))
 
-  val detangled: Detangled = DetangledImpl(Map(
+  val detangledMap: Map[UnitId, UnitInfo] = Map(
     idRoot -> UnitInfo(
       idRoot,
       dependsOn = Set(),
@@ -86,5 +87,32 @@ object SampleData {
       composedOf = Set(),
       depth = 17,
       complexity = 18)
-  ))
+  )
+  val detangled: Detangled = DetangledImpl(detangledMap)
+
+  val detangledMapWithCycles = detangledMap +
+    (cycleAB -> UnitInfo(
+      id = cycleAB,
+      dependsOn = Set(),
+      dependedOnBy = Set(),
+      composedOf = Set(idGroupA, idGroupB),
+      depth = 19,
+      complexity = 20)) +
+    (cycleCD -> UnitInfo(
+      id = cycleCD,
+      dependsOn = Set(),
+      dependedOnBy = Set(),
+      composedOf = Set(idPackageC, idPackageD),
+      depth = 21,
+      complexity = 22)) +
+    (cycleFG -> UnitInfo(
+      id = cycleFG,
+      dependsOn = Set(),
+      dependedOnBy = Set(),
+      composedOf = Set(idClassF, idClassG),
+      depth = 23,
+      complexity = 24
+    ))
+
+  val detangledWithCycles = DetangledImpl(detangledMapWithCycles)
 }
