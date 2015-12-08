@@ -1,5 +1,9 @@
 package com.seanshubin.detangler.core
 
+import java.nio.charset.StandardCharsets
+import java.nio.file.{Files, Paths}
+
+import org.jsoup.Jsoup
 import org.scalatest.FunSuite
 
 class PageTemplateTest extends FunSuite {
@@ -7,7 +11,7 @@ class PageTemplateTest extends FunSuite {
     """<div>
       |<ul class="units">
       |    <li class="unit">
-      |        <table class="unit-summary">
+      |        <table class="summary">
       |            <thead>
       |            <tr>
       |                <th>name</th>
@@ -25,7 +29,7 @@ class PageTemplateTest extends FunSuite {
       |            </tr>
       |            </tbody>
       |        </table>
-      |        <ul class="unit-dependency">
+      |        <ul class="dependency">
       |            <li>
       |                <table>
       |                    <thead>
@@ -39,8 +43,8 @@ class PageTemplateTest extends FunSuite {
       |                        <th>reason</th>
       |                    </tr>
       |                    </thead>
-      |                    <tbody class="unit-dependency-row-outer">
-      |                    <tr class="unit-dependency-row-inner">
+      |                    <tbody class="dependency-row-outer">
+      |                    <tr class="dependency-row-inner">
       |                        <td><a class="name" href="#other_group">other/group</a></td>
       |                        <td class="depth">depth</td>
       |                        <td class="complexity">complexity</td>
@@ -65,6 +69,8 @@ class PageTemplateTest extends FunSuite {
     val template = HtmlFragment.fromText(templateText)
     val pageTemplate = new PageTemplate(SampleData.idRoot, SampleData.detangled, template)
     val actual = pageTemplate.generate()
+
+    emitPage(actual)
 
     assert(actual.text("#group_a .name") === "group/a")
     assert(actual.text("#group_a .depth") === "1")
@@ -104,5 +110,25 @@ class PageTemplateTest extends FunSuite {
     assert(actual.attr("#group_a--package_c--class_f---group_b--package_e--class_i .from", "href") === "group_a--package_c.html#group_a--package_c--class_f")
     assert(actual.text("#group_a--package_c--class_f---group_b--package_e--class_i .to") === "class/i")
     assert(actual.attr("#group_a--package_c--class_f---group_b--package_e--class_i .to", "href") === "group_b--package_e.html#group_b--package_e--class_i")
+  }
+
+  def emitPage(fragment: HtmlFragment): Unit = {
+    val basePath = Paths.get("core", "src", "main", "resources")
+    val pageTemplatePath = basePath.resolve("unit.html")
+    val outPath = basePath.resolve("foo.html")
+    val charset = StandardCharsets.UTF_8
+    val baseUri = ""
+    val inputStream = Files.newInputStream(pageTemplatePath)
+    val document = Jsoup.parse(inputStream, charset.name(), baseUri)
+    inputStream.close()
+    val elements = fragment.clonedElement.children()
+    document.body.children().remove()
+    for {
+      i <- 0 until elements.size()
+    } {
+      document.body.appendChild(elements.get(i))
+    }
+    document.outputSettings().indentAmount(2)
+    Files.write(outPath, document.toString.getBytes(charset))
   }
 }

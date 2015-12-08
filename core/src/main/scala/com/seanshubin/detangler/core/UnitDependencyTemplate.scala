@@ -5,8 +5,8 @@ class UnitDependencyTemplate(template: HtmlFragment,
                              parentUnitId: UnitId,
                              arrowDirection: ArrowDirection,
                              detangled: Detangled) {
-  private val parentTemplate = template.remove(".unit-dependency-row-inner")
-  private val childTemplate = template.one(".unit-dependency-row-inner")
+  private val parentTemplate = template.remove(".dependency-row-inner")
+  private val childTemplate = template.one(".dependency-row-inner")
 
   def generate(): HtmlFragment = {
     val childUnits = arrowDirection.dependencies(detangled, parentUnitId)
@@ -14,7 +14,7 @@ class UnitDependencyTemplate(template: HtmlFragment,
 
     val result = parentTemplate.
       text(".caption", s"${arrowDirection.caption} (${childUnits.size})").
-      appendAll(".unit-dependency-row-outer", rows)
+      appendAll(".dependency-row-outer", rows)
     result
   }
 

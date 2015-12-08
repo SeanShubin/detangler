@@ -5,7 +5,7 @@ import org.scalatest.FunSuite
 class UnitSummaryTemplateTest extends FunSuite {
   test("unit summary template") {
     val templateText =
-      """<table class="unit-summary">
+      """<table class="summary">
         |    <thead>
         |    <tr>
         |        <th>name</th>
@@ -29,7 +29,7 @@ class UnitSummaryTemplateTest extends FunSuite {
     val unitSummaryTemplate = new UnitSummaryTemplate(template, SampleData.detangled)
     val actual = unitSummaryTemplate.generate(unit)
 
-    assert(actual.attr(".unit-summary", "id") === "group_a")
+    assert(actual.attr(".summary", "id") === "group_a")
     assert(actual.text(".name") === "group/a")
     assert(actual.text(".depth") === "1")
     assert(actual.text(".complexity") === "2")

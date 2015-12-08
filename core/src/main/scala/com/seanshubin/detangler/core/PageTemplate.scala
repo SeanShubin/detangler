@@ -5,9 +5,9 @@ class PageTemplate(unit: UnitId,
                    template: HtmlFragment) {
   val emptyPage = template.remove(".units").remove(".reasons")
   val unitsOuter = template.one(".units").remove(".unit")
-  val unitFragment = template.one(".unit").remove(".unit-dependency")
+  val unitFragment = template.one(".unit").remove(".dependency")
   val reasonsFragment = template.one(".reasons")
-  val dependencyFragment = template.one(".unit-dependency")
+  val dependencyFragment = template.one(".dependency")
 
   def generate(): HtmlFragment = {
     val units = unitsOuter.appendAll(".units", generateUnits())

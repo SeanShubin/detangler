@@ -32,8 +32,8 @@ class HtmlFragment(originalElement: Element) {
     val elements = for {
       index <- 0 until matching.size()
     } yield {
-        matching.get(index)
-      }
+      matching.get(index)
+    }
     val fragments = elements.map(new HtmlFragment(_))
     fragments
   }

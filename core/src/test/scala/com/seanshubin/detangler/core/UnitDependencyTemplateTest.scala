@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 
 class UnitDependencyTemplateTest extends FunSuite {
   val templateText =
-    """<ul class="unit-dependency">
+    """<ul class="dependency">
       |    <li>
       |        <table>
       |            <thead>
@@ -18,8 +18,8 @@ class UnitDependencyTemplateTest extends FunSuite {
       |                <th>reason</th>
       |            </tr>
       |            </thead>
-      |            <tbody class="unit-dependency-row-outer">
-      |            <tr class="unit-dependency-row-inner">
+      |            <tbody class="dependency-row-outer">
+      |            <tr class="dependency-row-inner">
       |                <td><a class="name" href="#other_group">other/group</a></td>
       |                <td class="depth">depth</td>
       |                <td class="complexity">complexity</td>
