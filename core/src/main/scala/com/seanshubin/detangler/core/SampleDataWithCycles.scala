@@ -1,7 +1,7 @@
 package com.seanshubin.detangler.core
 
 //move back to test package once we start using real data
-object SampleData {
+object SampleDataWithCycles {
   val idRoot = UnitId.simple()
   val idGroupA = UnitId.simple("group/a")
   val idGroupB = UnitId.simple("group/b")
@@ -12,25 +12,28 @@ object SampleData {
   val idClassG = UnitId.simple("group/a", "package/c", "class/g")
   val idClassH = UnitId.simple("group/a", "package/d", "class/h")
   val idClassI = UnitId.simple("group/b", "package/e", "class/i")
+  val cycleAB = UnitId.complex(Set("group/a", "group/b"))
+  val cycleCD = UnitId.complex(Set("group/a"), Set("package/c", "package/d"))
+  val cycleFG = UnitId.complex(Set("group/a"), Set("package/c"), Set("class/f", "class/g"))
 
   val detangledMap: Map[UnitId, UnitInfo] = Map(
     idRoot -> UnitInfo(
       idRoot,
       dependsOn = Set(),
       dependedOnBy = Set(),
-      composedOf = Set(idGroupA, idGroupB),
+      composedOf = Set(cycleAB, idGroupA, idGroupB),
       depth = 0,
       complexity = 0),
     idGroupA -> UnitInfo(
       idGroupA,
       dependsOn = Set(idGroupB),
-      dependedOnBy = Set(),
-      composedOf = Set(idPackageC, idPackageD),
+      dependedOnBy = Set(idGroupB),
+      composedOf = Set(cycleCD, idPackageC, idPackageD),
       depth = 1,
       complexity = 2),
     idGroupB -> UnitInfo(
       idGroupB,
-      dependsOn = Set(),
+      dependsOn = Set(idGroupA),
       dependedOnBy = Set(idGroupA),
       composedOf = Set(idPackageE),
       depth = 3,
@@ -38,13 +41,13 @@ object SampleData {
     idPackageC -> UnitInfo(
       idPackageC,
       dependsOn = Set(idPackageD, idPackageE),
-      dependedOnBy = Set(),
-      composedOf = Set(idClassF, idClassG),
+      dependedOnBy = Set(idPackageD),
+      composedOf = Set(cycleFG, idClassF, idClassG),
       depth = 5,
       complexity = 6),
     idPackageD -> UnitInfo(
       idPackageD,
-      dependsOn = Set(),
+      dependsOn = Set(idPackageC),
       dependedOnBy = Set(idPackageC),
       composedOf = Set(idClassH),
       depth = 7,
@@ -59,13 +62,13 @@ object SampleData {
     idClassF -> UnitInfo(
       idClassF,
       dependsOn = Set(idClassG, idClassH, idClassI),
-      dependedOnBy = Set(),
+      dependedOnBy = Set(idClassG),
       composedOf = Set(),
       depth = 11,
       complexity = 12),
     idClassG -> UnitInfo(
       idClassG,
-      dependsOn = Set(),
+      dependsOn = Set(idClassF),
       dependedOnBy = Set(idClassF),
       composedOf = Set(),
       depth = 13,
@@ -83,7 +86,27 @@ object SampleData {
       dependedOnBy = Set(idClassF),
       composedOf = Set(),
       depth = 17,
-      complexity = 18)
-  )
+      complexity = 18),
+    cycleAB -> UnitInfo(
+      id = cycleAB,
+      dependsOn = Set(),
+      dependedOnBy = Set(),
+      composedOf = Set(idGroupA, idGroupB),
+      depth = 19,
+      complexity = 20),
+    cycleCD -> UnitInfo(
+      id = cycleCD,
+      dependsOn = Set(),
+      dependedOnBy = Set(),
+      composedOf = Set(idPackageC, idPackageD),
+      depth = 21,
+      complexity = 22),
+    cycleFG -> UnitInfo(
+      id = cycleFG,
+      dependsOn = Set(),
+      dependedOnBy = Set(),
+      composedOf = Set(idClassF, idClassG),
+      depth = 23,
+      complexity = 24))
   val detangled: Detangled = DetangledImpl(detangledMap)
 }

@@ -18,13 +18,11 @@ trait ReporterWiring {
   lazy val classLoaderIntegration: ClassLoaderIntegration = new ClassLoaderIntegrationImpl(classLoader)
   lazy val resourceLoader: ResourceLoader = new ResourceLoaderImpl(classLoaderIntegration)
   lazy val removeClasses: Boolean = false
-  lazy val pageGenerator: PageGenerator = new PageGeneratorImpl(detangled, resourceLoader)
   lazy val reporter: Runnable = new ReporterImpl(
     reportDir,
     files,
     devonMarshaller,
     charset,
-    pageGenerator,
     resourceLoader,
     detangled)
 }

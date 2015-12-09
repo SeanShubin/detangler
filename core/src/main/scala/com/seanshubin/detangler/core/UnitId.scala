@@ -5,6 +5,12 @@ case class UnitId(paths: Seq[Set[String]]) extends Ordered[UnitId] {
     compareSeqSetString(this.paths, that.paths)
   }
 
+  def isCycle: Boolean = {
+    def isCycle(part: Set[String]) = part.size > 1
+    val result = paths.exists(isCycle)
+    result
+  }
+
   def isRoot: Boolean = paths.isEmpty
 
   def parent: UnitId = UnitId(paths.init)
@@ -47,15 +53,18 @@ case class UnitId(paths: Seq[Set[String]]) extends Ordered[UnitId] {
   }
 
   private def compareSeqString(left: Seq[String], right: Seq[String]): Int = {
-    if (left.size != right.size) throw new RuntimeException(s"left has size ${left.size}, right has size ${right.size}")
-    if (left.isEmpty && right.isEmpty) {
-      0
+    if (left.size != right.size) {
+      right.size.compareTo(left.size)
     } else {
-      val headCompare = left.head.compareTo(right.head)
-      if (headCompare == 0) {
-        compareSeqString(left.tail, right.tail)
+      if (left.isEmpty && right.isEmpty) {
+        0
       } else {
-        headCompare
+        val headCompare = left.head.compareTo(right.head)
+        if (headCompare == 0) {
+          compareSeqString(left.tail, right.tail)
+        } else {
+          headCompare
+        }
       }
     }
   }

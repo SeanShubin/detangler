@@ -15,13 +15,11 @@ trait PrototypeWiring {
   lazy val resourceLoader = new ResourceLoaderImpl(classLoaderIntegration)
   lazy val detangled: Detangled = SampleData.detangled
   lazy val shouldRemoveClass: Boolean = true
-  lazy val pageGenerator = new PageGeneratorImpl(detangled, resourceLoader)
   lazy val reporter = new ReporterImpl(
     reportDir,
     files,
     DevonMarshallerWiring.Default,
     StandardCharsets.UTF_8,
-    pageGenerator,
     resourceLoader,
     detangled
   )

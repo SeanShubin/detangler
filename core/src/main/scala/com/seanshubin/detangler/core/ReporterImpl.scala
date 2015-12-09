@@ -10,7 +10,6 @@ class ReporterImpl(reportDir: Path,
                    files: FilesContract,
                    devonMarshaller: DevonMarshaller,
                    charset: Charset,
-                   pageGenerator: PageGenerator,
                    resourceLoader: ResourceLoader,
                    detangled: Detangled) extends Runnable {
 
@@ -31,7 +30,7 @@ class ReporterImpl(reportDir: Path,
   }
 
   private def generateReportForUnit(detangled: Detangled, unitId: UnitId, templateText: String): Unit = {
-    val composedOf = detangled.composedOf(unitId)
+    val composedOf = detangled.composedOf(unitId).filterNot(_.isCycle)
     if (composedOf.nonEmpty) {
       val fileName = HtmlUtil.fileNameFor(unitId)
       val pageText = htmlContent(unitId, detangled, templateText)

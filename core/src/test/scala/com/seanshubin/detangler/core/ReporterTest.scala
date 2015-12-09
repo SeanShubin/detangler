@@ -13,7 +13,6 @@ class ReporterTest extends FunSuite with EasyMockSugar {
     val files: FilesContract = mock[FilesContract]
     val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
     val charset: Charset = StandardCharsets.UTF_8
-    val pageGenerator: PageGenerator = mock[PageGenerator]
     val resourceLoader: ResourceLoader = mock[ResourceLoader]
     val detangled: Detangled = SampleData.detangled
     val styleCss = new FakeFile("style", charset)
@@ -23,14 +22,11 @@ class ReporterTest extends FunSuite with EasyMockSugar {
       files,
       devonMarshaller,
       charset,
-      pageGenerator,
       resourceLoader,
       detangled)
 
     def expectPageWrite(id: UnitId, name: String): Unit = {
       val text = "content"
-      val dummyTemplate: HtmlFragment = null
-      pageGenerator.pageForId(id, dummyTemplate).andReturn(text)
       files.write(reportDir.resolve(name), text.getBytes(charset)).andReturn(null)
     }
 
@@ -45,7 +41,7 @@ class ReporterTest extends FunSuite with EasyMockSugar {
       expectPageWrite(SampleData.idGroupB, "group_b.html")
       expectPageWrite(SampleData.idPackageE, "group_b--package_e.html")
     }
-    whenExecuting(files, pageGenerator, resourceLoader) {
+    whenExecuting(files, resourceLoader) {
       reporter.run()
     }
   }
