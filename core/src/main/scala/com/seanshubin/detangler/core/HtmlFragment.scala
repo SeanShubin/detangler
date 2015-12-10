@@ -77,8 +77,8 @@ class SingleElementHtmlFragment(originalElement: Element) extends HtmlFragment {
     val elements = for {
       index <- 0 until matching.size()
     } yield {
-      matching.get(index)
-    }
+        matching.get(index)
+      }
     val fragments = elements.map(new SingleElementHtmlFragment(_))
     fragments
   }

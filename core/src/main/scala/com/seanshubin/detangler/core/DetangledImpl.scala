@@ -29,6 +29,8 @@ case class DetangledImpl(map: Map[UnitId, UnitInfo]) extends Detangled {
     map(unitId).composedOf.toSeq.sorted
   }
 
+  override def cycleSize(unitId: UnitId): Int = composedOf(unitId).size
+
   private def arrowsFor(leftParts: Seq[UnitId], rightParts: Seq[UnitId]): Seq[Arrow] = {
     for {
       fromPart <- leftParts

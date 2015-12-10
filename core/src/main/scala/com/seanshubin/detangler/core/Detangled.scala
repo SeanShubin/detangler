@@ -14,4 +14,6 @@ trait Detangled {
   def arrowsFor(unitId: UnitId): Seq[Arrow]
 
   def arrowsFor(parts: Seq[UnitId]): Seq[Arrow]
+
+  def cycleSize(unitId: UnitId): Int
 }

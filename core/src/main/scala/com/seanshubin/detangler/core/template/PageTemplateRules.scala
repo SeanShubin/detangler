@@ -9,7 +9,8 @@ class PageTemplateRules(pageTemplate: HtmlFragment, detangled: Detangled, unit: 
 
   def generate(): HtmlFragment = {
     val units = new UnitsTemplateRules(unitsTemplate, detangled, unit).generate()
-    val reasons = new ReasonsTemplateRules(reasonsTemplate, detangled, unit).generate()
+    val arrows = detangled.arrowsFor(unit)
+    val reasons = new ReasonsTemplateRules(reasonsTemplate, detangled, unit, arrows).generate()
     emptyTemplate.appendChild(units).appendChild(reasons)
   }
 }
