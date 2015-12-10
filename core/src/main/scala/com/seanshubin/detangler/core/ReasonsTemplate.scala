@@ -1,19 +1,17 @@
-package com.seanshubin.detangler.core.template
+package com.seanshubin.detangler.core
 
-import com.seanshubin.detangler.core._
+class ReasonsTemplate(template: HtmlFragment, context: UnitId) {
+  private val reasonsTemplate = template.one(".reasons").remove(".reason")
+  private val reasonTemplate = template.one(".reason")
 
-class ReasonsTemplateRules(reasonsTemplate: HtmlFragment, detangled: Detangled, context: UnitId, reasons: Seq[Reason]) {
-  private val parentTemplate = reasonsTemplate.remove(".reason")
-  private val reasonTemplate = reasonsTemplate.one(".reason")
-
-  def generate(): HtmlFragment = {
+  def generate(reasons: Seq[Reason]): HtmlFragment = {
     val result = composeReasons(reasons)
     result
   }
 
   private def composeReasons(reasons: Seq[Reason]): HtmlFragment = {
     val children = reasons.map(composeReason)
-    val result = parentTemplate.appendAll(".reasons", children)
+    val result = reasonsTemplate.appendAll(".reasons", children)
     result
   }
 

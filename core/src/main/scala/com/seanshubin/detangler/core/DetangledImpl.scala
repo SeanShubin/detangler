@@ -1,12 +1,12 @@
 package com.seanshubin.detangler.core
 
 case class DetangledImpl(map: Map[UnitId, UnitInfo]) extends Detangled {
-  override def arrowsFor(unitId: UnitId): Seq[Arrow] = {
-    arrowsFor(composedOf(unitId))
+  override def reasonsFor(unitId: UnitId): Seq[Reason] = {
+    reasonsFor(composedOf(unitId))
   }
 
-  override def arrowsFor(parts: Seq[UnitId]): Seq[Arrow] = {
-    arrowsFor(parts, parts)
+  override def reasonsFor(parts: Seq[UnitId]): Seq[Reason] = {
+    reasonsFor(parts, parts)
   }
 
   override def depth(unitId: UnitId): Int = {
@@ -31,13 +31,13 @@ case class DetangledImpl(map: Map[UnitId, UnitInfo]) extends Detangled {
 
   override def cycleSize(unitId: UnitId): Int = composedOf(unitId).size
 
-  private def arrowsFor(leftParts: Seq[UnitId], rightParts: Seq[UnitId]): Seq[Arrow] = {
+  private def reasonsFor(leftParts: Seq[UnitId], rightParts: Seq[UnitId]): Seq[Reason] = {
     for {
       fromPart <- leftParts
       toPart <- map(fromPart).dependsOn
       if rightParts.contains(toPart)
     } yield {
-      Arrow(fromPart, toPart, arrowsFor(composedOf(fromPart), composedOf(toPart)))
+      Reason(fromPart, toPart, reasonsFor(composedOf(fromPart), composedOf(toPart)))
     }
   }
 }

@@ -25,15 +25,15 @@ object HtmlUtil {
     }
   }
 
-  def arrowId(from: UnitId, to: UnitId): String = {
+  def reasonId(from: UnitId, to: UnitId): String = {
     htmlId(from) + "---" + HtmlUtil.htmlId(to)
   }
 
-  def arrowLink(from: UnitId, to: UnitId): String = {
-    "#" + arrowId(from, to)
+  def reasonLink(from: UnitId, to: UnitId): String = {
+    "#" + reasonId(from, to)
   }
 
-  def arrowName(from: UnitId, to: UnitId): String = "reason"
+  def reasonName(from: UnitId, to: UnitId): String = "reason"
 
 
   private val FileSystemCharacters = "/\\?%*:|\"<>. "

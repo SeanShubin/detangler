@@ -11,9 +11,9 @@ trait Detangled {
 
   def dependedOnBy(context: UnitId, unitId: UnitId): Seq[UnitId]
 
-  def arrowsFor(unitId: UnitId): Seq[Arrow]
+  def reasonsFor(unitId: UnitId): Seq[Reason]
 
-  def arrowsFor(parts: Seq[UnitId]): Seq[Arrow]
+  def reasonsFor(parts: Seq[UnitId]): Seq[Reason]
 
   def cycleSize(unitId: UnitId): Int
 }

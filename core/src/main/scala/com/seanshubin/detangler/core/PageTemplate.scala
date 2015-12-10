@@ -34,19 +34,19 @@ class PageTemplate(pageUnit: UnitId,
   }
 
   def generateDependsOn(unitId: UnitId): HtmlFragment = {
-    val dependsOnTemplate = new UnitDependencyTemplate(dependencyFragment, pageUnit, unitId, ArrowDirection.TowardDependsOn, detangled)
+    val dependsOnTemplate = new UnitDependencyTemplate(dependencyFragment, pageUnit, unitId, ReasonDirection.TowardDependsOn, detangled)
     dependsOnTemplate.generate()
   }
 
   def generateDependedOnBy(unitId: UnitId): HtmlFragment = {
-    val dependsOnTemplate = new UnitDependencyTemplate(dependencyFragment, pageUnit, unitId, ArrowDirection.TowardDependedOnBy, detangled)
+    val dependsOnTemplate = new UnitDependencyTemplate(dependencyFragment, pageUnit, unitId, ReasonDirection.TowardDependedOnBy, detangled)
     dependsOnTemplate.generate()
   }
 
   def generateReasons(): HtmlFragment = {
-    val reasonsTemplate = new ArrowsTemplate(reasonsFragment, pageUnit)
-    val arrows = detangled.arrowsFor(pageUnit)
-    val result = reasonsTemplate.generate(arrows)
+    val reasonsTemplate = new ReasonsTemplate(reasonsFragment, pageUnit)
+    val reasons = detangled.reasonsFor(pageUnit)
+    val result = reasonsTemplate.generate(reasons)
     result
   }
 }

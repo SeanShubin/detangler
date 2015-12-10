@@ -2,8 +2,8 @@ package com.seanshubin.detangler.core
 
 import org.scalatest.FunSuite
 
-class ArrowsTemplateTest extends FunSuite {
-  test("arrows template") {
+class ReasonsTemplateTest extends FunSuite {
+  test("reasons template") {
     val templateText =
       """<ul class="reasons">
         |    <li class="reason">
@@ -15,12 +15,12 @@ class ArrowsTemplateTest extends FunSuite {
         | """.stripMargin
     val template = HtmlFragment.fromText(templateText)
     val context = SampleData.idRoot
-    val arrows =
-      Seq(Arrow(SampleData.idGroupA, SampleData.idGroupB,
-        Seq(Arrow(SampleData.idPackageC, SampleData.idPackageE,
-          Seq(Arrow(SampleData.idClassF, SampleData.idClassI, Seq()))))))
-    val arrowsTemplate = new ArrowsTemplate(template, context)
-    val actual = arrowsTemplate.generate(arrows)
+    val reasons =
+      Seq(Reason(SampleData.idGroupA, SampleData.idGroupB,
+        Seq(Reason(SampleData.idPackageC, SampleData.idPackageE,
+          Seq(Reason(SampleData.idClassF, SampleData.idClassI, Seq()))))))
+    val reasonsTemplate = new ReasonsTemplate(template, context)
+    val actual = reasonsTemplate.generate(reasons)
 
     val groupElement = actual.one("#group_a---group_b")
     assert(groupElement.firstAttr(".from", "href") === "#group_a")

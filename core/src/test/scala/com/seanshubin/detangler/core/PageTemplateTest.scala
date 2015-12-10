@@ -290,27 +290,27 @@ class PageTemplateTest extends FunSuite {
     assert(HtmlUtil.fileNameFor(UnitId.Root) === "index.html")
   }
 
-  test("class level arrow html strings") {
+  test("class level reason html strings") {
     val reportTransformer: ReportTransformer = new ReportTransformerImpl()
     val from = UnitId.simple("g/a", "p/a", "c/a")
     val to = UnitId.simple("g/b", "p/c", "c/d")
-    assert(reportTransformer.arrowId(from, to) === "g_a--p_a--c_a---g_b--p_c--c_d")
-    assert(reportTransformer.arrowName(from, to) === "reason")
+    assert(reportTransformer.reasonId(from, to) === "g_a--p_a--c_a---g_b--p_c--c_d")
+    assert(reportTransformer.reasonName(from, to) === "reason")
   }
 
-  test("package level arrow html strings") {
+  test("package level reason html strings") {
     val reportTransformer: ReportTransformer = new ReportTransformerImpl()
     val from = UnitId.simple("g/a", "p/a")
     val to = UnitId.simple("g/b", "p/c")
-    assert(reportTransformer.arrowId(from, to) === "g_a--p_a---g_b--p_c")
-    assert(reportTransformer.arrowName(from, to) === "reason")
+    assert(reportTransformer.reasonId(from, to) === "g_a--p_a---g_b--p_c")
+    assert(reportTransformer.reasonName(from, to) === "reason")
   }
 
-  test("top level arrow html strings") {
+  test("top level reason html strings") {
     val reportTransformer: ReportTransformer = new ReportTransformerImpl()
     val from = UnitId.simple("g/a")
     val to = UnitId.simple("g/b")
-    assert(reportTransformer.arrowId(from, to) === "g_a---g_b")
-    assert(reportTransformer.arrowName(from, to) === "reason")
+    assert(reportTransformer.reasonId(from, to) === "g_a---g_b")
+    assert(reportTransformer.reasonName(from, to) === "reason")
   }
 */
