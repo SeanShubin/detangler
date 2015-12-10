@@ -1,51 +1,51 @@
 package com.seanshubin.detangler.core
 
-class PageTemplate(pageUnit: UnitId,
+class PageTemplate(pageModule: Module,
                    detangled: Detangled,
                    template: HtmlFragment) {
-  val emptyPage = template.remove(".units").remove(".reasons")
-  val unitsOuter = template.one(".units").remove(".unit").remove(".unit-with-cycle")
-  val unitFragment = template.one(".unit").remove(".dependency")
+  val emptyPage = template.remove(".modules").remove(".reasons")
+  val modulesOuter = template.one(".modules").remove(".module").remove(".module-with-cycle")
+  val moduleFragment = template.one(".module").remove(".dependency")
   val reasonsFragment = template.one(".reasons")
   val dependencyFragment = template.one(".dependency")
-  val unitCycle = template.one(".unit-with-cycle")
+  val moduleCycle = template.one(".module-with-cycle")
 
   def generate(): HtmlFragment = {
-    val units = unitsOuter.appendAll(".units", generateUnits())
+    val modules = modulesOuter.appendAll(".modules", generateModules())
     val reasons = generateReasons()
-    emptyPage.appendChild(units).appendChild(reasons)
+    emptyPage.appendChild(modules).appendChild(reasons)
   }
 
-  def generateUnits(): Seq[HtmlFragment] = {
-    detangled.composedOf(pageUnit).map(generateUnit)
+  def generateModules(): Seq[HtmlFragment] = {
+    detangled.composedOf(pageModule).map(generateModule)
   }
 
-  def generateUnit(unitId: UnitId): HtmlFragment = {
-    val result = if (unitId.isCycle) {
-      val unitCycleTemplate = new UnitCycleTemplate(unitCycle, unitId, detangled)
-      unitCycleTemplate.generate()
+  def generateModule(module: Module): HtmlFragment = {
+    val result = if (module.isCycle) {
+      val moduleCycleTemplate = new ModuleCycleTemplate(moduleCycle, module, detangled)
+      moduleCycleTemplate.generate()
     } else {
-      val unitSummaryTemplate = new UnitSummaryTemplate(unitFragment, detangled)
-      val dependsOn = generateDependsOn(unitId)
-      val dependedOnBy = generateDependedOnBy(unitId)
-      unitSummaryTemplate.generate(unitId).appendChild(dependsOn).appendChild(dependedOnBy)
+      val moduleSummaryTemplate = new ModuleSummaryTemplate(moduleFragment, detangled)
+      val dependsOn = generateDependsOn(module)
+      val dependedOnBy = generateDependedOnBy(module)
+      moduleSummaryTemplate.generate(module).appendChild(dependsOn).appendChild(dependedOnBy)
     }
     result
   }
 
-  def generateDependsOn(unitId: UnitId): HtmlFragment = {
-    val dependsOnTemplate = new UnitDependencyTemplate(dependencyFragment, pageUnit, unitId, ReasonDirection.TowardDependsOn, detangled)
+  def generateDependsOn(module: Module): HtmlFragment = {
+    val dependsOnTemplate = new ModuleDependencyTemplate(dependencyFragment, pageModule, module, ReasonDirection.TowardDependsOn, detangled)
     dependsOnTemplate.generate()
   }
 
-  def generateDependedOnBy(unitId: UnitId): HtmlFragment = {
-    val dependsOnTemplate = new UnitDependencyTemplate(dependencyFragment, pageUnit, unitId, ReasonDirection.TowardDependedOnBy, detangled)
+  def generateDependedOnBy(module: Module): HtmlFragment = {
+    val dependsOnTemplate = new ModuleDependencyTemplate(dependencyFragment, pageModule, module, ReasonDirection.TowardDependedOnBy, detangled)
     dependsOnTemplate.generate()
   }
 
   def generateReasons(): HtmlFragment = {
-    val reasonsTemplate = new ReasonsTemplate(reasonsFragment, pageUnit)
-    val reasons = detangled.reasonsFor(pageUnit)
+    val reasonsTemplate = new ReasonsTemplate(reasonsFragment, pageModule)
+    val reasons = detangled.reasonsFor(pageModule)
     val result = reasonsTemplate.generate(reasons)
     result
   }

@@ -25,7 +25,7 @@ class ReporterTest extends FunSuite with EasyMockSugar {
       resourceLoader,
       detangled)
 
-    def expectPageWrite(id: UnitId, name: String): Unit = {
+    def expectPageWrite(id: Module, name: String): Unit = {
       val text = "content"
       files.write(reportDir.resolve(name), text.getBytes(charset)).andReturn(null)
     }

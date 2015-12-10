@@ -1,37 +1,37 @@
 package com.seanshubin.detangler.core
 
-case class DetangledImpl(map: Map[UnitId, UnitInfo]) extends Detangled {
-  override def reasonsFor(unitId: UnitId): Seq[Reason] = {
-    reasonsFor(composedOf(unitId))
+case class DetangledImpl(map: Map[Module, ModuleInfo]) extends Detangled {
+  override def reasonsFor(module: Module): Seq[Reason] = {
+    reasonsFor(composedOf(module))
   }
 
-  override def reasonsFor(parts: Seq[UnitId]): Seq[Reason] = {
+  override def reasonsFor(parts: Seq[Module]): Seq[Reason] = {
     reasonsFor(parts, parts)
   }
 
-  override def depth(unitId: UnitId): Int = {
-    map(unitId).depth
+  override def depth(module: Module): Int = {
+    map(module).depth
   }
 
-  override def dependedOnBy(context: UnitId, unitId: UnitId): Seq[UnitId] = {
-    map(unitId).dependedOnBy.filter(_.parent == context).toSeq.sorted
+  override def dependedOnBy(context: Module, module: Module): Seq[Module] = {
+    map(module).dependedOnBy.filter(_.parent == context).toSeq.sorted
   }
 
-  override def complexity(unitId: UnitId): Int = {
-    map(unitId).complexity
+  override def complexity(module: Module): Int = {
+    map(module).complexity
   }
 
-  override def dependsOn(context: UnitId, unitId: UnitId): Seq[UnitId] = {
-    map(unitId).dependsOn.filter(_.parent == context).toSeq.sorted
+  override def dependsOn(context: Module, module: Module): Seq[Module] = {
+    map(module).dependsOn.filter(_.parent == context).toSeq.sorted
   }
 
-  override def composedOf(unitId: UnitId): Seq[UnitId] = {
-    map(unitId).composedOf.toSeq.sorted
+  override def composedOf(module: Module): Seq[Module] = {
+    map(module).composedOf.toSeq.sorted
   }
 
-  override def cycleSize(unitId: UnitId): Int = composedOf(unitId).size
+  override def cycleSize(module: Module): Int = composedOf(module).size
 
-  private def reasonsFor(leftParts: Seq[UnitId], rightParts: Seq[UnitId]): Seq[Reason] = {
+  private def reasonsFor(leftParts: Seq[Module], rightParts: Seq[Module]): Seq[Reason] = {
     for {
       fromPart <- leftParts
       toPart <- map(fromPart).dependsOn

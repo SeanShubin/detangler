@@ -1,19 +1,19 @@
 package com.seanshubin.detangler.core
 
 trait Detangled {
-  def depth(unitId: UnitId): Int
+  def depth(module: Module): Int
 
-  def complexity(unitId: UnitId): Int
+  def complexity(module: Module): Int
 
-  def composedOf(unitId: UnitId): Seq[UnitId]
+  def composedOf(module: Module): Seq[Module]
 
-  def dependsOn(context: UnitId, unitId: UnitId): Seq[UnitId]
+  def dependsOn(context: Module, module: Module): Seq[Module]
 
-  def dependedOnBy(context: UnitId, unitId: UnitId): Seq[UnitId]
+  def dependedOnBy(context: Module, module: Module): Seq[Module]
 
-  def reasonsFor(unitId: UnitId): Seq[Reason]
+  def reasonsFor(module: Module): Seq[Reason]
 
-  def reasonsFor(parts: Seq[UnitId]): Seq[Reason]
+  def reasonsFor(parts: Seq[Module]): Seq[Reason]
 
-  def cycleSize(unitId: UnitId): Int
+  def cycleSize(module: Module): Int
 }

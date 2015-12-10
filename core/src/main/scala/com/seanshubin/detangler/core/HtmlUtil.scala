@@ -1,39 +1,39 @@
 package com.seanshubin.detangler.core
 
 object HtmlUtil {
-  def fileNameFor(unitId: UnitId): String = {
-    if (unitId.isRoot) {
+  def fileNameFor(module: Module): String = {
+    if (module.isRoot) {
       "index.html"
     } else {
-      unitId.paths.map(htmlIdForSetOfString).mkString("--").map(makeFileSystemSafe) + ".html"
+      module.paths.map(htmlIdForSetOfString).mkString("--").map(makeFileSystemSafe) + ".html"
     }
   }
 
-  def htmlId(unitId: UnitId): String = {
-    unitId.paths.map(htmlIdForSetOfString).mkString("--").map(makeCssSelectorSafe)
+  def htmlId(module: Module): String = {
+    module.paths.map(htmlIdForSetOfString).mkString("--").map(makeCssSelectorSafe)
   }
 
-  def htmlName(unitId: UnitId): String = {
-    unitId.paths.last.toSeq.sorted.mkString("-")
+  def htmlName(module: Module): String = {
+    module.paths.last.toSeq.sorted.mkString("-")
   }
 
-  def htmlLink(context: UnitId, unitId: UnitId): String = {
-    if (unitId.parent == context) {
-      "#" + htmlId(unitId)
+  def htmlLink(context: Module, module: Module): String = {
+    if (module.parent == context) {
+      "#" + htmlId(module)
     } else {
-      fileNameFor(unitId.parent) + "#" + htmlId(unitId)
+      fileNameFor(module.parent) + "#" + htmlId(module)
     }
   }
 
-  def reasonId(from: UnitId, to: UnitId): String = {
+  def reasonId(from: Module, to: Module): String = {
     htmlId(from) + "---" + HtmlUtil.htmlId(to)
   }
 
-  def reasonLink(from: UnitId, to: UnitId): String = {
+  def reasonLink(from: Module, to: Module): String = {
     "#" + reasonId(from, to)
   }
 
-  def reasonName(from: UnitId, to: UnitId): String = "reason"
+  def reasonName(from: Module, to: Module): String = "reason"
 
 
   private val FileSystemCharacters = "/\\?%*:|\"<>. "

@@ -9,8 +9,8 @@ import org.scalatest.FunSuite
 class PageTemplateTest extends FunSuite {
   val templateText =
     """<div>
-      |<ul class="units">
-      |    <li class="unit">
+      |<ul class="modules">
+      |    <li class="module">
       |        <table class="summary">
       |            <thead>
       |            <tr>
@@ -129,13 +129,13 @@ class PageTemplateTest extends FunSuite {
     Files.write(styleSheetDestinationPath, bytes)
   }
 
-  def emitPage(unit: UnitId): Unit = {
+  def emitPage(module: Module): Unit = {
     val template = HtmlFragment.fromText(templateText)
-    val pageTemplate = new PageTemplate(unit, SampleData.detangled, template)
+    val pageTemplate = new PageTemplate(module, SampleData.detangled, template)
     val fragment = pageTemplate.generate()
-    val templatePath = Paths.get("core", "src", "main", "resources", "unit.html")
+    val templatePath = Paths.get("core", "src", "main", "resources", "module.html")
     val generatedPath = Paths.get("generated", "prototype")
-    val outPath = generatedPath.resolve(HtmlUtil.fileNameFor(unit))
+    val outPath = generatedPath.resolve(HtmlUtil.fileNameFor(module))
     val charset = StandardCharsets.UTF_8
     val baseUri = ""
     val inputStream = Files.newInputStream(templatePath)
@@ -158,8 +158,8 @@ class PageTemplateTest extends FunSuite {
     val reportTransformer: ReportTransformer = new ReportTransformerImpl()
     val page = reportTransformer.pageFor(SampleData.detangled, SampleData.idRoot)
     assert(page.fileName === "index.html")
-    assert(page.units.size === 2)
-    val groupA = page.units.head
+    assert(page.modules.size === 2)
+    val groupA = page.modules.head
     assert(groupA.id === "group_a")
     assert(groupA.name === "group/a")
     assert(groupA.depth === "1")
@@ -206,8 +206,8 @@ class PageTemplateTest extends FunSuite {
     val reportTransformer: ReportTransformer = new ReportTransformerImpl()
     val page = reportTransformer.pageFor(SampleData.detangled, SampleData.idGroupA)
     assert(page.fileName === "group_a.html")
-    assert(page.units.size === 2)
-    val packageA = page.units.head
+    assert(page.modules.size === 2)
+    val packageA = page.modules.head
     assert(packageA.id === "group_a--package_c")
     assert(packageA.name === "package/c")
     assert(packageA.depth === "5")
@@ -244,8 +244,8 @@ class PageTemplateTest extends FunSuite {
     val reportTransformer: ReportTransformer = new ReportTransformerImpl()
     val page = reportTransformer.pageFor(SampleData.detangled, SampleData.idPackageC)
     assert(page.fileName === "group_a--package_c.html")
-    assert(page.units.size === 2)
-    val classA = page.units.head
+    assert(page.modules.size === 2)
+    val classA = page.modules.head
     assert(classA.id === "group_a--package_c--class_f")
     assert(classA.name === "class/f")
     assert(classA.depth === "11")
@@ -261,32 +261,32 @@ class PageTemplateTest extends FunSuite {
     assert(classB.complexity === "14")
   }
 
-  test("class level unit html strings") {
-    val unitId = UnitId.complex(Set("g/a"), Set("p/b", "p/c", "p/d"), Set("c/e", "c/f"))
-    val parent = unitId.parent
-    assert(HtmlUtil.htmlId(unitId) === "g_a--p_b-p_c-p_d--c_e-c_f")
-    assert(HtmlUtil.htmlName(unitId) === "c/e-c/f")
-    assert(HtmlUtil.htmlLink(parent, unitId) === "#g_a--p_b-p_c-p_d--c_e-c_f")
-    assert(HtmlUtil.htmlLink(UnitId.Root, unitId) === "g_a--p_b-p_c-p_d.html#g_a--p_b-p_c-p_d--c_e-c_f")
+  test("class level module html strings") {
+    val Module = UnitId.complex(Set("g/a"), Set("p/b", "p/c", "p/d"), Set("c/e", "c/f"))
+    val parent = Module.parent
+    assert(HtmlUtil.htmlId(Module) === "g_a--p_b-p_c-p_d--c_e-c_f")
+    assert(HtmlUtil.htmlName(Module) === "c/e-c/f")
+    assert(HtmlUtil.htmlLink(parent, Module) === "#g_a--p_b-p_c-p_d--c_e-c_f")
+    assert(HtmlUtil.htmlLink(UnitId.Root, Module) === "g_a--p_b-p_c-p_d.html#g_a--p_b-p_c-p_d--c_e-c_f")
   }
 
-  test("package level unit html strings") {
-    val unitId = UnitId.complex(Set("g/a"), Set("p/b", "p/c", "p/d"))
-    val parent = unitId.parent
-    assert(HtmlUtil.htmlId(unitId) === "g_a--p_b-p_c-p_d")
-    assert(HtmlUtil.htmlName(unitId) === "p/b-p/c-p/d")
-    assert(HtmlUtil.htmlLink(parent, unitId) === "#g_a--p_b-p_c-p_d")
-    assert(HtmlUtil.htmlLink(UnitId.Root, unitId) === "g_a.html#g_a--p_b-p_c-p_d")
-    assert(HtmlUtil.fileNameFor(unitId) === "g_a--p_b-p_c-p_d.html")
+  test("package level module html strings") {
+    val Module = UnitId.complex(Set("g/a"), Set("p/b", "p/c", "p/d"))
+    val parent = Module.parent
+    assert(HtmlUtil.htmlId(Module) === "g_a--p_b-p_c-p_d")
+    assert(HtmlUtil.htmlName(Module) === "p/b-p/c-p/d")
+    assert(HtmlUtil.htmlLink(parent, Module) === "#g_a--p_b-p_c-p_d")
+    assert(HtmlUtil.htmlLink(UnitId.Root, Module) === "g_a.html#g_a--p_b-p_c-p_d")
+    assert(HtmlUtil.fileNameFor(Module) === "g_a--p_b-p_c-p_d.html")
   }
 
-  test("top level unit html strings") {
-    val unitId = SampleData.idGroupA
+  test("top level module html strings") {
+    val Module = SampleData.idGroupA
     assert(HtmlUtil.htmlId(SampleData.idGroupA) === "group_a")
     assert(HtmlUtil.htmlName(SampleData.idGroupA) === "group/a")
     assert(HtmlUtil.htmlLink(UnitId.Root, SampleData.idGroupA) === "#group_a")
     assert(HtmlUtil.htmlLink(SampleData.idGroupB, SampleData.idGroupA) === "index.html#group_a")
-    assert(HtmlUtil.fileNameFor(unitId) === "group_a.html")
+    assert(HtmlUtil.fileNameFor(Module) === "group_a.html")
     assert(HtmlUtil.fileNameFor(UnitId.Root) === "index.html")
   }
 

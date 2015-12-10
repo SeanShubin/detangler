@@ -1,17 +1,15 @@
-package com.seanshubin.detangler.core.template
+package com.seanshubin.detangler.core
 
-import com.seanshubin.detangler.core._
-
-class DependencyTemplateRules(dependencyTemplate: HtmlFragment,
-                              detangled: Detangled,
-                              context: Module,
-                              parentModule: Module,
-                              reasonDirection: ReasonDirection) {
-  private val parentTemplate = dependencyTemplate.remove(".dependency-header")
-  private val childTemplate = dependencyTemplate.one(".dependency-detail")
+class ModuleDependencyTemplate(template: HtmlFragment,
+                               pageModule: Module,
+                               parentModule: Module,
+                               reasonDirection: ReasonDirection,
+                               detangled: Detangled) {
+  private val parentTemplate = template.remove(".dependency-row-inner")
+  private val childTemplate = template.one(".dependency-row-inner")
 
   def generate(): HtmlFragment = {
-    val childModules = reasonDirection.dependencies(detangled, context, parentModule)
+    val childModules = reasonDirection.dependencies(detangled, pageModule, parentModule)
     if (childModules.isEmpty) {
       HtmlFragment.Empty
     } else {
@@ -27,7 +25,7 @@ class DependencyTemplateRules(dependencyTemplate: HtmlFragment,
     val reasonName = reasonDirection.name(parentModule, childModule)
     val reasonLink = reasonDirection.link(parentModule, childModule)
     childTemplate.
-      anchor(".name", HtmlUtil.htmlLink(context, childModule), HtmlUtil.htmlName(childModule)).
+      anchor(".name", HtmlUtil.htmlLink(pageModule, childModule), HtmlUtil.htmlName(childModule)).
       text(".depth", detangled.depth(childModule).toString).
       text(".complexity", detangled.complexity(childModule).toString).
       anchor(".reason", reasonLink, reasonName)

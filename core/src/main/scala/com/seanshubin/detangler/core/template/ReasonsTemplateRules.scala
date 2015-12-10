@@ -2,7 +2,7 @@ package com.seanshubin.detangler.core.template
 
 import com.seanshubin.detangler.core._
 
-class ReasonsTemplateRules(reasonsTemplate: HtmlFragment, detangled: Detangled, context: UnitId, reasons: Seq[Reason]) {
+class ReasonsTemplateRules(reasonsTemplate: HtmlFragment, detangled: Detangled, context: Module, reasons: Seq[Reason]) {
   private val parentTemplate = reasonsTemplate.remove(".reason")
   private val reasonTemplate = reasonsTemplate.one(".reason")
 

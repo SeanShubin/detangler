@@ -1,7 +1,7 @@
 package com.seanshubin.detangler.core
 
-case class UnitId(paths: Seq[Set[String]]) extends Ordered[UnitId] {
-  override def compare(that: UnitId): Int = {
+case class Module(paths: Seq[Set[String]]) extends Ordered[Module] {
+  override def compare(that: Module): Int = {
     compareSeqSetString(this.paths, that.paths)
   }
 
@@ -13,7 +13,7 @@ case class UnitId(paths: Seq[Set[String]]) extends Ordered[UnitId] {
 
   def isRoot: Boolean = paths.isEmpty
 
-  def parent: UnitId = UnitId(paths.init)
+  def parent: Module = Module(paths.init)
 
   def qualifiedName: String = {
     def partAsString(part: Set[String]) = part.toSeq.sorted.mkString("-")
@@ -25,7 +25,7 @@ case class UnitId(paths: Seq[Set[String]]) extends Ordered[UnitId] {
   }
 
   def fileSystemName: String = {
-    val safePaths = paths.map(_.map(_.map(UnitId.makeFileSystemSafe)))
+    val safePaths = paths.map(_.map(_.map(Module.makeFileSystemSafe)))
     safePaths.last.mkString("-")
   }
 
@@ -33,7 +33,7 @@ case class UnitId(paths: Seq[Set[String]]) extends Ordered[UnitId] {
     if (paths.size == 1) {
       "#" + name
     } else {
-      val safePaths = paths.map(_.map(_.map(UnitId.makeFileSystemSafe)))
+      val safePaths = paths.map(_.map(_.map(Module.makeFileSystemSafe)))
       safePaths.init.map(_.mkString("-")).mkString("/") + "#" + name
     }
   }
@@ -74,12 +74,12 @@ case class UnitId(paths: Seq[Set[String]]) extends Ordered[UnitId] {
   }
 }
 
-object UnitId {
+object Module {
   val Root = simple()
 
-  def simple(ids: String*) = UnitId(ids.map(Set(_)))
+  def simple(ids: String*) = Module(ids.map(Set(_)))
 
-  def complex(parts: Set[String]*) = UnitId(parts)
+  def complex(parts: Set[String]*) = Module(parts)
 
   val FileSystemCharacters = "/\\?%*:|\"<>. "
 

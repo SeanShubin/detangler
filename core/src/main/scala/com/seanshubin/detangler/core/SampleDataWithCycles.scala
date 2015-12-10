@@ -2,106 +2,106 @@ package com.seanshubin.detangler.core
 
 //move back to test package once we start using real data
 object SampleDataWithCycles {
-  val idRoot = UnitId.simple()
-  val idGroupA = UnitId.simple("group/a")
-  val idGroupB = UnitId.simple("group/b")
-  val idPackageC = UnitId.simple("group/a", "package/c")
-  val idPackageD = UnitId.simple("group/a", "package/d")
-  val idPackageE = UnitId.simple("group/b", "package/e")
-  val idClassF = UnitId.simple("group/a", "package/c", "class/f")
-  val idClassG = UnitId.simple("group/a", "package/c", "class/g")
-  val idClassH = UnitId.simple("group/a", "package/d", "class/h")
-  val idClassI = UnitId.simple("group/b", "package/e", "class/i")
-  val cycleAB = UnitId.complex(Set("group/a", "group/b"))
-  val cycleCD = UnitId.complex(Set("group/a"), Set("package/c", "package/d"))
-  val cycleFG = UnitId.complex(Set("group/a"), Set("package/c"), Set("class/f", "class/g"))
+  val idRoot = Module.simple()
+  val idGroupA = Module.simple("group/a")
+  val idGroupB = Module.simple("group/b")
+  val idPackageC = Module.simple("group/a", "package/c")
+  val idPackageD = Module.simple("group/a", "package/d")
+  val idPackageE = Module.simple("group/b", "package/e")
+  val idClassF = Module.simple("group/a", "package/c", "class/f")
+  val idClassG = Module.simple("group/a", "package/c", "class/g")
+  val idClassH = Module.simple("group/a", "package/d", "class/h")
+  val idClassI = Module.simple("group/b", "package/e", "class/i")
+  val cycleAB = Module.complex(Set("group/a", "group/b"))
+  val cycleCD = Module.complex(Set("group/a"), Set("package/c", "package/d"))
+  val cycleFG = Module.complex(Set("group/a"), Set("package/c"), Set("class/f", "class/g"))
 
-  val detangledMap: Map[UnitId, UnitInfo] = Map(
-    idRoot -> UnitInfo(
+  val detangledMap: Map[Module, ModuleInfo] = Map(
+    idRoot -> ModuleInfo(
       idRoot,
       dependsOn = Set(),
       dependedOnBy = Set(),
       composedOf = Set(cycleAB, idGroupA, idGroupB),
       depth = 0,
       complexity = 0),
-    idGroupA -> UnitInfo(
+    idGroupA -> ModuleInfo(
       idGroupA,
       dependsOn = Set(idGroupB),
       dependedOnBy = Set(idGroupB),
       composedOf = Set(cycleCD, idPackageC, idPackageD),
       depth = 1,
       complexity = 2),
-    idGroupB -> UnitInfo(
+    idGroupB -> ModuleInfo(
       idGroupB,
       dependsOn = Set(idGroupA),
       dependedOnBy = Set(idGroupA),
       composedOf = Set(idPackageE),
       depth = 3,
       complexity = 4),
-    idPackageC -> UnitInfo(
+    idPackageC -> ModuleInfo(
       idPackageC,
       dependsOn = Set(idPackageD, idPackageE),
       dependedOnBy = Set(idPackageD),
       composedOf = Set(cycleFG, idClassF, idClassG),
       depth = 5,
       complexity = 6),
-    idPackageD -> UnitInfo(
+    idPackageD -> ModuleInfo(
       idPackageD,
       dependsOn = Set(idPackageC),
       dependedOnBy = Set(idPackageC),
       composedOf = Set(idClassH),
       depth = 7,
       complexity = 8),
-    idPackageE -> UnitInfo(
+    idPackageE -> ModuleInfo(
       idPackageE,
       dependsOn = Set(),
       dependedOnBy = Set(idPackageC),
       composedOf = Set(idClassI),
       depth = 9,
       complexity = 10),
-    idClassF -> UnitInfo(
+    idClassF -> ModuleInfo(
       idClassF,
       dependsOn = Set(idClassG, idClassH, idClassI),
       dependedOnBy = Set(idClassG),
       composedOf = Set(),
       depth = 11,
       complexity = 12),
-    idClassG -> UnitInfo(
+    idClassG -> ModuleInfo(
       idClassG,
       dependsOn = Set(idClassF),
       dependedOnBy = Set(idClassF),
       composedOf = Set(),
       depth = 13,
       complexity = 14),
-    idClassH -> UnitInfo(
+    idClassH -> ModuleInfo(
       idClassH,
       dependsOn = Set(),
       dependedOnBy = Set(idClassF),
       composedOf = Set(),
       depth = 15,
       complexity = 16),
-    idClassI -> UnitInfo(
+    idClassI -> ModuleInfo(
       idClassI,
       dependsOn = Set(),
       dependedOnBy = Set(idClassF),
       composedOf = Set(),
       depth = 17,
       complexity = 18),
-    cycleAB -> UnitInfo(
+    cycleAB -> ModuleInfo(
       id = cycleAB,
       dependsOn = Set(),
       dependedOnBy = Set(),
       composedOf = Set(idGroupA, idGroupB),
       depth = 19,
       complexity = 20),
-    cycleCD -> UnitInfo(
+    cycleCD -> ModuleInfo(
       id = cycleCD,
       dependsOn = Set(),
       dependedOnBy = Set(),
       composedOf = Set(idPackageC, idPackageD),
       depth = 21,
       complexity = 22),
-    cycleFG -> UnitInfo(
+    cycleFG -> ModuleInfo(
       id = cycleFG,
       dependsOn = Set(),
       dependedOnBy = Set(),

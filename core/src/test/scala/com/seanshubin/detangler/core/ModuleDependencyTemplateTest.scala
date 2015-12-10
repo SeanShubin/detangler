@@ -2,7 +2,7 @@ package com.seanshubin.detangler.core
 
 import org.scalatest.FunSuite
 
-class UnitDependencyTemplateTest extends FunSuite {
+class ModuleDependencyTemplateTest extends FunSuite {
   val templateText =
     """<ul class="dependency">
       |    <li>
@@ -32,10 +32,10 @@ class UnitDependencyTemplateTest extends FunSuite {
       | """.stripMargin
   val template = HtmlFragment.fromText(templateText)
 
-  test("unit depends on template") {
-    val unit = SampleData.idGroupA
-    val unitSummaryTemplate = new UnitDependencyTemplate(template, SampleData.idRoot, unit, ReasonDirection.TowardDependsOn, SampleData.detangled)
-    val actual = unitSummaryTemplate.generate()
+  test("module depends on template") {
+    val module = SampleData.idGroupA
+    val moduleSummaryTemplate = new ModuleDependencyTemplate(template, SampleData.idRoot, module, ReasonDirection.TowardDependsOn, SampleData.detangled)
+    val actual = moduleSummaryTemplate.generate()
 
     assert(actual.text(".caption") === "depends on (1)")
     assert(actual.text(".name") === "group/b")
@@ -46,10 +46,10 @@ class UnitDependencyTemplateTest extends FunSuite {
     assert(actual.attr(".reason", "href") === "#group_a---group_b")
   }
 
-  test("unit depended on by on template") {
-    val unit = SampleData.idGroupB
-    val unitSummaryTemplate = new UnitDependencyTemplate(template, SampleData.idRoot, unit, ReasonDirection.TowardDependedOnBy, SampleData.detangled)
-    val actual = unitSummaryTemplate.generate()
+  test("module depended on by on template") {
+    val module = SampleData.idGroupB
+    val moduleSummaryTemplate = new ModuleDependencyTemplate(template, SampleData.idRoot, module, ReasonDirection.TowardDependedOnBy, SampleData.detangled)
+    val actual = moduleSummaryTemplate.generate()
 
     assert(actual.text(".caption") === "depended on by (1)")
     assert(actual.text(".name") === "group/a")

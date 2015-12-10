@@ -1,6 +1,6 @@
 package com.seanshubin.detangler.core
 
-class ReasonsTemplate(template: HtmlFragment, context: UnitId) {
+class ReasonsTemplate(template: HtmlFragment, context: Module) {
   private val reasonsTemplate = template.one(".reasons").remove(".reason")
   private val reasonTemplate = template.one(".reason")
 

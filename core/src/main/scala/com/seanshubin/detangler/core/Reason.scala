@@ -1,6 +1,6 @@
 package com.seanshubin.detangler.core
 
-case class Reason(from: UnitId, to: UnitId, reasons: Seq[Reason])
+case class Reason(from: Module, to: Module, reasons: Seq[Reason])
 
 object Reason {
   def toIndentedLines(reason: Reason): Seq[String] = {

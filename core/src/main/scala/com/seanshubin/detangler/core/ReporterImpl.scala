@@ -15,10 +15,10 @@ class ReporterImpl(reportDir: Path,
 
   override def run(): Unit = {
     initDestinationDirectory()
-    val inputStream = resourceLoader.inputStreamFor("unit.html")
+    val inputStream = resourceLoader.inputStreamFor("template.html")
     val templateText = IoUtil.inputStreamToString(inputStream, charset)
     inputStream.close()
-    generateReportForUnit(detangled, UnitId.Root, templateText)
+    generateReportForModule(detangled, Module.Root, templateText)
   }
 
   private def initDestinationDirectory(): Unit = {
@@ -29,25 +29,25 @@ class ReporterImpl(reportDir: Path,
     IoUtil.copyInputStreamToOutputStream(in, out)
   }
 
-  private def generateReportForUnit(detangled: Detangled, unitId: UnitId, templateText: String): Unit = {
-    val composedOf = detangled.composedOf(unitId).filterNot(_.isCycle)
+  private def generateReportForModule(detangled: Detangled, module: Module, templateText: String): Unit = {
+    val composedOf = detangled.composedOf(module).filterNot(_.isCycle)
     if (composedOf.nonEmpty) {
-      val fileName = HtmlUtil.fileNameFor(unitId)
-      val pageText = htmlContent(unitId, detangled, templateText)
+      val fileName = HtmlUtil.fileNameFor(module)
+      val pageText = htmlContent(module, detangled, templateText)
       val pagePath = reportDir.resolve(fileName)
       val bytes = pageText.getBytes(charset)
       files.write(pagePath, bytes)
       for {
         child <- composedOf
       } {
-        generateReportForUnit(detangled, child, templateText)
+        generateReportForModule(detangled, child, templateText)
       }
     }
   }
 
-  private def htmlContent(unit: UnitId, detangled: Detangled, templateText: String): String = {
+  private def htmlContent(module: Module, detangled: Detangled, templateText: String): String = {
     val template = HtmlFragment.fromText(templateText)
-    val pageTemplate = new PageTemplate(unit, detangled, template)
+    val pageTemplate = new PageTemplate(module, detangled, template)
     val fragment = pageTemplate.generate()
     val baseUri = ""
     val document = Jsoup.parse(templateText, baseUri)

@@ -2,8 +2,8 @@ package com.seanshubin.detangler.core
 
 import org.scalatest.FunSuite
 
-class UnitSummaryTemplateTest extends FunSuite {
-  test("unit summary template") {
+class ModuleSummaryTemplateTest extends FunSuite {
+  test("module summary template") {
     val templateText =
       """<table class="summary">
         |    <thead>
@@ -25,9 +25,9 @@ class UnitSummaryTemplateTest extends FunSuite {
         |</table>
         | """.stripMargin
     val template = HtmlFragment.fromText(templateText)
-    val unit = SampleData.idGroupA
-    val unitSummaryTemplate = new UnitSummaryTemplate(template, SampleData.detangled)
-    val actual = unitSummaryTemplate.generate(unit)
+    val module = SampleData.idGroupA
+    val moduleSummaryTemplate = new ModuleSummaryTemplate(template, SampleData.detangled)
+    val actual = moduleSummaryTemplate.generate(module)
 
     assert(actual.attr(".summary", "id") === "group_a")
     assert(actual.text(".name") === "group/a")
