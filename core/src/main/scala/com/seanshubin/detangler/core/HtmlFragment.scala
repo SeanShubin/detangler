@@ -41,6 +41,8 @@ sealed trait HtmlFragment {
 
   def remove(cssQuery: String): HtmlFragment
 
+  def removeContents(): HtmlFragment
+
   def anchor(cssQuery: String, href: String, text: String): HtmlFragment
 
   def becomeChildOf(that: HtmlFragment): HtmlFragment
@@ -141,6 +143,12 @@ class SingleElementHtmlFragment(originalElement: Element) extends HtmlFragment {
     new SingleElementHtmlFragment(element)
   }
 
+  override def removeContents(): HtmlFragment = {
+    val clone: Element = originalElement.clone()
+    clone.children().remove()
+    new SingleElementHtmlFragment(clone)
+  }
+
   override def anchor(cssQuery: String, href: String, text: String): HtmlFragment = {
     val element = originalElement.clone()
     val toModify = findExactlyOne(cssQuery, element)
@@ -174,6 +182,8 @@ class EmptyHtmlFragment extends HtmlFragment {
   override def anchor(cssQuery: String, href: String, text: String): HtmlFragment = ???
 
   override def remove(cssQuery: String): HtmlFragment = ???
+
+  override def removeContents(): HtmlFragment = ???
 
   override def appendChild(that: HtmlFragment): HtmlFragment = ???
 
