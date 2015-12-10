@@ -27,6 +27,8 @@ sealed trait HtmlFragment {
 
   def appendAll(cssQuery: String, fragments: Seq[HtmlFragment]): HtmlFragment
 
+  def appendAll(fragments: Seq[HtmlFragment]): HtmlFragment
+
   def attr(cssQuery: String, name: String, value: String): HtmlFragment
 
   def attr(cssQuery: String, name: String): String
@@ -44,6 +46,8 @@ sealed trait HtmlFragment {
   def removeContents(): HtmlFragment
 
   def anchor(cssQuery: String, href: String, text: String): HtmlFragment
+
+  def anchor(href: String, text: String): HtmlFragment
 
   def becomeChildOf(that: HtmlFragment): HtmlFragment
 }
@@ -73,8 +77,8 @@ class SingleElementHtmlFragment(originalElement: Element) extends HtmlFragment {
     val elements = for {
       index <- 0 until matching.size()
     } yield {
-        matching.get(index)
-      }
+      matching.get(index)
+    }
     val fragments = elements.map(new SingleElementHtmlFragment(_))
     fragments
   }
@@ -103,6 +107,16 @@ class SingleElementHtmlFragment(originalElement: Element) extends HtmlFragment {
       fragment <- fragments
     } {
       attachTo.appendChild(fragment.clonedElement)
+    }
+    new SingleElementHtmlFragment(element)
+  }
+
+  def appendAll(fragments: Seq[HtmlFragment]): HtmlFragment = {
+    val element = originalElement.clone()
+    for {
+      fragment <- fragments
+    } {
+      element.appendChild(fragment.clonedElement)
     }
     new SingleElementHtmlFragment(element)
   }
@@ -156,6 +170,13 @@ class SingleElementHtmlFragment(originalElement: Element) extends HtmlFragment {
     toModify.text(text)
     new SingleElementHtmlFragment(element)
   }
+
+  override def anchor(href: String, text: String): HtmlFragment = {
+    val element = originalElement.clone()
+    element.attr("href", href)
+    element.text(text)
+    new SingleElementHtmlFragment(element)
+  }
 }
 
 class EmptyHtmlFragment extends HtmlFragment {
@@ -173,6 +194,8 @@ class EmptyHtmlFragment extends HtmlFragment {
 
   override def appendAll(cssQuery: String, fragments: Seq[HtmlFragment]): HtmlFragment = ???
 
+  override def appendAll(fragments: Seq[HtmlFragment]): HtmlFragment = ???
+
   override def firstText(cssQuery: String): String = ???
 
   override def clonedElement: Element = ???
@@ -180,6 +203,8 @@ class EmptyHtmlFragment extends HtmlFragment {
   override def all(cssQuery: String): Seq[HtmlFragment] = ???
 
   override def anchor(cssQuery: String, href: String, text: String): HtmlFragment = ???
+
+  override def anchor(href: String, text: String): HtmlFragment = ???
 
   override def remove(cssQuery: String): HtmlFragment = ???
 
