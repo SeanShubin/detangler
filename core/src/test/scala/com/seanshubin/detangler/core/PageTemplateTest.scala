@@ -1,9 +1,5 @@
 package com.seanshubin.detangler.core
 
-import java.nio.charset.StandardCharsets
-import java.nio.file.{Files, Paths}
-
-import org.jsoup.Jsoup
 import org.scalatest.FunSuite
 
 class PageTemplateTest extends FunSuite {

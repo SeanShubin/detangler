@@ -2,7 +2,7 @@ package com.seanshubin.detangler.core
 
 case class DetangledImpl(map: Map[Module, ModuleInfo]) extends Detangled {
   override def reasonsFor(module: Module): Seq[Reason] = {
-    reasonsFor(composedOf(module))
+    reasonsFor(children(module))
   }
 
   override def reasonsFor(parts: Seq[Module]): Seq[Reason] = {
@@ -25,11 +25,15 @@ case class DetangledImpl(map: Map[Module, ModuleInfo]) extends Detangled {
     map(module).dependsOn.filter(_.parent == context).toSeq.sorted
   }
 
-  override def composedOf(module: Module): Seq[Module] = {
-    map(module).composedOf.toSeq.sorted
+  override def children(module: Module): Seq[Module] = {
+    map(module).children.toSeq.sorted
   }
 
-  override def cycleSize(module: Module): Int = composedOf(module).size
+  override def cycleParts(module: Module): Seq[Module] = {
+    map(module).cycleParts.toSeq.sorted
+  }
+
+  override def cycleSize(module: Module): Int = cycleParts(module).size
 
   private def reasonsFor(leftParts: Seq[Module], rightParts: Seq[Module]): Seq[Reason] = {
     for {
@@ -37,7 +41,7 @@ case class DetangledImpl(map: Map[Module, ModuleInfo]) extends Detangled {
       toPart <- map(fromPart).dependsOn
       if rightParts.contains(toPart)
     } yield {
-      Reason(fromPart, toPart, reasonsFor(composedOf(fromPart), composedOf(toPart)))
+      Reason(fromPart, toPart, reasonsFor(children(fromPart), children(toPart)))
     }
   }
 }

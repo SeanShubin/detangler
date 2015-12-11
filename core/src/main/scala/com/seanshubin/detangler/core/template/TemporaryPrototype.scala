@@ -6,7 +6,7 @@ import java.nio.file.{Files, Paths}
 import com.seanshubin.detangler.core.{HtmlFragment, SampleData}
 
 object TemporaryPrototype extends App {
-  val templatePath = Paths.get("core", "src", "main", "resources", "new-template.html")
+  val templatePath = Paths.get("core", "src", "main", "resources", "template.html")
   val inputStream = Files.newInputStream(templatePath)
   val charset = StandardCharsets.UTF_8
   val pageTemplate = HtmlFragment.fromInputStream(inputStream, charset)

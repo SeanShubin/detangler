@@ -8,7 +8,7 @@ class CycleDetailTemplateRules(detailTemplate: HtmlFragment, detangled: Detangle
   private val partTemplate = detailTemplate.one(SelectorCyclePart)
 
   def generate(): HtmlFragment = {
-    val children = detangled.composedOf(module).map(generateChild)
+    val children = detangled.cycleParts(module).map(generateChild)
     val result = emptyTemplate.appendAll(SelectorCycleParts, children)
     result
   }

@@ -7,9 +7,9 @@
 </head>
 <body>
 <div>
-    <ul class="modules">
-        <li class="module">
-            <table class="summary">
+    <ul class="fragment-modules">
+        <li class="fragment-module">
+            <table class="fragment-module-summary">
                 <thead>
                 <tr>
                     <th>name</th>
@@ -27,7 +27,7 @@
                 </tr>
                 </tbody>
             </table>
-            <ul class="dependency">
+            <ul class="fragment-module-detail">
                 <li>
                     <table>
                         <thead>
@@ -41,8 +41,8 @@
                             <th>reason</th>
                         </tr>
                         </thead>
-                        <tbody class="dependency-row-outer">
-                        <tr class="dependency-row-inner">
+                        <tbody class="fragment-module-dependencies">
+                        <tr class="fragment-module-dependency">
                             <td><a class="name" href="">other/group</a></td>
                             <td class="depth">depth</td>
                             <td class="complexity">complexity</td>
@@ -53,8 +53,8 @@
                 </li>
             </ul>
         </li>
-        <li class="module-with-cycle">
-            <table class="summary-with-cycle">
+        <li class="fragment-cycle">
+            <table class="fragment-cycle-summary">
                 <thead>
                 <tr>
                     <th>size</th>
@@ -70,7 +70,7 @@
                 </tr>
                 </tbody>
             </table>
-            <ul class="dependency-with-cycle">
+            <ul class="fragment-cycle-detail">
                 <li>
                     <table>
                         <thead>
@@ -78,8 +78,8 @@
                             <th>parts</th>
                         </tr>
                         </thead>
-                        <tbody class="dependency-row-outer">
-                        <tr class="dependency-row-inner">
+                        <tbody class="fragment-cycle-parts">
+                        <tr class="fragment-cycle-part">
                             <td><a class="name" href="">other/group</a></td>
                         </tr>
                         </tbody>
@@ -88,8 +88,8 @@
             </ul>
         </li>
     </ul>
-    <ul class="reasons">
-        <li class="reason">
+    <ul class="fragment-reasons">
+        <li class="fragment-reason">
             <a class="from" href="">from</a>
             <span>&xrarr;</span>
             <a class="to" href="">to</a>

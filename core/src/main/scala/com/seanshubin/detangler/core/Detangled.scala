@@ -5,7 +5,9 @@ trait Detangled {
 
   def complexity(module: Module): Int
 
-  def composedOf(module: Module): Seq[Module]
+  def children(module: Module): Seq[Module]
+
+  def cycleParts(module: Module): Seq[Module]
 
   def dependsOn(context: Module, module: Module): Seq[Module]
 

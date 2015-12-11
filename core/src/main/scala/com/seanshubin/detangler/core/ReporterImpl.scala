@@ -16,7 +16,7 @@ class ReporterImpl(reportDir: Path,
 
   override def run(): Unit = {
     initDestinationDirectory()
-    val inputStream = resourceLoader.inputStreamFor("new-template.html")
+    val inputStream = resourceLoader.inputStreamFor("template.html")
     val templateText = IoUtil.inputStreamToString(inputStream, charset)
     inputStream.close()
     generateReportForModule(detangled, Module.Root, templateText)
@@ -31,15 +31,15 @@ class ReporterImpl(reportDir: Path,
   }
 
   private def generateReportForModule(detangled: Detangled, module: Module, templateText: String): Unit = {
-    val composedOf = detangled.composedOf(module).filterNot(_.isCycle)
-    if (composedOf.nonEmpty) {
+    val children = detangled.children(module).filterNot(_.isCycle)
+    if (children.nonEmpty) {
       val fileName = HtmlUtil.fileNameFor(module)
       val pageText = htmlContent(module, detangled, templateText)
       val pagePath = reportDir.resolve(fileName)
       val bytes = pageText.getBytes(charset)
       files.write(pagePath, bytes)
       for {
-        child <- composedOf
+        child <- children
       } {
         generateReportForModule(detangled, child, templateText)
       }
