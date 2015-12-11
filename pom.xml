@@ -12,6 +12,8 @@
     <modules>
         <module>core</module>
         <module>console</module>
+        <module>model</module>
+        <module>report</module>
     </modules>
     <repositories>
         <repository>
