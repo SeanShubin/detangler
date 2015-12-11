@@ -1,8 +1,6 @@
 package com.seanshubin.detangler.core
 
-class PageTemplate(pageModule: Module,
-                   detangled: Detangled,
-                   template: HtmlFragment) {
+class PageTemplate(template: HtmlFragment, detangled: Detangled, pageModule: Module) {
   val emptyPage = template.remove(".modules").remove(".reasons")
   val modulesOuter = template.one(".modules").remove(".module").remove(".module-with-cycle")
   val moduleFragment = template.one(".module").remove(".dependency")

@@ -67,7 +67,7 @@ class PageTemplateTest extends FunSuite {
 
   test("root page") {
     val template = HtmlFragment.fromText(templateText)
-    val pageTemplate = new PageTemplate(SampleData.idRoot, SampleData.detangled, template)
+    val pageTemplate = new PageTemplate(template, SampleData.detangled, SampleData.idRoot)
     val actual = pageTemplate.generate()
 
     assert(actual.text("#group_a .name") === "group/a")
@@ -131,7 +131,7 @@ class PageTemplateTest extends FunSuite {
 
   def emitPage(module: Module): Unit = {
     val template = HtmlFragment.fromText(templateText)
-    val pageTemplate = new PageTemplate(module, SampleData.detangled, template)
+    val pageTemplate = new PageTemplate(template, SampleData.detangled, module)
     val fragment = pageTemplate.generate()
     val templatePath = Paths.get("core", "src", "main", "resources", "module.html")
     val generatedPath = Paths.get("generated", "prototype")

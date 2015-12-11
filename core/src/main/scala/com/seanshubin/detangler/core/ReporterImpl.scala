@@ -47,7 +47,7 @@ class ReporterImpl(reportDir: Path,
 
   private def htmlContent(module: Module, detangled: Detangled, templateText: String): String = {
     val template = HtmlFragment.fromText(templateText)
-    val pageTemplate = new PageTemplate(module, detangled, template)
+    val pageTemplate = new PageTemplate(template, detangled, module)
     val fragment = pageTemplate.generate()
     val baseUri = ""
     val document = Jsoup.parse(templateText, baseUri)
