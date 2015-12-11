@@ -41,7 +41,7 @@ object SampleDataWithCycles {
     idPackageC -> ModuleInfo(
       idPackageC,
       dependsOn = Set(idPackageD, idPackageE),
-      dependedOnBy = Set(idPackageD),
+      dependedOnBy = Set(idPackageD, idPackageE),
       composedOf = Set(cycleFG, idClassF, idClassG),
       depth = 5,
       complexity = 6),
@@ -54,7 +54,7 @@ object SampleDataWithCycles {
       complexity = 8),
     idPackageE -> ModuleInfo(
       idPackageE,
-      dependsOn = Set(),
+      dependsOn = Set(idPackageC),
       dependedOnBy = Set(idPackageC),
       composedOf = Set(idClassI),
       depth = 9,
@@ -62,7 +62,7 @@ object SampleDataWithCycles {
     idClassF -> ModuleInfo(
       idClassF,
       dependsOn = Set(idClassG, idClassH, idClassI),
-      dependedOnBy = Set(idClassG),
+      dependedOnBy = Set(idClassG, idClassH, idClassI),
       composedOf = Set(),
       depth = 11,
       complexity = 12),
@@ -75,14 +75,14 @@ object SampleDataWithCycles {
       complexity = 14),
     idClassH -> ModuleInfo(
       idClassH,
-      dependsOn = Set(),
+      dependsOn = Set(idClassF),
       dependedOnBy = Set(idClassF),
       composedOf = Set(),
       depth = 15,
       complexity = 16),
     idClassI -> ModuleInfo(
       idClassI,
-      dependsOn = Set(),
+      dependsOn = Set(idClassF),
       dependedOnBy = Set(idClassF),
       composedOf = Set(),
       depth = 17,
