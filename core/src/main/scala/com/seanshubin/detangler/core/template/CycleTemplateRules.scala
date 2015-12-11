@@ -10,7 +10,8 @@ class CycleTemplateRules(cycleTemplate: HtmlFragment, detangled: Detangled, page
 
   def generate(): HtmlFragment = {
     val summary = new CycleSummaryTemplateRules(summaryTemplate, detangled, module).generate()
-    val parts = new CycleDetailTemplateRules(detailTemplate, detangled, pageModule, module).generate()
-    emptyTemplate.appendChild(summary).appendChild(parts)
+    val detail = new CycleDetailTemplateRules(detailTemplate, detangled, pageModule, module).generate()
+    val result = emptyTemplate.appendChild(summary).appendChild(detail)
+    result
   }
 }

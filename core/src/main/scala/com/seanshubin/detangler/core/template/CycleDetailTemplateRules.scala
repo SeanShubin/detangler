@@ -9,10 +9,12 @@ class CycleDetailTemplateRules(detailTemplate: HtmlFragment, detangled: Detangle
 
   def generate(): HtmlFragment = {
     val children = detangled.composedOf(module).map(generateChild)
-    emptyTemplate.appendAll(SelectorCycleParts, children)
+    val result = emptyTemplate.appendAll(SelectorCycleParts, children)
+    result
   }
 
   private def generateChild(child: Module): HtmlFragment = {
-    partTemplate.anchor(HtmlUtil.htmlLink(pageModule, child), HtmlUtil.htmlName(module))
+    val result = partTemplate.anchor(".name", HtmlUtil.htmlLink(pageModule, child), HtmlUtil.htmlName(child))
+    result
   }
 }

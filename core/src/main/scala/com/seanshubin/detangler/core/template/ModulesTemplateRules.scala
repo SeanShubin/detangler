@@ -10,7 +10,8 @@ class ModulesTemplateRules(modulesTemplate: HtmlFragment, detangled: Detangled, 
 
   def generate(): HtmlFragment = {
     val modulesAndCycles = detangled.composedOf(parentModule).map(generateModuleOrCycle)
-    emptyTemplate.appendAll(SelectorModules, modulesAndCycles)
+    val result = emptyTemplate.appendAll(SelectorModules, modulesAndCycles)
+    result
   }
 
   private def generateModuleOrCycle(module: Module): HtmlFragment = {

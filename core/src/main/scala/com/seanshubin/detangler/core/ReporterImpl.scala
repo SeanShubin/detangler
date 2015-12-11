@@ -3,6 +3,7 @@ package com.seanshubin.detangler.core
 import java.nio.charset.Charset
 import java.nio.file.Path
 
+import com.seanshubin.detangler.core.template.PageTemplateRules
 import com.seanshubin.devon.core.devon.DevonMarshaller
 import org.jsoup.Jsoup
 
@@ -15,7 +16,7 @@ class ReporterImpl(reportDir: Path,
 
   override def run(): Unit = {
     initDestinationDirectory()
-    val inputStream = resourceLoader.inputStreamFor("template.html")
+    val inputStream = resourceLoader.inputStreamFor("new-template.html")
     val templateText = IoUtil.inputStreamToString(inputStream, charset)
     inputStream.close()
     generateReportForModule(detangled, Module.Root, templateText)
@@ -47,7 +48,7 @@ class ReporterImpl(reportDir: Path,
 
   private def htmlContent(module: Module, detangled: Detangled, templateText: String): String = {
     val template = HtmlFragment.fromText(templateText)
-    val pageTemplate = new PageTemplate(template, detangled, module)
+    val pageTemplate = new PageTemplateRules(template, detangled, module)
     val fragment = pageTemplate.generate()
     val baseUri = ""
     val document = Jsoup.parse(templateText, baseUri)
