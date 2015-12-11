@@ -1,7 +1,7 @@
 package com.seanshubin.detangler.core.template
 
-import com.seanshubin.detangler.core.template.FragmentSelectors._
 import com.seanshubin.detangler.core._
+import com.seanshubin.detangler.core.template.FragmentSelectors._
 
 class ReasonsTemplateRules(reasonsTemplate: HtmlFragment, detangled: Detangled, context: Module, reasons: Seq[Reason]) {
   private val parentTemplate = reasonsTemplate.remove(SelectorReason)
