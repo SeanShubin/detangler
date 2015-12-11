@@ -1,14 +1,15 @@
 package com.seanshubin.detangler.core.template
 
 import com.seanshubin.detangler.core._
+import com.seanshubin.detangler.core.template.FragmentSelectors._
 
 class DependencyTemplateRules(dependencyTemplate: HtmlFragment,
                               detangled: Detangled,
                               context: Module,
                               parentModule: Module,
                               reasonDirection: ReasonDirection) {
-  private val parentTemplate = dependencyTemplate.remove(".dependency-header")
-  private val childTemplate = dependencyTemplate.one(".dependency-detail")
+  private val parentTemplate = dependencyTemplate.remove(SelectorModuleDependencies)
+  private val childTemplate = dependencyTemplate.one(SelectorModuleDependency)
 
   def generate(): HtmlFragment = {
     val childModules = reasonDirection.dependencies(detangled, context, parentModule)
@@ -18,7 +19,7 @@ class DependencyTemplateRules(dependencyTemplate: HtmlFragment,
       val rows = childModules.map(generateRow)
       val result = parentTemplate.
         text(".caption", s"${reasonDirection.caption} (${childModules.size})").
-        appendAll(".dependency-row-outer", rows)
+        appendAll(rows)
       result
     }
   }

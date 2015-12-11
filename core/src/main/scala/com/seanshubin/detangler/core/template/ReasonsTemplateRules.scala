@@ -1,10 +1,11 @@
 package com.seanshubin.detangler.core.template
 
+import com.seanshubin.detangler.core.template.FragmentSelectors._
 import com.seanshubin.detangler.core._
 
 class ReasonsTemplateRules(reasonsTemplate: HtmlFragment, detangled: Detangled, context: Module, reasons: Seq[Reason]) {
-  private val parentTemplate = reasonsTemplate.remove(".reason")
-  private val reasonTemplate = reasonsTemplate.one(".reason")
+  private val parentTemplate = reasonsTemplate.remove(SelectorReason)
+  private val reasonTemplate = reasonsTemplate.one(SelectorReason)
 
   def generate(): HtmlFragment = {
     val result = composeReasons(reasons)
@@ -13,13 +14,13 @@ class ReasonsTemplateRules(reasonsTemplate: HtmlFragment, detangled: Detangled, 
 
   private def composeReasons(reasons: Seq[Reason]): HtmlFragment = {
     val children = reasons.map(composeReason)
-    val result = parentTemplate.appendAll(".reasons", children)
+    val result = parentTemplate.appendAll(SelectorReasons, children)
     result
   }
 
   private def composeReason(reason: Reason): HtmlFragment = {
     val withoutSubReasons = reasonTemplate.
-      attr(".reason", "id", HtmlUtil.reasonId(reason.from, reason.to)).
+      attr(SelectorReason, "id", HtmlUtil.reasonId(reason.from, reason.to)).
       anchor(".from", HtmlUtil.htmlLink(context, reason.from), HtmlUtil.htmlName(reason.from)).
       anchor(".to", HtmlUtil.htmlLink(context, reason.to), HtmlUtil.htmlName(reason.to))
     val result = if (reason.reasons.isEmpty) {

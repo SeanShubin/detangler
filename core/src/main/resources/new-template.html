@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>dependency report</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<div>
+    <ul class="fragment-modules">
+        <li class="fragment-module">
+            <table class="fragment-module-summary">
+                <thead>
+                <tr>
+                    <th>name</th>
+                    <th>depth</th>
+                    <th>complexity</th>
+                    <th>composed of</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="name">sample/group</td>
+                    <td class="depth">depth number</td>
+                    <td class="complexity">complexity number</td>
+                    <td><a class="composed-of" href="">parts</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <ul class="fragment-module-detail">
+                <li>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="caption" colspan="4">depends on (number)</th>
+                        </tr>
+                        <tr>
+                            <th>name</th>
+                            <th>depth</th>
+                            <th>complexity</th>
+                            <th>reason</th>
+                        </tr>
+                        </thead>
+                        <tbody class="fragment-module-dependencies">
+                        <tr class="fragment-module-dependency">
+                            <td><a class="name" href="">other/group</a></td>
+                            <td class="depth">depth</td>
+                            <td class="complexity">complexity</td>
+                            <td><a class="reason" href="">reason</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        </li>
+        <li class="fragment-cycle">
+            <table class="fragment-cycle-summary">
+                <thead>
+                <tr>
+                    <th>size</th>
+                    <th>depth</th>
+                    <th>complexity</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="size">size number</td>
+                    <td class="depth">depth number</td>
+                    <td class="complexity">complexity number</td>
+                </tr>
+                </tbody>
+            </table>
+            <ul class="fragment-cycle-detail">
+                <li>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>parts</th>
+                        </tr>
+                        </thead>
+                        <tbody class="fragment-cycle-parts">
+                        <tr class="fragment-cycle-part">
+                            <td><a class="name" href="">other/group</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="fragment-reasons">
+        <li class="fragment-reason">
+            <a class="from" href="">from</a>
+            <span>&xrarr;</span>
+            <a class="to" href="">to</a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

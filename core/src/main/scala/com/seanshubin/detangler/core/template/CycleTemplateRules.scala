@@ -1,11 +1,12 @@
 package com.seanshubin.detangler.core.template
 
+import com.seanshubin.detangler.core.template.FragmentSelectors._
 import com.seanshubin.detangler.core.{Detangled, HtmlFragment, Module}
 
 class CycleTemplateRules(cycleTemplate: HtmlFragment, detangled: Detangled, pageModule: Module, module: Module) {
-  private val emptyTemplate = cycleTemplate.remove(".summary").remove(".parts")
-  private val summaryTemplate = cycleTemplate.one(".summary")
-  private val partsTemplate = cycleTemplate.one(".parts")
+  private val emptyTemplate = cycleTemplate.remove(SelectorCycleSummary).remove(SelectorCycleParts)
+  private val summaryTemplate = cycleTemplate.one(SelectorCycleSummary)
+  private val partsTemplate = cycleTemplate.one(SelectorCycleParts)
 
   def generate(): HtmlFragment = {
     val summary = new CycleSummaryTemplateRules(summaryTemplate, detangled, module).generate()
