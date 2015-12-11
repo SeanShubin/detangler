@@ -31,32 +31,33 @@ class ModuleDependencyTemplateTest extends FunSuite {
       |</ul>
       | """.stripMargin
   val template = HtmlFragment.fromText(templateText)
+  /*
+    test("module depends on template") {
+      val module = SampleData.idGroupA
+      val moduleSummaryTemplate = new ModuleDependencyTemplate(template, SampleData.idRoot, module, ReasonDirection.TowardDependsOn, SampleData.detangled)
+      val actual = moduleSummaryTemplate.generate()
 
-  test("module depends on template") {
-    val module = SampleData.idGroupA
-    val moduleSummaryTemplate = new ModuleDependencyTemplate(template, SampleData.idRoot, module, ReasonDirection.TowardDependsOn, SampleData.detangled)
-    val actual = moduleSummaryTemplate.generate()
+      assert(actual.text(".caption") === "depends on (1)")
+      assert(actual.text(".name") === "group/b")
+      assert(actual.attr(".name", "href") === "#group_b")
+      assert(actual.text(".depth") === "3")
+      assert(actual.text(".complexity") === "4")
+      assert(actual.text(".reason") === "reason")
+      assert(actual.attr(".reason", "href") === "#group_a---group_b")
+    }
 
-    assert(actual.text(".caption") === "depends on (1)")
-    assert(actual.text(".name") === "group/b")
-    assert(actual.attr(".name", "href") === "#group_b")
-    assert(actual.text(".depth") === "3")
-    assert(actual.text(".complexity") === "4")
-    assert(actual.text(".reason") === "reason")
-    assert(actual.attr(".reason", "href") === "#group_a---group_b")
-  }
+    test("module depended on by on template") {
+      val module = SampleData.idGroupB
+      val moduleSummaryTemplate = new ModuleDependencyTemplate(template, SampleData.idRoot, module, ReasonDirection.TowardDependedOnBy, SampleData.detangled)
+      val actual = moduleSummaryTemplate.generate()
 
-  test("module depended on by on template") {
-    val module = SampleData.idGroupB
-    val moduleSummaryTemplate = new ModuleDependencyTemplate(template, SampleData.idRoot, module, ReasonDirection.TowardDependedOnBy, SampleData.detangled)
-    val actual = moduleSummaryTemplate.generate()
-
-    assert(actual.text(".caption") === "depended on by (1)")
-    assert(actual.text(".name") === "group/a")
-    assert(actual.attr(".name", "href") === "#group_a")
-    assert(actual.text(".depth") === "1")
-    assert(actual.text(".complexity") === "2")
-    assert(actual.text(".reason") === "reason")
-    assert(actual.attr(".reason", "href") === "#group_a---group_b")
-  }
+      assert(actual.text(".caption") === "depended on by (1)")
+      assert(actual.text(".name") === "group/a")
+      assert(actual.attr(".name", "href") === "#group_a")
+      assert(actual.text(".depth") === "1")
+      assert(actual.text(".complexity") === "2")
+      assert(actual.text(".reason") === "reason")
+      assert(actual.attr(".reason", "href") === "#group_a---group_b")
+    }
+  */
 }
