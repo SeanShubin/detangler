@@ -1,5 +1,9 @@
 package com.seanshubin.detangler.modle
 
-trait Detangled {
+import scala.collection.parallel.immutable.ParSet
 
+trait Detangled {
+  def root(): Module
+
+  def children(module: Module): ParSet[Module]
 }
