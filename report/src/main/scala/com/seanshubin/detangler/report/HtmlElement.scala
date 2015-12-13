@@ -42,10 +42,24 @@ class HtmlElement(originalElement: Element) {
 }
 
 object HtmlElement {
-  def fromInputStream(inputStream: InputStream, charset: Charset): HtmlElement = {
+  def pageFromInputStream(inputStream: InputStream, charset: Charset): HtmlElement = {
     val baseUri = ""
     val document = Jsoup.parse(inputStream, charset.name(), baseUri)
     document.outputSettings().indentAmount(2)
     new HtmlElement(document)
+  }
+
+  def pageFromString(text: String): HtmlElement = {
+    val document = Jsoup.parse(text)
+    document.outputSettings().indentAmount(2)
+    new HtmlElement(document)
+  }
+
+  def fragmentFromString(text: String): HtmlElement = {
+    val document = Jsoup.parse(text)
+    val elements = document.body().children()
+    val size = elements.size()
+    if (size != 1) throw new RuntimeException(s"$text\nExpected exactly 1 element in body got $size")
+    new HtmlElement(elements.get(0))
   }
 }

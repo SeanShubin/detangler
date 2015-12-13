@@ -24,7 +24,7 @@ class Reporter(detangled: Detangled,
 
   private def generatePage(module: Module): Unit = {
     val pageTemplateInputStream = classLoader.getResourceAsStream("template.html")
-    val pageTemplate = HtmlElement.fromInputStream(pageTemplateInputStream, charset)
+    val pageTemplate = HtmlElement.pageFromInputStream(pageTemplateInputStream, charset)
     module match {
       case single: Single =>
         val children = detangled.children(module)
