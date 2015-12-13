@@ -1,6 +1,6 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.modle.Single
+import com.seanshubin.detangler.model.Single
 
 class PageTemplateRulesImpl(modulesTemplateRules: ModulesTemplateRules,
                             reasonsTemplateRules: ReasonsTemplateRules) extends PageTemplateRules {
@@ -10,7 +10,7 @@ class PageTemplateRulesImpl(modulesTemplateRules: ModulesTemplateRules,
     val reasonsTemplate = pageTemplate.select(".reasons")
     val modules = modulesTemplateRules.generate(modulesTemplate, single)
     val reasons = reasonsTemplateRules.generate(reasonsTemplate, single)
-    val page = emptyPageTemplate.append("body", modules, reasons)
+    val page = emptyPageTemplate.append("body", Seq(modules, reasons))
     page.text
   }
 }

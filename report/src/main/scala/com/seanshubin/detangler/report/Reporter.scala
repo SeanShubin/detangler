@@ -3,7 +3,7 @@ package com.seanshubin.detangler.report
 import java.nio.charset.Charset
 import java.nio.file.Path
 
-import com.seanshubin.detangler.modle.{Cycle, Detangled, Module, Single}
+import com.seanshubin.detangler.model.{Cycle, Detangled, Module, Single}
 
 class Reporter(detangled: Detangled,
                directory: Path,
@@ -27,7 +27,7 @@ class Reporter(detangled: Detangled,
     val pageTemplate = HtmlElement.pageFromInputStream(pageTemplateInputStream, charset)
     module match {
       case single: Single =>
-        val children = detangled.children(module)
+        val children = detangled.children(single)
         if (children.nonEmpty) {
           val content = pageTemplateRules.generate(pageTemplate, single)
           val fileName = fileNameFor(single)

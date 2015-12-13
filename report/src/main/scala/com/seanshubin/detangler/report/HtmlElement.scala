@@ -20,7 +20,7 @@ class HtmlElement(originalElement: Element) {
     new HtmlElement(select(cssQuery, originalElement))
   }
 
-  def append(cssQuery: String, children: HtmlElement*): HtmlElement = {
+  def append(cssQuery: String, children: Seq[HtmlElement]): HtmlElement = {
     val element = clonedElement
     val attachmentPoint = select(cssQuery, element)
     for {
@@ -29,6 +29,10 @@ class HtmlElement(originalElement: Element) {
       attachmentPoint.appendChild(child.clonedElement)
     }
     new HtmlElement(element)
+  }
+
+  def append(cssQuery: String, child: HtmlElement): HtmlElement = {
+    append(cssQuery, Seq(child))
   }
 
   def clonedElement: Element = originalElement.clone()
@@ -57,6 +61,7 @@ object HtmlElement {
 
   def fragmentFromString(text: String): HtmlElement = {
     val document = Jsoup.parse(text)
+    document.outputSettings().indentAmount(2)
     val elements = document.body().children()
     val size = elements.size()
     if (size != 1) throw new RuntimeException(s"$text\nExpected exactly 1 element in body got $size")

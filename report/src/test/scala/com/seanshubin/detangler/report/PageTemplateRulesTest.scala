@@ -1,6 +1,6 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.modle.Single
+import com.seanshubin.detangler.model.Single
 import org.scalatest.FunSuite
 
 class PageTemplateRulesTest extends FunSuite {

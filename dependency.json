@@ -54,5 +54,5 @@
     "cycleCount": 0,
     "cycleSize": 0
   },
-  "failIfAnyLimitExceeded": true
+  "failIfAnyLimitExceeded": false
 }
