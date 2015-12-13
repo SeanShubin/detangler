@@ -10,7 +10,7 @@ class Reporter(detangled: Detangled,
                filesContract: FilesContract,
                charset: Charset,
                classLoader: ClassLoaderContract,
-               pageTextGenerator: PageTextGenerator) extends Runnable {
+               pageTemplateRules: PageTemplateRules) extends Runnable {
   override def run(): Unit = {
     copyResource("style.css", directory.resolve("style.css"))
     generatePage(detangled.root())
@@ -23,11 +23,13 @@ class Reporter(detangled: Detangled,
   }
 
   private def generatePage(module: Module): Unit = {
+    val pageTemplateInputStream = classLoader.getResourceAsStream("template.html")
+    val pageTemplate = HtmlElement.fromInputStream(pageTemplateInputStream, charset)
     module match {
       case single: Single =>
         val children = detangled.children(module)
         if (children.nonEmpty) {
-          val content = pageTextGenerator.generateFor(single)
+          val content = pageTemplateRules.generate(pageTemplate, single)
           val fileName = fileNameFor(single)
           val file = directory.resolve(fileName)
           filesContract.write(file, content.getBytes(charset))

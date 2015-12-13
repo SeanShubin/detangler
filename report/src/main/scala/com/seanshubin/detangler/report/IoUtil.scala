@@ -1,6 +1,7 @@
 package com.seanshubin.detangler.report
 
-import java.io.{InputStream, OutputStream}
+import java.io.{ByteArrayInputStream, InputStream, OutputStream}
+import java.nio.charset.Charset
 
 import scala.annotation.tailrec
 
@@ -12,5 +13,10 @@ object IoUtil {
       outputStream.write(ch)
       copyInputStreamToOutputStream(inputStream, outputStream)
     }
+  }
+
+  def stringToInputStream(text: String, charset: Charset): InputStream = {
+    val bytes = text.getBytes(charset)
+    new ByteArrayInputStream(bytes)
   }
 }
