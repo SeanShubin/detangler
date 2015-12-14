@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>dependency report</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<div>
+    <ul class="modules append-module">
+        <li class="single">
+            <table class="single-summary">
+                <thead>
+                <tr>
+                    <th>name</th>
+                    <th>depth</th>
+                    <th>complexity</th>
+                    <th>composed of</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="name">sample/group</td>
+                    <td class="depth">depth number</td>
+                    <td class="complexity">complexity number</td>
+                    <td><a class="composed-of" href="">parts</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <ul class="single-detail">
+                <li>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="caption" colspan="4">depends on (number)</th>
+                        </tr>
+                        <tr>
+                            <th>name</th>
+                            <th>depth</th>
+                            <th>complexity</th>
+                            <th>reason</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><a class="name" href="">other/group</a></td>
+                            <td class="depth">depth</td>
+                            <td class="complexity">complexity</td>
+                            <td><a class="reason" href="">reason</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        </li>
+        <li class="cycle">
+            <table class="cycle-summary">
+                <thead>
+                <tr>
+                    <th>size</th>
+                    <th>depth</th>
+                    <th>complexity</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="size">size number</td>
+                    <td class="depth">depth number</td>
+                    <td class="complexity">complexity number</td>
+                </tr>
+                </tbody>
+            </table>
+            <ul class="cycle-detail">
+                <li>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>parts</th>
+                        </tr>
+                        </thead>
+                        <tbody class="cycle-parts append-cycle-part">
+                        <tr class="cycle-part">
+                            <td><a class="name" href="">other/group</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="reasons">
+        <li class="reason">
+            <a class="from" href="">from</a>
+            <span>&xrarr;</span>
+            <a class="to" href="">to</a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

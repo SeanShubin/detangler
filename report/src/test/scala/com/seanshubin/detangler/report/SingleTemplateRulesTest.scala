@@ -23,7 +23,7 @@ class SingleTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     val singleTemplate = HtmlElement.fragmentFromString(singleTemplateText)
-    val singleTemplateRules = new SingleTemplateRulesImpl(singleSummaryTemplateRules, singleDetailTemplateRules, SampleData.theRoot)
+    val singleTemplateRules = new SingleTemplateRulesImpl(singleSummaryTemplateRules, singleDetailTemplateRules)
     val expected =
       """<div class="single">
         |  <p>summary Single(group/a)</p>

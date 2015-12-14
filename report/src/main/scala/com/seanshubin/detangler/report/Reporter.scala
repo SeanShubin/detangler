@@ -12,12 +12,14 @@ class Reporter(detangled: Detangled,
                classLoader: ClassLoaderContract,
                pageTemplateRules: PageTemplateRules) extends Runnable {
   override def run(): Unit = {
+    filesContract.createDirectories(directory)
     copyResource("style.css", directory.resolve("style.css"))
     generatePage(detangled.root())
   }
 
   private def copyResource(name: String, destination: Path): Unit = {
     val inputStream = classLoader.getResourceAsStream(name)
+    if (inputStream == null) throw new RuntimeException(s"Unable to find resource named '$name'")
     val outputStream = filesContract.newOutputStream(destination)
     IoUtil.copyInputStreamToOutputStream(inputStream, outputStream)
   }
