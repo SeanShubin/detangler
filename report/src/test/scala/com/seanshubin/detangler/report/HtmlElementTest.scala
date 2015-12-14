@@ -83,6 +83,29 @@ class HtmlElementTest extends FunSuite {
     assertLinesSame(appended.text, expected)
   }
 
+  test("replace") {
+    val starting = HtmlElement.fragmentFromString(
+      """<div>
+        |<ul>
+        |  <li>aaa</li>
+        |  <li class="replace-me">bbb</li>
+        |  <li>ccc</li>
+        |</ul>
+        |</div>""".stripMargin
+    )
+    val replaceWith = HtmlElement.fragmentFromString("<li>ddd</li>")
+    val replaced = starting.replace(".replace-me", replaceWith)
+    val expected =
+      """<div>
+        |<ul>
+        |  <li>aaa</li>
+        |  <li>ddd</li>
+        |  <li>ccc</li>
+        |</ul>
+        |</div>""".stripMargin
+    assertLinesSame(replaced.text, expected)
+  }
+
   def assertLinesSame(left: String, right: String): Unit = {
     val compare = LinesDifference.compare(left, right)
     assert(compare.isSame, compare.detailLines.mkString("\n", "\n", "\n"))
