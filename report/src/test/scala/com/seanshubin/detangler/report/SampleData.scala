@@ -5,16 +5,16 @@ import com.seanshubin.detangler.model.{Detangled, Module, Single}
 import scala.collection.parallel.immutable.ParSet
 
 object SampleData {
-  val moduleRoot = Single(Seq(), 0, 0)
-  val moduleA = Single(Seq("group/a"), 1, 2)
-  val moduleB = Single(Seq("group/b"), 3, 4)
-  val moduleC = Single(Seq("group/a", "package/c"), 5, 6)
-  val moduleD = Single(Seq("group/a", "package/d"), 7, 8)
-  val moduleE = Single(Seq("group/b", "package/e"), 9, 10)
-  val moduleF = Single(Seq("group/a", "package/c", "class/f"), 11, 12)
-  val moduleG = Single(Seq("group/a", "package/c", "class/g"), 13, 14)
-  val moduleH = Single(Seq("group/a", "package/d", "class/h"), 15, 16)
-  val moduleI = Single(Seq("group/b", "package/e", "class/i"), 17, 18)
+  val moduleRoot = Single(Seq())
+  val moduleA = Single(Seq("group/a"))
+  val moduleB = Single(Seq("group/b"))
+  val moduleC = Single(Seq("group/a", "package/c"))
+  val moduleD = Single(Seq("group/a", "package/d"))
+  val moduleE = Single(Seq("group/b", "package/e"))
+  val moduleF = Single(Seq("group/a", "package/c", "class/f"))
+  val moduleG = Single(Seq("group/a", "package/c", "class/g"))
+  val moduleH = Single(Seq("group/a", "package/d", "class/h"))
+  val moduleI = Single(Seq("group/b", "package/e", "class/i"))
   private val map: Map[Module, ModuleInfo] = Map(
     moduleRoot -> ModuleInfo(module = moduleRoot, children = ParSet(moduleA, moduleB)),
     moduleA -> ModuleInfo(module = moduleA, children = ParSet(moduleC, moduleD)),

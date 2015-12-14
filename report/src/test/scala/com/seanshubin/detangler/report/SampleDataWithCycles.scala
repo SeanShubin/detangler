@@ -5,19 +5,19 @@ import com.seanshubin.detangler.model.{Cycle, Detangled, Module, Single}
 import scala.collection.parallel.immutable.ParSet
 
 object SampleDataWithCycles {
-  val moduleRoot = Single(Seq(), 0, 0)
-  val moduleA = Single(Seq("group/a"), 1, 2)
-  val moduleB = Single(Seq("group/b"), 3, 4)
-  val moduleC = Single(Seq("group/a", "package/c"), 5, 6)
-  val moduleD = Single(Seq("group/a", "package/d"), 7, 8)
-  val moduleE = Single(Seq("group/b", "package/e"), 9, 10)
-  val moduleF = Single(Seq("group/a", "package/c", "class/f"), 11, 12)
-  val moduleG = Single(Seq("group/a", "package/c", "class/g"), 13, 14)
-  val moduleH = Single(Seq("group/a", "package/d", "class/h"), 15, 16)
-  val moduleI = Single(Seq("group/b", "package/e", "class/i"), 17, 18)
-  val cycleAB = Cycle(Set(moduleA, moduleB), 19, 20)
-  val cycleCD = Cycle(Set(moduleA, moduleB), 21, 22)
-  val cycleFG = Cycle(Set(moduleA, moduleB), 23, 24)
+  val moduleRoot = Single(Seq())
+  val moduleA = Single(Seq("group/a"))
+  val moduleB = Single(Seq("group/b"))
+  val moduleC = Single(Seq("group/a", "package/c"))
+  val moduleD = Single(Seq("group/a", "package/d"))
+  val moduleE = Single(Seq("group/b", "package/e"))
+  val moduleF = Single(Seq("group/a", "package/c", "class/f"))
+  val moduleG = Single(Seq("group/a", "package/c", "class/g"))
+  val moduleH = Single(Seq("group/a", "package/d", "class/h"))
+  val moduleI = Single(Seq("group/b", "package/e", "class/i"))
+  val cycleAB = Cycle(Set(moduleA, moduleB))
+  val cycleCD = Cycle(Set(moduleA, moduleB))
+  val cycleFG = Cycle(Set(moduleA, moduleB))
   private val map: Map[Module, ModuleInfo] = Map(
     moduleRoot -> ModuleInfo(module = moduleRoot, children = ParSet(moduleA, moduleB, cycleAB), parts = ParSet()),
     moduleA -> ModuleInfo(module = moduleA, children = ParSet(moduleC, moduleD, cycleCD), parts = ParSet()),

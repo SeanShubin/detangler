@@ -2,13 +2,9 @@ package com.seanshubin.detangler.model
 
 import scala.annotation.tailrec
 
-sealed trait Module {
-  def depth: Int
+sealed trait Module
 
-  def total: Int
-}
-
-case class Single(path: Seq[String], depth: Int, total: Int) extends Module with Ordered[Single] {
+case class Single(path: Seq[String]) extends Module with Ordered[Single] {
   override def toString: String = s"Single(${path.mkString("-")})"
 
   override def compare(that: Single): Int = compare(this.path.toList, that.path.toList)
@@ -25,7 +21,7 @@ case class Single(path: Seq[String], depth: Int, total: Int) extends Module with
 
 }
 
-case class Cycle(parts: Set[Single], depth: Int, total: Int) extends Module {
+case class Cycle(parts: Set[Single]) extends Module {
   override def toString: String = {
     s"Cycle(${parts.toSeq.sorted.mkString("--")})"
   }
