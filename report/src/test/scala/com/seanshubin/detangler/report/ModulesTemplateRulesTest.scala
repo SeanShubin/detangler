@@ -49,7 +49,7 @@ class ModulesTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     //when
-    val actual = modulesTemplateRules.generate(modulesTemplate, SampleData.moduleRoot).text
+    val actual = modulesTemplateRules.generate(modulesTemplate, SampleDataWithCycles.moduleRoot).text
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))

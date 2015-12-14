@@ -2,8 +2,6 @@ package com.seanshubin.detangler.report
 
 import com.seanshubin.detangler.model.{Cycle, Detangled, Module, Single}
 
-import scala.collection.parallel.immutable.ParSet
-
 object SampleDataWithCycles {
   val moduleRoot = Single(Seq())
   val moduleA = Single(Seq("group/a"))
@@ -19,26 +17,74 @@ object SampleDataWithCycles {
   val cycleCD = Cycle(Set(moduleA, moduleB))
   val cycleFG = Cycle(Set(moduleA, moduleB))
   private val map: Map[Module, ModuleInfo] = Map(
-    moduleRoot -> ModuleInfo(module = moduleRoot, children = ParSet(moduleA, moduleB, cycleAB), parts = ParSet()),
-    moduleA -> ModuleInfo(module = moduleA, children = ParSet(moduleC, moduleD, cycleCD), parts = ParSet()),
-    moduleB -> ModuleInfo(module = moduleB, children = ParSet(moduleE), parts = ParSet()),
-    moduleC -> ModuleInfo(module = moduleC, children = ParSet(moduleF, moduleG, cycleFG), parts = ParSet()),
-    moduleD -> ModuleInfo(module = moduleD, children = ParSet(moduleH), parts = ParSet()),
-    moduleE -> ModuleInfo(module = moduleE, children = ParSet(moduleI), parts = ParSet()),
-    moduleF -> ModuleInfo(module = moduleF, children = ParSet(), parts = ParSet()),
-    moduleG -> ModuleInfo(module = moduleG, children = ParSet(), parts = ParSet()),
-    moduleH -> ModuleInfo(module = moduleH, children = ParSet(), parts = ParSet()),
-    moduleI -> ModuleInfo(module = moduleI, children = ParSet(), parts = ParSet()),
-    cycleAB -> ModuleInfo(module = cycleAB, children = ParSet(), parts = ParSet(moduleA, moduleB)),
-    cycleCD -> ModuleInfo(module = cycleCD, children = ParSet(), parts = ParSet(moduleC, moduleD)),
-    cycleFG -> ModuleInfo(module = cycleFG, children = ParSet(), parts = ParSet(moduleF, moduleG))
+    moduleRoot -> ModuleInfo(
+      id = moduleRoot,
+      children = Set(moduleA, moduleB, cycleAB)
+    ),
+    moduleA -> ModuleInfo(
+      id = moduleA,
+      children = Set(moduleC, moduleD, cycleCD),
+      dependsOn = Set(moduleB),
+      dependedOnBy = Set(moduleB),
+      depth = 1,
+      complexity = 1
+    ),
+    moduleB -> ModuleInfo(
+      id = moduleB,
+      children = Set(moduleE),
+      dependsOn = Set(moduleA),
+      dependedOnBy = Set(moduleA)
+    ),
+    moduleC -> ModuleInfo(
+      id = moduleC,
+      children = Set(moduleF, moduleG, cycleFG),
+      dependsOn = Set(moduleD),
+      dependedOnBy = Set(moduleD),
+      depth = 1,
+      complexity = 1
+    ),
+    moduleD -> ModuleInfo(
+      id = moduleD,
+      children = Set(moduleH),
+      dependsOn = Set(moduleC),
+      dependedOnBy = Set(moduleC)
+    ),
+    moduleE -> ModuleInfo(
+      id = moduleE,
+      children = Set(moduleI)
+    ),
+    moduleF -> ModuleInfo(
+      id = moduleF,
+      dependsOn = Set(moduleG),
+      dependedOnBy = Set(moduleG)
+    ),
+    moduleG -> ModuleInfo(
+      id = moduleG,
+      dependsOn = Set(moduleF),
+      dependedOnBy = Set(moduleF)
+    ),
+    moduleH -> ModuleInfo(
+      id = moduleH
+    ),
+    moduleI -> ModuleInfo(
+      id = moduleI
+    ),
+    cycleAB -> ModuleInfo(
+      id = cycleAB,
+      parts = Set(moduleA, moduleB)
+    ),
+    cycleCD -> ModuleInfo(
+      id = cycleCD,
+      parts = Set(moduleC, moduleD)
+    ),
+    cycleFG -> ModuleInfo(
+      id = cycleFG,
+      parts = Set(moduleF, moduleG)
+    )
   )
   val detangled = new Detangled {
     override def root(): Single = moduleRoot
 
-    override def children(single: Single): ParSet[Module] = map(single).children
+    override def children(single: Single): Set[Module] = map(single).children
   }
-
-  private case class ModuleInfo(module: Module, children: ParSet[Module], parts: ParSet[Single])
-
 }
