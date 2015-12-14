@@ -18,12 +18,12 @@ class ReporterTest extends FunSuite {
     )
     val classLoader = new ClassLoaderStub(resourceMap, charset)
     val pageTextMap = Map(
-      SampleData.moduleRoot -> "index text",
-      SampleData.moduleA -> "a text",
-      SampleData.moduleB -> "b text",
-      SampleData.moduleC -> "c text",
-      SampleData.moduleD -> "d text",
-      SampleData.moduleE -> "e text"
+      SampleData.moduleRoot -> "<p>index text</p>",
+      SampleData.moduleA -> "<p>a text</p>",
+      SampleData.moduleB -> "<p>b text</p>",
+      SampleData.moduleC -> "<p>c text</p>",
+      SampleData.moduleD -> "<p>d text</p>",
+      SampleData.moduleE -> "<p>e text</p>"
     )
     val pageTemplateRules = new PageTemplateRulesStub(pageTextMap, charset)
     val reporter: Runnable = new Reporter(
@@ -48,12 +48,12 @@ class ReporterTest extends FunSuite {
       "style.css"
     ))
     assert(setDifference.isSame, setDifference.message)
-    assert(filesStub.stringContentsOf("index.html") === "index text")
+    assert(filesStub.stringContentsOf("index.html") === "<p>index text</p>")
     assert(filesStub.stringContentsOf("style.css") === "style text")
-    assert(filesStub.stringContentsOf("group-a.html") === "a text")
-    assert(filesStub.stringContentsOf("group-b.html") === "b text")
-    assert(filesStub.stringContentsOf("group-a--package-c.html") === "c text")
-    assert(filesStub.stringContentsOf("group-a--package-d.html") === "d text")
-    assert(filesStub.stringContentsOf("group-b--package-e.html") === "e text")
+    assert(filesStub.stringContentsOf("group-a.html") === "<p>a text</p>")
+    assert(filesStub.stringContentsOf("group-b.html") === "<p>b text</p>")
+    assert(filesStub.stringContentsOf("group-a--package-c.html") === "<p>c text</p>")
+    assert(filesStub.stringContentsOf("group-a--package-d.html") === "<p>d text</p>")
+    assert(filesStub.stringContentsOf("group-b--package-e.html") === "<p>e text</p>")
   }
 }

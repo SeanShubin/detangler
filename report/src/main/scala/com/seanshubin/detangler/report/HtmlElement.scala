@@ -35,7 +35,7 @@ class HtmlElement(originalElement: Element) {
     append(cssQuery, Seq(child))
   }
 
-  def replace(cssQuery:String, content:HtmlElement):HtmlElement = {
+  def replace(cssQuery: String, content: HtmlElement): HtmlElement = {
     val element = clonedElement
     select(cssQuery, element).replaceWith(content.clonedElement)
     new HtmlElement(element)

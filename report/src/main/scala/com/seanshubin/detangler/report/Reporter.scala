@@ -29,7 +29,7 @@ class Reporter(detangled: Detangled,
       case single: Single =>
         val children = detangled.children(single)
         if (children.nonEmpty) {
-          val content = pageTemplateRules.generate(pageTemplate, single)
+          val content = pageTemplateRules.generate(pageTemplate, single).text
           val fileName = fileNameFor(single)
           val file = directory.resolve(fileName)
           filesContract.write(file, content.getBytes(charset))
