@@ -1,6 +1,6 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.model.{Detangled, Module, ModuleOrdering, Single}
+import com.seanshubin.detangler.model._
 
 class ModulesTemplateRulesImpl(singleTemplateRules: SingleTemplateRules,
                                cycleTemplateRules: CycleTemplateRules,
@@ -10,12 +10,24 @@ class ModulesTemplateRulesImpl(singleTemplateRules: SingleTemplateRules,
     val singleTemplate = modulesTemplate.select(".single")
     val cycleTemplate = modulesTemplate.select(".cycle")
     val children = detangled.children(single)
-    val moduleElements = children.toSeq.seq.sortWith(ModuleOrdering.lessThan).map(composeModule)
+    def composeModuleFunction(module: Module): HtmlElement = composeModule(module, singleTemplate, cycleTemplate)
+    val moduleElements = children.toSeq.seq.sortWith(ModuleOrdering.lessThan).map(composeModuleFunction)
     val result = baseTemplate.append(".module-append-here", moduleElements)
     result
   }
 
-  private def composeModule(module: Module): HtmlElement = {
-    ???
+  private def composeModule(module: Module, singleTemplate: HtmlElement, cycleTemplate: HtmlElement): HtmlElement = {
+    module match {
+      case cycle: Cycle => composeCycle(cycleTemplate, cycle)
+      case single: Single => composeSingle(singleTemplate, single)
+    }
+  }
+
+  private def composeCycle(cycleTemplate: HtmlElement, cycle: Cycle): HtmlElement = {
+    cycleTemplateRules.generate(cycleTemplate, cycle)
+  }
+
+  private def composeSingle(singleTemplate: HtmlElement, single: Single): HtmlElement = {
+    singleTemplateRules.generate(singleTemplate, single)
   }
 }

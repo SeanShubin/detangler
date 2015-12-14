@@ -27,6 +27,6 @@ case class Single(path: Seq[String], depth: Int, total: Int) extends Module with
 
 case class Cycle(parts: Set[Single], depth: Int, total: Int) extends Module {
   override def toString: String = {
-    parts.toSeq.sorted.mkString("--")
+    s"Cycle(${parts.toSeq.sorted.mkString("--")})"
   }
 }
