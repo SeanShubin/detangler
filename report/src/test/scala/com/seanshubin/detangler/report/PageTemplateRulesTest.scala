@@ -32,7 +32,7 @@ class PageTemplateRulesTest extends FunSuite {
         |</html>
         | """.stripMargin
     //when
-    val actual = pageTemplateRules.generate(pageTemplate, SampleData.moduleRoot)
+    val actual = pageTemplateRules.generate(pageTemplate, SampleData.theRoot)
     //then
     val linesCompareResult = LinesDifference.compare(actual.text, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n", "\n", "\n"))

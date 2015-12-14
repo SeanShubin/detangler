@@ -3,67 +3,71 @@ package com.seanshubin.detangler.report
 import com.seanshubin.detangler.model.{Detangled, Module, Single}
 
 object SampleData {
-  val moduleRoot = Single(Seq())
-  val moduleA = Single(Seq("group/a"))
-  val moduleB = Single(Seq("group/b"))
-  val moduleC = Single(Seq("group/a", "package/c"))
-  val moduleD = Single(Seq("group/a", "package/d"))
-  val moduleE = Single(Seq("group/b", "package/e"))
-  val moduleF = Single(Seq("group/a", "package/c", "class/f"))
-  val moduleG = Single(Seq("group/a", "package/c", "class/g"))
-  val moduleH = Single(Seq("group/a", "package/d", "class/h"))
-  val moduleI = Single(Seq("group/b", "package/e", "class/i"))
+  val theRoot = Single(Seq())
+  val groupA = Single(Seq("group/a"))
+  val groupB = Single(Seq("group/b"))
+  val packageC = Single(Seq("group/a", "package/c"))
+  val packageD = Single(Seq("group/a", "package/d"))
+  val packageE = Single(Seq("group/b", "package/e"))
+  val classF = Single(Seq("group/a", "package/c", "class/f"))
+  val classG = Single(Seq("group/a", "package/c", "class/g"))
+  val classH = Single(Seq("group/a", "package/d", "class/h"))
+  val classI = Single(Seq("group/b", "package/e", "class/i"))
   private val map: Map[Module, ModuleInfo] = Map(
-    moduleRoot -> ModuleInfo(
-      id = moduleRoot,
-      children = Set(moduleA, moduleB)
+    theRoot -> ModuleInfo(
+      id = theRoot,
+      children = Set(groupA, groupB)
     ),
-    moduleA -> ModuleInfo(
-      id = moduleA,
-      children = Set(moduleC, moduleD),
-      dependsOn = Set(moduleB),
+    groupA -> ModuleInfo(
+      id = groupA,
+      children = Set(packageC, packageD),
+      dependsOn = Set(groupB),
       depth = 1,
       complexity = 1
     ),
-    moduleB -> ModuleInfo(
-      id = moduleB,
-      children = Set(moduleE),
-      dependedOnBy = Set(moduleA)
+    groupB -> ModuleInfo(
+      id = groupB,
+      children = Set(packageE),
+      dependedOnBy = Set(groupA)
     ),
-    moduleC -> ModuleInfo(
-      id = moduleC,
-      children = Set(moduleF, moduleG),
-      dependsOn = Set(moduleD),
+    packageC -> ModuleInfo(
+      id = packageC,
+      children = Set(classF, classG),
+      dependsOn = Set(packageD),
       depth = 1,
       complexity = 1
     ),
-    moduleD -> ModuleInfo(
-      id = moduleD,
-      children = Set(moduleH),
-      dependedOnBy = Set(moduleC)
+    packageD -> ModuleInfo(
+      id = packageD,
+      children = Set(classH),
+      dependedOnBy = Set(packageC)
     ),
-    moduleE -> ModuleInfo(
-      id = moduleE,
-      children = Set(moduleI)
+    packageE -> ModuleInfo(
+      id = packageE,
+      children = Set(classI)
     ),
-    moduleF -> ModuleInfo(
-      id = moduleF,
-      dependsOn = Set(moduleG)
+    classF -> ModuleInfo(
+      id = classF,
+      dependsOn = Set(classG)
     ),
-    moduleG -> ModuleInfo(
-      id = moduleG,
-      dependedOnBy = Set(moduleF)
+    classG -> ModuleInfo(
+      id = classG,
+      dependedOnBy = Set(classF)
     ),
-    moduleH -> ModuleInfo(
-      id = moduleH
+    classH -> ModuleInfo(
+      id = classH
     ),
-    moduleI -> ModuleInfo(
-      id = moduleI
+    classI -> ModuleInfo(
+      id = classI
     )
   )
   val detangled = new Detangled {
-    override def root(): Single = moduleRoot
+    override def root(): Single = theRoot
 
     override def children(single: Single): Set[Module] = map(single).children
+
+    override def depth(module: Module): Int = map(module).depth
+
+    override def complexity(module: Module): Int = map(module).complexity
   }
 }

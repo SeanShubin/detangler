@@ -4,7 +4,7 @@ import com.seanshubin.detangler.model.Single
 import org.scalatest.FunSuite
 
 class SingleTemplateRulesTest extends FunSuite {
-  test("modules template without cycles") {
+  test("single") {
     //given
     val singleSummaryTemplateRules = new SingleSummaryTemplateRules {
       override def generate(singleTemplate: HtmlElement, single: Single): HtmlElement =
@@ -23,7 +23,7 @@ class SingleTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     val singleTemplate = HtmlElement.fragmentFromString(singleTemplateText)
-    val singleTemplateRules = new SingleTemplateRulesImpl(singleSummaryTemplateRules, singleDetailTemplateRules, SampleData.moduleRoot)
+    val singleTemplateRules = new SingleTemplateRulesImpl(singleSummaryTemplateRules, singleDetailTemplateRules, SampleData.theRoot)
     val expected =
       """<div class="single">
         |  <p>summary Single(group/a)</p>
@@ -31,7 +31,7 @@ class SingleTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     //when
-    val actual = singleTemplateRules.generate(singleTemplate, SampleData.moduleA).text
+    val actual = singleTemplateRules.generate(singleTemplate, SampleData.groupA).text
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))

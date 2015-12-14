@@ -106,6 +106,27 @@ class HtmlElementTest extends FunSuite {
     assertLinesSame(replaced.text, expected)
   }
 
+  test("set text") {
+    val starting = HtmlElement.fragmentFromString( """<p class="replace-me">replace-me</p>""")
+    val replaced = starting.text(".replace-me", "replaced")
+    val expected = """<p class="replace-me">replaced</p>""".stripMargin
+    assertLinesSame(replaced.text, expected)
+  }
+
+  test("set attribute") {
+    val starting = HtmlElement.fragmentFromString( """<p class="set-attribute">some text</p>""")
+    val replaced = starting.attr(".set-attribute", "id", "foo")
+    val expected = """<p class="set-attribute" id="foo">some text</p>""".stripMargin
+    assertLinesSame(replaced.text, expected)
+  }
+
+  test("set anchor") {
+    val starting = HtmlElement.fragmentFromString( """<a class="set-anchor" href="href">link</p>""")
+    val replaced = starting.anchor(".set-anchor", "replaced-anchor", "replaced-link")
+    val expected = """<a class="set-anchor" href="replaced-anchor">replaced-link</a>""".stripMargin
+    assertLinesSame(replaced.text, expected)
+  }
+
   def assertLinesSame(left: String, right: String): Unit = {
     val compare = LinesDifference.compare(left, right)
     assert(compare.isSame, compare.detailLines.mkString("\n", "\n", "\n"))

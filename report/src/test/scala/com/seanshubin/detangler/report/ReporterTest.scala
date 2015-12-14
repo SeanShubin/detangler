@@ -18,12 +18,12 @@ class ReporterTest extends FunSuite {
     )
     val classLoader = new ClassLoaderStub(resourceMap, charset)
     val pageTextMap = Map(
-      SampleData.moduleRoot -> "<p>index text</p>",
-      SampleData.moduleA -> "<p>a text</p>",
-      SampleData.moduleB -> "<p>b text</p>",
-      SampleData.moduleC -> "<p>c text</p>",
-      SampleData.moduleD -> "<p>d text</p>",
-      SampleData.moduleE -> "<p>e text</p>"
+      SampleData.theRoot -> "<p>index text</p>",
+      SampleData.groupA -> "<p>a text</p>",
+      SampleData.groupB -> "<p>b text</p>",
+      SampleData.packageC -> "<p>c text</p>",
+      SampleData.packageD -> "<p>d text</p>",
+      SampleData.packageE -> "<p>e text</p>"
     )
     val pageTemplateRules = new PageTemplateRulesStub(pageTextMap, charset)
     val reporter: Runnable = new Reporter(

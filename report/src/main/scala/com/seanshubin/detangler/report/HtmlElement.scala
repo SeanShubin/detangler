@@ -41,6 +41,28 @@ class HtmlElement(originalElement: Element) {
     new HtmlElement(element)
   }
 
+  def text(cssQuery: String, newText: String): HtmlElement = {
+    val element = clonedElement
+    val target = select(cssQuery, element)
+    target.text(newText)
+    new HtmlElement(element)
+  }
+
+  def attr(cssQuery: String, name: String, value: String): HtmlElement = {
+    val element = clonedElement
+    val target = select(cssQuery, element)
+    target.attr(name, value)
+    new HtmlElement(element)
+  }
+
+  def anchor(cssQuery: String, href: String, text: String): HtmlElement = {
+    val element = clonedElement
+    val target = select(cssQuery, element)
+    target.attr("href", href)
+    target.text(text)
+    new HtmlElement(element)
+  }
+
   def clonedElement: Element = originalElement.clone()
 
   private def select(cssQuery: String, from: Element): Element = {
