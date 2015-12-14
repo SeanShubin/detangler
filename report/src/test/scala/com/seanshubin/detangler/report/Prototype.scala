@@ -11,13 +11,13 @@ object Prototype extends App {
   val filesContract: FilesContract = FilesDelegate
   val charset: Charset = StandardCharsets.UTF_8
   val classLoader: ClassLoaderContract = new ClassLoaderDelegate(getClass.getClassLoader)
-  val singleSummaryTemplateRules = new SingleSummaryTemplateRulesImpl(detangled)
-  val singleDetailTemplateRules = new SingleDetailTemplateRulesImpl()
-  val singleTemplateRules = new SingleTemplateRulesImpl(singleSummaryTemplateRules, singleDetailTemplateRules)
-  val cycleTemplateRules = new CycleTemplateRulesImpl()
-  val modulesTemplateRules = new ModulesTemplateRulesImpl(singleTemplateRules, cycleTemplateRules, detangled)
-  val reasonsTemplateRules = new ReasonsTemplateRulesImpl()
+  val singleSummaryTemplateRules: SingleSummaryTemplateRules = new SingleSummaryTemplateRulesImpl(detangled)
+  val singleDetailTemplateRules: SingleDetailTemplateRules = new SingleDetailTemplateRulesImpl()
+  val singleTemplateRules: SingleTemplateRules = new SingleTemplateRulesImpl(singleSummaryTemplateRules, singleDetailTemplateRules)
+  val cycleTemplateRules: CycleTemplateRules = new CycleTemplateRulesImpl()
+  val modulesTemplateRules: ModulesTemplateRules = new ModulesTemplateRulesImpl(singleTemplateRules, cycleTemplateRules, detangled)
+  val reasonsTemplateRules: ReasonsTemplateRules = new ReasonsTemplateRulesImpl()
   val pageTemplateRules: PageTemplateRules = new PageTemplateRulesImpl(modulesTemplateRules, reasonsTemplateRules)
-  val reporter = new Reporter(detangled, directory, filesContract, charset, classLoader, pageTemplateRules)
+  val reporter: Runnable = new Reporter(detangled, directory, filesContract, charset, classLoader, pageTemplateRules)
   reporter.run()
 }
