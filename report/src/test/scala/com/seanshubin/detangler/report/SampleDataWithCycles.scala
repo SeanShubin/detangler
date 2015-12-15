@@ -90,5 +90,9 @@ object SampleDataWithCycles {
     override def depth(module: Module): Int = map(module).depth
 
     override def complexity(module: Module): Int = map(module).complexity
+
+    override def dependsOn(single: Single): Set[Single] = map(single).dependsOn
+
+    override def dependedOnBy(single: Single): Set[Single] = map(single).dependedOnBy
   }
 }

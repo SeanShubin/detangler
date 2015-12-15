@@ -6,10 +6,15 @@ class SingleTemplateRulesImpl(singleSummaryTemplateRules: SingleSummaryTemplateR
                               singleDetailTemplateRules: SingleDetailTemplateRules) extends SingleTemplateRules {
   override def generate(singleTemplate: HtmlElement, single: Single): HtmlElement = {
     val summaryTemplate = singleTemplate.select(".single-summary")
-    val detailTemplate = singleTemplate.select(".single-detail")
+    val dependsOnTemplate = singleTemplate.select(".single-depends-on")
+    val dependedOnByTemplate = singleTemplate.select(".single-depended-on-by")
     val summary = singleSummaryTemplateRules.generate(summaryTemplate, single)
-    val detail = singleDetailTemplateRules.generate(detailTemplate, single)
-    val result = singleTemplate.replace(".single-summary", summary).replace(".single-detail", detail)
+    val dependsOn = singleDetailTemplateRules.generate(dependsOnTemplate, single, DependencyDirection.TowardDependsOn)
+    val dependedOnBy = singleDetailTemplateRules.generate(dependedOnByTemplate, single, DependencyDirection.TowardDependedOnBy)
+    val result = singleTemplate.
+      replace(".single-summary", summary).
+      replace(".single-depends-on", dependsOn).
+      replace(".single-depended-on-by", dependedOnBy)
     result
   }
 }

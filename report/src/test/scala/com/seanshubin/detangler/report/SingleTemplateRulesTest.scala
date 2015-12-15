@@ -11,15 +11,14 @@ class SingleTemplateRulesTest extends FunSuite {
         HtmlElement.fragmentFromString(s"<p>summary ${single.toString}</p>")
     }
     val singleDetailTemplateRules = new SingleDetailTemplateRules {
-      override def generate(singleTemplate: HtmlElement, single: Single): HtmlElement =
-        HtmlElement.fragmentFromString(s"<p>detail ${single.toString}</p>")
+      override def generate(singleTemplate: HtmlElement, single: Single, direction: DependencyDirection): HtmlElement =
+        HtmlElement.fragmentFromString(s"<p>${direction.caption} ${single.toString}</p>")
     }
     val singleTemplateText =
       """<div class="single">
-        |  <div class="summary">
-        |  </div>
-        |  <div class="detail">
-        |  </div>
+        |  <div class="single-summary"></div>
+        |  <div class="single-depends-on"></div>
+        |  <div class="single-depended-on-by"></div>
         |</div>
       """.stripMargin
     val singleTemplate = HtmlElement.fragmentFromString(singleTemplateText)
@@ -27,7 +26,8 @@ class SingleTemplateRulesTest extends FunSuite {
     val expected =
       """<div class="single">
         |  <p>summary Single(group/a)</p>
-        |  <p>detail Single(group/a)</p>
+        |  <p>depends on Single(group/a)</p>
+        |  <p>depended on by Single(group/a)</p>
         |</div>
       """.stripMargin
     //when
