@@ -34,7 +34,7 @@ class PageTemplateRulesTest extends FunSuite {
     //when
     val actual = pageTemplateRules.generate(pageTemplate, SampleData.theRoot)
     //then
-    val linesCompareResult = LinesDifference.compare(actual.text, expected)
+    val linesCompareResult = LinesDifference.compare(actual.toString, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n", "\n", "\n"))
   }
 }

@@ -2,51 +2,29 @@ package com.seanshubin.detangler.report
 
 import com.seanshubin.detangler.model.{Detangled, Single}
 
-class DependencyTemplateRulesImpl(detangled:Detangled, dependencyDirection:DependencyDirection) extends DependencyTemplateRules {
+class DependencyTemplateRulesImpl(detangled: Detangled, dependencyDirection: DependencyDirection) extends DependencyTemplateRules {
   override def generate(dependencyTemplate: HtmlElement,
-                        context:Single,
+                        context: Single,
                         single: Single): HtmlElement = {
+    val baseTemplate = dependencyTemplate.remove(".dependency-row")
     val dependencyRowTemplate = dependencyTemplate.select(".dependency-row")
     val childModules = dependencyDirection.dependenciesFor(detangled, context, single)
-    if (childModules.isEmpty) {
-      HtmlFragment.Empty
-    } else {
-      val rows = childModules.map(generateRow)
-      val result = wrapperTemplate.
-        text(".caption", s"${reasonDirection.caption} (${childModules.size})").
-        appendAll(SelectorModuleDependencies, rows)
-      result
-    }
+    def generateRowFunction(x: Single) = generateRow(dependencyRowTemplate, context, single, x)
+    val rows = childModules.map(generateRowFunction)
+    val result = baseTemplate.
+      text(".caption", s"${dependencyDirection.caption} (${childModules.size})").
+      append(".append-dependency-row", rows)
+    result
+  }
 
+  private def generateRow(dependencyRowTemplate: HtmlElement, context: Single, parent: Single, child: Single): HtmlElement = {
+    val reasonName = dependencyDirection.name(parent, child)
+    val reasonLink = dependencyDirection.link(parent, child)
 
-    """            <ul class="single-detail">
-      |                <li>
-      |                    <table>
-      |                        <thead>
-      |                        <tr>
-      |                            <th class="caption" colspan="4">depends on (number)</th>
-      |                        </tr>
-      |                        <tr>
-      |                            <th>name</th>
-      |                            <th>depth</th>
-      |                            <th>complexity</th>
-      |                            <th>reason</th>
-      |                        </tr>
-      |                        </thead>
-      |                        <tbody>
-      |                        <tr>
-      |                            <td><a class="name" href="">other/group</a></td>
-      |                            <td class="depth">depth</td>
-      |                            <td class="complexity">complexity</td>
-      |                            <td><a class="reason" href="">reason</a></td>
-      |                        </tr>
-      |                        </tbody>
-      |                    </table>
-      |                </li>
-      |            </ul>
-      |
-      |
-    """.stripMargin
-    HtmlElement.fragmentFromString("<p>SingleDetailTemplateRulesImpl not implemented</p>")
+    dependencyRowTemplate.
+      anchor(".name", HtmlUtil.htmlLink(context, child), HtmlUtil.htmlName(child)).
+      text(".depth", detangled.depth(child).toString).
+      text(".complexity", detangled.complexity(child).toString).
+      anchor(".reason", reasonLink, reasonName)
   }
 }

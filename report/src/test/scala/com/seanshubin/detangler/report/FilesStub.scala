@@ -7,7 +7,7 @@ import java.nio.file.{OpenOption, Path}
 
 class FilesStub(charset: Charset) extends FilesNotImplemented {
   var writeResults: Map[String, ByteArrayOutputStream] = Map()
-  var directoriesCreated:Seq[Path] = Seq()
+  var directoriesCreated: Seq[Path] = Seq()
 
   def stringContentsOf(fileName: String): String = {
     val outputStream = writeResults(fileName)

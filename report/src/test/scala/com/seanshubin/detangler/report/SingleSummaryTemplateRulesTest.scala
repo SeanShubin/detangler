@@ -24,7 +24,7 @@ class SingleSummaryTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     //when
-    val actual = singleSummaryTemplateRules.generate(singleSummaryTemplate, SampleData.groupA).text
+    val actual = singleSummaryTemplateRules.generate(singleSummaryTemplate, SampleData.groupA).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n", "\n", "\n"))

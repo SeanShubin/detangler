@@ -38,4 +38,16 @@ class HtmlUtilTest extends FunSuite {
     assert(HtmlUtil.htmlLink(SampleData.packageD, SampleData.packageC) === "group-a.html#package-c")
     assert(HtmlUtil.htmlLink(SampleData.packageD, SampleData.classF) === "group-a--package-c.html#class-f")
   }
+
+  test("reason name") {
+    assert(HtmlUtil.reasonName(SampleData.groupA, SampleData.groupB) === "reason")
+    assert(HtmlUtil.reasonName(SampleData.packageC, SampleData.packageD) === "reason")
+    assert(HtmlUtil.reasonName(SampleData.classF, SampleData.classG) === "reason")
+  }
+
+  test("reason link") {
+    assert(HtmlUtil.reasonLink(SampleData.groupA, SampleData.groupB) === "#group-a---group-b")
+    assert(HtmlUtil.reasonLink(SampleData.packageC, SampleData.packageD) === "#package-c---package-d")
+    assert(HtmlUtil.reasonLink(SampleData.classF, SampleData.classG) === "#class-f---class-g")
+  }
 }

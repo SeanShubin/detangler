@@ -10,16 +10,16 @@ class ModulesTemplateRulesImpl(singleTemplateRules: SingleTemplateRules,
     val singleTemplate = modulesTemplate.select(".single")
     val cycleTemplate = modulesTemplate.select(".cycle")
     val children = detangled.children(single)
-    def composeModuleFunction(module: Module): HtmlElement = composeModule(module, singleTemplate, cycleTemplate)
+    def composeModuleFunction(module: Module): HtmlElement = composeModule(single, module, singleTemplate, cycleTemplate)
     val moduleElements = children.toSeq.seq.sortWith(ModuleOrdering.lessThan).map(composeModuleFunction)
     val result = baseTemplate.append(".append-module", moduleElements)
     result
   }
 
-  private def composeModule(module: Module, singleTemplate: HtmlElement, cycleTemplate: HtmlElement): HtmlElement = {
+  private def composeModule(context: Single, module: Module, singleTemplate: HtmlElement, cycleTemplate: HtmlElement): HtmlElement = {
     module match {
       case cycle: Cycle => composeCycle(cycleTemplate, cycle)
-      case single: Single => composeSingle(singleTemplate, single)
+      case single: Single => composeSingle(singleTemplate, context, single)
     }
   }
 
@@ -27,7 +27,7 @@ class ModulesTemplateRulesImpl(singleTemplateRules: SingleTemplateRules,
     cycleTemplateRules.generate(cycleTemplate, cycle)
   }
 
-  private def composeSingle(singleTemplate: HtmlElement, single: Single): HtmlElement = {
-    singleTemplateRules.generate(singleTemplate, single)
+  private def composeSingle(singleTemplate: HtmlElement, context: Single, single: Single): HtmlElement = {
+    singleTemplateRules.generate(singleTemplate, context, single)
   }
 }

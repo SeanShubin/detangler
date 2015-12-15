@@ -27,6 +27,16 @@ object HtmlUtil {
     }
   }
 
+  def reasonId(from: Single, to: Single): String = {
+    htmlId(from) + "---" + HtmlUtil.htmlId(to)
+  }
+
+  def reasonLink(from: Single, to: Single): String = {
+    "#" + reasonId(from, to)
+  }
+
+  def reasonName(from: Single, to: Single): String = "reason"
+
   private val FileSystemCharacters = "/\\?%*:|\"<>. "
   private val CssSelectorCharacters = "~!@$%^&*()+=,./';:\"?><[]\\{}|`#"
 

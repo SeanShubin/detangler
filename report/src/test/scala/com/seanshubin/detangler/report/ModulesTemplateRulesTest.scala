@@ -5,7 +5,7 @@ import org.scalatest.FunSuite
 
 class ModulesTemplateRulesTest extends FunSuite {
   val singleTemplateRules = new SingleTemplateRules {
-    override def generate(singleTemplate: HtmlElement, single: Single): HtmlElement =
+    override def generate(singleTemplate: HtmlElement, context: Single, single: Single): HtmlElement =
       HtmlElement.fragmentFromString(s"<p>${single.toString}</p>")
   }
   val cycleTemplateRules = new CycleTemplateRules {
@@ -32,7 +32,7 @@ class ModulesTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     //when
-    val actual = modulesTemplateRules.generate(modulesTemplate, SampleData.theRoot).text
+    val actual = modulesTemplateRules.generate(modulesTemplate, SampleData.theRoot).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))
@@ -49,7 +49,7 @@ class ModulesTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     //when
-    val actual = modulesTemplateRules.generate(modulesTemplate, SampleDataWithCycles.theRoot).text
+    val actual = modulesTemplateRules.generate(modulesTemplate, SampleDataWithCycles.theRoot).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))

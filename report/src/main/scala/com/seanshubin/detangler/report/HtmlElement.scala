@@ -4,11 +4,12 @@ import java.io.InputStream
 import java.nio.charset.Charset
 
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
+import org.jsoup.nodes.{Document, Element}
 
 
 class HtmlElement(originalElement: Element) {
-  def text = originalElement.toString
+
+  override def toString: String = originalElement.toString
 
   def remove(cssQuery: String): HtmlElement = {
     val element = clonedElement
@@ -20,7 +21,7 @@ class HtmlElement(originalElement: Element) {
     new HtmlElement(select(cssQuery, originalElement))
   }
 
-  def append(cssQuery: String, children: Seq[HtmlElement]): HtmlElement = {
+  def append(cssQuery: String, children: Iterable[HtmlElement]): HtmlElement = {
     val element = clonedElement
     val attachmentPoint = select(cssQuery, element)
     for {
@@ -41,11 +42,19 @@ class HtmlElement(originalElement: Element) {
     new HtmlElement(element)
   }
 
+  def text(): String = {
+    originalElement.text()
+  }
+
   def text(cssQuery: String, newText: String): HtmlElement = {
     val element = clonedElement
     val target = select(cssQuery, element)
     target.text(newText)
     new HtmlElement(element)
+  }
+
+  def attr(name: String): String = {
+    originalElement.attr(name)
   }
 
   def attr(cssQuery: String, name: String, value: String): HtmlElement = {
@@ -77,22 +86,27 @@ object HtmlElement {
   def pageFromInputStream(inputStream: InputStream, charset: Charset): HtmlElement = {
     val baseUri = ""
     val document = Jsoup.parse(inputStream, charset.name(), baseUri)
-    document.outputSettings().indentAmount(2)
+    documentSettings(document)
     new HtmlElement(document)
   }
 
   def pageFromString(text: String): HtmlElement = {
     val document = Jsoup.parse(text)
-    document.outputSettings().indentAmount(2)
+    documentSettings(document)
     new HtmlElement(document)
   }
 
   def fragmentFromString(text: String): HtmlElement = {
     val document = Jsoup.parse(text)
-    document.outputSettings().indentAmount(2)
+    documentSettings(document)
     val elements = document.body().children()
     val size = elements.size()
     if (size != 1) throw new RuntimeException(s"$text\nExpected exactly 1 element in body got $size")
     new HtmlElement(elements.get(0))
+  }
+
+  private def documentSettings(document: Document): Unit = {
+    document.outputSettings().indentAmount(2)
+    document.outputSettings().outline(true)
   }
 }

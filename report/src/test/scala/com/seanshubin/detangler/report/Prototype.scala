@@ -12,8 +12,9 @@ object Prototype extends App {
   val charset: Charset = StandardCharsets.UTF_8
   val classLoader: ClassLoaderContract = new ClassLoaderDelegate(getClass.getClassLoader)
   val singleSummaryTemplateRules: SingleSummaryTemplateRules = new SingleSummaryTemplateRulesImpl(detangled)
-  val singleDetailTemplateRules: DependencyTemplateRules = new DependencyTemplateRulesImpl()
-  val singleTemplateRules: SingleTemplateRules = new SingleTemplateRulesImpl(singleSummaryTemplateRules, singleDetailTemplateRules)
+  val dependsOnTemplateRules: DependencyTemplateRules = new DependencyTemplateRulesImpl(detangled, DependencyDirection.TowardDependsOn)
+  val dependedOnByTemplateRules: DependencyTemplateRules = new DependencyTemplateRulesImpl(detangled, DependencyDirection.TowardDependedOnBy)
+  val singleTemplateRules: SingleTemplateRules = new SingleTemplateRulesImpl(singleSummaryTemplateRules, dependsOnTemplateRules, dependedOnByTemplateRules)
   val cycleTemplateRules: CycleTemplateRules = new CycleTemplateRulesImpl()
   val modulesTemplateRules: ModulesTemplateRules = new ModulesTemplateRulesImpl(singleTemplateRules, cycleTemplateRules, detangled)
   val reasonsTemplateRules: ReasonsTemplateRules = new ReasonsTemplateRulesImpl()

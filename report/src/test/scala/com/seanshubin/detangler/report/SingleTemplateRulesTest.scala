@@ -10,9 +10,13 @@ class SingleTemplateRulesTest extends FunSuite {
       override def generate(singleTemplate: HtmlElement, single: Single): HtmlElement =
         HtmlElement.fragmentFromString(s"<p>summary ${single.toString}</p>")
     }
-    val singleDetailTemplateRules = new DependencyTemplateRules {
-      override def generate(singleTemplate: HtmlElement, single: Single, direction: DependencyDirection): HtmlElement =
-        HtmlElement.fragmentFromString(s"<p>${direction.caption} ${single.toString}</p>")
+    val dependsOnTemplateRules = new DependencyTemplateRules {
+      override def generate(singleTemplate: HtmlElement, context: Single, single: Single): HtmlElement =
+        HtmlElement.fragmentFromString(s"<p>depends on ${single.toString}</p>")
+    }
+    val dependedOnByTemplateRules = new DependencyTemplateRules {
+      override def generate(singleTemplate: HtmlElement, context: Single, single: Single): HtmlElement =
+        HtmlElement.fragmentFromString(s"<p>depended on by ${single.toString}</p>")
     }
     val singleTemplateText =
       """<div class="single">
@@ -22,7 +26,7 @@ class SingleTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     val singleTemplate = HtmlElement.fragmentFromString(singleTemplateText)
-    val singleTemplateRules = new SingleTemplateRulesImpl(singleSummaryTemplateRules, singleDetailTemplateRules)
+    val singleTemplateRules = new SingleTemplateRulesImpl(singleSummaryTemplateRules, dependsOnTemplateRules, dependedOnByTemplateRules)
     val expected =
       """<div class="single">
         |  <p>summary Single(group/a)</p>
@@ -31,7 +35,7 @@ class SingleTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     //when
-    val actual = singleTemplateRules.generate(singleTemplate, SampleData.groupA).text
+    val actual = singleTemplateRules.generate(singleTemplate, SampleData.theRoot, SampleData.groupA).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))

@@ -23,17 +23,17 @@ class HtmlElementTest extends FunSuite {
 
   test("page from input stream") {
     val element = HtmlElement.pageFromInputStream(IoUtil.stringToInputStream(sampleRawPage, charset), charset)
-    assertLinesSame(element.text, sampleGeneratedPage)
+    assertLinesSame(element.toString, sampleGeneratedPage)
   }
 
   test("page from string") {
     val element = HtmlElement.pageFromString(sampleFragment)
-    assertLinesSame(element.text, sampleGeneratedPage)
+    assertLinesSame(element.toString, sampleGeneratedPage)
   }
 
   test("fragment from string") {
     val element = HtmlElement.fragmentFromString(sampleFragment)
-    assert(element.text === sampleFragment)
+    assert(element.toString === sampleFragment)
   }
 
   test("remove") {
@@ -51,7 +51,7 @@ class HtmlElementTest extends FunSuite {
         |  <li>ccc</li>
         |</ul>
       """.stripMargin
-    assertLinesSame(removed.text, expected)
+    assertLinesSame(removed.toString, expected)
   }
 
   test("select") {
@@ -64,7 +64,7 @@ class HtmlElementTest extends FunSuite {
       """.stripMargin)
     val selected = starting.select(".select-me")
     val expected = """<li class="select-me">bbb</li>"""
-    assertLinesSame(selected.text, expected)
+    assertLinesSame(selected.toString, expected)
   }
 
   test("append") {
@@ -80,7 +80,7 @@ class HtmlElementTest extends FunSuite {
         |  <li>ccc</li>
         |</ul>
         |</div>""".stripMargin
-    assertLinesSame(appended.text, expected)
+    assertLinesSame(appended.toString, expected)
   }
 
   test("replace") {
@@ -103,28 +103,28 @@ class HtmlElementTest extends FunSuite {
         |  <li>ccc</li>
         |</ul>
         |</div>""".stripMargin
-    assertLinesSame(replaced.text, expected)
+    assertLinesSame(replaced.toString, expected)
   }
 
   test("set text") {
     val starting = HtmlElement.fragmentFromString( """<p class="replace-me">replace-me</p>""")
     val replaced = starting.text(".replace-me", "replaced")
     val expected = """<p class="replace-me">replaced</p>""".stripMargin
-    assertLinesSame(replaced.text, expected)
+    assertLinesSame(replaced.toString, expected)
   }
 
   test("set attribute") {
     val starting = HtmlElement.fragmentFromString( """<p class="set-attribute">some text</p>""")
     val replaced = starting.attr(".set-attribute", "id", "foo")
     val expected = """<p class="set-attribute" id="foo">some text</p>""".stripMargin
-    assertLinesSame(replaced.text, expected)
+    assertLinesSame(replaced.toString, expected)
   }
 
   test("set anchor") {
     val starting = HtmlElement.fragmentFromString( """<a class="set-anchor" href="href">link</p>""")
     val replaced = starting.anchor(".set-anchor", "replaced-anchor", "replaced-link")
     val expected = """<a class="set-anchor" href="replaced-anchor">replaced-link</a>""".stripMargin
-    assertLinesSame(replaced.text, expected)
+    assertLinesSame(replaced.toString, expected)
   }
 
   def assertLinesSame(left: String, right: String): Unit = {

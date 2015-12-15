@@ -6,10 +6,10 @@ class DependencyTemplateRulesTest extends FunSuite {
   test("single detail") {
     //given
     val singleTemplateText =
-      """<div class="single-detail">
+      """<div class="dependency">
         |  <p class="caption">replace-me</p>
-        |  <ul class="single-detail-rows">
-        |     <li class="single-detail-row">
+        |  <ul class="append-dependency-row">
+        |     <li class="dependency-row">
         |       <p><a class="name" href="replace-me">replace-me</a></p>
         |       <p class="depth">replace-me</p>
         |       <p class="complexity">replace-me</p>
@@ -19,25 +19,17 @@ class DependencyTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     val singleDetailTemplate = HtmlElement.fragmentFromString(singleTemplateText)
-    val singleDetailTemplateRules = new DependencyTemplateRulesImpl()
-    val expected =
-      """<div class="single-detail">
-        |  <p class="caption">depends on (1)</p>
-        |  <ul class="single-detail-rows">
-        |     <li class="single-detail-row">
-        |       <p><a class="name" href="#group_b">group/b</a></p>
-        |       <p class="depth">3</p>
-        |       <p class="complexity">4</p>
-        |       <p><a class="reason" href="#group_a---group_b">reason</a></p>
-        |     </li>
-        |  </ul>
-        |</div>
-      """.stripMargin
+    val singleDetailTemplateRules = new DependencyTemplateRulesImpl(
+      SampleData.detangled, DependencyDirection.TowardDependsOn)
     //when
-    val actual = singleDetailTemplateRules.generate(singleDetailTemplate, SampleData.groupA, DependencyDirection.TowardDependsOn).text
+    val actual = singleDetailTemplateRules.generate(singleDetailTemplate, SampleData.theRoot, SampleData.groupA)
     //then
-    val linesCompareResult = LinesDifference.compare(actual, expected)
-    println(actual)
-    assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n", "\n", "\n"))
+    assert(actual.select(".caption").text() === "depends on (1)")
+    assert(actual.select(".name").attr("href") === "#group-b")
+    assert(actual.select(".name").text() === "group/b")
+    assert(actual.select(".depth").text() === "0")
+    assert(actual.select(".complexity").text() === "0")
+    assert(actual.select(".reason").attr("href") === "#group-a---group-b")
+    assert(actual.select(".reason").text() === "reason")
   }
 }

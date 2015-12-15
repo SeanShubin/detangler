@@ -31,13 +31,14 @@ class Reporter(detangled: Detangled,
       case single: Single =>
         val children = detangled.children(single)
         if (children.nonEmpty) {
-          val content = pageTemplateRules.generate(pageTemplate, single).text
+          val content = pageTemplateRules.generate(pageTemplate, single).toString
           val fileName = HtmlUtil.fileNameFor(single)
           val file = directory.resolve(fileName)
           filesContract.write(file, content.getBytes(charset))
           children.foreach(generatePage)
         }
       case cycle: Cycle =>
+      //don't generate pages for cycles
     }
   }
 }
