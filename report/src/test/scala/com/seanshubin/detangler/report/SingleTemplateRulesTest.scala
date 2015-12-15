@@ -21,6 +21,7 @@ class SingleTemplateRulesTest extends FunSuite {
     val singleTemplateText =
       """<div class="single">
         |  <div class="single-summary"></div>
+        |  <div class="single-dependency"></div>
         |  <div class="single-depends-on"></div>
         |  <div class="single-depended-on-by"></div>
         |</div>

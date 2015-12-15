@@ -6,14 +6,14 @@ class DependencyTemplateRulesImpl(detangled: Detangled, dependencyDirection: Dep
   override def generate(dependencyTemplate: HtmlElement,
                         context: Single,
                         single: Single): HtmlElement = {
-    val baseTemplate = dependencyTemplate.remove(".dependency-row")
-    val dependencyRowTemplate = dependencyTemplate.select(".dependency-row")
+    val baseTemplate = dependencyTemplate.remove(".single-dependency-row")
+    val dependencyRowTemplate = dependencyTemplate.select(".single-dependency-row")
     val childModules = dependencyDirection.dependenciesFor(detangled, context, single)
     def generateRowFunction(x: Single) = generateRow(dependencyRowTemplate, context, single, x)
     val rows = childModules.map(generateRowFunction)
     val result = baseTemplate.
       text(".caption", s"${dependencyDirection.caption} (${childModules.size})").
-      append(".append-dependency-row", rows)
+      append(".single-append-dependency-row", rows)
     result
   }
 

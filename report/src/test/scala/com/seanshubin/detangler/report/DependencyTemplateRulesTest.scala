@@ -6,10 +6,10 @@ class DependencyTemplateRulesTest extends FunSuite {
   test("single detail") {
     //given
     val singleTemplateText =
-      """<div class="dependency">
+      """<div class="single-dependency">
         |  <p class="caption">replace-me</p>
-        |  <ul class="append-dependency-row">
-        |     <li class="dependency-row">
+        |  <ul class="single-append-dependency-row">
+        |     <li class="single-dependency-row">
         |       <p><a class="name" href="replace-me">replace-me</a></p>
         |       <p class="depth">replace-me</p>
         |       <p class="complexity">replace-me</p>
