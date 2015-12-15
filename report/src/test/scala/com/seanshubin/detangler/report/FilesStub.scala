@@ -2,10 +2,12 @@ package com.seanshubin.detangler.report
 
 import java.io.{ByteArrayOutputStream, OutputStream}
 import java.nio.charset.Charset
+import java.nio.file.attribute.FileAttribute
 import java.nio.file.{OpenOption, Path}
 
 class FilesStub(charset: Charset) extends FilesNotImplemented {
   var writeResults: Map[String, ByteArrayOutputStream] = Map()
+  var directoriesCreated:Seq[Path] = Seq()
 
   def stringContentsOf(fileName: String): String = {
     val outputStream = writeResults(fileName)
@@ -32,5 +34,10 @@ class FilesStub(charset: Charset) extends FilesNotImplemented {
       writeResults = writeResults + (path.getFileName.toString -> outputStream)
       outputStream
     }
+  }
+
+  override def createDirectories(dir: Path, attrs: FileAttribute[_]*): Path = {
+    directoriesCreated = directoriesCreated :+ dir
+    dir
   }
 }

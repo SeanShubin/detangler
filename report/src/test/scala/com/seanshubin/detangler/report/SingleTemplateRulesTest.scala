@@ -10,7 +10,7 @@ class SingleTemplateRulesTest extends FunSuite {
       override def generate(singleTemplate: HtmlElement, single: Single): HtmlElement =
         HtmlElement.fragmentFromString(s"<p>summary ${single.toString}</p>")
     }
-    val singleDetailTemplateRules = new SingleDetailTemplateRules {
+    val singleDetailTemplateRules = new DependencyTemplateRules {
       override def generate(singleTemplate: HtmlElement, single: Single, direction: DependencyDirection): HtmlElement =
         HtmlElement.fragmentFromString(s"<p>${direction.caption} ${single.toString}</p>")
     }

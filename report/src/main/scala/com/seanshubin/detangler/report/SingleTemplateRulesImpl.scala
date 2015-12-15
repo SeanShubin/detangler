@@ -3,7 +3,7 @@ package com.seanshubin.detangler.report
 import com.seanshubin.detangler.model.Single
 
 class SingleTemplateRulesImpl(singleSummaryTemplateRules: SingleSummaryTemplateRules,
-                              singleDetailTemplateRules: SingleDetailTemplateRules) extends SingleTemplateRules {
+                              singleDetailTemplateRules: DependencyTemplateRules) extends SingleTemplateRules {
   override def generate(singleTemplate: HtmlElement, single: Single): HtmlElement = {
     val summaryTemplate = singleTemplate.select(".single-summary")
     val dependsOnTemplate = singleTemplate.select(".single-depends-on")

@@ -2,7 +2,7 @@ package com.seanshubin.detangler.report
 
 import org.scalatest.FunSuite
 
-class SingleDetailTemplateRulesTest extends FunSuite {
+class DependencyTemplateRulesTest extends FunSuite {
   test("single detail") {
     //given
     val singleTemplateText =
@@ -19,7 +19,7 @@ class SingleDetailTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     val singleDetailTemplate = HtmlElement.fragmentFromString(singleTemplateText)
-    val singleDetailTemplateRules = new SingleDetailTemplateRulesImpl()
+    val singleDetailTemplateRules = new DependencyTemplateRulesImpl()
     val expected =
       """<div class="single-detail">
         |  <p class="caption">depends on (1)</p>
@@ -37,6 +37,7 @@ class SingleDetailTemplateRulesTest extends FunSuite {
     val actual = singleDetailTemplateRules.generate(singleDetailTemplate, SampleData.groupA, DependencyDirection.TowardDependsOn).text
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
+    println(actual)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n", "\n", "\n"))
   }
 }

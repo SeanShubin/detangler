@@ -55,5 +55,6 @@ class ReporterTest extends FunSuite {
     assert(filesStub.stringContentsOf("group-a--package-c.html") === "<p>c text</p>")
     assert(filesStub.stringContentsOf("group-a--package-d.html") === "<p>d text</p>")
     assert(filesStub.stringContentsOf("group-b--package-e.html") === "<p>e text</p>")
+    assert(filesStub.directoriesCreated === Seq(Paths.get("generated", "ReporterTest")))
   }
 }

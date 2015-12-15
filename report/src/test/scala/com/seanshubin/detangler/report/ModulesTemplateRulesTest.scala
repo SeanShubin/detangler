@@ -13,7 +13,7 @@ class ModulesTemplateRulesTest extends FunSuite {
       HtmlElement.fragmentFromString(s"<p>${cycle.toString}</p>")
   }
   val modulesTemplateText =
-    """<div class="module-append-here">
+    """<div class="append-module">
       |  <div class="single">
       |  </div>
       |  <div class="cycle">
@@ -26,7 +26,7 @@ class ModulesTemplateRulesTest extends FunSuite {
     //given
     val modulesTemplateRules = new ModulesTemplateRulesImpl(singleTemplateRules, cycleTemplateRules, SampleData.detangled)
     val expected =
-      """<div class="module-append-here">
+      """<div class="append-module">
         |  <p>Single(group/a)</p>
         |  <p>Single(group/b)</p>
         |</div>
@@ -42,7 +42,7 @@ class ModulesTemplateRulesTest extends FunSuite {
     //given
     val modulesTemplateRules = new ModulesTemplateRulesImpl(singleTemplateRules, cycleTemplateRules, SampleDataWithCycles.detangled)
     val expected =
-      """<div class="module-append-here">
+      """<div class="append-module">
         |  <p>Cycle(Single(group/a)--Single(group/b))</p>
         |  <p>Single(group/a)</p>
         |  <p>Single(group/b)</p>
