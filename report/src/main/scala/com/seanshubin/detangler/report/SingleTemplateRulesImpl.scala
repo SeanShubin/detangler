@@ -12,10 +12,18 @@ class SingleTemplateRulesImpl(singleSummaryTemplateRules: SingleSummaryTemplateR
     val summary = singleSummaryTemplateRules.generate(summaryTemplate, single)
     val dependsOn = dependsOnTemplateRules.generate(dependencyTemplate, context, single)
     val dependedOnBy = dependedOnByTemplateRules.generate(dependencyTemplate, context, single)
-    val result = baseTemplate.
-      replace(".single-summary", summary).
-      replace(".single-depends-on", dependsOn).
-      replace(".single-depended-on-by", dependedOnBy)
-    result
+    val a = baseTemplate.replace(".single-summary", summary)
+    val b = replaceIfPositiveQuantity(".single-depends-on", a, dependsOn)
+    val c = replaceIfPositiveQuantity(".single-depended-on-by", b, dependedOnBy)
+    c
+  }
+
+  private def replaceIfPositiveQuantity(cssQuery: String, base: HtmlElement, quantityAndElement: QuantityAndElement): HtmlElement = {
+    val QuantityAndElement(quantity, element) = quantityAndElement
+    if (quantity == 0) {
+      base.remove(cssQuery)
+    } else {
+      base.replace(cssQuery, element)
+    }
   }
 }

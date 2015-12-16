@@ -5,7 +5,7 @@ import com.seanshubin.detangler.model.{Detangled, Single}
 class DependencyTemplateRulesImpl(detangled: Detangled, dependencyDirection: DependencyDirection) extends DependencyTemplateRules {
   override def generate(dependencyTemplate: HtmlElement,
                         context: Single,
-                        single: Single): HtmlElement = {
+                        single: Single): QuantityAndElement = {
     val baseTemplate = dependencyTemplate.remove(".single-dependency-row")
     val dependencyRowTemplate = dependencyTemplate.select(".single-dependency-row")
     val childModules = dependencyDirection.dependenciesFor(detangled, context, single)
@@ -14,7 +14,7 @@ class DependencyTemplateRulesImpl(detangled: Detangled, dependencyDirection: Dep
     val result = baseTemplate.
       text(".caption", s"${dependencyDirection.caption} (${childModules.size})").
       append(".single-append-dependency-row", rows)
-    result
+    QuantityAndElement(childModules.size, result)
   }
 
   private def generateRow(dependencyRowTemplate: HtmlElement, context: Single, parent: Single, child: Single): HtmlElement = {
