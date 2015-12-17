@@ -1,9 +1,9 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.model.{Cycle, Detangled, Module, Single}
+import com.seanshubin.detangler.model._
 
 object SampleDataWithCycles {
-  val theRoot = Single(Seq())
+  val root = Single(Seq())
   val groupA = Single(Seq("group/a"))
   val groupB = Single(Seq("group/b"))
   val packageC = Single(Seq("group/a", "package/c"))
@@ -17,8 +17,8 @@ object SampleDataWithCycles {
   val cycleCD = Cycle(Set(packageC, packageD))
   val cycleFG = Cycle(Set(classF, classG))
   private val map: Map[Module, ModuleInfo] = Map(
-    theRoot -> ModuleInfo(
-      id = theRoot,
+    root -> ModuleInfo(
+      id = root,
       children = Set(groupA, groupB, cycleAB)
     ),
     groupA -> ModuleInfo(
@@ -82,17 +82,5 @@ object SampleDataWithCycles {
       parts = Set(classF, classG)
     )
   )
-  val detangled = new Detangled {
-    override def root(): Single = theRoot
-
-    override def children(single: Single): Set[Module] = map(single).children
-
-    override def depth(module: Module): Int = map(module).depth
-
-    override def complexity(module: Module): Int = map(module).complexity
-
-    override def dependsOn(single: Single): Set[Single] = map(single).dependsOn
-
-    override def dependedOnBy(single: Single): Set[Single] = map(single).dependedOnBy
-  }
+  val detangled = new DetangledFake(root, map)
 }

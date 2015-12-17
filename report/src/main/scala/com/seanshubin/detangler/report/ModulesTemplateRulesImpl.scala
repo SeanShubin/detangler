@@ -9,7 +9,7 @@ class ModulesTemplateRulesImpl(singleTemplateRules: SingleTemplateRules,
     val baseTemplate = modulesTemplate.remove(".single").remove(".cycle")
     val singleTemplate = modulesTemplate.select(".single")
     val cycleTemplate = modulesTemplate.select(".cycle")
-    val children = detangled.children(single)
+    val children = detangled.childModules(single)
     def composeModuleFunction(module: Module): HtmlElement = composeModule(single, module, singleTemplate, cycleTemplate)
     val moduleElements = children.toSeq.seq.sortWith(ModuleOrdering.lessThan).map(composeModuleFunction)
     val result = baseTemplate.append(".append-module", moduleElements)

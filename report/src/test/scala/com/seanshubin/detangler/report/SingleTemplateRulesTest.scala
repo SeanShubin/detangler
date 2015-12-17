@@ -41,7 +41,7 @@ class SingleTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     //when
-    val actual = singleTemplateRules.generate(singleTemplate, SampleData.theRoot, SampleData.groupA).toString
+    val actual = singleTemplateRules.generate(singleTemplate, SampleData.root, SampleData.groupA).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))
@@ -71,7 +71,7 @@ class SingleTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     //when
-    val actual = singleTemplateRules.generate(singleTemplate, SampleData.theRoot, SampleData.groupA).toString
+    val actual = singleTemplateRules.generate(singleTemplate, SampleData.root, SampleData.groupA).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))
@@ -101,7 +101,7 @@ class SingleTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     //when
-    val actual = singleTemplateRules.generate(singleTemplate, SampleData.theRoot, SampleData.groupA).toString
+    val actual = singleTemplateRules.generate(singleTemplate, SampleData.root, SampleData.groupA).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))
@@ -130,7 +130,7 @@ class SingleTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     //when
-    val actual = singleTemplateRules.generate(singleTemplate, SampleData.theRoot, SampleData.groupA).toString
+    val actual = singleTemplateRules.generate(singleTemplate, SampleData.root, SampleData.groupA).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))

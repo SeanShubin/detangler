@@ -17,7 +17,7 @@ object Prototype extends App {
   val singleTemplateRules: SingleTemplateRules = new SingleTemplateRulesImpl(singleSummaryTemplateRules, dependsOnTemplateRules, dependedOnByTemplateRules)
   val cycleTemplateRules: CycleTemplateRules = new CycleTemplateRulesImpl()
   val modulesTemplateRules: ModulesTemplateRules = new ModulesTemplateRulesImpl(singleTemplateRules, cycleTemplateRules, detangled)
-  val reasonsTemplateRules: ReasonsTemplateRules = new ReasonsTemplateRulesImpl()
+  val reasonsTemplateRules: ReasonsTemplateRules = new ReasonsTemplateRulesImpl(detangled)
   val pageTemplateRules: PageTemplateRules = new PageTemplateRulesImpl(modulesTemplateRules, reasonsTemplateRules)
   val reporter: Runnable = new Reporter(detangled, directory, filesContract, charset, classLoader, pageTemplateRules)
   reporter.run()

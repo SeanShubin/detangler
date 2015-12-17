@@ -3,7 +3,9 @@ package com.seanshubin.detangler.model
 trait Detangled {
   def root(): Single
 
-  def children(single: Single): Set[Module]
+  def childModules(single: Single): Set[Module]
+
+  def childSingles(single: Single): Set[Single]
 
   def depth(module: Module): Int
 
@@ -12,4 +14,6 @@ trait Detangled {
   def dependsOn(single: Single): Set[Single]
 
   def dependedOnBy(single: Single): Set[Single]
+
+  def reasonsFor(single: Single): Set[Reason]
 }

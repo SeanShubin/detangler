@@ -11,8 +11,9 @@ class PageTemplateRulesTest extends FunSuite {
         HtmlElement.fragmentFromString(s"<p>modules for $single</p>")
     }
     val reasonsTemplateRules = new ReasonsTemplateRules {
-      override def generate(reasonsTemplate: HtmlElement, single: Single): HtmlElement =
+      override def generate(reasonsTemplate: HtmlElement, context: Single, single: Single): HtmlElement = {
         HtmlElement.fragmentFromString(s"<p>reasons for $single</p>")
+      }
     }
     val pageTemplateRules = new PageTemplateRulesImpl(modulesTemplateRules, reasonsTemplateRules)
     val pageTemplateText =
@@ -32,7 +33,7 @@ class PageTemplateRulesTest extends FunSuite {
         |</html>
         | """.stripMargin
     //when
-    val actual = pageTemplateRules.generate(pageTemplate, SampleData.theRoot)
+    val actual = pageTemplateRules.generate(pageTemplate, SampleData.root)
     //then
     val linesCompareResult = LinesDifference.compare(actual.toString, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n", "\n", "\n"))

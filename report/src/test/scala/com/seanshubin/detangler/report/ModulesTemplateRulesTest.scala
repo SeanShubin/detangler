@@ -32,7 +32,7 @@ class ModulesTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     //when
-    val actual = modulesTemplateRules.generate(modulesTemplate, SampleData.theRoot).toString
+    val actual = modulesTemplateRules.generate(modulesTemplate, SampleData.root).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))
@@ -49,7 +49,7 @@ class ModulesTemplateRulesTest extends FunSuite {
         |</div>
       """.stripMargin
     //when
-    val actual = modulesTemplateRules.generate(modulesTemplate, SampleDataWithCycles.theRoot).toString
+    val actual = modulesTemplateRules.generate(modulesTemplate, SampleDataWithCycles.root).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))

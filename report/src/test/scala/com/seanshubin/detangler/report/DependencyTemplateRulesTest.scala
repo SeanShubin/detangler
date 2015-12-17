@@ -22,7 +22,7 @@ class DependencyTemplateRulesTest extends FunSuite {
     val singleDetailTemplateRules = new DependencyTemplateRulesImpl(
       SampleData.detangled, DependencyDirection.TowardDependsOn)
     //when
-    val QuantityAndElement(quantity, actual) = singleDetailTemplateRules.generate(singleDetailTemplate, SampleData.theRoot, SampleData.groupA)
+    val QuantityAndElement(quantity, actual) = singleDetailTemplateRules.generate(singleDetailTemplate, SampleData.root, SampleData.groupA)
     //then
     assert(quantity === 1)
     assert(actual.select(".caption").text() === "depends on (1)")

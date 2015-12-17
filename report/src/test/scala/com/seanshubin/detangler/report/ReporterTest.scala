@@ -18,7 +18,7 @@ class ReporterTest extends FunSuite {
     )
     val classLoader = new ClassLoaderStub(resourceMap, charset)
     val pageTextMap = Map(
-      SampleData.theRoot -> "<p>index text</p>",
+      SampleData.root -> "<p>index text</p>",
       SampleData.groupA -> "<p>a text</p>",
       SampleData.groupB -> "<p>b text</p>",
       SampleData.packageC -> "<p>c text</p>",

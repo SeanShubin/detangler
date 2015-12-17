@@ -3,7 +3,7 @@ package com.seanshubin.detangler.report
 import java.nio.charset.Charset
 import java.nio.file.Path
 
-import com.seanshubin.detangler.model.{Cycle, Detangled, Module, Single}
+import com.seanshubin.detangler.model.{Detangled, Single}
 
 class Reporter(detangled: Detangled,
                directory: Path,
@@ -24,21 +24,16 @@ class Reporter(detangled: Detangled,
     IoUtil.copyInputStreamToOutputStream(inputStream, outputStream)
   }
 
-  private def generatePage(module: Module): Unit = {
+  private def generatePage(single: Single): Unit = {
     val pageTemplateInputStream = classLoader.getResourceAsStream("template.html")
     val pageTemplate = HtmlElement.pageFromInputStream(pageTemplateInputStream, charset)
-    module match {
-      case single: Single =>
-        val children = detangled.children(single)
-        if (children.nonEmpty) {
-          val content = pageTemplateRules.generate(pageTemplate, single).toString
-          val fileName = HtmlUtil.fileNameFor(single)
-          val file = directory.resolve(fileName)
-          filesContract.write(file, content.getBytes(charset))
-          children.foreach(generatePage)
-        }
-      case cycle: Cycle =>
-      //don't generate pages for cycles
+    val children = detangled.childSingles(single)
+    if (children.nonEmpty) {
+      val content = pageTemplateRules.generate(pageTemplate, single).toString
+      val fileName = HtmlUtil.fileNameFor(single)
+      val file = directory.resolve(fileName)
+      filesContract.write(file, content.getBytes(charset))
+      children.foreach(generatePage)
     }
   }
 }

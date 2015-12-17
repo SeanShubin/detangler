@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 
 class HtmlUtilTest extends FunSuite {
   test("file names") {
-    assert(HtmlUtil.fileNameFor(SampleData.theRoot) === "index.html")
+    assert(HtmlUtil.fileNameFor(SampleData.root) === "index.html")
     assert(HtmlUtil.fileNameFor(SampleData.groupA) === "group-a.html")
     assert(HtmlUtil.fileNameFor(SampleData.packageC) === "group-a--package-c.html")
   }
@@ -22,9 +22,9 @@ class HtmlUtilTest extends FunSuite {
   }
 
   test("html link") {
-    assert(HtmlUtil.htmlLink(SampleData.theRoot, SampleData.groupA) === "#group-a")
-    assert(HtmlUtil.htmlLink(SampleData.theRoot, SampleData.packageC) === "group-a.html#package-c")
-    assert(HtmlUtil.htmlLink(SampleData.theRoot, SampleData.classF) === "group-a--package-c.html#class-f")
+    assert(HtmlUtil.htmlLink(SampleData.root, SampleData.groupA) === "#group-a")
+    assert(HtmlUtil.htmlLink(SampleData.root, SampleData.packageC) === "group-a.html#package-c")
+    assert(HtmlUtil.htmlLink(SampleData.root, SampleData.classF) === "group-a--package-c.html#class-f")
     assert(HtmlUtil.htmlLink(SampleData.groupA, SampleData.groupA) === "index.html#group-a")
     assert(HtmlUtil.htmlLink(SampleData.groupA, SampleData.packageC) === "#package-c")
     assert(HtmlUtil.htmlLink(SampleData.groupA, SampleData.classF) === "group-a--package-c.html#class-f")

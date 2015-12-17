@@ -8,7 +8,7 @@ class PageTemplateRulesImpl(modulesTemplateRules: ModulesTemplateRules,
     val modulesTemplate = pageTemplate.select(".modules")
     val reasonsTemplate = pageTemplate.select(".reasons")
     val modules = modulesTemplateRules.generate(modulesTemplate, single)
-    val reasons = reasonsTemplateRules.generate(reasonsTemplate, single)
+    val reasons = reasonsTemplateRules.generate(reasonsTemplate, single, single)
     val page = pageTemplate.replace(".modules", modules).replace(".reasons", reasons)
     page
   }
