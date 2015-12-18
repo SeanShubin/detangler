@@ -9,7 +9,7 @@ class ModulesTemplateRulesTest extends FunSuite {
       HtmlElement.fragmentFromString(s"<p>${single.toString}</p>")
   }
   val cycleTemplateRules = new CycleTemplateRules {
-    override def generate(singleTemplate: HtmlElement, cycle: Cycle): HtmlElement =
+    override def generate(singleTemplate: HtmlElement, context:Single, cycle: Cycle): HtmlElement =
       HtmlElement.fragmentFromString(s"<p>${cycle.toString}</p>")
   }
   val modulesTemplateText =

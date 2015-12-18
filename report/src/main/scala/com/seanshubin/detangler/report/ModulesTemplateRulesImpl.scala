@@ -18,13 +18,13 @@ class ModulesTemplateRulesImpl(singleTemplateRules: SingleTemplateRules,
 
   private def composeModule(context: Single, module: Module, singleTemplate: HtmlElement, cycleTemplate: HtmlElement): HtmlElement = {
     module match {
-      case cycle: Cycle => composeCycle(cycleTemplate, cycle)
+      case cycle: Cycle => composeCycle(cycleTemplate, context, cycle)
       case single: Single => composeSingle(singleTemplate, context, single)
     }
   }
 
-  private def composeCycle(cycleTemplate: HtmlElement, cycle: Cycle): HtmlElement = {
-    cycleTemplateRules.generate(cycleTemplate, cycle)
+  private def composeCycle(cycleTemplate: HtmlElement, context:Single, cycle: Cycle): HtmlElement = {
+    cycleTemplateRules.generate(cycleTemplate, context, cycle)
   }
 
   private def composeSingle(singleTemplate: HtmlElement, context: Single, single: Single): HtmlElement = {

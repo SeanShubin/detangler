@@ -1,6 +1,6 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.model.{Reason, Module, Single, Detangled}
+import com.seanshubin.detangler.model._
 
 class DetangledFake(theRoot:Single, map: Map[Module, ModuleInfo]) extends Detangled{
   override def root(): Single = theRoot
@@ -11,6 +11,10 @@ class DetangledFake(theRoot:Single, map: Map[Module, ModuleInfo]) extends Detang
     case x:Single => Some(x)
     case _ => None
   }
+
+  override def cycleSize(cycle: Cycle): Int = map(cycle).parts.size
+
+  override def cycleParts(cycle: Cycle): Set[Single] = map(cycle).parts
 
   override def depth(module: Module): Int = map(module).depth
 

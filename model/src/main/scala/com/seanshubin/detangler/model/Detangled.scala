@@ -7,6 +7,10 @@ trait Detangled {
 
   def childSingles(single: Single): Set[Single]
 
+  def cycleSize(cycle: Cycle): Int
+
+  def cycleParts(cycle: Cycle): Set[Single]
+
   def depth(module: Module): Int
 
   def complexity(module: Module): Int
