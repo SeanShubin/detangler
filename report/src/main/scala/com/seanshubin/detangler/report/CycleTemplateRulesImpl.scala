@@ -23,7 +23,7 @@ class CycleTemplateRulesImpl(detangled: Detangled) extends CycleTemplateRules {
     val cyclePartTemplate = detailTemplate.select(".cycle-part")
     def generateCyclePartFunction(part: Single) = generateCyclePart(cyclePartTemplate, context, part)
     val cycleParts = detangled.cycleParts(cycle).map(generateCyclePartFunction)
-    val result = detailTemplate.remove(".cycle-part").append(".append-part", cycleParts)
+    val result = detailTemplate.remove(".cycle-part").append(".append-cycle-part", cycleParts)
     result
   }
 
