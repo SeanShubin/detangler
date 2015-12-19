@@ -9,6 +9,10 @@ case class Standalone(path: Seq[String]) extends Module with Ordered[Standalone]
 
   override def compare(that: Standalone): Int = compare(this.path.toList, that.path.toList)
 
+  def parent: Standalone = Standalone(path.init)
+
+  def isRoot: Boolean = path.isEmpty
+
   @tailrec
   private def compare(left: List[String], right: List[String]): Int = {
     if (left.size != right.size)

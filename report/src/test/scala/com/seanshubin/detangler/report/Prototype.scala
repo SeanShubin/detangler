@@ -20,7 +20,11 @@ object Prototype extends App {
     val cycleTemplateRules: CycleTemplateRules = new CycleTemplateRulesImpl(detangled)
     val modulesTemplateRules: ModulesTemplateRules = new ModulesTemplateRulesImpl(standaloneTemplateRules, cycleTemplateRules, detangled)
     val reasonsTemplateRules: ReasonsTemplateRules = new ReasonsTemplateRulesImpl(detangled)
-    val pageTemplateRules: PageTemplateRules = new PageTemplateRulesImpl(modulesTemplateRules, reasonsTemplateRules)
+    val pageTemplateRules: PageTemplateRules = new PageTemplateRulesImpl(
+      modulesTemplateRules,
+      reasonsTemplateRules,
+      HtmlRendering.fileNameFor,
+      HtmlRendering.htmlName)
     val reporter: Runnable = new Reporter(detangled, directory, filesContract, charset, classLoader, pageTemplateRules)
     reporter.run()
   }

@@ -22,9 +22,9 @@ object DependencyDirection {
       detangled.dependsOn(context, standalone)
     }
 
-    override def name(left: Standalone, right: Standalone): String = HtmlUtil.reasonName(left, right)
+    override def name(left: Standalone, right: Standalone): String = HtmlRendering.reasonName(left, right)
 
-    override def link(left: Standalone, right: Standalone): String = HtmlUtil.reasonLink(left, right)
+    override def link(left: Standalone, right: Standalone): String = HtmlRendering.reasonLink(left, right)
 
   }
   val TowardDependedOnBy = new DependencyDirection("depended on by") {
@@ -32,8 +32,8 @@ object DependencyDirection {
       detangled.dependedOnBy(context, standalone)
     }
 
-    override def name(left: Standalone, right: Standalone): String = HtmlUtil.reasonName(right, left)
+    override def name(left: Standalone, right: Standalone): String = HtmlRendering.reasonName(right, left)
 
-    override def link(left: Standalone, right: Standalone): String = HtmlUtil.reasonLink(right, left)
+    override def link(left: Standalone, right: Standalone): String = HtmlRendering.reasonLink(right, left)
   }
 }

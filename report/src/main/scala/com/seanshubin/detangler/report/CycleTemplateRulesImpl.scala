@@ -28,6 +28,6 @@ class CycleTemplateRulesImpl(detangled: Detangled) extends CycleTemplateRules {
   }
 
   def generateCyclePart(cyclePartTemplate: HtmlElement, context: Standalone, part: Standalone): HtmlElement = {
-    cyclePartTemplate.anchor(".name", HtmlUtil.htmlLink(context, part), HtmlUtil.htmlName(part))
+    cyclePartTemplate.anchor(".name", HtmlRendering.htmlLink(context, part), HtmlRendering.htmlName(part))
   }
 }

@@ -2,7 +2,7 @@ package com.seanshubin.detangler.report
 
 import com.seanshubin.detangler.model.Standalone
 
-object HtmlUtil {
+object HtmlRendering {
   def fileNameFor(standalone: Standalone): String = {
     if (standalone.path.isEmpty) {
       "index.html"

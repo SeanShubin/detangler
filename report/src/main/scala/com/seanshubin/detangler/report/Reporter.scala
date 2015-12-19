@@ -30,7 +30,7 @@ class Reporter(detangled: Detangled,
     val children = detangled.childStandalone(standalone)
     if (children.nonEmpty) {
       val content = pageTemplateRules.generate(pageTemplate, standalone).toString
-      val fileName = HtmlUtil.fileNameFor(standalone)
+      val fileName = HtmlRendering.fileNameFor(standalone)
       val file = directory.resolve(fileName)
       filesContract.write(file, content.getBytes(charset))
       children.foreach(generatePage)

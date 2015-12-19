@@ -22,7 +22,7 @@ class DependencyTemplateRulesImpl(detangled: Detangled, dependencyDirection: Dep
     val reasonLink = dependencyDirection.link(parent, child)
 
     dependencyRowTemplate.
-      anchor(".name", HtmlUtil.htmlLink(context, child), HtmlUtil.htmlName(child)).
+      anchor(".name", HtmlRendering.htmlLink(context, child), HtmlRendering.htmlName(child)).
       text(".depth", detangled.depth(child).toString).
       text(".complexity", detangled.complexity(child).toString).
       anchor(".reason", reasonLink, reasonName)

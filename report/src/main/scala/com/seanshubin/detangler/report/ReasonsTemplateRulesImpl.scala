@@ -18,9 +18,9 @@ class ReasonsTemplateRulesImpl(detangled: Detangled) extends ReasonsTemplateRule
   }
 
   def composeReason(baseTemplate: HtmlElement, reasonTemplate: HtmlElement, context: Standalone, reason: Reason): HtmlElement = {
-    val withoutSubReasons = reasonTemplate.attr(".reason", "id", HtmlUtil.reasonId(reason.from, reason.to)).
-      anchor(".from", HtmlUtil.htmlLink(context, reason.from), HtmlUtil.htmlName(reason.from)).
-      anchor(".to", HtmlUtil.htmlLink(context, reason.to), HtmlUtil.htmlName(reason.to))
+    val withoutSubReasons = reasonTemplate.attr(".reason", "id", HtmlRendering.reasonId(reason.from, reason.to)).
+      anchor(".from", HtmlRendering.htmlLink(context, reason.from), HtmlRendering.htmlName(reason.from)).
+      anchor(".to", HtmlRendering.htmlLink(context, reason.to), HtmlRendering.htmlName(reason.to))
     val result = if (reason.reasons.isEmpty) {
       withoutSubReasons
     } else {
