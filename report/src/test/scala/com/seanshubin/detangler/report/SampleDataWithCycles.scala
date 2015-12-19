@@ -88,5 +88,5 @@ object SampleDataWithCycles {
       parts = Set(classF, classG)
     )
   )
-  val detangled = new DetangledFake(root, map)
+  val detangled = new DetangledFake(root, map, 3)
 }

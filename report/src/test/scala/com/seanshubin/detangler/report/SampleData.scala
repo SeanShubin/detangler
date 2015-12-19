@@ -64,5 +64,5 @@ object SampleData {
       dependedOnBy = Set(classF)
     )
   )
-  val detangled = new DetangledFake(root, map)
+  val detangled = new DetangledFake(root, map, 3)
 }

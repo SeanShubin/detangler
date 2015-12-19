@@ -6,6 +6,8 @@ import java.nio.charset.Charset
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 
+import scala.collection.JavaConversions
+
 
 class HtmlElement(originalElement: Element) {
 
@@ -14,6 +16,13 @@ class HtmlElement(originalElement: Element) {
   def remove(cssQuery: String): HtmlElement = {
     val element = clonedElement
     select(cssQuery, element).remove()
+    new HtmlElement(element)
+  }
+
+  def removeAll(cssQuery: String): HtmlElement = {
+    val element = clonedElement
+    val elements = selectAll(cssQuery, element)
+    elements.foreach(_.remove())
     new HtmlElement(element)
   }
 
@@ -79,6 +88,11 @@ class HtmlElement(originalElement: Element) {
     val size = elements.size()
     if (size != 1) throw new RuntimeException(s"$from\nExpected exactly 1 matching '$cssQuery', got $size")
     elements.get(0)
+  }
+
+  private def selectAll(cssQuery: String, from: Element): Iterable[Element] = {
+    val elements = from.select(cssQuery)
+    JavaConversions.collectionAsScalaIterable(elements)
   }
 }
 

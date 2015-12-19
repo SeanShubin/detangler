@@ -2,7 +2,7 @@ package com.seanshubin.detangler.report
 
 import com.seanshubin.detangler.model._
 
-class DetangledFake(theRoot: Standalone, map: Map[Module, ModuleInfo]) extends Detangled {
+class DetangledFake(theRoot: Standalone, map: Map[Module, ModuleInfo], val levelsDeep: Int) extends Detangled {
   override def root(): Standalone = theRoot
 
   override def childModules(standalone: Standalone): Set[Module] = map(standalone).children
@@ -25,6 +25,8 @@ class DetangledFake(theRoot: Standalone, map: Map[Module, ModuleInfo]) extends D
   override def dependedOnBy(context: Standalone, standalone: Standalone): Set[Standalone] = map(standalone).dependedOnBy.filter(hasParentOf(context))
 
   override def reasonsFor(standalone: Standalone): Set[Reason] = reasonsFor(childStandalone(standalone))
+
+  override def isLeaf(standalone: Standalone): Boolean = standalone.path.size == levelsDeep
 
   private def hasParentOf(parent: Standalone): Standalone => Boolean = (child) => child.path.init == parent.path
 

@@ -20,4 +20,8 @@ trait Detangled {
   def dependedOnBy(context: Standalone, standalone: Standalone): Set[Standalone]
 
   def reasonsFor(standalone: Standalone): Set[Reason]
+
+  def isLeaf(standalone: Standalone): Boolean
+
+  def levelsDeep: Int
 }

@@ -29,7 +29,8 @@ class Reporter(detangled: Detangled,
     val pageTemplate = HtmlElement.pageFromInputStream(pageTemplateInputStream, charset)
     val children = detangled.childStandalone(standalone)
     if (children.nonEmpty) {
-      val content = pageTemplateRules.generate(pageTemplate, standalone).toString
+      val isLeafPage = standalone.path.size >= detangled.levelsDeep - 1
+      val content = pageTemplateRules.generate(pageTemplate, standalone, isLeafPage).toString
       val fileName = HtmlRendering.fileNameFor(standalone)
       val file = directory.resolve(fileName)
       filesContract.write(file, content.getBytes(charset))

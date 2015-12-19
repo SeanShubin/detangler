@@ -15,7 +15,7 @@
                 <th>name</th>
                 <th>depth</th>
                 <th>complexity</th>
-                <th>composed of</th>
+                <th class="delete-if-leaf">composed of</th>
             </tr>
             </thead>
             <tbody>
@@ -23,7 +23,7 @@
                 <td class="name">sample/group</td>
                 <td class="depth">depth number</td>
                 <td class="complexity">complexity number</td>
-                <td><a class="composed-of" href="">parts</a></td>
+                <td class="delete-if-leaf"><a class="composed-of" href="">parts</a></td>
             </tr>
             </tbody>
         </table>
@@ -38,7 +38,7 @@
                         <th>name</th>
                         <th>depth</th>
                         <th>complexity</th>
-                        <th>reason</th>
+                        <th class="delete-if-leaf">reason</th>
                     </tr>
                     </thead>
                     <tbody class="standalone-append-dependency-row">
@@ -46,7 +46,7 @@
                         <td><a class="name" href="">other/group</a></td>
                         <td class="depth">depth</td>
                         <td class="complexity">complexity</td>
-                        <td><a class="reason" href="">reason</a></td>
+                        <td class="delete-if-leaf"><a class="reason" href="">reason</a></td>
                     </tr>
                     </tbody>
                 </table>
@@ -92,7 +92,7 @@
         </ul>
     </li>
 </ul>
-<ul class="reasons append-reason">
+<ul class="reasons append-reason delete-if-leaf">
     <li class="reason append-reasons">
         <a class="from" href="">from</a>
         <span>&xrarr;</span>

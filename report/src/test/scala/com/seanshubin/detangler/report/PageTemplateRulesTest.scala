@@ -25,7 +25,7 @@ class PageTemplateRulesTest extends FunSuite {
 
   test("root page template") {
     //when
-    val actual = pageTemplateRules.generate(pageTemplate, SampleData.root)
+    val actual = pageTemplateRules.generate(pageTemplate, SampleData.root, isLeafPage = false)
     //then
     assert(actual.select(".modules").text() === "the modules")
     assert(actual.select(".reasons").text() === "the reasons")
@@ -33,7 +33,7 @@ class PageTemplateRulesTest extends FunSuite {
 
   test("page template with parent") {
     //when
-    val actual = pageTemplateRules.generate(pageTemplate, SampleData.groupA)
+    val actual = pageTemplateRules.generate(pageTemplate, SampleData.groupA, isLeafPage = false)
     //then
     assert(actual.select(".parent").text() === "the parent text")
     assert(actual.select(".parent").attr("href") === "the parent link")
