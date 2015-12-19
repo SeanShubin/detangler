@@ -2,13 +2,13 @@ package com.seanshubin.detangler.report
 
 import com.seanshubin.detangler.model._
 
-class DetangledFake(theRoot:Single, map: Map[Module, ModuleInfo]) extends Detangled{
+class DetangledFake(theRoot: Single, map: Map[Module, ModuleInfo]) extends Detangled {
   override def root(): Single = theRoot
 
   override def childModules(single: Single): Set[Module] = map(single).children
 
   override def childSingles(single: Single): Set[Single] = childModules(single).flatMap {
-    case x:Single => Some(x)
+    case x: Single => Some(x)
     case _ => None
   }
 
@@ -26,6 +26,8 @@ class DetangledFake(theRoot:Single, map: Map[Module, ModuleInfo]) extends Detang
 
   override def reasonsFor(single: Single): Set[Reason] = reasonsFor(childSingles(single))
 
+  private def hasParentOf(parent: Single): Single => Boolean = (child) => child.path.init == parent.path
+
   private def reasonsFor(parts: Set[Single]): Set[Reason] = {
     reasonsFor(parts, parts)
   }
@@ -39,5 +41,4 @@ class DetangledFake(theRoot:Single, map: Map[Module, ModuleInfo]) extends Detang
       Reason(fromPart, toPart, reasonsFor(childSingles(fromPart), childSingles(toPart)))
     }
   }
-
 }

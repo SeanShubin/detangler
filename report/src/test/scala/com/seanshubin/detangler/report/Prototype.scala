@@ -9,7 +9,7 @@ object Prototype extends App {
   runFromPath(Paths.get("generated", "cycles-false"), SampleData.detangled)
   runFromPath(Paths.get("generated", "cycles-true"), SampleDataWithCycles.detangled)
 
-  def runFromPath(directory:Path, detangled:Detangled): Unit ={
+  def runFromPath(directory: Path, detangled: Detangled): Unit = {
     val filesContract: FilesContract = FilesDelegate
     val charset: Charset = StandardCharsets.UTF_8
     val classLoader: ClassLoaderContract = new ClassLoaderDelegate(getClass.getClassLoader)

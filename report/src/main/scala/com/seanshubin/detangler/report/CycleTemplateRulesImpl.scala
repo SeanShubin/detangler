@@ -3,7 +3,7 @@ package com.seanshubin.detangler.report
 import com.seanshubin.detangler.model.{Cycle, Detangled, Single}
 
 class CycleTemplateRulesImpl(detangled: Detangled) extends CycleTemplateRules {
-  override def generate(cycleTemplate: HtmlElement, context:Single, cycle: Cycle): HtmlElement = {
+  override def generate(cycleTemplate: HtmlElement, context: Single, cycle: Cycle): HtmlElement = {
     val cycleSummaryTemplate = cycleTemplate.select(".cycle-summary")
     val cycleDetailTemplate = cycleTemplate.select(".cycle-detail")
     val cycleSummary = generateSummary(cycleSummaryTemplate, cycle)

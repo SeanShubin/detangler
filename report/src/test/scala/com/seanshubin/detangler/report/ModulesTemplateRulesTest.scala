@@ -9,7 +9,7 @@ class ModulesTemplateRulesTest extends FunSuite {
       HtmlElement.fragmentFromString(s"<p>${single.toString}</p>")
   }
   val cycleTemplateRules = new CycleTemplateRules {
-    override def generate(singleTemplate: HtmlElement, context:Single, cycle: Cycle): HtmlElement =
+    override def generate(singleTemplate: HtmlElement, context: Single, cycle: Cycle): HtmlElement =
       HtmlElement.fragmentFromString(s"<p>${cycle.toString}</p>")
   }
   val modulesTemplateText =
@@ -52,6 +52,6 @@ class ModulesTemplateRulesTest extends FunSuite {
     val actual = modulesTemplateRules.generate(modulesTemplate, SampleDataWithCycles.root).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
-    assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))
+    assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n", "\n", "\n"))
   }
 }

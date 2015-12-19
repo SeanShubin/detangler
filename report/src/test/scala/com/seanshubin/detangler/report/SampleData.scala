@@ -1,6 +1,6 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.model.{Reason, Detangled, Module, Single}
+import com.seanshubin.detangler.model.{Module, Single}
 
 object SampleData {
   val root = Single(Seq())
@@ -33,7 +33,7 @@ object SampleData {
     packageC -> ModuleInfo(
       id = packageC,
       children = Set(classF, classG),
-      dependsOn = Set(packageD),
+      dependsOn = Set(packageD, packageE),
       depth = 1,
       complexity = 1
     ),
@@ -44,22 +44,25 @@ object SampleData {
     ),
     packageE -> ModuleInfo(
       id = packageE,
-      children = Set(classI)
+      children = Set(classI),
+      dependedOnBy = Set(packageC)
     ),
     classF -> ModuleInfo(
       id = classF,
-      dependsOn = Set(classG)
+      dependsOn = Set(classG, classH, classI)
     ),
     classG -> ModuleInfo(
       id = classG,
       dependedOnBy = Set(classF)
     ),
     classH -> ModuleInfo(
-      id = classH
+      id = classH,
+      dependedOnBy = Set(classF)
     ),
     classI -> ModuleInfo(
-      id = classI
+      id = classI,
+      dependedOnBy = Set(classF)
     )
   )
-  val detangled = new DetangledFake(root,map)
+  val detangled = new DetangledFake(root, map)
 }

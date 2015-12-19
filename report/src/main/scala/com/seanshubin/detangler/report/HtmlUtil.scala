@@ -15,6 +15,10 @@ object HtmlUtil {
     single.path.last.map(makeCssSelectorSafe)
   }
 
+  def qualifiedHtmlId(single: Single): String = {
+    single.path.mkString("--").map(makeCssSelectorSafe)
+  }
+
   def htmlName(single: Single): String = {
     single.path.last
   }
@@ -28,7 +32,7 @@ object HtmlUtil {
   }
 
   def reasonId(from: Single, to: Single): String = {
-    htmlId(from) + "---" + HtmlUtil.htmlId(to)
+    qualifiedHtmlId(from) + "---" + qualifiedHtmlId(to)
   }
 
   def reasonLink(from: Single, to: Single): String = {

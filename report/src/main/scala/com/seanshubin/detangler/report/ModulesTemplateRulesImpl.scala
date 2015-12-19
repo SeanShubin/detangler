@@ -23,7 +23,7 @@ class ModulesTemplateRulesImpl(singleTemplateRules: SingleTemplateRules,
     }
   }
 
-  private def composeCycle(cycleTemplate: HtmlElement, context:Single, cycle: Cycle): HtmlElement = {
+  private def composeCycle(cycleTemplate: HtmlElement, context: Single, cycle: Cycle): HtmlElement = {
     cycleTemplateRules.generate(cycleTemplate, context, cycle)
   }
 
