@@ -19,7 +19,7 @@ object DependencyDirection {
   lazy val values: Seq[DependencyDirection] = valuesBuffer.toSeq
   val TowardDependsOn = new DependencyDirection("depends on") {
     override def dependenciesFor(detangled: Detangled, context: Single, single: Single): Set[Single] = {
-      detangled.dependsOn(single)
+      detangled.dependsOn(context, single)
     }
 
     override def name(left: Single, right: Single): String = HtmlUtil.reasonName(left, right)
@@ -29,7 +29,7 @@ object DependencyDirection {
   }
   val TowardDependedOnBy = new DependencyDirection("depended on by") {
     override def dependenciesFor(detangled: Detangled, context: Single, single: Single): Set[Single] = {
-      detangled.dependedOnBy(single)
+      detangled.dependedOnBy(context, single)
     }
 
     override def name(left: Single, right: Single): String = HtmlUtil.reasonName(right, left)

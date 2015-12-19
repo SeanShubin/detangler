@@ -20,9 +20,9 @@ class DetangledFake(theRoot: Single, map: Map[Module, ModuleInfo]) extends Detan
 
   override def complexity(module: Module): Int = map(module).complexity
 
-  override def dependsOn(single: Single): Set[Single] = map(single).dependsOn
+  override def dependsOn(context: Single, single: Single): Set[Single] = map(single).dependsOn.filter(hasParentOf(context))
 
-  override def dependedOnBy(single: Single): Set[Single] = map(single).dependedOnBy
+  override def dependedOnBy(context: Single, single: Single): Set[Single] = map(single).dependedOnBy.filter(hasParentOf(context))
 
   override def reasonsFor(single: Single): Set[Reason] = reasonsFor(childSingles(single))
 
