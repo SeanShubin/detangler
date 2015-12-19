@@ -3,13 +3,13 @@ package com.seanshubin.detangler.report
 import org.scalatest.FunSuite
 
 class DependencyTemplateRulesTest extends FunSuite {
-  test("single detail") {
+  test("standalone detail") {
     //given
-    val singleTemplateText =
-      """<div class="single-dependency">
+    val standaloneTemplateText =
+      """<div class="standalone-dependency">
         |  <p class="caption">replace-me</p>
-        |  <ul class="single-append-dependency-row">
-        |     <li class="single-dependency-row">
+        |  <ul class="standalone-append-dependency-row">
+        |     <li class="standalone-dependency-row">
         |       <p><a class="name" href="replace-me">replace-me</a></p>
         |       <p class="depth">replace-me</p>
         |       <p class="complexity">replace-me</p>
@@ -18,11 +18,11 @@ class DependencyTemplateRulesTest extends FunSuite {
         |  </ul>
         |</div>
       """.stripMargin
-    val singleDetailTemplate = HtmlElement.fragmentFromString(singleTemplateText)
-    val singleDetailTemplateRules = new DependencyTemplateRulesImpl(
+    val standaloneDetailTemplate = HtmlElement.fragmentFromString(standaloneTemplateText)
+    val standaloneDetailTemplateRules = new DependencyTemplateRulesImpl(
       SampleData.detangled, DependencyDirection.TowardDependsOn)
     //when
-    val QuantityAndElement(quantity, actual) = singleDetailTemplateRules.generate(singleDetailTemplate, SampleData.root, SampleData.groupA)
+    val QuantityAndElement(quantity, actual) = standaloneDetailTemplateRules.generate(standaloneDetailTemplate, SampleData.root, SampleData.groupA)
     //then
     assert(quantity === 1)
     assert(actual.select(".caption").text() === "depends on (1)")

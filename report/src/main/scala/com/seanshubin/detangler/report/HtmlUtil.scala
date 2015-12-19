@@ -1,45 +1,45 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.model.Single
+import com.seanshubin.detangler.model.Standalone
 
 object HtmlUtil {
-  def fileNameFor(single: Single): String = {
-    if (single.path.isEmpty) {
+  def fileNameFor(standalone: Standalone): String = {
+    if (standalone.path.isEmpty) {
       "index.html"
     } else {
-      single.path.mkString("--").map(makeFileSystemSafe) + ".html"
+      standalone.path.mkString("--").map(makeFileSystemSafe) + ".html"
     }
   }
 
-  def htmlId(single: Single): String = {
-    single.path.last.map(makeCssSelectorSafe)
+  def htmlId(standalone: Standalone): String = {
+    standalone.path.last.map(makeCssSelectorSafe)
   }
 
-  def qualifiedHtmlId(single: Single): String = {
-    single.path.mkString("--").map(makeCssSelectorSafe)
+  def qualifiedHtmlId(standalone: Standalone): String = {
+    standalone.path.mkString("--").map(makeCssSelectorSafe)
   }
 
-  def htmlName(single: Single): String = {
-    single.path.last
+  def htmlName(standalone: Standalone): String = {
+    standalone.path.last
   }
 
-  def htmlLink(context: Single, single: Single): String = {
-    if (single.path.init == context.path) {
-      "#" + htmlId(single)
+  def htmlLink(context: Standalone, standalone: Standalone): String = {
+    if (standalone.path.init == context.path) {
+      "#" + htmlId(standalone)
     } else {
-      fileNameFor(Single(single.path.init)) + "#" + htmlId(single)
+      fileNameFor(Standalone(standalone.path.init)) + "#" + htmlId(standalone)
     }
   }
 
-  def reasonId(from: Single, to: Single): String = {
+  def reasonId(from: Standalone, to: Standalone): String = {
     qualifiedHtmlId(from) + "---" + qualifiedHtmlId(to)
   }
 
-  def reasonLink(from: Single, to: Single): String = {
+  def reasonLink(from: Standalone, to: Standalone): String = {
     "#" + reasonId(from, to)
   }
 
-  def reasonName(from: Single, to: Single): String = "reason"
+  def reasonName(from: Standalone, to: Standalone): String = "reason"
 
   private val FileSystemCharacters = "/\\?%*:|\"<>. "
   private val CssSelectorCharacters = "~!@$%^&*()+=,./';:\"?><[]\\{}|`#"

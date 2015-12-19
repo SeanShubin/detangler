@@ -1,7 +1,7 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.model.Single
+import com.seanshubin.detangler.model.Standalone
 
 trait DependencyTemplateRules {
-  def generate(detailTemplate: HtmlElement, context: Single, single: Single): QuantityAndElement
+  def generate(detailTemplate: HtmlElement, context: Standalone, standalone: Standalone): QuantityAndElement
 }

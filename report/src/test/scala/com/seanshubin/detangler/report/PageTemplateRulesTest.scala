@@ -1,18 +1,18 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.model.Single
+import com.seanshubin.detangler.model.Standalone
 import org.scalatest.FunSuite
 
 class PageTemplateRulesTest extends FunSuite {
   test("page template") {
     //given
     val modulesTemplateRules = new ModulesTemplateRules {
-      override def generate(modulesTemplate: HtmlElement, single: Single): HtmlElement =
-        HtmlElement.fragmentFromString(s"<p>modules for $single</p>")
+      override def generate(modulesTemplate: HtmlElement, standalone: Standalone): HtmlElement =
+        HtmlElement.fragmentFromString(s"<p>modules for $standalone</p>")
     }
     val reasonsTemplateRules = new ReasonsTemplateRules {
-      override def generate(reasonsTemplate: HtmlElement, context: Single, single: Single): HtmlElement = {
-        HtmlElement.fragmentFromString(s"<p>reasons for $single</p>")
+      override def generate(reasonsTemplate: HtmlElement, context: Standalone, standalone: Standalone): HtmlElement = {
+        HtmlElement.fragmentFromString(s"<p>reasons for $standalone</p>")
       }
     }
     val pageTemplateRules = new PageTemplateRulesImpl(modulesTemplateRules, reasonsTemplateRules)
@@ -27,8 +27,8 @@ class PageTemplateRulesTest extends FunSuite {
       """<html>
         |  <head></head>
         |  <body>
-        |    <p>modules for Single()</p>
-        |    <p>reasons for Single()</p>
+        |    <p>modules for Standalone()</p>
+        |    <p>reasons for Standalone()</p>
         |  </body>
         |</html>
         | """.stripMargin

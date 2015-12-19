@@ -13,12 +13,12 @@ object Prototype extends App {
     val filesContract: FilesContract = FilesDelegate
     val charset: Charset = StandardCharsets.UTF_8
     val classLoader: ClassLoaderContract = new ClassLoaderDelegate(getClass.getClassLoader)
-    val singleSummaryTemplateRules: SingleSummaryTemplateRules = new SingleSummaryTemplateRulesImpl(detangled)
+    val standaloneSummaryTemplateRules: StandaloneSummaryTemplateRules = new StandaloneSummaryTemplateRulesImpl(detangled)
     val dependsOnTemplateRules: DependencyTemplateRules = new DependencyTemplateRulesImpl(detangled, DependencyDirection.TowardDependsOn)
     val dependedOnByTemplateRules: DependencyTemplateRules = new DependencyTemplateRulesImpl(detangled, DependencyDirection.TowardDependedOnBy)
-    val singleTemplateRules: SingleTemplateRules = new SingleTemplateRulesImpl(singleSummaryTemplateRules, dependsOnTemplateRules, dependedOnByTemplateRules)
+    val standaloneTemplateRules: StandaloneTemplateRules = new StandaloneTemplateRulesImpl(standaloneSummaryTemplateRules, dependsOnTemplateRules, dependedOnByTemplateRules)
     val cycleTemplateRules: CycleTemplateRules = new CycleTemplateRulesImpl(detangled)
-    val modulesTemplateRules: ModulesTemplateRules = new ModulesTemplateRulesImpl(singleTemplateRules, cycleTemplateRules, detangled)
+    val modulesTemplateRules: ModulesTemplateRules = new ModulesTemplateRulesImpl(standaloneTemplateRules, cycleTemplateRules, detangled)
     val reasonsTemplateRules: ReasonsTemplateRules = new ReasonsTemplateRulesImpl(detangled)
     val pageTemplateRules: PageTemplateRules = new PageTemplateRulesImpl(modulesTemplateRules, reasonsTemplateRules)
     val reporter: Runnable = new Reporter(detangled, directory, filesContract, charset, classLoader, pageTemplateRules)

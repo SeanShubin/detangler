@@ -1,18 +1,18 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.model.{Module, Single}
+import com.seanshubin.detangler.model.{Module, Standalone}
 
 object SampleData {
-  val root = Single(Seq())
-  val groupA = Single(Seq("group/a"))
-  val groupB = Single(Seq("group/b"))
-  val packageC = Single(Seq("group/a", "package/c"))
-  val packageD = Single(Seq("group/a", "package/d"))
-  val packageE = Single(Seq("group/b", "package/e"))
-  val classF = Single(Seq("group/a", "package/c", "class/f"))
-  val classG = Single(Seq("group/a", "package/c", "class/g"))
-  val classH = Single(Seq("group/a", "package/d", "class/h"))
-  val classI = Single(Seq("group/b", "package/e", "class/i"))
+  val root = Standalone(Seq())
+  val groupA = Standalone(Seq("group/a"))
+  val groupB = Standalone(Seq("group/b"))
+  val packageC = Standalone(Seq("group/a", "package/c"))
+  val packageD = Standalone(Seq("group/a", "package/d"))
+  val packageE = Standalone(Seq("group/b", "package/e"))
+  val classF = Standalone(Seq("group/a", "package/c", "class/f"))
+  val classG = Standalone(Seq("group/a", "package/c", "class/g"))
+  val classH = Standalone(Seq("group/a", "package/d", "class/h"))
+  val classI = Standalone(Seq("group/b", "package/e", "class/i"))
   private val map: Map[Module, ModuleInfo] = Map(
     root -> ModuleInfo(
       id = root,

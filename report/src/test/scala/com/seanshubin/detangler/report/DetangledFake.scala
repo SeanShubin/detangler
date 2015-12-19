@@ -2,43 +2,43 @@ package com.seanshubin.detangler.report
 
 import com.seanshubin.detangler.model._
 
-class DetangledFake(theRoot: Single, map: Map[Module, ModuleInfo]) extends Detangled {
-  override def root(): Single = theRoot
+class DetangledFake(theRoot: Standalone, map: Map[Module, ModuleInfo]) extends Detangled {
+  override def root(): Standalone = theRoot
 
-  override def childModules(single: Single): Set[Module] = map(single).children
+  override def childModules(standalone: Standalone): Set[Module] = map(standalone).children
 
-  override def childSingles(single: Single): Set[Single] = childModules(single).flatMap {
-    case x: Single => Some(x)
+  override def childStandalone(standalone: Standalone): Set[Standalone] = childModules(standalone).flatMap {
+    case x: Standalone => Some(x)
     case _ => None
   }
 
   override def cycleSize(cycle: Cycle): Int = map(cycle).parts.size
 
-  override def cycleParts(cycle: Cycle): Set[Single] = map(cycle).parts
+  override def cycleParts(cycle: Cycle): Set[Standalone] = map(cycle).parts
 
   override def depth(module: Module): Int = map(module).depth
 
   override def complexity(module: Module): Int = map(module).complexity
 
-  override def dependsOn(context: Single, single: Single): Set[Single] = map(single).dependsOn.filter(hasParentOf(context))
+  override def dependsOn(context: Standalone, standalone: Standalone): Set[Standalone] = map(standalone).dependsOn.filter(hasParentOf(context))
 
-  override def dependedOnBy(context: Single, single: Single): Set[Single] = map(single).dependedOnBy.filter(hasParentOf(context))
+  override def dependedOnBy(context: Standalone, standalone: Standalone): Set[Standalone] = map(standalone).dependedOnBy.filter(hasParentOf(context))
 
-  override def reasonsFor(single: Single): Set[Reason] = reasonsFor(childSingles(single))
+  override def reasonsFor(standalone: Standalone): Set[Reason] = reasonsFor(childStandalone(standalone))
 
-  private def hasParentOf(parent: Single): Single => Boolean = (child) => child.path.init == parent.path
+  private def hasParentOf(parent: Standalone): Standalone => Boolean = (child) => child.path.init == parent.path
 
-  private def reasonsFor(parts: Set[Single]): Set[Reason] = {
+  private def reasonsFor(parts: Set[Standalone]): Set[Reason] = {
     reasonsFor(parts, parts)
   }
 
-  private def reasonsFor(leftParts: Set[Single], rightParts: Set[Single]): Set[Reason] = {
+  private def reasonsFor(leftParts: Set[Standalone], rightParts: Set[Standalone]): Set[Reason] = {
     for {
       fromPart <- leftParts
       toPart <- map(fromPart).dependsOn
       if rightParts.contains(toPart)
     } yield {
-      Reason(fromPart, toPart, reasonsFor(childSingles(fromPart), childSingles(toPart)))
+      Reason(fromPart, toPart, reasonsFor(childStandalone(fromPart), childStandalone(toPart)))
     }
   }
 }

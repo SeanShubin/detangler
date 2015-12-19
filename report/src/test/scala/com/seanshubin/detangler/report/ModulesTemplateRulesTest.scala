@@ -1,20 +1,20 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.model.{Cycle, Single}
+import com.seanshubin.detangler.model.{Cycle, Standalone}
 import org.scalatest.FunSuite
 
 class ModulesTemplateRulesTest extends FunSuite {
-  val singleTemplateRules = new SingleTemplateRules {
-    override def generate(singleTemplate: HtmlElement, context: Single, single: Single): HtmlElement =
-      HtmlElement.fragmentFromString(s"<p>${single.toString}</p>")
+  val standaloneTemplateRules = new StandaloneTemplateRules {
+    override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Standalone): HtmlElement =
+      HtmlElement.fragmentFromString(s"<p>${standalone.toString}</p>")
   }
   val cycleTemplateRules = new CycleTemplateRules {
-    override def generate(singleTemplate: HtmlElement, context: Single, cycle: Cycle): HtmlElement =
+    override def generate(standaloneTemplate: HtmlElement, context: Standalone, cycle: Cycle): HtmlElement =
       HtmlElement.fragmentFromString(s"<p>${cycle.toString}</p>")
   }
   val modulesTemplateText =
     """<div class="append-module">
-      |  <div class="single">
+      |  <div class="standalone">
       |  </div>
       |  <div class="cycle">
       |  </div>
@@ -24,11 +24,11 @@ class ModulesTemplateRulesTest extends FunSuite {
 
   test("modules template without cycles") {
     //given
-    val modulesTemplateRules = new ModulesTemplateRulesImpl(singleTemplateRules, cycleTemplateRules, SampleData.detangled)
+    val modulesTemplateRules = new ModulesTemplateRulesImpl(standaloneTemplateRules, cycleTemplateRules, SampleData.detangled)
     val expected =
       """<div class="append-module">
-        |  <p>Single(group/a)</p>
-        |  <p>Single(group/b)</p>
+        |  <p>Standalone(group/a)</p>
+        |  <p>Standalone(group/b)</p>
         |</div>
       """.stripMargin
     //when
@@ -40,12 +40,12 @@ class ModulesTemplateRulesTest extends FunSuite {
 
   test("modules template with cycles") {
     //given
-    val modulesTemplateRules = new ModulesTemplateRulesImpl(singleTemplateRules, cycleTemplateRules, SampleDataWithCycles.detangled)
+    val modulesTemplateRules = new ModulesTemplateRulesImpl(standaloneTemplateRules, cycleTemplateRules, SampleDataWithCycles.detangled)
     val expected =
       """<div class="append-module">
-        |  <p>Cycle(Single(group/a)--Single(group/b))</p>
-        |  <p>Single(group/a)</p>
-        |  <p>Single(group/b)</p>
+        |  <p>Cycle(Standalone(group/a)--Standalone(group/b))</p>
+        |  <p>Standalone(group/a)</p>
+        |  <p>Standalone(group/b)</p>
         |</div>
       """.stripMargin
     //when

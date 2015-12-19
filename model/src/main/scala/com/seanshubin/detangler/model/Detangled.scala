@@ -1,23 +1,23 @@
 package com.seanshubin.detangler.model
 
 trait Detangled {
-  def root(): Single
+  def root(): Standalone
 
-  def childModules(single: Single): Set[Module]
+  def childModules(standalone: Standalone): Set[Module]
 
-  def childSingles(single: Single): Set[Single]
+  def childStandalone(standalone: Standalone): Set[Standalone]
 
   def cycleSize(cycle: Cycle): Int
 
-  def cycleParts(cycle: Cycle): Set[Single]
+  def cycleParts(cycle: Cycle): Set[Standalone]
 
   def depth(module: Module): Int
 
   def complexity(module: Module): Int
 
-  def dependsOn(context: Single, single: Single): Set[Single]
+  def dependsOn(context: Standalone, standalone: Standalone): Set[Standalone]
 
-  def dependedOnBy(context: Single, single: Single): Set[Single]
+  def dependedOnBy(context: Standalone, standalone: Standalone): Set[Standalone]
 
-  def reasonsFor(single: Single): Set[Reason]
+  def reasonsFor(standalone: Standalone): Set[Reason]
 }

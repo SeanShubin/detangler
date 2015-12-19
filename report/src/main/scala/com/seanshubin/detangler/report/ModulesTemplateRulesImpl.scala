@@ -2,32 +2,32 @@ package com.seanshubin.detangler.report
 
 import com.seanshubin.detangler.model._
 
-class ModulesTemplateRulesImpl(singleTemplateRules: SingleTemplateRules,
+class ModulesTemplateRulesImpl(standaloneTemplateRules: StandaloneTemplateRules,
                                cycleTemplateRules: CycleTemplateRules,
                                detangled: Detangled) extends ModulesTemplateRules {
-  override def generate(modulesTemplate: HtmlElement, single: Single): HtmlElement = {
-    val baseTemplate = modulesTemplate.remove(".single").remove(".cycle")
-    val singleTemplate = modulesTemplate.select(".single")
+  override def generate(modulesTemplate: HtmlElement, standalone: Standalone): HtmlElement = {
+    val baseTemplate = modulesTemplate.remove(".standalone").remove(".cycle")
+    val standaloneTemplate = modulesTemplate.select(".standalone")
     val cycleTemplate = modulesTemplate.select(".cycle")
-    val children = detangled.childModules(single)
-    def composeModuleFunction(module: Module): HtmlElement = composeModule(single, module, singleTemplate, cycleTemplate)
+    val children = detangled.childModules(standalone)
+    def composeModuleFunction(module: Module): HtmlElement = composeModule(standalone, module, standaloneTemplate, cycleTemplate)
     val moduleElements = children.toSeq.seq.sortWith(ModuleOrdering.lessThan).map(composeModuleFunction)
     val result = baseTemplate.append(".append-module", moduleElements)
     result
   }
 
-  private def composeModule(context: Single, module: Module, singleTemplate: HtmlElement, cycleTemplate: HtmlElement): HtmlElement = {
+  private def composeModule(context: Standalone, module: Module, standaloneTemplate: HtmlElement, cycleTemplate: HtmlElement): HtmlElement = {
     module match {
       case cycle: Cycle => composeCycle(cycleTemplate, context, cycle)
-      case single: Single => composeSingle(singleTemplate, context, single)
+      case standalone: Standalone => composeStandalone(standaloneTemplate, context, standalone)
     }
   }
 
-  private def composeCycle(cycleTemplate: HtmlElement, context: Single, cycle: Cycle): HtmlElement = {
+  private def composeCycle(cycleTemplate: HtmlElement, context: Standalone, cycle: Cycle): HtmlElement = {
     cycleTemplateRules.generate(cycleTemplate, context, cycle)
   }
 
-  private def composeSingle(singleTemplate: HtmlElement, context: Single, single: Single): HtmlElement = {
-    singleTemplateRules.generate(singleTemplate, context, single)
+  private def composeStandalone(standaloneTemplate: HtmlElement, context: Standalone, standalone: Standalone): HtmlElement = {
+    standaloneTemplateRules.generate(standaloneTemplate, context, standalone)
   }
 }

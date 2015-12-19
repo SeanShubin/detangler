@@ -1,7 +1,7 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.model.Single
+import com.seanshubin.detangler.model.Standalone
 
 trait PageTemplateRules {
-  def generate(pageTemplate: HtmlElement, single: Single): HtmlElement
+  def generate(pageTemplate: HtmlElement, standalone: Standalone): HtmlElement
 }

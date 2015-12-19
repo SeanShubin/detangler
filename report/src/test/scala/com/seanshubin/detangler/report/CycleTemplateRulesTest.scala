@@ -1,12 +1,12 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.model.Single
+import com.seanshubin.detangler.model.Standalone
 import org.scalatest.FunSuite
 
 class CycleTemplateRulesTest extends FunSuite {
-  val singleSummaryTemplateRules = new SingleSummaryTemplateRules {
-    override def generate(singleTemplate: HtmlElement, single: Single): HtmlElement =
-      HtmlElement.fragmentFromString(s"<p>summary ${single.toString}</p>")
+  val standaloneSummaryTemplateRules = new StandaloneSummaryTemplateRules {
+    override def generate(standaloneTemplate: HtmlElement, standalone: Standalone): HtmlElement =
+      HtmlElement.fragmentFromString(s"<p>summary ${standalone.toString}</p>")
   }
 
   test("cycle") {
