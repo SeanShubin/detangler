@@ -9,6 +9,11 @@
     <name>${project.groupId}:${project.artifactId}</name>
     <dependencies>
         <dependency>
+            <groupId>com.seanshubin.detangler</groupId>
+            <artifactId>detangler-report</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.seanshubin.devon</groupId>
             <artifactId>devon-core</artifactId>
         </dependency>
@@ -17,16 +22,8 @@
             <artifactId>scala-library</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_2.11</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
         </dependency>
     </dependencies>
     <build>

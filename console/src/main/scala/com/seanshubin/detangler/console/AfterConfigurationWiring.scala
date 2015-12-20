@@ -3,6 +3,7 @@ package com.seanshubin.detangler.console
 import java.nio.file.Path
 
 import com.seanshubin.detangler.core._
+import com.seanshubin.detangler.model.Detangled
 
 trait AfterConfigurationWiring {
   def reportDir: Path

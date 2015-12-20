@@ -5,94 +5,47 @@ import java.nio.file.Paths
 
 import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
 import org.scalatest.FunSuite
-import org.scalatest.mock.EasyMockSugar
 
-class ConfigurationFactoryImplTest extends FunSuite with EasyMockSugar {
+class ConfigurationFactoryImplTest extends FunSuite {
+  val configFileName: String = "environment.txt"
+  val args = Seq(configFileName)
+  val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
+  val charset: Charset = StandardCharsets.UTF_8
+
   test("complete configuration") {
-    new Helper {
-      override def content =
-        """{
-          |  reportDir generated/report
-          |}
-          | """.stripMargin
-
-      override def expected = Right(Configuration(Paths.get("generated", "report")))
-
-      override def expecting = () => {
-        mockFileSystem.exists(configFilePath).andReturn(true)
-        mockFileSystem.readAllBytes(configFilePath).andReturn(contentBytes)
-      }
-
-      override def whenExecuting = () => {
-        val actual = configurationFactory.validate(args)
-        assert(actual === expected)
-      }
-    }
+    val content =
+      """{
+        |  reportDir generated/report
+        |}
+        | """.stripMargin
+    val expected = Right(Configuration(Paths.get("generated", "report")))
+    val filesStub = new FilesStub(Map("environment.txt" -> content), charset)
+    val configurationFactory = new ConfigurationFactoryImpl(filesStub, devonMarshaller, charset)
+    val actual = configurationFactory.validate(args)
+    assert(actual === expected)
   }
 
   test("missing configuration file") {
-    new Helper {
-      override def content =
-        """{
-          |  servePathOverride gui/src/main/resources/
-          |  optionalPathPrefix /template
-          |}
-          | """.stripMargin
+    val content =
+      """{
+        |  servePathOverride gui/src/main/resources/
+        |  optionalPathPrefix /template
+        |}
+        | """.stripMargin
 
-      override def expected = Left(Seq("Configuration file named 'environment.txt' not found"))
-
-      override def expecting = () => {
-        mockFileSystem.exists(configFilePath).andReturn(false)
-      }
-
-      override def whenExecuting = () => {
-        val actual = configurationFactory.validate(args)
-        assert(actual === expected)
-      }
-    }
+    val expected = Left(Seq("Configuration file named 'environment.txt' not found"))
+    val filesStub = new FilesStub(Map(), charset)
+    val configurationFactory = new ConfigurationFactoryImpl(filesStub, devonMarshaller, charset)
+    val actual = configurationFactory.validate(args)
+    assert(actual === expected)
   }
 
   test("malformed configuration") {
-    new Helper {
-      override def content = "{"
-
-      override def expected = Left(Seq("There was a problem reading the configuration file 'environment.txt': Could not match 'element', expected one of: map, array, string, null"))
-
-      override def expecting = () => {
-        mockFileSystem.exists(configFilePath).andReturn(true)
-        mockFileSystem.readAllBytes(configFilePath).andReturn(contentBytes)
-      }
-
-      override def whenExecuting = () => {
-        val actual = configurationFactory.validate(args)
-        assert(actual === expected)
-      }
-    }
+    val content = "{"
+    val expected = Left(Seq("There was a problem reading the configuration file 'environment.txt': Could not match 'element', expected one of: map, array, string, null"))
+    val filesStub = new FilesStub(Map("environment.txt" -> content), charset)
+    val configurationFactory = new ConfigurationFactoryImpl(filesStub, devonMarshaller, charset)
+    val actual = configurationFactory.validate(args)
+    assert(actual === expected)
   }
-
-  trait Helper {
-    def content: String
-
-    def expected: Either[Seq[String], Configuration]
-
-    val configFileName: String = "environment.txt"
-    val args = Seq(configFileName)
-    val mockFileSystem: FilesContract = mock[FilesContract]
-    val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
-    val charset: Charset = StandardCharsets.UTF_8
-    val configurationFactory = new ConfigurationFactoryImpl(mockFileSystem, devonMarshaller, charset)
-    val configFilePath = Paths.get(configFileName)
-    val contentBytes = content.getBytes(charset)
-    val mocks = Array(mockFileSystem)
-
-    def expecting: () => Unit
-
-    def whenExecuting: () => Unit
-
-    expecting()
-    EasyMockSugar.whenExecuting(mockFileSystem) {
-      whenExecuting()
-    }
-  }
-
 }

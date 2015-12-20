@@ -5,6 +5,8 @@ import java.nio.charset.Charset
 import java.nio.file.attribute.FileAttribute
 import java.nio.file.{OpenOption, Path}
 
+import com.seanshubin.detangler.contract.FilesNotImplemented
+
 class FilesStub(charset: Charset) extends FilesNotImplemented {
   var writeResults: Map[String, ByteArrayOutputStream] = Map()
   var directoriesCreated: Seq[Path] = Seq()

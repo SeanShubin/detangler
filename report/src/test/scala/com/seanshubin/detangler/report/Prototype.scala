@@ -3,7 +3,8 @@ package com.seanshubin.detangler.report
 import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.{Path, Paths}
 
-import com.seanshubin.detangler.model.Detangled
+import com.seanshubin.detangler.contract.{ClassLoaderContract, ClassLoaderDelegate, FilesContract, FilesDelegate}
+import com.seanshubin.detangler.model.{Detangled, SampleData, SampleDataWithCycles}
 
 object Prototype extends App {
   runFromPath(Paths.get("generated", "cycles-false"), SampleData.detangled)

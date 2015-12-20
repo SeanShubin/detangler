@@ -3,6 +3,7 @@ package com.seanshubin.detangler.report
 import java.nio.charset.Charset
 import java.nio.file.Path
 
+import com.seanshubin.detangler.contract.{ClassLoaderContract, FilesContract}
 import com.seanshubin.detangler.model.{Detangled, Standalone}
 
 class Reporter(detangled: Detangled,

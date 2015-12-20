@@ -3,6 +3,7 @@ package com.seanshubin.detangler.core
 import java.nio.charset.Charset
 import java.nio.file.Paths
 
+import com.seanshubin.detangler.contract.FilesContract
 import com.seanshubin.devon.core.devon.DevonMarshaller
 
 class ConfigurationFactoryImpl(files: FilesContract,
