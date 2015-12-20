@@ -8,7 +8,7 @@ class DependencyTemplateRulesImpl(detangled: Detangled, dependencyDirection: Dep
                         standalone: Standalone): QuantityAndElement = {
     val baseTemplate = dependencyTemplate.remove(".standalone-dependency-row")
     val dependencyRowTemplate = dependencyTemplate.select(".standalone-dependency-row")
-    val childModules = dependencyDirection.dependenciesFor(detangled, context, standalone)
+    val childModules = dependencyDirection.dependenciesFor(detangled, standalone)
     def generateRowFunction(x: Standalone) = generateRow(dependencyRowTemplate, context, standalone, x)
     val rows = childModules.map(generateRowFunction)
     val result = baseTemplate.
