@@ -15,6 +15,7 @@
         <module>console</module>
         <module>model</module>
         <module>report</module>
+        <module>analysis</module>
     </modules>
     <repositories>
         <repository>
