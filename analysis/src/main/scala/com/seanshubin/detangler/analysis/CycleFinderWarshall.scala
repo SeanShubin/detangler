@@ -2,15 +2,15 @@ package com.seanshubin.detangler.analysis
 
 import scala.collection.mutable.{Map => MutableMap, Set => MutableSet}
 
-class CycleFinderWarshall extends CycleFinder {
-  override def findCycles(graph: Map[String, Set[String]]): Set[Set[String]] = {
+class CycleFinderWarshall[T] extends CycleFinder[T] {
+  override def findCycles(graph: Map[T, Set[T]]): Map[T, Set[T]] = {
     val matrix = WarshallMatrix.fromGraph(graph)
     matrix.traverse()
     val cycles = matrix.cycles()
     cycles
   }
 
-  private class WarshallMatrix(graph: Map[String, Set[String]], nodes: Seq[String], matrix: Array[Array[Int]]) {
+  private class WarshallMatrix(graph: Map[T, Set[T]], nodes: Seq[T], matrix: Array[Array[Int]]) {
     val size = nodes.size
 
     def traverse(): Unit = {
@@ -31,34 +31,33 @@ class CycleFinderWarshall extends CycleFinder {
       }
     }
 
-    def cycles(): Set[Set[String]] = {
-      val inCycles: MutableSet[Int] = MutableSet[Int]()
-      val cyclesByFirstInCycle: MutableMap[Int, MutableSet[Int]] = MutableMap()
+    def cycles(): Map[T, Set[T]] = {
+      val cycleMap: MutableMap[Int, MutableSet[Int]] = MutableMap()
       for {
         i <- 0 until size
-        if !inCycles.contains(i)
         j <- i + 1 until size
-        if !inCycles.contains(j)
         if matrix(i)(j) == 1 && matrix(j)(i) == 1
       } {
-        inCycles.add(i)
-        inCycles.add(j)
-        if (!cyclesByFirstInCycle.contains(i)) {
-          cyclesByFirstInCycle.put(i, MutableSet())
+        val value = cycleMap.get(i) match {
+          case Some(existing) => existing
+          case None =>
+            val created = MutableSet[Int]()
+            created.add(i)
+            cycleMap.put(i, created)
+            created
         }
-        cyclesByFirstInCycle(i).add(i)
-        cyclesByFirstInCycle(i).add(j)
+        value.add(j)
+        cycleMap.put(j, value)
       }
-      val immutableIndicesMap = cyclesByFirstInCycle.toMap.map(CollectionUtil.functionOverPairValueOnly(_.toSet))
+      val immutableIndicesMap = cycleMap.toMap.map(CollectionUtil.functionOverPairValueOnly(_.toSet))
       val immutableValuesMap = immutableIndicesMap.map(CollectionUtil.functionOverPairWithKeyAndSetOfValues(nodes))
-      val result = immutableValuesMap.values.toSet
-      result
+      immutableValuesMap
     }
   }
 
   private object WarshallMatrix {
-    def fromGraph(graph: Map[String, Set[String]]): WarshallMatrix = {
-      val nodes = graph.keySet.toSeq.sorted
+    def fromGraph(graph: Map[T, Set[T]]): WarshallMatrix = {
+      val nodes = graph.keySet.toSeq
       val size = nodes.size
       val matrix: Array[Array[Int]] = Array.ofDim[Int](size, size)
       new WarshallMatrix(graph, nodes, matrix)

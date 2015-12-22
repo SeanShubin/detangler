@@ -16,7 +16,7 @@ class CycleTemplateRulesImpl(detangled: Detangled) extends CycleTemplateRules {
     summaryTemplate.
       text(".size", detangled.cycleSize(cycle).toString).
       text(".depth", detangled.depth(cycle).toString).
-      text(".complexity", detangled.complexity(cycle).toString)
+      text(".complexity", detangled.transitive(cycle).toString)
   }
 
   def generateDetail(detailTemplate: HtmlElement, context: Standalone, cycle: Cycle): HtmlElement = {

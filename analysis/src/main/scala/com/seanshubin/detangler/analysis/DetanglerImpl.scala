@@ -1,22 +1,21 @@
 package com.seanshubin.detangler.analysis
 
-import com.seanshubin.detangler.model.Detangled
+import com.seanshubin.detangler.model.{Detangled, Standalone}
 
-class DetanglerImpl(cycleFinder: CycleFinder) extends Detangler {
-  override def analyze(data: Seq[(String, String)]): Detangled = {
-    val dependsOnMap = data.foldLeft(Map[String, Set[String]]())(CollectionUtil.appendPairToMapFromKeyToSetOfValues)
+class DetanglerImpl(cycleFinder: CycleFinder[Standalone]) extends Detangler {
+  override def analyze(data: Seq[(Standalone, Standalone)]): Detangled = {
+    val dependsOnMap = data.foldLeft(Map[Standalone, Set[Standalone]]())(CollectionUtil.appendPairToMapFromKeyToSetOfValues)
     analyze(dependsOnMap)
   }
 
-  def analyze(dependsOnMap: Map[String, Set[String]]): Detangled = {
-    val dependedOnByMap = CollectionUtil.invert(dependsOnMap)
-    val cycles: Set[Set[String]] = cycleFinder.findCycles(dependsOnMap)
-    println(("-" * 40) + "DEPENDS ON" + ("-" * 40))
-    println(dependsOnMap)
-    println(("-" * 40) + "CYCLES" + ("-" * 40))
-    println(cycles)
-    println(("-" * 40) + "DEPENDED ON BY" + ("-" * 40))
-    println(dependedOnByMap)
-    ???
+  def analyze(originalDependsOnMap: Map[Standalone, Set[Standalone]]): Detangled = {
+    val originalDependedOnByMap = CollectionUtil.invert(originalDependsOnMap)
+    val dependsOnMap = CollectionUtil.addEmptyKeysForMapOfSets(originalDependsOnMap)
+    val dependedOnByMap = CollectionUtil.addEmptyKeysForMapOfSets(originalDependedOnByMap)
+    val cycles: Map[Standalone, Set[Standalone]] = cycleFinder.findCycles(dependsOnMap)
+    val emptyAggregate = Aggregate(Map(), dependsOnMap, dependedOnByMap, cycles)
+    val aggregate = dependsOnMap.keys.foldLeft(emptyAggregate)(Aggregate.add)
+    val detangled = new DetangledBackedByAggregate(aggregate)
+    detangled
   }
 }

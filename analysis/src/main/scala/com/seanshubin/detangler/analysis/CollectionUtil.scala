@@ -47,4 +47,12 @@ object CollectionUtil {
   def mutableToImmutable[T](mutable: MutableMap[T, MutableSet[T]]): Map[T, Set[T]] = {
     mutable.toMap.map(functionOverPairValueOnly(_.toSet))
   }
+
+  def addEmptyKeysForMapOfSets[T](data: Map[T, Set[T]]) = {
+    val individualValues = data.values.flatten
+    def addEmptyKeyIfMissing(data: Map[T, Set[T]], item: T): Map[T, Set[T]] = {
+      if (data.contains(item)) data else data.updated(item, Set())
+    }
+    individualValues.foldLeft(data)(addEmptyKeyIfMissing)
+  }
 }

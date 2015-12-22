@@ -27,15 +27,15 @@ class ModulesTemplateRulesTest extends FunSuite {
     val modulesTemplateRules = new ModulesTemplateRulesImpl(standaloneTemplateRules, cycleTemplateRules, SampleData.detangled)
     val expected =
       """<div class="append-module">
-        |  <p>Standalone(group/a)</p>
-        |  <p>Standalone(group/b)</p>
+        |  <p>group/a</p>
+        |  <p>group/b</p>
         |</div>
       """.stripMargin
     //when
     val actual = modulesTemplateRules.generate(modulesTemplate, SampleData.root).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
-    assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))
+    assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n", "\n", "\n"))
   }
 
   test("modules template with cycles") {
@@ -43,9 +43,9 @@ class ModulesTemplateRulesTest extends FunSuite {
     val modulesTemplateRules = new ModulesTemplateRulesImpl(standaloneTemplateRules, cycleTemplateRules, SampleDataWithCycles.detangled)
     val expected =
       """<div class="append-module">
-        |  <p>Cycle(Standalone(group/a)--Standalone(group/b))</p>
-        |  <p>Standalone(group/a)</p>
-        |  <p>Standalone(group/b)</p>
+        |  <p>group/a-group/b</p>
+        |  <p>group/a</p>
+        |  <p>group/b</p>
         |</div>
       """.stripMargin
     //when

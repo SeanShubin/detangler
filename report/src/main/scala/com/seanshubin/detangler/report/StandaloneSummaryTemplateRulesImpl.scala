@@ -8,7 +8,7 @@ class StandaloneSummaryTemplateRulesImpl(detangled: Detangled) extends Standalon
       attr(".standalone-summary", "id", HtmlRendering.htmlId(standalone)).
       text(".name", HtmlRendering.htmlName(standalone)).
       text(".depth", detangled.depth(standalone).toString).
-      text(".complexity", detangled.complexity(standalone).toString).
+      text(".complexity", detangled.transitive(standalone).toString).
       anchor(".composed-of", HtmlRendering.fileNameFor(standalone), "parts")
   }
 }

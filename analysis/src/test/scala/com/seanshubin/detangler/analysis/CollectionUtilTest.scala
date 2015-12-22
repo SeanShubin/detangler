@@ -33,4 +33,11 @@ class CollectionUtilTest extends FunSuite {
     val actual = CollectionUtil.invert(data)
     assert(actual === expected)
   }
+
+  test("add empty keys for map of sets") {
+    val data = Map(1 -> Set(2, 3), 3 -> Set(2, 4))
+    val expected = Map(1 -> Set(2, 3), 2 -> Set(), 3 -> Set(2, 4), 4 -> Set())
+    val actual = CollectionUtil.addEmptyKeysForMapOfSets(data)
+    assert(actual === expected)
+  }
 }

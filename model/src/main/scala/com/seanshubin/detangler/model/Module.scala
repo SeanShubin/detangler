@@ -4,10 +4,12 @@ import scala.annotation.tailrec
 
 sealed trait Module {
   def parent: Standalone
+
+  def toString: String
 }
 
 case class Standalone(path: Seq[String]) extends Module with Ordered[Standalone] {
-  override def toString: String = s"Standalone(${path.mkString("-")})"
+  override def toString: String = s"${path.mkString("--")}"
 
   override def compare(that: Standalone): Int = compare(this.path.toList, that.path.toList)
 
@@ -33,6 +35,6 @@ case class Cycle(parts: Set[Standalone]) extends Module {
   override def parent: Standalone = parts.head.parent
 
   override def toString: String = {
-    s"Cycle(${parts.toSeq.sorted.mkString("--")})"
+    s"""${parts.toSeq.sorted.mkString("-")}"""
   }
 }

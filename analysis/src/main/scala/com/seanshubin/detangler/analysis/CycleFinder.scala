@@ -1,5 +1,5 @@
 package com.seanshubin.detangler.analysis
 
-trait CycleFinder {
-  def findCycles(graph: Map[String, Set[String]]): Set[Set[String]]
+trait CycleFinder[T] {
+  def findCycles(graph: Map[T, Set[T]]): Map[T, Set[T]]
 }

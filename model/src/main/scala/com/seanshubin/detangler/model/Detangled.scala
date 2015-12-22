@@ -11,9 +11,11 @@ trait Detangled {
 
   def cycleParts(cycle: Cycle): Set[Standalone]
 
+  def breadth(module: Module): Int
+
   def depth(module: Module): Int
 
-  def complexity(module: Module): Int
+  def transitive(module: Module): Int
 
   def dependsOn(module: Module): Set[Standalone]
 

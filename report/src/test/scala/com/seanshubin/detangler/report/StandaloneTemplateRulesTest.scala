@@ -35,16 +35,16 @@ class StandaloneTemplateRulesTest extends FunSuite {
     val standaloneTemplateRules = new StandaloneTemplateRulesImpl(standaloneSummaryTemplateRules, dependsOnTemplateRules, dependedOnByTemplateRules)
     val expected =
       """<div class="standalone">
-        |  <p>summary Standalone(group/a)</p>
-        |  <p>depends on Standalone(group/a)</p>
-        |  <p>depended on by Standalone(group/a)</p>
+        |  <p>summary group/a</p>
+        |  <p>depends on group/a</p>
+        |  <p>depended on by group/a</p>
         |</div>
       """.stripMargin
     //when
     val actual = standaloneTemplateRules.generate(standaloneTemplate, SampleData.root, SampleData.groupA).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
-    assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))
+    assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n", "\n", "\n"))
   }
 
   test("no depends on") {
@@ -66,15 +66,15 @@ class StandaloneTemplateRulesTest extends FunSuite {
     val standaloneTemplateRules = new StandaloneTemplateRulesImpl(standaloneSummaryTemplateRules, dependsOnTemplateRules, dependedOnByTemplateRules)
     val expected =
       """<div class="standalone">
-        |  <p>summary Standalone(group/a)</p>
-        |  <p>depended on by Standalone(group/a)</p>
+        |  <p>summary group/a</p>
+        |  <p>depended on by group/a</p>
         |</div>
       """.stripMargin
     //when
     val actual = standaloneTemplateRules.generate(standaloneTemplate, SampleData.root, SampleData.groupA).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
-    assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))
+    assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n", "\n", "\n"))
   }
 
   test("no depended on by") {
@@ -96,15 +96,15 @@ class StandaloneTemplateRulesTest extends FunSuite {
     val standaloneTemplateRules = new StandaloneTemplateRulesImpl(standaloneSummaryTemplateRules, dependsOnTemplateRules, dependedOnByTemplateRules)
     val expected =
       """<div class="standalone">
-        |  <p>summary Standalone(group/a)</p>
-        |  <p>depends on Standalone(group/a)</p>
+        |  <p>summary group/a</p>
+        |  <p>depends on group/a</p>
         |</div>
       """.stripMargin
     //when
     val actual = standaloneTemplateRules.generate(standaloneTemplate, SampleData.root, SampleData.groupA).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
-    assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))
+    assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n", "\n", "\n"))
   }
 
   test("no dependencies") {
@@ -126,13 +126,13 @@ class StandaloneTemplateRulesTest extends FunSuite {
     val standaloneTemplateRules = new StandaloneTemplateRulesImpl(standaloneSummaryTemplateRules, dependsOnTemplateRules, dependedOnByTemplateRules)
     val expected =
       """<div class="standalone">
-        |  <p>summary Standalone(group/a)</p>
+        |  <p>summary group/a</p>
         |</div>
       """.stripMargin
     //when
     val actual = standaloneTemplateRules.generate(standaloneTemplate, SampleData.root, SampleData.groupA).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
-    assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n"))
+    assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n", "\n", "\n"))
   }
 }
