@@ -2,7 +2,9 @@ package com.seanshubin.detangler.model
 
 import scala.annotation.tailrec
 
-sealed trait Module
+sealed trait Module {
+  def parent: Standalone
+}
 
 case class Standalone(path: Seq[String]) extends Module with Ordered[Standalone] {
   override def toString: String = s"Standalone(${path.mkString("-")})"
@@ -26,6 +28,10 @@ case class Standalone(path: Seq[String]) extends Module with Ordered[Standalone]
 }
 
 case class Cycle(parts: Set[Standalone]) extends Module {
+  require(parts.tail.forall(part => parts.head.parent == part.parent))
+
+  override def parent: Standalone = parts.head.parent
+
   override def toString: String = {
     s"Cycle(${parts.toSeq.sorted.mkString("--")})"
   }

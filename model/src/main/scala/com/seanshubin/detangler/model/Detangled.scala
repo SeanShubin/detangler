@@ -15,9 +15,9 @@ trait Detangled {
 
   def complexity(module: Module): Int
 
-  def dependsOn(standalone: Standalone): Set[Standalone]
+  def dependsOn(module: Module): Set[Standalone]
 
-  def dependedOnBy(standalone: Standalone): Set[Standalone]
+  def dependedOnBy(module: Module): Set[Standalone]
 
   def reasonsFor(standalone: Standalone): Set[Reason]
 

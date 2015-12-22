@@ -18,11 +18,11 @@ class DetangledFake(theRoot: Standalone, map: Map[Module, ModuleInfo], val level
 
   override def complexity(module: Module): Int = map(module).complexity
 
-  override def dependsOn(standalone: Standalone): Set[Standalone] =
-    map(standalone).dependsOn.filter(hasParentOf(standalone.parent))
+  override def dependsOn(module: Module): Set[Standalone] =
+    map(module).dependsOn.filter(hasParentOf(module.parent))
 
-  override def dependedOnBy(standalone: Standalone): Set[Standalone] =
-    map(standalone).dependedOnBy.filter(hasParentOf(standalone.parent))
+  override def dependedOnBy(module: Module): Set[Standalone] =
+    map(module).dependedOnBy.filter(hasParentOf(module.parent))
 
   override def reasonsFor(standalone: Standalone): Set[Reason] = reasonsFor(childStandalone(standalone))
 

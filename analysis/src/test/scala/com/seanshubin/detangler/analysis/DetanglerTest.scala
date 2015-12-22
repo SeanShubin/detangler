@@ -15,7 +15,6 @@ class DetanglerTest extends FunSuite {
       ("f", "d"),
       ("g", "h"),
       ("h", "g"),
-      ("h", "h"),
       ("h", "i"),
       ("i", "j")
     )
@@ -33,7 +32,8 @@ class DetanglerTest extends FunSuite {
     val cycleGH = Cycle(Set(g, h))
     val expectedModules = Seq(a, b, cycleDEF, d, e, f, cycleGH, g, h, i, c, j)
 
-    val detangler = new DetanglerImpl
+    val cycleFinder = new CycleFinderWarshall
+    val detangler = new DetanglerImpl(cycleFinder)
     val detangled = detangler.analyze(dependencies)
 
     assert(detangled.levelsDeep === 1)
@@ -68,7 +68,7 @@ class DetanglerTest extends FunSuite {
                  cycle: Cycle,
                  depth: Int,
                  complexity: Int,
-                 parts:Seq[Standalone],
+                 parts: Seq[Standalone],
                  dependsOn: Seq[Standalone],
                  dependedOnBy: Seq[Standalone]): Unit = {
     assert(detangled.depth(cycle) === depth, cycle)
