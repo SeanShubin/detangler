@@ -17,6 +17,10 @@ case class Standalone(path: Seq[String]) extends Module with Ordered[Standalone]
 
   def isRoot: Boolean = path.isEmpty
 
+  def level: Int = path.size
+
+  def atLevel(targetLevel: Int): Standalone = Standalone(path.take(targetLevel))
+
   @tailrec
   private def compare(left: List[String], right: List[String]): Int = {
     if (left.size != right.size)
