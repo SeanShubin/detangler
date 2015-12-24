@@ -39,7 +39,7 @@ class TreeTest extends FunSuite {
       }
       path.map(modifyPathPart).mkString("(", "", ")")
     }
-    val actual = tree.map(composeName)
+    val actual = tree.mapOverTree(composeName)
     assert(actual.value(root) === "()")
     assert(actual.value(groupA) === "(a)")
     assert(actual.value(groupB) === "(b)")

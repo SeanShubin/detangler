@@ -31,8 +31,8 @@ case class Tree[T](value: T, path: Seq[String] = Seq(), branches: Seq[Tree[T]] =
     path +: branches.flatMap(_.keys())
   }
 
-  def map[U](f: (T, Seq[String]) => U): Tree[U] = {
-    new Tree[U](f(value, path), path, branches.map(_.map(f)))
+  def mapOverTree[U](f: (T, Seq[String]) => U): Tree[U] = {
+    new Tree[U](f(value, path), path, branches.par.map(_.mapOverTree(f)).seq)
   }
 
   def value(valuePath: Seq[String]): T = {
