@@ -8,11 +8,16 @@ class DetanglerImpl(cycleFinder: CycleFinder[Standalone]) extends Detangler {
   }
 
   def analyze(data: DependencyData): Detangled = {
-    val tree = data.all.foldLeft(TreeOfStandalone.Empty)(TreeOfStandalone.addStandalone)
-    val cycles: Map[Standalone, Set[Standalone]] = cycleFinder.findCycles(data.dependsOn)
-    val emptyAggregate = Aggregate(Map(), data.dependsOn, data.dependedOnBy, cycles)
-    val aggregate = data.dependsOn.keys.foldLeft(emptyAggregate)(Aggregate.add)
-    val detangled = new DetangledBackedByAggregate(aggregate)
+    def analyzePath(value: Unit, path: Seq[String]): Aggregate = {
+      val subset = data.subsetFor(path)
+      val cycles: Map[Standalone, Set[Standalone]] = cycleFinder.findCycles(subset.dependsOn)
+      val emptyAggregate = Aggregate(Map(), subset.dependsOn, subset.dependedOnBy, cycles)
+      val aggregate = subset.dependsOn.keys.foldLeft(emptyAggregate)(Aggregate.add)
+      aggregate
+    }
+    val treeOfPaths = data.all.map(_.path).foldLeft(Tree.Empty)(Tree.add)
+    val treeOfAggregate = treeOfPaths.mapOverTree(analyzePath)
+    val detangled = new DetangledBackedByTreeOfAggregate(data.level, treeOfAggregate)
     detangled
   }
 }

@@ -3,6 +3,7 @@ package com.seanshubin.detangler.model
 import scala.annotation.tailrec
 
 sealed trait Module {
+  def isRoot: Boolean
   def parent: Standalone
 
   def toString: String
@@ -15,7 +16,7 @@ case class Standalone(path: Seq[String]) extends Module with Ordered[Standalone]
 
   def parent: Standalone = Standalone(path.init)
 
-  def isRoot: Boolean = path.isEmpty
+  override def isRoot: Boolean = path.isEmpty
 
   def level: Int = path.size
 
@@ -35,6 +36,8 @@ case class Standalone(path: Seq[String]) extends Module with Ordered[Standalone]
 
 case class Cycle(parts: Set[Standalone]) extends Module {
   require(parts.tail.forall(part => parts.head.parent == part.parent))
+
+  override def isRoot: Boolean = false
 
   override def parent: Standalone = parts.head.parent
 

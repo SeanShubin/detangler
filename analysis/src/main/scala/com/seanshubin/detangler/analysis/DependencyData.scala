@@ -5,7 +5,26 @@ import com.seanshubin.detangler.model.Standalone
 case class DependencyData(level: Int,
                           all: Set[Standalone],
                           dependsOn: Map[Standalone, Set[Standalone]],
-                          dependedOnBy: Map[Standalone, Set[Standalone]])
+                          dependedOnBy: Map[Standalone, Set[Standalone]]) {
+  def subsetFor(path: Seq[String]): DependencyData = {
+    val newLevel = path.size + 1
+    def isRelevant(standalone: Standalone): Boolean =
+      standalone.path.startsWith(path) && standalone.path.size == newLevel
+    def isEntryRelevant(entry: (Standalone, Set[Standalone])): Boolean = {
+      val (key, _) = entry
+      isRelevant(key)
+    }
+    def filterDependencies(entry: (Standalone, Set[Standalone])): (Standalone, Set[Standalone]) = {
+      val (key, oldValue) = entry
+      val newValue = oldValue.filter(isRelevant)
+      (key, newValue)
+    }
+    val newAll = all.filter(isRelevant)
+    val newDependsOn = dependsOn.filter(isEntryRelevant).map(filterDependencies)
+    val newDependedOnBy = dependedOnBy.filter(isEntryRelevant).map(filterDependencies)
+    DependencyData(newLevel, newAll, newDependsOn, newDependedOnBy)
+  }
+}
 
 object DependencyData {
   type DependencyPair = (Standalone, Standalone)

@@ -59,4 +59,6 @@ object Tree {
   def isSuperPath(left: Seq[String], right: Seq[String]): Boolean = {
     left == right.take(left.size)
   }
+
+  def add(tree: Tree[Unit], path: Seq[String]): Tree[Unit] = tree.add(path)
 }
