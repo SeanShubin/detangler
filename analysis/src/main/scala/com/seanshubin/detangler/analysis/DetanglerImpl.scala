@@ -8,7 +8,7 @@ class DetanglerImpl(cycleFinder: CycleFinder[Standalone]) extends Detangler {
   }
 
   def analyze(data: DependencyData): Detangled = {
-    val tree = data.all.foldLeft(Tree.Empty)(Tree.addStandalone)
+    val tree = data.all.foldLeft(TreeOfStandalone.Empty)(TreeOfStandalone.addStandalone)
     val cycles: Map[Standalone, Set[Standalone]] = cycleFinder.findCycles(data.dependsOn)
     val emptyAggregate = Aggregate(Map(), data.dependsOn, data.dependedOnBy, cycles)
     val aggregate = data.dependsOn.keys.foldLeft(emptyAggregate)(Aggregate.add)

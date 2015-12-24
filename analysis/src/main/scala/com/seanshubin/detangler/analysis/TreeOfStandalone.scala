@@ -2,8 +2,8 @@ package com.seanshubin.detangler.analysis
 
 import com.seanshubin.detangler.model.Standalone
 
-case class Tree(parent: Standalone, children: List[Tree]) {
-  def addStandalone(standalone: Standalone): Tree = {
+case class TreeOfStandalone(parent: Standalone, children: List[TreeOfStandalone]) {
+  def addStandalone(standalone: Standalone): TreeOfStandalone = {
     if (parent.level == standalone.level) {
       if (parent == standalone) this
       else throw new RuntimeException(s"$parent did not equal $standalone")
@@ -12,7 +12,7 @@ case class Tree(parent: Standalone, children: List[Tree]) {
       val childNodes = children.map(_.parent)
       val index = childNodes.indexOf(atChildLevel)
       if (index == -1) {
-        val emptyChild = Tree(atChildLevel, Nil)
+        val emptyChild = TreeOfStandalone(atChildLevel, Nil)
         val newChild = emptyChild.addStandalone(standalone)
         val newChildren = newChild :: children
         copy(children = newChildren)
@@ -37,10 +37,10 @@ case class Tree(parent: Standalone, children: List[Tree]) {
   }
 }
 
-object Tree {
-  val Empty = Tree(Standalone(Seq()), Nil)
+object TreeOfStandalone {
+  val Empty = TreeOfStandalone(Standalone(Seq()), Nil)
 
-  def addStandalone(tree: Tree, standalone: Standalone): Tree = {
+  def addStandalone(tree: TreeOfStandalone, standalone: Standalone): TreeOfStandalone = {
     tree.addStandalone(standalone)
   }
 }

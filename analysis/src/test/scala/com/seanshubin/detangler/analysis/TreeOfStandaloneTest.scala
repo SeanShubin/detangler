@@ -3,15 +3,15 @@ package com.seanshubin.detangler.analysis
 import com.seanshubin.detangler.model.Standalone
 import org.scalatest.FunSuite
 
-class TreeTest extends FunSuite {
+class TreeOfStandaloneTest extends FunSuite {
   test("single item") {
     val root = Standalone(Seq())
     val groupA = Standalone(Seq("group/a"))
     val modules = Seq(groupA)
     val expected =
-      Tree(root, List(
-        Tree(groupA, Nil)))
-    val actual = modules.foldLeft(Tree.Empty)(Tree.addStandalone)
+      TreeOfStandalone(root, List(
+        TreeOfStandalone(groupA, Nil)))
+    val actual = modules.foldLeft(TreeOfStandalone.Empty)(TreeOfStandalone.addStandalone)
     assert(actual === expected)
   }
 
@@ -21,10 +21,10 @@ class TreeTest extends FunSuite {
     val groupB = Standalone(Seq("group/b"))
     val modules = Seq(groupA, groupB)
     val expected =
-      Tree(root, List(
-        Tree(groupB, Nil),
-        Tree(groupA, Nil)))
-    val actual = modules.foldLeft(Tree.Empty)(Tree.addStandalone)
+      TreeOfStandalone(root, List(
+        TreeOfStandalone(groupB, Nil),
+        TreeOfStandalone(groupA, Nil)))
+    val actual = modules.foldLeft(TreeOfStandalone.Empty)(TreeOfStandalone.addStandalone)
     assert(actual === expected)
   }
 
@@ -34,10 +34,10 @@ class TreeTest extends FunSuite {
     val packageC = Standalone(Seq("group/a", "package/c"))
     val modules = Seq(packageC)
     val expected =
-      Tree(root, List(
-        Tree(groupA, List(
-          Tree(packageC, Nil)))))
-    val actual = modules.foldLeft(Tree.Empty)(Tree.addStandalone)
+      TreeOfStandalone(root, List(
+        TreeOfStandalone(groupA, List(
+          TreeOfStandalone(packageC, Nil)))))
+    val actual = modules.foldLeft(TreeOfStandalone.Empty)(TreeOfStandalone.addStandalone)
     assert(actual === expected)
   }
 
@@ -54,17 +54,17 @@ class TreeTest extends FunSuite {
     val classI = Standalone(Seq("group/b", "package/e", "class/i"))
     val modules = Seq(classF, classG, classH, classI)
     val expected =
-      Tree(root, List(
-        Tree(groupB, List(
-          Tree(packageE, List(
-            Tree(classI, Nil))))),
-        Tree(groupA, List(
-          Tree(packageD, List(
-            Tree(classH, Nil))),
-          Tree(packageC, List(
-            Tree(classG, Nil),
-            Tree(classF, Nil)))))))
-    val actual = modules.foldLeft(Tree.Empty)(Tree.addStandalone)
+      TreeOfStandalone(root, List(
+        TreeOfStandalone(groupB, List(
+          TreeOfStandalone(packageE, List(
+            TreeOfStandalone(classI, Nil))))),
+        TreeOfStandalone(groupA, List(
+          TreeOfStandalone(packageD, List(
+            TreeOfStandalone(classH, Nil))),
+          TreeOfStandalone(packageC, List(
+            TreeOfStandalone(classG, Nil),
+            TreeOfStandalone(classF, Nil)))))))
+    val actual = modules.foldLeft(TreeOfStandalone.Empty)(TreeOfStandalone.addStandalone)
     assert(actual === expected)
   }
 }
