@@ -36,8 +36,12 @@ case class Tree[T](value: T, path: Seq[String] = Seq(), branches: Seq[Tree[T]] =
   }
 
   def value(valuePath: Seq[String]): T = {
+    apply(valuePath).value
+  }
+
+  def apply(valuePath: Seq[String]): Tree[T] = {
     if (path == valuePath) {
-      value
+      this
     } else if (isSuperPath(path, valuePath)) {
       val immediateBranchKeys = branches.map(_.path)
       val nextChildDown = valuePath.take(path.size + 1)
@@ -45,7 +49,7 @@ case class Tree[T](value: T, path: Seq[String] = Seq(), branches: Seq[Tree[T]] =
       if (index == -1) {
         throw new RuntimeException(s"No value found at $valuePath")
       } else {
-        branches(index).value(valuePath)
+        branches(index)(valuePath)
       }
     } else {
       throw new RuntimeException(s"$path is not a super path of $valuePath")

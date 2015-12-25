@@ -1,8 +1,6 @@
 package com.seanshubin.detangler.model
 
 trait Detangled {
-  def root(): Standalone
-
   def childModules(standalone: Standalone): Set[Module]
 
   def childStandalone(standalone: Standalone): Set[Standalone]

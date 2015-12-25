@@ -35,6 +35,10 @@ case class Standalone(path: Seq[String]) extends Module with Ordered[Standalone]
 
 }
 
+object Standalone {
+  val Root = Standalone(Seq())
+}
+
 case class Cycle(parts: Set[Standalone]) extends Module {
   require(parts.tail.forall(part => parts.head.parent == part.parent))
 

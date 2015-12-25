@@ -148,6 +148,7 @@ class DetanglerTest extends FunSuite {
     assert(detangled.transitive(standalone) === transitive, s"transitive for $standalone")
     assert(detangled.dependsOn(standalone) === dependsOn, s"dependsOn for $standalone")
     assert(detangled.dependedOnBy(standalone) === dependedOnBy, s"dependedOnBy for $standalone")
+    assert(detangled.childModules(standalone) === children, s"children for $standalone")
   }
 
   def checkCycle(detangled: Detangled,

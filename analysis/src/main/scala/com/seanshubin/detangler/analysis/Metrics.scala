@@ -3,7 +3,7 @@ package com.seanshubin.detangler.analysis
 import com.seanshubin.detangler.model.{Module, Standalone}
 
 case class Metrics(id: Module,
-                   children: Set[Standalone],
+                   children: Set[Module],
                    cycleParts: Set[Standalone],
                    dependsOn: Set[Standalone],
                    dependedOnBy: Set[Standalone],

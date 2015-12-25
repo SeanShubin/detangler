@@ -50,7 +50,7 @@ class CycleTemplateRulesTest extends FunSuite {
         |</div>
         | """.stripMargin
     //when
-    val actual = cycleTemplateRules.generate(cycleTemplate, detangled.root(), SampleDataWithCycles.cycleAB).toString
+    val actual = cycleTemplateRules.generate(cycleTemplate, Standalone.Root, SampleDataWithCycles.cycleAB).toString
     //then
     val linesCompareResult = LinesDifference.compare(actual, expected)
     assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n", "\n", "\n"))

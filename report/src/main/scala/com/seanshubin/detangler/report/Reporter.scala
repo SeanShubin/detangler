@@ -15,7 +15,7 @@ class Reporter(detangled: Detangled,
   override def run(): Unit = {
     filesContract.createDirectories(directory)
     copyResource("style.css", directory.resolve("style.css"))
-    generatePage(detangled.root())
+    generatePage(Standalone.Root)
   }
 
   private def copyResource(name: String, destination: Path): Unit = {

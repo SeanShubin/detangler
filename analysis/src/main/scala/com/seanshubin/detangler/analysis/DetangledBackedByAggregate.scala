@@ -3,8 +3,6 @@ package com.seanshubin.detangler.analysis
 import com.seanshubin.detangler.model._
 
 class DetangledBackedByAggregate(aggregate: Aggregate) extends Detangled {
-  override def root(): Standalone = Standalone(Seq())
-
   override def reasonsFor(standalone: Standalone): Set[Reason] = ???
 
   override def cycleParts(cycle: Cycle): Set[Standalone] = aggregate.modules(cycle).cycleParts
