@@ -24,29 +24,8 @@ case class Aggregate(modules: Map[Module, Metrics],
     afterComputingDependsOn.addCycleWithoutComputingDependsOn(cycleParts, cycleDependsOn)
   }
 
-  private def addStandalone(standalone: Standalone): Aggregate = {
-    val afterComputingDependsOn = dependsOnMap(standalone).foldLeft(this)(Aggregate.add)
-    afterComputingDependsOn.addStandaloneWithoutComputingDependsOn(standalone)
-  }
-
-  private def addStandaloneWithoutComputingDependsOn(standalone: Standalone): Aggregate = {
-    val dependsOn = dependsOnMap(standalone)
-    val depth = if (dependsOn.isEmpty) 0 else dependsOn.map(modules).map(_.depth).max + 1
-    val transitiveDependencies = dependsOn.map(modules).flatMap(_.transitiveDependencies) ++ dependsOn
-    val metrics = Metrics(
-      id = standalone,
-      children = Set(),
-      cycleParts = Set(),
-      dependsOn = dependsOn,
-      dependedOnBy = dependedOnByMap(standalone),
-      depth = depth,
-      transitiveDependencies = transitiveDependencies
-    )
-    this.copy(modules = modules.updated(standalone, metrics))
-  }
-
   private def addCycleWithoutComputingDependsOn(cycleParts: Set[Standalone], cycleDependsOn: Set[Standalone]): Aggregate = {
-    val depth = if (cycleDependsOn.isEmpty) 0 else cycleDependsOn.map(modules).map(_.depth).max + cycleParts.size
+    val depth = if (cycleDependsOn.isEmpty) cycleParts.size else cycleDependsOn.map(modules).map(_.depth).max + cycleParts.size
     val cycleTransitiveDependencies = cycleDependsOn.map(modules).flatMap(_.transitiveDependencies) ++ cycleDependsOn
     val cycleDependedOnBy = cycleParts.flatMap(dependedOnByMap).diff(cycleParts)
     val cycle = Cycle(cycleParts)
@@ -78,6 +57,33 @@ case class Aggregate(modules: Map[Module, Metrics],
     val cyclePartEntries = cycleParts.map(createMetricsEntryForCyclePart)
     val newEntries = cycleEntry +: cyclePartEntries.toSeq
     this.copy(modules = modules ++ newEntries)
+  }
+
+  private def addStandalone(standalone: Standalone): Aggregate = {
+    val afterComputingDependsOn = dependsOnMap(standalone).foldLeft(this)(Aggregate.add)
+    afterComputingDependsOn.addStandaloneWithoutComputingDependsOn(standalone)
+  }
+
+  private def addStandaloneWithoutComputingDependsOn(standalone: Standalone): Aggregate = {
+    val dependsOn = dependsOnMap(standalone)
+    val depth = if (dependsOn.isEmpty) 0 else dependsOn.map(modules).map(_.depth).max + 1
+    val transitiveDependencies = dependsOn.map(modules).flatMap(_.transitiveDependencies) ++ dependsOn
+    val metrics = Metrics(
+      id = standalone,
+      children = Set(),
+      cycleParts = Set(),
+      dependsOn = dependsOn,
+      dependedOnBy = dependedOnByMap(standalone),
+      depth = depth,
+      transitiveDependencies = transitiveDependencies
+    )
+    this.copy(modules = modules.updated(standalone, metrics))
+  }
+
+  override def toString: String = {
+    val summary = s"${modules.size} modules"
+    val modulesString = modules.keys.toSeq.mkString(", ")
+    s"$summary, $modulesString"
   }
 }
 

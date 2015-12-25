@@ -17,7 +17,6 @@ class TreeTest extends FunSuite {
   test("construct tree") {
     val tree = Tree.Empty.add(classF).add(classG).add(classH).add(classI)
     val keys = tree.keys()
-    keys.foreach(println)
     assert(keys.size === 10)
     assert(keys(0) === root)
     assert(keys(1) === groupA)

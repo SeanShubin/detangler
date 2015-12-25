@@ -14,9 +14,13 @@ class DetangledBackedByTreeOfAggregate(level: Int, treeOfAggregate: Tree[Aggrega
   override def dependedOnBy(module: Module): Set[Standalone] = lookupMetrics(module).dependedOnBy
 
   private def lookupMetrics(module: Module): Metrics = {
-    val aggregate = treeOfAggregate.value(module.parent.path)
-    val metrics = aggregate.modules(module)
-    metrics
+    if (module.isRoot) {
+      Metrics.Empty
+    } else {
+      val aggregate = treeOfAggregate.value(module.parent.path)
+      val metrics = aggregate.modules(module)
+      metrics
+    }
   }
 
   override def childStandalone(standalone: Standalone): Set[Standalone] = ???

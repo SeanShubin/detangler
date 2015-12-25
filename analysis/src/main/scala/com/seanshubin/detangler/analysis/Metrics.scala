@@ -19,3 +19,14 @@ case class Metrics(id: Module,
 
   def transitive: Int = transitiveDependencies.size
 }
+
+object Metrics {
+  val Empty = Metrics(
+    id = Standalone(Seq()),
+    children = Set(),
+    cycleParts = Set(),
+    dependsOn = Set(),
+    dependedOnBy = Set(),
+    depth = 0,
+    transitiveDependencies = Set())
+}

@@ -4,6 +4,7 @@ import scala.annotation.tailrec
 
 sealed trait Module {
   def isRoot: Boolean
+
   def parent: Standalone
 
   def toString: String

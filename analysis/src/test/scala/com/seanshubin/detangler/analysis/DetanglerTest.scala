@@ -38,7 +38,7 @@ class DetanglerTest extends FunSuite {
     val detangled = detangler.analyze(dependencies)
 
     assert(detangled.levelsDeep === 1)
-    //    checkStandalone(detangled, root, 0, 0, 0, Set(), Set(), expectedModules)
+    checkStandalone(detangled, root, 0, 0, 0, Set(), Set(), expectedModules)
     checkStandalone(detangled, a, 1, 8, 9, Set(b), Set(), Set())
     checkStandalone(detangled, b, 2, 7, 8, Set(c, d), Set(a), Set())
     checkStandalone(detangled, c, 0, 0, 0, Set(), Set(b), Set())
@@ -77,16 +77,16 @@ class DetanglerTest extends FunSuite {
 
     assert(detangled.levelsDeep === 3)
 
-    //    checkStandalone(detangled, root, 0, 0, 0, Set(), Set(), Set(groupA, groupB))
+    checkStandalone(detangled, root, 0, 0, 0, Set(), Set(), Set(groupA, groupB))
     checkStandalone(detangled, groupA, 1, 1, 1, Set(groupB), Set(), Set(packageC, packageD))
     checkStandalone(detangled, groupB, 0, 0, 0, Set(), Set(groupA), Set(packageE))
-    checkStandalone(detangled, packageC, 2, 1, 2, Set(packageD), Set(), Set(classF, classG))
+    checkStandalone(detangled, packageC, 1, 1, 1, Set(packageD), Set(), Set(classF, classG))
     checkStandalone(detangled, packageD, 0, 0, 0, Set(), Set(packageC), Set(classH))
-    checkStandalone(detangled, packageE, 0, 0, 0, Set(), Set(packageC), Set(classI))
-    checkStandalone(detangled, classF, 1, 3, 3, Set(classG, classH, classI), Set(), Set())
+    checkStandalone(detangled, packageE, 0, 0, 0, Set(), Set(), Set(classI))
+    checkStandalone(detangled, classF, 1, 1, 1, Set(classG), Set(), Set())
     checkStandalone(detangled, classG, 0, 0, 0, Set(), Set(classF), Set())
-    checkStandalone(detangled, classH, 0, 0, 0, Set(), Set(classF), Set())
-    checkStandalone(detangled, classI, 0, 0, 0, Set(), Set(classF), Set())
+    checkStandalone(detangled, classH, 0, 0, 0, Set(), Set(), Set())
+    checkStandalone(detangled, classI, 0, 0, 0, Set(), Set(), Set())
   }
 
   test("multiple levels deep with cycles") {
@@ -102,7 +102,7 @@ class DetanglerTest extends FunSuite {
     val classI = Standalone(Seq("group/b", "package/e", "class/i"))
     val groupAB = Cycle(Set(groupA, groupB))
     val packageCD = Cycle(Set(packageC, packageD))
-    val cycleFG = Cycle(Set(classF, classG))
+    val classFG = Cycle(Set(classF, classG))
 
     val dependencies = Seq(
       (classF, classG),
@@ -120,19 +120,19 @@ class DetanglerTest extends FunSuite {
     assert(detangled.levelsDeep === 3)
 
     checkStandalone(detangled, root, 0, 0, 0, Set(), Set(), Set(groupA, groupB, groupAB))
-    checkStandalone(detangled, groupA, 1, 2, 1, Set(groupB), Set(groupB), Set(packageC, packageD))
+    checkStandalone(detangled, groupA, 1, 2, 1, Set(groupB), Set(groupB), Set(packageC, packageD, packageCD))
     checkStandalone(detangled, groupB, 1, 2, 1, Set(groupA), Set(groupA), Set(packageE))
-    checkStandalone(detangled, packageC, 1, 2, 1, Set(packageD, packageE), Set(), Set(classF, classG))
+    checkStandalone(detangled, packageC, 1, 2, 1, Set(packageD), Set(packageD), Set(classF, classG, classFG))
     checkStandalone(detangled, packageD, 1, 2, 1, Set(packageC), Set(packageC), Set(classH))
-    checkStandalone(detangled, packageE, 0, 0, 0, Set(), Set(packageC), Set(classI))
-    checkStandalone(detangled, classF, 1, 3, 3, Set(classG), Set(classG), Set())
-    checkStandalone(detangled, classG, 0, 0, 0, Set(classF), Set(classF), Set())
+    checkStandalone(detangled, packageE, 0, 0, 0, Set(), Set(), Set(classI))
+    checkStandalone(detangled, classF, 1, 2, 1, Set(classG), Set(classG), Set())
+    checkStandalone(detangled, classG, 1, 2, 1, Set(classF), Set(classF), Set())
     checkStandalone(detangled, classH, 0, 0, 0, Set(), Set(), Set())
     checkStandalone(detangled, classI, 0, 0, 0, Set(), Set(), Set())
 
-    checkCycle(detangled, groupAB, 0, 0, 0, Set(groupA, groupB), Set(), Set())
-    checkCycle(detangled, packageCD, 0, 0, 0, Set(packageC, packageD), Set(), Set())
-    checkCycle(detangled, cycleFG, 0, 0, 0, Set(classF, classG), Set(), Set())
+    checkCycle(detangled, groupAB, 0, 2, 0, Set(groupA, groupB), Set(), Set())
+    checkCycle(detangled, packageCD, 0, 2, 0, Set(packageC, packageD), Set(), Set())
+    checkCycle(detangled, classFG, 0, 2, 0, Set(classF, classG), Set(), Set())
   }
 
   def checkStandalone(detangled: Detangled,
