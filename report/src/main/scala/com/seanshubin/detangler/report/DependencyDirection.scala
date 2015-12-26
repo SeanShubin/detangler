@@ -16,6 +16,7 @@ sealed abstract case class DependencyDirection(caption: String) {
 
 object DependencyDirection {
   lazy val values: Seq[DependencyDirection] = valuesBuffer.toSeq
+  private val valuesBuffer = new ArrayBuffer[DependencyDirection]()
   val TowardDependsOn = new DependencyDirection("depends on") {
     override def dependenciesFor(detangled: Detangled, standalone: Standalone): Seq[Standalone] = {
       detangled.dependsOn(standalone)
@@ -35,5 +36,4 @@ object DependencyDirection {
 
     override def link(left: Standalone, right: Standalone): String = HtmlRendering.reasonLink(right, left)
   }
-  private val valuesBuffer = new ArrayBuffer[DependencyDirection]()
 }

@@ -16,7 +16,6 @@ object SampleDataWithCycles {
   val cycleAB = Cycle(Set(groupA, groupB))
   val cycleCD = Cycle(Set(packageC, packageD))
   val cycleFG = Cycle(Set(classF, classG))
-  val detangled = new DetangledFake(root, map, 3)
   private val map: Map[Module, ModuleInfo] = Map(
     root -> ModuleInfo(
       id = root,
@@ -89,4 +88,5 @@ object SampleDataWithCycles {
       parts = Set(classF, classG)
     )
   )
+  val detangled = new DetangledFake(root, map, 3)
 }

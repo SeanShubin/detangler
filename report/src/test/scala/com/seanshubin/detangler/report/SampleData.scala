@@ -13,7 +13,6 @@ object SampleData {
   val classG = Standalone(Seq("group/a", "package/c", "class/g"))
   val classH = Standalone(Seq("group/a", "package/d", "class/h"))
   val classI = Standalone(Seq("group/b", "package/e", "class/i"))
-  val detangled = new DetangledFake(root, map, 3)
   private val map: Map[Module, ModuleInfo] = Map(
     root -> ModuleInfo(
       id = root,
@@ -65,4 +64,5 @@ object SampleData {
       dependedOnBy = Set(classF)
     )
   )
+  val detangled = new DetangledFake(root, map, 3)
 }
