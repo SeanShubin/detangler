@@ -17,7 +17,8 @@ class DetanglerImpl(cycleFinder: CycleFinder[Standalone]) extends Detangler {
     }
     val treeOfPaths = data.all.map(_.path).foldLeft(Tree.Empty)(Tree.add)
     val treeOfAggregate = treeOfPaths.mapOverTree(analyzePath)
-    val detangled = new DetangledBackedByTreeOfAggregate(data.level, treeOfAggregate)
+    val allDependsOn = DependencyData.mergeAllHigherLevels(data.level, data.dependsOn)
+    val detangled = new DetangledBackedByTreeOfAggregate(data.level, treeOfAggregate, allDependsOn)
     detangled
   }
 }

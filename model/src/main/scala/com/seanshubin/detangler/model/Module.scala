@@ -11,7 +11,7 @@ sealed trait Module {
 }
 
 case class Standalone(path: Seq[String]) extends Module with Ordered[Standalone] {
-  override def toString: String = s"${path.mkString("--")}"
+  override def toString: String = s"<${path.mkString("--")}>"
 
   override def compare(that: Standalone): Int = compare(this.path.toList, that.path.toList)
 

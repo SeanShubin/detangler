@@ -1,6 +1,6 @@
 package com.seanshubin.detangler.analysis
 
-import com.seanshubin.detangler.model.{Cycle, Detangled, Module, Standalone}
+import com.seanshubin.detangler.model._
 import org.scalatest.FunSuite
 
 class DetanglerTest extends FunSuite {
@@ -87,6 +87,21 @@ class DetanglerTest extends FunSuite {
     checkStandalone(detangled, classG, 0, 0, 0, Set(), Set(classF), Set())
     checkStandalone(detangled, classH, 0, 0, 0, Set(), Set(), Set())
     checkStandalone(detangled, classI, 0, 0, 0, Set(), Set(), Set())
+
+    val reasons = detangled.reasonsFor(root)
+    assert(reasons.size === 1)
+    val groupReason = reasons.head
+    assert(groupReason.from === groupA)
+    assert(groupReason.to === groupB)
+    assert(groupReason.reasons.size === 1)
+    val packageReason = groupReason.reasons.head
+    assert(packageReason.from === packageC)
+    assert(packageReason.to === packageE)
+    assert(packageReason.reasons.size === 1)
+    val classReason = packageReason.reasons.head
+    assert(classReason.from === classF)
+    assert(classReason.to === classI)
+    assert(classReason.reasons.size === 0)
   }
 
   test("multiple levels deep with cycles") {

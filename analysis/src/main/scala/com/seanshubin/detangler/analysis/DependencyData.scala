@@ -41,21 +41,9 @@ case class DependencyData(level: Int,
   def higherLevel(): DependencyData = {
     val newLevel = level - 1
     val newAll = all.map(_.parent)
-    val newDependsOn = dependsOn.foldLeft(Map[Standalone, Set[Standalone]]())(promoteToParent)
-    val newDependedOnBy = dependedOnBy.foldLeft(Map[Standalone, Set[Standalone]]())(promoteToParent)
+    val newDependsOn = dependsOn.foldLeft(Map[Standalone, Set[Standalone]]())(DependencyData.promoteToParent)
+    val newDependedOnBy = dependedOnBy.foldLeft(Map[Standalone, Set[Standalone]]())(DependencyData.promoteToParent)
     DependencyData(newLevel, newAll, newDependsOn, newDependedOnBy)
-  }
-
-  private def promoteToParent(soFar: Map[Standalone, Set[Standalone]], current: (Standalone, Set[Standalone])): Map[Standalone, Set[Standalone]] = {
-    val (childKey, childValues) = current
-    val key = childKey.parent
-    def matchesKey(standalone: Standalone): Boolean = standalone == key
-    val valuesToAdd = childValues.map(_.parent).filterNot(matchesKey)
-    val newValues = soFar.get(key) match {
-      case Some(oldValues) => oldValues ++ valuesToAdd
-      case None => valuesToAdd
-    }
-    soFar + (key -> newValues)
   }
 }
 
@@ -97,5 +85,27 @@ object DependencyData {
     def sameLevel(entry: Standalone): Boolean = entry.level == firstLevel
     if (entries.forall(sameLevel)) firstLevel
     else throw new RuntimeException("Data found at different granularity")
+  }
+
+  def promoteToParent(soFar: Map[Standalone, Set[Standalone]], current: (Standalone, Set[Standalone])): Map[Standalone, Set[Standalone]] = {
+    val (childKey, childValues) = current
+    val key = childKey.parent
+    def matchesKey(standalone: Standalone): Boolean = standalone == key
+    val valuesToAdd = childValues.map(_.parent).filterNot(matchesKey)
+    val newValues = soFar.get(key) match {
+      case Some(oldValues) => oldValues ++ valuesToAdd
+      case None => valuesToAdd
+    }
+    soFar + (key -> newValues)
+  }
+
+  def mergeAllHigherLevels(currentLevel: Int, original: Map[Standalone, Set[Standalone]]): Map[Standalone, Set[Standalone]] = {
+    if (currentLevel == 0) {
+      original
+    } else {
+      val promoted = original.foldLeft(Map[Standalone, Set[Standalone]]())(DependencyData.promoteToParent)
+      val merged = original ++ promoted ++ mergeAllHigherLevels(currentLevel - 1, promoted)
+      merged
+    }
   }
 }
