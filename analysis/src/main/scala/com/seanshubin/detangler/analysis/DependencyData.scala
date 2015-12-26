@@ -67,11 +67,15 @@ object DependencyData {
 
   def addDependency(soFar: DependencyMap, current: DependencyPair): DependencyMap = {
     val (from, to) = current
-    val newDependencies = soFar.get(from) match {
-      case Some(dependencies) => dependencies + to
-      case None => Set(to)
+    if (from == to) {
+      soFar
+    } else {
+      val newDependencies = soFar.get(from) match {
+        case Some(dependencies) => dependencies + to
+        case None => Set(to)
+      }
+      soFar.updated(from, newDependencies)
     }
-    soFar.updated(from, newDependencies)
   }
 
   def addEntryIfEmpty(dependencies: DependencyMap, entry: Standalone): DependencyMap = {

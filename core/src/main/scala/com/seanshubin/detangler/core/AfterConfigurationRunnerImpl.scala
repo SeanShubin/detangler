@@ -6,7 +6,9 @@ import com.seanshubin.detangler.model.Detangled
 
 class AfterConfigurationRunnerImpl(createReporter: (Detangled, Path) => Runnable, reportDir: Path) extends Runnable {
   override def run(): Unit = {
-    createReporter(DetangledFactory.sampleWithoutCycles(), reportDir.resolve("cycles-false")).run()
-    createReporter(DetangledFactory.sampleWithCycles(), reportDir.resolve("cycles-true")).run()
+    val detangledFactory = new DetangledFactory
+    createReporter(detangledFactory.generatedSampleData(), reportDir.resolve("random")).run()
+    createReporter(detangledFactory.sampleWithoutCycles(), reportDir.resolve("simple")).run()
+    createReporter(detangledFactory.sampleWithCycles(), reportDir.resolve("cycles")).run()
   }
 }
