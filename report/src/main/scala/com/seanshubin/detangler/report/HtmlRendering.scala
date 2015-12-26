@@ -25,10 +25,18 @@ object HtmlRendering {
 
   def htmlLink(context: Standalone, standalone: Standalone): String = {
     if (standalone.path.init == context.path) {
-      "#" + htmlId(standalone)
+      innerHtmlLinkFor(standalone)
     } else {
-      fileNameFor(Standalone(standalone.path.init)) + "#" + htmlId(standalone)
+      outerHtmlLinkFor(standalone)
     }
+  }
+
+  def innerHtmlLinkFor(standalone: Standalone): String = {
+    "#" + htmlId(standalone)
+  }
+
+  def outerHtmlLinkFor(standalone: Standalone): String = {
+    fileNameFor(Standalone(standalone.path.init)) + "#" + htmlId(standalone)
   }
 
   def reasonId(from: Standalone, to: Standalone): String = {

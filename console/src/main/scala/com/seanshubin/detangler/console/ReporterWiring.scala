@@ -25,7 +25,7 @@ trait ReporterWiring {
   val pageTemplateRules: PageTemplateRules = new PageTemplateRulesImpl(
     modulesTemplateRules,
     reasonsTemplateRules,
-    HtmlRendering.fileNameFor,
+    HtmlRendering.outerHtmlLinkFor,
     HtmlRendering.htmlName)
   val reporter: Runnable = new Reporter(detangled, reportDir, filesContract, charset, classLoader, pageTemplateRules)
 }

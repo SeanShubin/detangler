@@ -26,7 +26,7 @@ object Module {
 }
 
 case class Standalone(path: Seq[String]) extends Module {
-  override def toString: String = s"<${path.mkString("--")}>"
+  override def toString: String = s"${path.mkString("--")}"
 
   override def typeOrder: Int = 2
 

@@ -161,9 +161,9 @@ class DetanglerTest extends FunSuite {
     assert(detangled.breadth(standalone) === breadth, s"breadth for $standalone")
     assert(detangled.depth(standalone) === depth, s"depth for $standalone")
     assert(detangled.transitive(standalone) === transitive, s"transitive for $standalone")
-    assert(detangled.dependsOn(standalone) === dependsOn, s"dependsOn for $standalone")
-    assert(detangled.dependedOnBy(standalone) === dependedOnBy, s"dependedOnBy for $standalone")
-    assert(detangled.childModules(standalone) === children, s"children for $standalone")
+    assert(detangled.dependsOn(standalone).toSet === dependsOn, s"dependsOn for $standalone")
+    assert(detangled.dependedOnBy(standalone).toSet === dependedOnBy, s"dependedOnBy for $standalone")
+    assert(detangled.childModules(standalone).toSet === children, s"children for $standalone")
   }
 
   def checkCycle(detangled: Detangled,
@@ -177,8 +177,8 @@ class DetanglerTest extends FunSuite {
     assert(detangled.breadth(cycle) === breadth, s"breadth for $cycle")
     assert(detangled.depth(cycle) === depth, s"depth for $cycle")
     assert(detangled.transitive(cycle) === transitive, s"transitive for $cycle")
-    assert(detangled.cycleParts(cycle) === parts, s"cycleParts for $cycle")
-    assert(detangled.dependsOn(cycle) === dependsOn, s"dependsOn for $cycle")
-    assert(detangled.dependedOnBy(cycle) === dependedOnBy, s"dependedOnBy for $cycle")
+    assert(detangled.cycleParts(cycle).toSet === parts, s"cycleParts for $cycle")
+    assert(detangled.dependsOn(cycle).toSet === dependsOn, s"dependsOn for $cycle")
+    assert(detangled.dependedOnBy(cycle).toSet === dependedOnBy, s"dependedOnBy for $cycle")
   }
 }
