@@ -4,7 +4,7 @@ import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.{Path, Paths}
 
 import com.seanshubin.detangler.contract.{ClassLoaderContract, ClassLoaderDelegate, FilesContract, FilesDelegate}
-import com.seanshubin.detangler.model.{Detangled, SampleData, SampleDataWithCycles}
+import com.seanshubin.detangler.model.Detangled
 
 object Prototype extends App {
   runFromPath(Paths.get("generated", "cycles-false"), SampleData.detangled)

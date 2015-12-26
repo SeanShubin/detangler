@@ -1,4 +1,6 @@
-package com.seanshubin.detangler.model
+package com.seanshubin.detangler.report
+
+import com.seanshubin.detangler.model.{Module, Standalone}
 
 case class ModuleInfo(id: Module,
                       dependsOn: Set[Standalone] = Set(),

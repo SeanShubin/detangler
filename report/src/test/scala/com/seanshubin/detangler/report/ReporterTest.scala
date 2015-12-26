@@ -3,7 +3,6 @@ package com.seanshubin.detangler.report
 import java.nio.charset.StandardCharsets
 import java.nio.file.Paths
 
-import com.seanshubin.detangler.model.SampleData
 import org.scalatest.FunSuite
 
 class ReporterTest extends FunSuite {

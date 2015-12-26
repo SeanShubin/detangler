@@ -1,6 +1,6 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.model.{Cycle, SampleData, SampleDataWithCycles, Standalone}
+import com.seanshubin.detangler.model.{Cycle, Standalone}
 import org.scalatest.FunSuite
 
 class ModulesTemplateRulesTest extends FunSuite {

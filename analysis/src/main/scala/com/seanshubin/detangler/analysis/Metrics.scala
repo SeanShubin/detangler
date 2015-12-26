@@ -29,4 +29,18 @@ object Metrics {
     dependedOnBy = Set(),
     depth = 0,
     transitiveDependencies = Set())
+
+  def greaterOrEqual(left: Metrics, right: Metrics): Boolean = {
+    !lessThan(left, right)
+  }
+
+  def lessThan(left: Metrics, right: Metrics): Boolean = {
+    if (left.depth < right.depth) {
+      true
+    } else if (right.depth < left.depth) {
+      false
+    } else {
+      Module.lessThan(left.id, right.id)
+    }
+  }
 }

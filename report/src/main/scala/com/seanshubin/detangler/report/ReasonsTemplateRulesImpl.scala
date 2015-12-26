@@ -10,7 +10,7 @@ class ReasonsTemplateRulesImpl(detangled: Detangled) extends ReasonsTemplateRule
     composeReasons(baseTemplate, reasonTemplate, context, reasons)
   }
 
-  def composeReasons(baseTemplate: HtmlElement, reasonTemplate: HtmlElement, context: Standalone, reasons: Set[Reason]): HtmlElement = {
+  def composeReasons(baseTemplate: HtmlElement, reasonTemplate: HtmlElement, context: Standalone, reasons: Seq[Reason]): HtmlElement = {
     def composeReasonFunction(reason: Reason) = composeReason(baseTemplate, reasonTemplate, context, reason)
     val childElements = reasons.map(composeReasonFunction)
     val result = baseTemplate.append(".append-reason", childElements)

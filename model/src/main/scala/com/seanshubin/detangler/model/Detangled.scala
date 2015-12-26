@@ -1,13 +1,13 @@
 package com.seanshubin.detangler.model
 
 trait Detangled {
-  def childModules(standalone: Standalone): Set[Module]
+  def childModules(standalone: Standalone): Seq[Module]
 
-  def childStandalone(standalone: Standalone): Set[Standalone]
+  def childStandalone(standalone: Standalone): Seq[Standalone]
 
   def cycleSize(cycle: Cycle): Int
 
-  def cycleParts(cycle: Cycle): Set[Standalone]
+  def cycleParts(cycle: Cycle): Seq[Standalone]
 
   def breadth(module: Module): Int
 
@@ -15,11 +15,11 @@ trait Detangled {
 
   def transitive(module: Module): Int
 
-  def dependsOn(module: Module): Set[Standalone]
+  def dependsOn(module: Module): Seq[Standalone]
 
-  def dependedOnBy(module: Module): Set[Standalone]
+  def dependedOnBy(module: Module): Seq[Standalone]
 
-  def reasonsFor(standalone: Standalone): Set[Reason]
+  def reasonsFor(standalone: Standalone): Seq[Reason]
 
   def isLeaf(standalone: Standalone): Boolean
 

@@ -5,15 +5,19 @@ import com.seanshubin.detangler.model._
 class DetangledBackedByTreeOfAggregate(level: Int,
                                        treeOfAggregate: Tree[Aggregate],
                                        allDependsOn: Map[Standalone, Set[Standalone]]) extends Detangled {
-  override def reasonsFor(standalone: Standalone): Set[Reason] = reasonsFor(childStandalone(standalone))
+  override def reasonsFor(standalone: Standalone): Seq[Reason] = reasonsFor(childStandalone(standalone))
 
-  override def cycleParts(cycle: Cycle): Set[Standalone] = lookupMetrics(cycle).cycleParts
+  override def cycleParts(cycle: Cycle): Seq[Standalone] = sortByStandaloneInfo(lookupMetrics(cycle).cycleParts)
 
   override def isLeaf(standalone: Standalone): Boolean = ???
 
-  override def dependedOnBy(module: Module): Set[Standalone] = lookupMetrics(module).dependedOnBy
+  override def dependedOnBy(module: Module): Seq[Standalone] = sortByStandaloneInfo(lookupMetrics(module).dependedOnBy)
 
-  override def childStandalone(standalone: Standalone): Set[Standalone] = {
+  private def sortByStandaloneInfo(unsorted: Set[Standalone]): Seq[Standalone] = {
+    unsorted.toSeq.map(lookupMetrics).sortWith(Metrics.greaterOrEqual).map(_.id.asInstanceOf[Standalone])
+  }
+
+  override def childStandalone(standalone: Standalone): Seq[Standalone] = {
     val allChildren = childModules(standalone)
     val standaloneChildren = allChildren.flatMap {
       case x: Standalone => Some(x)
@@ -26,9 +30,9 @@ class DetangledBackedByTreeOfAggregate(level: Int,
 
   override def cycleSize(cycle: Cycle): Int = lookupMetrics(cycle).cycleParts.size
 
-  override def childModules(standalone: Standalone): Set[Module] = treeOfAggregate.value(standalone.path).modules.keySet
+  override def childModules(standalone: Standalone): Seq[Module] = sortByModuleInfo(treeOfAggregate.value(standalone.path).modules.keySet)
 
-  override def dependsOn(module: Module): Set[Standalone] = lookupMetrics(module).dependsOn
+  override def dependsOn(module: Module): Seq[Standalone] = sortByStandaloneInfo(lookupMetrics(module).dependsOn)
 
   override def levelsDeep: Int = level
 
@@ -46,18 +50,21 @@ class DetangledBackedByTreeOfAggregate(level: Int,
 
   override def breadth(module: Module): Int = lookupMetrics(module).breadth
 
-  private def reasonsFor(parts: Set[Standalone]): Set[Reason] = {
+  private def reasonsFor(parts: Seq[Standalone]): Seq[Reason] = {
     reasonsFor(parts, parts)
   }
 
-  private def reasonsFor(leftParts: Set[Standalone], rightParts: Set[Standalone]): Set[Reason] = {
+  private def reasonsFor(leftParts: Seq[Standalone], rightParts: Seq[Standalone]): Seq[Reason] = {
     for {
       fromPart <- leftParts
-      toPart <- allDependsOn(fromPart)
+      toPart <- sortByStandaloneInfo(allDependsOn(fromPart))
       if rightParts.contains(toPart)
     } yield {
       Reason(fromPart, toPart, reasonsFor(childStandalone(fromPart), childStandalone(toPart)))
     }
   }
 
+  private def sortByModuleInfo(unsorted: Set[Module]): Seq[Module] = {
+    unsorted.toSeq.map(lookupMetrics).sortWith(Metrics.greaterOrEqual).map(_.id)
+  }
 }

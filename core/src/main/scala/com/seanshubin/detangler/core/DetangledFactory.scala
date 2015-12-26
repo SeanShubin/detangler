@@ -5,10 +5,33 @@ import java.util.Random
 import com.seanshubin.detangler.analysis.{CycleFinderWarshall, DetanglerImpl}
 import com.seanshubin.detangler.model.{Detangled, Standalone}
 
-class DetangledFactory {
+object DetangledFactory {
   val seed = 12345
   val random = new Random(seed)
-  val bound = 'z' - 'a' + 1
+  val letterChoices: Seq[Char] = 'a' to 'z'
+  val startSounds = Seq("b", "br", "c", "cl", "d", "f", "fl", "g", "gl", "j", "m", "n", "p", "pl", "qu", "r", "sh", "sk", "sp", "st", "str", "t", "th", "tr", "w", "wh", "wr")
+  val middleSounds = Seq("a", "e", "ee", "ea", "i", "o", "u")
+  val endSounds = Seq("b", "be", "ck", "de", "fe", "ke", "le", "lt", "me", "n", "p", "pe", "re", "t", "th", "te", "x")
+  val startSyllables = for {
+    startSound <- startSounds
+    middleSound <- middleSounds
+  } yield {
+    startSound + middleSound
+  }
+  val middleSyllables = for {
+    startSound <- startSounds
+    middleSound <- middleSounds
+    endSound <- endSounds
+  } yield {
+    startSound + middleSound + endSound
+  }
+  val endSyllables = for {
+    middleSound <- middleSounds
+    endSound <- endSounds
+  } yield {
+    middleSound + endSound
+  }
+  val allSyllables = startSyllables ++ middleSyllables ++ endSyllables
 
   def sampleWithoutCycles(): Detangled = {
     val classF = Standalone(Seq("group/a", "package/c", "class/f"))
@@ -50,11 +73,11 @@ class DetangledFactory {
   def generatedSampleData(): Detangled = {
     val modules = for {
       i <- 1 to 10
-      groupName = randomName(12)
+      groupName = randomName(4)
       j <- 1 to 10
-      packageName = randomName(6)
+      packageName = randomName(3)
       k <- 1 to 10
-      className = randomName(3)
+      className = randomName(2)
     } yield {
       Standalone(Seq(groupName, packageName, className))
     }
@@ -76,15 +99,17 @@ class DetangledFactory {
   }
 
   def randomName(size: Int): String = {
-    val firstLetter = randomChar().toUpper
-    val remainingLetters = "" + Iterator.continually(randomChar).take(size).mkString
-    "" + firstLetter + remainingLetters
-
+    val syllables = Iterator.continually(randomSyllable).take(size).mkString
+    capitalize(syllables)
   }
 
-  def randomChar(): Char = {
-    (random.nextInt(bound) + 'a').toChar
+  def capitalize(s: String): String = {
+    s.head.toUpper + s.tail
   }
+
+  def randomSyllable: String = chooseRandom(allSyllables)
+
+  def chooseRandom[T](choices: Seq[T]): T = choices(random.nextInt(choices.size))
 
   def randomBetween(from: Int, to: Int): Int = {
     random.nextInt(to - from) + from

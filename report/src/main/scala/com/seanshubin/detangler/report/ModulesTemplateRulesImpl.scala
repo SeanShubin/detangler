@@ -11,7 +11,7 @@ class ModulesTemplateRulesImpl(standaloneTemplateRules: StandaloneTemplateRules,
     val cycleTemplate = modulesTemplate.select(".cycle")
     val children = detangled.childModules(standalone)
     def composeModuleFunction(module: Module): HtmlElement = composeModule(standalone, module, standaloneTemplate, cycleTemplate)
-    val moduleElements = children.toSeq.seq.sortWith(ModuleOrdering.lessThan).map(composeModuleFunction)
+    val moduleElements = children.map(composeModuleFunction)
     val result = baseTemplate.append(".append-module", moduleElements)
     result
   }
