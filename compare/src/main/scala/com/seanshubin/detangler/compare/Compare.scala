@@ -35,8 +35,8 @@ object Compare {
     mergedCompareFunction
   }
 
-  def composeCompareSeqFunction[T](compareFunction: (T, T) => Int): (Seq[T], Seq[T]) => Int = {
-    def compareSeqFunction(left: Seq[T], right: Seq[T]): Int = {
+  def composeCompareSeqFunction[T](compareFunction: (T, T) => Int): (List[T], List[T]) => Int = {
+    def compareSeqFunction(left: List[T], right: List[T]): Int = {
       (left, right) match {
         case (Nil, Nil) => 0
         case (Nil, rightHead :: rightTail) => -1

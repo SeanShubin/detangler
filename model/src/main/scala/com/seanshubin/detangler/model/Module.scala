@@ -43,7 +43,7 @@ object Standalone {
   val Root = Standalone(Seq())
   val compare: (Standalone, Standalone) => Int = (left: Standalone, right: Standalone) => {
     val comparePaths = Compare.composeCompareSeqFunction(Ordering.String.compare)
-    comparePaths(left.path, right.path)
+    comparePaths(left.path.toList, right.path.toList)
   }
 }
 
@@ -70,7 +70,7 @@ object Cycle {
     compareParts(leftParts, rightParts)
   }
 
-  private def sortedParts(cycle: Cycle): Seq[Standalone] = {
-    cycle.parts.toSeq.sortWith(Compare.lessThan(Standalone.compare))
+  private def sortedParts(cycle: Cycle): List[Standalone] = {
+    cycle.parts.toSeq.sortWith(Compare.lessThan(Standalone.compare)).toList
   }
 }

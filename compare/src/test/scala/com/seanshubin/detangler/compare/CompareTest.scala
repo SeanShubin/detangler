@@ -149,9 +149,9 @@ class CompareTest extends FunSuite {
 
   test("compare lists") {
     val compareFunction = Compare.composeCompareSeqFunction(Ordering.String.compare)
-    val a = Seq("aaa", "bbb")
-    val b = Seq("aaa", "bbb", "ccc")
-    val c = Seq("aaa", "ddd", "ccc")
+    val a = List("aaa", "bbb")
+    val b = List("aaa", "bbb", "ccc")
+    val c = List("aaa", "ddd", "ccc")
     assert(compareFunction(a, a) === 0)
     assert(compareFunction(b, b) === 0)
     assert(compareFunction(c, c) === 0)
