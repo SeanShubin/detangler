@@ -16,6 +16,7 @@
         <module>model</module>
         <module>report</module>
         <module>analysis</module>
+        <module>compare</module>
     </modules>
     <repositories>
         <repository>

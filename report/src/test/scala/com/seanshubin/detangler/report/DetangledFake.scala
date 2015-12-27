@@ -1,9 +1,10 @@
 package com.seanshubin.detangler.report
 
+import com.seanshubin.detangler.compare.Compare
 import com.seanshubin.detangler.model._
 
 class DetangledFake(theRoot: Standalone, map: Map[Module, ModuleInfo], val levelsDeep: Int) extends Detangled {
-  override def childModules(standalone: Standalone): Seq[Module] = map(standalone).children.toSeq.sortWith(Module.lessThan)
+  override def childModules(standalone: Standalone): Seq[Module] = map(standalone).children.toSeq.sortWith(Compare.lessThan(Module.compare))
 
   override def childStandalone(standalone: Standalone): Seq[Standalone] = childModules(standalone).flatMap {
     case x: Standalone => Some(x)

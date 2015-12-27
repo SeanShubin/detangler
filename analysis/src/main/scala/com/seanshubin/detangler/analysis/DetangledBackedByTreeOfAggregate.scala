@@ -1,5 +1,6 @@
 package com.seanshubin.detangler.analysis
 
+import com.seanshubin.detangler.compare.Compare
 import com.seanshubin.detangler.model._
 
 class DetangledBackedByTreeOfAggregate(level: Int,
@@ -12,10 +13,6 @@ class DetangledBackedByTreeOfAggregate(level: Int,
   override def isLeaf(standalone: Standalone): Boolean = ???
 
   override def dependedOnBy(module: Module): Seq[Standalone] = sortByStandaloneInfo(lookupMetrics(module).dependedOnBy)
-
-  private def sortByStandaloneInfo(unsorted: Set[Standalone]): Seq[Standalone] = {
-    unsorted.toSeq.map(lookupMetrics).sortWith(Metrics.greaterOrEqual).map(_.id.asInstanceOf[Standalone])
-  }
 
   override def childStandalone(standalone: Standalone): Seq[Standalone] = {
     val allChildren = childModules(standalone)
@@ -34,9 +31,15 @@ class DetangledBackedByTreeOfAggregate(level: Int,
 
   override def dependsOn(module: Module): Seq[Standalone] = sortByStandaloneInfo(lookupMetrics(module).dependsOn)
 
+  private def sortByStandaloneInfo(unsorted: Set[Standalone]): Seq[Standalone] = {
+    unsorted.toSeq.map(lookupMetrics).sortWith(Compare.lessThan(Compare.reverse(Metrics.compare))).map(_.id.asInstanceOf[Standalone])
+  }
+
   override def levelsDeep: Int = level
 
   override def depth(module: Module): Int = lookupMetrics(module).depth
+
+  override def breadth(module: Module): Int = lookupMetrics(module).breadth
 
   private def lookupMetrics(module: Module): Metrics = {
     if (module.isRoot) {
@@ -47,8 +50,6 @@ class DetangledBackedByTreeOfAggregate(level: Int,
       metrics
     }
   }
-
-  override def breadth(module: Module): Int = lookupMetrics(module).breadth
 
   private def reasonsFor(parts: Seq[Standalone]): Seq[Reason] = {
     reasonsFor(parts, parts)
@@ -65,6 +66,6 @@ class DetangledBackedByTreeOfAggregate(level: Int,
   }
 
   private def sortByModuleInfo(unsorted: Set[Module]): Seq[Module] = {
-    unsorted.toSeq.map(lookupMetrics).sortWith(Metrics.greaterOrEqual).map(_.id)
+    unsorted.toSeq.map(lookupMetrics).sortWith(Compare.lessThan(Compare.reverse(Metrics.compare))).map(_.id)
   }
 }

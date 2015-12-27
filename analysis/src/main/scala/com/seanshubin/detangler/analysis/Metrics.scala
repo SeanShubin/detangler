@@ -1,5 +1,6 @@
 package com.seanshubin.detangler.analysis
 
+import com.seanshubin.detangler.compare.Compare
 import com.seanshubin.detangler.model.{Module, Standalone}
 
 case class Metrics(id: Module,
@@ -29,18 +30,13 @@ object Metrics {
     dependedOnBy = Set(),
     depth = 0,
     transitiveDependencies = Set())
+  val compare: (Metrics, Metrics) => Int = Compare.mergeCompareFunctions(compareDepth, compareId)
 
-  def greaterOrEqual(left: Metrics, right: Metrics): Boolean = {
-    !lessThan(left, right)
+  def compareDepth(left: Metrics, right: Metrics): Int = {
+    Ordering.Int.compare(left.depth, right.depth)
   }
 
-  def lessThan(left: Metrics, right: Metrics): Boolean = {
-    if (left.depth < right.depth) {
-      true
-    } else if (right.depth < left.depth) {
-      false
-    } else {
-      Module.lessThan(left.id, right.id)
-    }
+  def compareId(left: Metrics, right: Metrics): Int = {
+    Module.compare(left.id, right.id)
   }
 }
