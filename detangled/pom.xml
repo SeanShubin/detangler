@@ -5,24 +5,13 @@
         <artifactId>detangler-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>detangler-report</artifactId>
+    <artifactId>detangler-detangled</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
     <dependencies>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-detangled</artifactId>
+            <artifactId>detangler-compare</artifactId>
             <version>${parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-contract</artifactId>
-            <version>${parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-contract</artifactId>
-            <version>${parent.version}</version>
-            <type>test-jar</type>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -31,10 +20,6 @@
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_2.11</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
         </dependency>
     </dependencies>
     <build>

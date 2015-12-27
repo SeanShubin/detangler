@@ -10,7 +10,12 @@
     <dependencies>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-model</artifactId>
+            <artifactId>detangler-detangled</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.seanshubin.detangler</groupId>
+            <artifactId>detangler-data</artifactId>
             <version>${parent.version}</version>
         </dependency>
         <dependency>

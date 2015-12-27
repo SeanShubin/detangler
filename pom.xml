@@ -13,10 +13,12 @@
         <module>contract</module>
         <module>core</module>
         <module>console</module>
-        <module>model</module>
+        <module>detangled</module>
+        <module>data</module>
         <module>report</module>
         <module>analysis</module>
         <module>compare</module>
+        <module>scanner</module>
     </modules>
     <repositories>
         <repository>

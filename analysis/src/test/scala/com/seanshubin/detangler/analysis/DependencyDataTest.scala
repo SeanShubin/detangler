@@ -1,5 +1,6 @@
 package com.seanshubin.detangler.analysis
 
+import com.seanshubin.detangler.data.DependencyAccumulator
 import com.seanshubin.detangler.model.Standalone
 import org.scalatest.FunSuite
 
@@ -15,12 +16,8 @@ class DependencyDataTest extends FunSuite {
   val classH = Standalone(Seq("group/a", "package/d", "class/h"))
   val classI = Standalone(Seq("group/b", "package/e", "class/i"))
 
-  val dependencies = Seq(
-    (classF, classG),
-    (classF, classH),
-    (classF, classI)
-  )
-  val dependencyData = DependencyData.fromPairs(dependencies)
+  val accumulator = DependencyAccumulator.Empty.addValues(classF.path, Seq(classG.path, classH.path, classI.path))
+  val dependencyData = DependencyData.fromMaps(accumulator.dependencies, accumulator.transpose().dependencies)
 
   test("root subset") {
     val subset = dependencyData.subsetFor(root.path)

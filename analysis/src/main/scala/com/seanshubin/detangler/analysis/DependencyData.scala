@@ -48,24 +48,35 @@ case class DependencyData(level: Int,
 }
 
 object DependencyData {
-  type DependencyPair = (Standalone, Standalone)
-  type DependencySeq = Seq[DependencyPair]
-  type DependencyMap = Map[Standalone, Set[Standalone]]
-  val emptyDependencies: DependencyMap = Map()
+  val emptyDependencies: Map[Standalone, Set[Standalone]] = Map()
 
   def createEmpty(level: Int) = DependencyData(level = level, all = Set(), dependsOn = Map(), dependedOnBy = Map())
 
-  def fromPairs(pairs: DependencySeq): DependencyData = {
-    val all: Set[Standalone] = pairs.map(_._1).toSet ++ pairs.map(_._2).toSet
+  def fromMaps(dependsOnPaths: Map[Seq[String], Set[Seq[String]]],
+               dependedOnByPaths: Map[Seq[String], Set[Seq[String]]]): DependencyData = {
+    val dependsOn = pathsToModules(dependsOnPaths)
+    val dependedOnBy = pathsToModules(dependedOnByPaths)
+    val all = dependsOn.keySet
     val level = allSameLevel(all)
-    val uncheckedDependsOn = pairs.foldLeft(emptyDependencies)(addDependency)
-    val dependsOn = all.foldLeft(uncheckedDependsOn)(addEntryIfEmpty)
-    val uncheckedDependedOnBy = pairs.map(reversePair).foldLeft(emptyDependencies)(addDependency)
-    val dependedOnBy = all.foldLeft(uncheckedDependedOnBy)(addEntryIfEmpty)
     DependencyData(level, all, dependsOn, dependedOnBy)
   }
 
-  def addDependency(soFar: DependencyMap, current: DependencyPair): DependencyMap = {
+  def pathsToModules(paths: Map[Seq[String], Set[Seq[String]]]): Map[Standalone, Set[Standalone]] = {
+    for {
+      (key, values) <- paths
+    } yield {
+      (Standalone(key), values.map(Standalone.apply))
+    }
+  }
+
+  def allSameLevel(entries: Set[Standalone]): Int = {
+    val firstLevel = entries.head.level
+    def sameLevel(entry: Standalone): Boolean = entry.level == firstLevel
+    if (entries.forall(sameLevel)) firstLevel
+    else throw new RuntimeException("Data found at different granularity")
+  }
+
+  def addDependency(soFar: Map[Standalone, Set[Standalone]], current: (Standalone, Standalone)): Map[Standalone, Set[Standalone]] = {
     val (from, to) = current
     if (from == to) {
       soFar
@@ -78,18 +89,11 @@ object DependencyData {
     }
   }
 
-  def addEntryIfEmpty(dependencies: DependencyMap, entry: Standalone): DependencyMap = {
+  def addEntryIfEmpty(dependencies: Map[Standalone, Set[Standalone]], entry: Standalone): Map[Standalone, Set[Standalone]] = {
     if (dependencies.contains(entry)) dependencies else dependencies + (entry -> Set())
   }
 
-  def reversePair(pair: DependencyPair): DependencyPair = (pair._2, pair._1)
-
-  def allSameLevel(entries: Set[Standalone]): Int = {
-    val firstLevel = entries.head.level
-    def sameLevel(entry: Standalone): Boolean = entry.level == firstLevel
-    if (entries.forall(sameLevel)) firstLevel
-    else throw new RuntimeException("Data found at different granularity")
-  }
+  def reversePair(pair: (Standalone, Standalone)): (Standalone, Standalone) = (pair._2, pair._1)
 
   def promoteToParent(soFar: Map[Standalone, Set[Standalone]], current: (Standalone, Set[Standalone])): Map[Standalone, Set[Standalone]] = {
     val (childKey, childValues) = current

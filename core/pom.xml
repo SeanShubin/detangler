@@ -10,12 +10,12 @@
     <dependencies>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-report</artifactId>
+            <artifactId>detangler-analysis</artifactId>
             <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-analysis</artifactId>
+            <artifactId>detangler-report</artifactId>
             <version>${parent.version}</version>
         </dependency>
         <dependency>

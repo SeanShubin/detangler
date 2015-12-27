@@ -1,5 +1,6 @@
 package com.seanshubin.detangler.analysis
 
+import com.seanshubin.detangler.data.DependencyAccumulator
 import com.seanshubin.detangler.model._
 import org.scalatest.FunSuite
 
@@ -16,26 +17,22 @@ class DetanglerTest extends FunSuite {
     val h = Standalone(Seq("h"))
     val i = Standalone(Seq("i"))
     val j = Standalone(Seq("j"))
-    val dependencies = Seq(
-      (a, b),
-      (b, c),
-      (b, d),
-      (d, e),
-      (e, f),
-      (e, g),
-      (f, d),
-      (g, h),
-      (h, g),
-      (h, i),
-      (i, j)
-    )
+    val accumulator = DependencyAccumulator.Empty.
+      addValues(a.path, Seq(b.path)).
+      addValues(b.path, Seq(c.path, d.path)).
+      addValues(d.path, Seq(e.path)).
+      addValues(e.path, Seq(f.path, g.path)).
+      addValues(f.path, Seq(d.path)).
+      addValues(g.path, Seq(h.path)).
+      addValues(h.path, Seq(g.path, i.path)).
+      addValues(i.path, Seq(j.path))
     val cycleDEF = Cycle(Set(d, e, f))
     val cycleGH = Cycle(Set(g, h))
     val expectedModules: Set[Module] = Set(a, b, cycleDEF, d, e, f, cycleGH, g, h, i, c, j)
 
     val cycleFinder = new CycleFinderWarshall[Standalone]
     val detangler = new DetanglerImpl(cycleFinder)
-    val detangled = detangler.analyze(dependencies)
+    val detangled = detangler.analyze(accumulator.dependencies, accumulator.transpose().dependencies)
 
     assert(detangled.levelsDeep === 1)
     checkStandalone(detangled, root, 0, 0, 0, Set(), Set(), expectedModules)
@@ -65,15 +62,12 @@ class DetanglerTest extends FunSuite {
     val classH = Standalone(Seq("group/a", "package/d", "class/h"))
     val classI = Standalone(Seq("group/b", "package/e", "class/i"))
 
-    val dependencies = Seq(
-      (classF, classG),
-      (classF, classH),
-      (classF, classI)
-    )
+    val accumulator = DependencyAccumulator.Empty.
+      addValues(classF.path, Seq(classG.path, classH.path, classI.path))
 
     val cycleFinder = new CycleFinderWarshall[Standalone]
     val detangler = new DetanglerImpl(cycleFinder)
-    val detangled = detangler.analyze(dependencies)
+    val detangled = detangler.analyze(accumulator.dependencies, accumulator.transpose().dependencies)
 
     assert(detangled.levelsDeep === 3)
 
@@ -119,18 +113,15 @@ class DetanglerTest extends FunSuite {
     val packageCD = Cycle(Set(packageC, packageD))
     val classFG = Cycle(Set(classF, classG))
 
-    val dependencies = Seq(
-      (classF, classG),
-      (classF, classH),
-      (classF, classI),
-      (classG, classF),
-      (classH, classF),
-      (classI, classF)
-    )
+    val accumulator = DependencyAccumulator.Empty.
+      addValues(classF.path, Seq(classG.path, classH.path, classI.path)).
+      addValues(classG.path, Seq(classF.path)).
+      addValues(classH.path, Seq(classF.path)).
+      addValues(classI.path, Seq(classF.path))
 
     val cycleFinder = new CycleFinderWarshall[Standalone]
     val detangler = new DetanglerImpl(cycleFinder)
-    val detangled = detangler.analyze(dependencies)
+    val detangled = detangler.analyze(accumulator.dependencies, accumulator.transpose().dependencies)
 
     assert(detangled.levelsDeep === 3)
 
