@@ -33,6 +33,37 @@ object DetangledFactory {
   }
   val allSyllables = startSyllables ++ middleSyllables ++ endSyllables
 
+  def contrivedSample(): Detangled = {
+    val root = Standalone(Seq())
+    val a = Standalone(Seq("a"))
+    val b = Standalone(Seq("b"))
+    val c = Standalone(Seq("c"))
+    val d = Standalone(Seq("d"))
+    val e = Standalone(Seq("e"))
+    val f = Standalone(Seq("f"))
+    val g = Standalone(Seq("g"))
+    val h = Standalone(Seq("h"))
+    val i = Standalone(Seq("i"))
+    val j = Standalone(Seq("j"))
+    val dependencies = Seq(
+      (a, b),
+      (b, c),
+      (b, d),
+      (d, e),
+      (e, f),
+      (e, g),
+      (f, d),
+      (g, h),
+      (h, g),
+      (h, i),
+      (i, j)
+    )
+    val cycleFinder = new CycleFinderWarshall[Standalone]
+    val detangler = new DetanglerImpl(cycleFinder)
+    val detangled = detangler.analyze(dependencies)
+    detangled
+  }
+
   def sampleWithoutCycles(): Detangled = {
     val classF = Standalone(Seq("group/a", "package/c", "class/f"))
     val classG = Standalone(Seq("group/a", "package/c", "class/g"))

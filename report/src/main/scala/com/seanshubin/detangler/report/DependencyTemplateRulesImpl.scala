@@ -24,7 +24,8 @@ class DependencyTemplateRulesImpl(detangled: Detangled, dependencyDirection: Dep
     dependencyRowTemplate.
       anchor(".name", HtmlRendering.htmlLink(context, child), HtmlRendering.htmlName(child)).
       text(".depth", detangled.depth(child).toString).
-      text(".complexity", detangled.transitive(child).toString).
+      text(".breadth", detangled.breadth(child).toString).
+      text(".transitive", detangled.transitive(child).toString).
       anchor(".reason", reasonLink, reasonName)
   }
 }

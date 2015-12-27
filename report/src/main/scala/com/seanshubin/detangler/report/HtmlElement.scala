@@ -19,6 +19,15 @@ class HtmlElement(originalElement: Element) {
     new HtmlElement(element)
   }
 
+  def clonedElement: Element = originalElement.clone()
+
+  private def select(cssQuery: String, from: Element): Element = {
+    val elements = from.select(cssQuery)
+    val size = elements.size()
+    if (size != 1) throw new RuntimeException(s"$from\nExpected exactly 1 matching '$cssQuery', got $size")
+    elements.get(0)
+  }
+
   def removeAll(cssQuery: String): HtmlElement = {
     val element = clonedElement
     val elements = selectAll(cssQuery, element)
@@ -26,8 +35,17 @@ class HtmlElement(originalElement: Element) {
     new HtmlElement(element)
   }
 
+  private def selectAll(cssQuery: String, from: Element): Iterable[Element] = {
+    val elements = from.select(cssQuery)
+    JavaConversions.collectionAsScalaIterable(elements)
+  }
+
   def select(cssQuery: String): HtmlElement = {
     new HtmlElement(select(cssQuery, originalElement))
+  }
+
+  def append(cssQuery: String, child: HtmlElement): HtmlElement = {
+    append(cssQuery, Seq(child))
   }
 
   def append(cssQuery: String, children: Iterable[HtmlElement]): HtmlElement = {
@@ -39,10 +57,6 @@ class HtmlElement(originalElement: Element) {
       attachmentPoint.appendChild(child.clonedElement)
     }
     new HtmlElement(element)
-  }
-
-  def append(cssQuery: String, child: HtmlElement): HtmlElement = {
-    append(cssQuery, Seq(child))
   }
 
   def replace(cssQuery: String, content: HtmlElement): HtmlElement = {
@@ -81,18 +95,8 @@ class HtmlElement(originalElement: Element) {
     new HtmlElement(element)
   }
 
-  def clonedElement: Element = originalElement.clone()
-
-  private def select(cssQuery: String, from: Element): Element = {
-    val elements = from.select(cssQuery)
-    val size = elements.size()
-    if (size != 1) throw new RuntimeException(s"$from\nExpected exactly 1 matching '$cssQuery', got $size")
-    elements.get(0)
-  }
-
-  private def selectAll(cssQuery: String, from: Element): Iterable[Element] = {
-    val elements = from.select(cssQuery)
-    JavaConversions.collectionAsScalaIterable(elements)
+  def selectAll(cssQuery: String): Seq[HtmlElement] = {
+    selectAll(cssQuery, originalElement).map(new HtmlElement(_)).toSeq
   }
 }
 

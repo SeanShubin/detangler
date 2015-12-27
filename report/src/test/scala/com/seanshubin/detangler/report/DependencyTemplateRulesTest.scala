@@ -12,7 +12,8 @@ class DependencyTemplateRulesTest extends FunSuite {
         |     <li class="standalone-dependency-row">
         |       <p><a class="name" href="replace-me">replace-me</a></p>
         |       <p class="depth">replace-me</p>
-        |       <p class="complexity">replace-me</p>
+        |       <p class="breadth">replace-me</p>
+        |       <p class="transitive">replace-me</p>
         |       <p><a class="reason" href="replace-me">replace-me</a></p>
         |     </li>
         |  </ul>
@@ -29,7 +30,8 @@ class DependencyTemplateRulesTest extends FunSuite {
     assert(actual.select(".name").attr("href") === "#group-b")
     assert(actual.select(".name").text() === "group/b")
     assert(actual.select(".depth").text() === "0")
-    assert(actual.select(".complexity").text() === "0")
+    assert(actual.select(".breadth").text() === "0")
+    assert(actual.select(".transitive").text() === "0")
     assert(actual.select(".reason").attr("href") === "#group-a---group-b")
     assert(actual.select(".reason").text() === "reason")
   }

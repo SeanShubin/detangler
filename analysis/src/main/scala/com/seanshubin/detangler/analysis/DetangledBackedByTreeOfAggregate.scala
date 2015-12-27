@@ -14,6 +14,10 @@ class DetangledBackedByTreeOfAggregate(level: Int,
 
   override def dependedOnBy(module: Module): Seq[Standalone] = sortByStandaloneInfo(lookupMetrics(module).dependedOnBy)
 
+  private def sortByStandaloneInfo(unsorted: Set[Standalone]): Seq[Standalone] = {
+    unsorted.toSeq.map(lookupMetrics).sortWith(Compare.lessThan(Compare.reverse(Metrics.compare))).map(_.id.asInstanceOf[Standalone])
+  }
+
   override def childStandalone(standalone: Standalone): Seq[Standalone] = {
     val allChildren = childModules(standalone)
     val standaloneChildren = allChildren.flatMap {
@@ -30,10 +34,6 @@ class DetangledBackedByTreeOfAggregate(level: Int,
   override def childModules(standalone: Standalone): Seq[Module] = sortByModuleInfo(treeOfAggregate.value(standalone.path).modules.keySet)
 
   override def dependsOn(module: Module): Seq[Standalone] = sortByStandaloneInfo(lookupMetrics(module).dependsOn)
-
-  private def sortByStandaloneInfo(unsorted: Set[Standalone]): Seq[Standalone] = {
-    unsorted.toSeq.map(lookupMetrics).sortWith(Compare.lessThan(Compare.reverse(Metrics.compare))).map(_.id.asInstanceOf[Standalone])
-  }
 
   override def levelsDeep: Int = level
 
@@ -66,6 +66,6 @@ class DetangledBackedByTreeOfAggregate(level: Int,
   }
 
   private def sortByModuleInfo(unsorted: Set[Module]): Seq[Module] = {
-    unsorted.toSeq.map(lookupMetrics).sortWith(Compare.lessThan(Compare.reverse(Metrics.compare))).map(_.id)
+    unsorted.toSeq.map(lookupMetrics).sortWith(Compare.lessThan(Metrics.compare)).map(_.id)
   }
 }

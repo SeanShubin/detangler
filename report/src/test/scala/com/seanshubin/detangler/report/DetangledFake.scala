@@ -15,7 +15,7 @@ class DetangledFake(theRoot: Standalone, map: Map[Module, ModuleInfo], val level
 
   override def cycleParts(cycle: Cycle): Seq[Standalone] = map(cycle).parts.toSeq
 
-  override def breadth(module: Module): Int = ???
+  override def breadth(module: Module): Int = map(module).dependsOn.size
 
   override def depth(module: Module): Int = map(module).depth
 

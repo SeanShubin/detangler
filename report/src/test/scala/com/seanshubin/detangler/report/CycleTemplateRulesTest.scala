@@ -17,7 +17,8 @@ class CycleTemplateRulesTest extends FunSuite {
         |  <div class="cycle-summary">
         |    <p class="size">size number</p>
         |    <p class="depth">depth number</p>
-        |    <p class="complexity">0</p>
+        |    <p class="breadth">breadth number</p>
+        |    <p class="transitive">transitive number</p>
         |  </div>
         |  <div class="cycle-detail">
         |    <div class="cycle-parts append-cycle-part">
@@ -30,29 +31,18 @@ class CycleTemplateRulesTest extends FunSuite {
       """.stripMargin
     val cycleTemplate = HtmlElement.fragmentFromString(cycleTemplateText)
     val cycleTemplateRules = new CycleTemplateRulesImpl(detangled)
-    val expected =
-      """<div class="cycle">
-        |  <div class="cycle-summary">
-        |    <p class="size">2</p>
-        |    <p class="depth">0</p>
-        |    <p class="complexity">0</p>
-        |  </div>
-        |  <div class="cycle-detail">
-        |    <div class="cycle-parts append-cycle-part">
-        |      <div class="cycle-part">
-        |        <p><a class="name" href="#group-a">group/a</a></p>
-        |      </div>
-        |      <div class="cycle-part">
-        |        <p><a class="name" href="#group-b">group/b</a></p>
-        |      </div>
-        |    </div>
-        |  </div>
-        |</div>
-        | """.stripMargin
     //when
-    val actual = cycleTemplateRules.generate(cycleTemplate, Standalone.Root, SampleDataWithCycles.cycleAB).toString
+    val actual = cycleTemplateRules.generate(cycleTemplate, Standalone.Root, SampleDataWithCycles.cycleAB)
     //then
-    val linesCompareResult = LinesDifference.compare(actual, expected)
-    assert(linesCompareResult.isSame, linesCompareResult.detailLines.mkString("\n", "\n", "\n"))
+    assert(actual.select(".size").text() === "2")
+    assert(actual.select(".depth").text() === "0")
+    assert(actual.select(".breadth").text() === "0")
+    assert(actual.select(".transitive").text() === "0")
+    val cycleParts = actual.selectAll(".cycle-part")
+    assert(cycleParts.size === 2)
+    assert(cycleParts(0).select(".name").text() === "group/a")
+    assert(cycleParts(0).select(".name").attr("href") === "#group-a")
+    assert(cycleParts(1).select(".name").text() === "group/b")
+    assert(cycleParts(1).select(".name").attr("href") === "#group-b")
   }
 }

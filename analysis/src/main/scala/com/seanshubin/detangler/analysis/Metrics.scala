@@ -30,7 +30,7 @@ object Metrics {
     dependedOnBy = Set(),
     depth = 0,
     transitiveDependencies = Set())
-  val compare: (Metrics, Metrics) => Int = Compare.mergeCompareFunctions(compareDepth, compareId)
+  val compare: (Metrics, Metrics) => Int = Compare.mergeCompareFunctions(Compare.reverse(compareDepth), compareId)
 
   def compareDepth(left: Metrics, right: Metrics): Int = {
     Ordering.Int.compare(left.depth, right.depth)
