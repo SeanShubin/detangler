@@ -39,7 +39,7 @@ class DependencyAccumulatorTest extends FunSuite {
       classF -> Seq(classH),
       classF -> Seq(classI)
     )
-    val accumulator = DependencyAccumulator.fromIterator(rawDataSeq.iterator)
+    val accumulator = DependencyAccumulator.fromIterable(rawDataSeq)
     assert(accumulator.dependencies === Map(
       classF -> Set(classG, classH, classI),
       classG -> Set(),

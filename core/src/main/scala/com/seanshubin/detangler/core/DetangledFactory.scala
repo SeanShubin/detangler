@@ -115,7 +115,7 @@ object DetangledFactory {
       (from, dependsOn)
     }
     val dependencies = (0 until 1000).map(createDependencies)
-    val accumulator = DependencyAccumulator.fromIterator(dependencies.iterator)
+    val accumulator = DependencyAccumulator.fromIterable(dependencies)
     val cycleFinder = new CycleFinderWarshall[Standalone]
     val detangler = new DetanglerImpl(cycleFinder)
     val detangled = detangler.analyze(accumulator.dependencies, accumulator.transpose().dependencies)

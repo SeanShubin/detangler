@@ -1,3 +1,6 @@
 {
   reportDir generated/report
+  searchPaths [
+    "."
+  ]
 }

@@ -18,7 +18,7 @@ class ConfigurationFactoryImplTest extends FunSuite {
         |  reportDir generated/report
         |}
         | """.stripMargin
-    val expected = Right(Configuration(Paths.get("generated", "report")))
+    val expected = Right(Configuration.Sample)
     val filesStub = new FilesStub(Map("environment.txt" -> content), charset)
     val configurationFactory = new ConfigurationFactoryImpl(filesStub, devonMarshaller, charset)
     val actual = configurationFactory.validate(args)

@@ -43,11 +43,11 @@ case class DependencyAccumulator(dependencies: Map[Seq[String], Set[Seq[String]]
 object DependencyAccumulator {
   val Empty = new DependencyAccumulator(Map())
 
-  def fromIterator(iterator: Iterator[(Seq[String], Seq[Seq[String]])]): DependencyAccumulator = {
+  def fromIterable(iterable: Iterable[(Seq[String], Seq[Seq[String]])]): DependencyAccumulator = {
     def addEntry(accumulator: DependencyAccumulator, entry: (Seq[String], Seq[Seq[String]])): DependencyAccumulator = {
       val (key, values) = entry
       accumulator.addValues(key, values)
     }
-    iterator.foldLeft(Empty)(addEntry)
+    iterable.foldLeft(Empty)(addEntry)
   }
 }
