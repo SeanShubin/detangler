@@ -1,7 +1,6 @@
 package com.seanshubin.detangler.core
 
 import java.nio.charset.{Charset, StandardCharsets}
-import java.nio.file.Paths
 
 import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
 import org.scalatest.FunSuite

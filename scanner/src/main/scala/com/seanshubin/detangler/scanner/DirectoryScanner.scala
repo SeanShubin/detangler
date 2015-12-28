@@ -2,7 +2,6 @@ package com.seanshubin.detangler.scanner
 
 import java.nio.file.Path
 
-trait ClassScanner {
-  def loadBytes(path: Path): Iterable[Seq[Byte]]
-
+trait DirectoryScanner {
+  def findFiles(): Iterable[Path]
 }

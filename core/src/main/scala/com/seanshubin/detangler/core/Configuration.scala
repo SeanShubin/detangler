@@ -1,6 +1,6 @@
 package com.seanshubin.detangler.core
 
-import java.nio.file.{Paths, Path}
+import java.nio.file.{Path, Paths}
 
 case class Configuration(reportDir: Path, searchPaths: Seq[Path])
 

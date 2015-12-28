@@ -15,10 +15,12 @@ trait AfterConfigurationWiring {
     override def reportDir: Path = theReportDir
   }.reporter
   lazy val filesContract: FilesContract = FilesDelegate
-  lazy val fileScanner: FileScanner = new FileScannerImpl(filesContract, searchPaths)
-  lazy val jarScanner: JarScanner = new JarScannerImpl
-  lazy val classScanner: ClassScanner = new ClassScannerImpl
-  lazy val scanner: Scanner = new ScannerImpl(fileScanner, jarScanner, classScanner)
+  lazy val directoryScanner: DirectoryScanner = new DirectoryScannerImpl(filesContract, searchPaths)
+  lazy val zipScanner: ZipScanner = new ZipScannerImpl
+  lazy val classScanner: ClassScanner = new ClassScannerImpl(filesContract)
+  lazy val fileScanner: FileScanner = new FileScannerImpl(zipScanner, classScanner)
+  lazy val classBytesScanner: ClassBytesScanner = new ClassBytesScannerImpl
+  lazy val scanner: Scanner = new ScannerImpl(directoryScanner, fileScanner, classBytesScanner)
   lazy val cycleFinder: CycleFinder[Standalone] = new CycleFinderWarshall[Standalone]
   lazy val detangler: Detangler = new DetanglerImpl(cycleFinder)
   lazy val analyzer: Runnable = new AfterConfigurationRunnerImpl(scanner, detangler, createReporter, reportDir)

@@ -2,7 +2,6 @@ package com.seanshubin.detangler.scanner
 
 import java.nio.file.Path
 
-trait ClassScanner {
+trait ZipScanner {
   def loadBytes(path: Path): Iterable[Seq[Byte]]
-
 }

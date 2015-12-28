@@ -1,5 +1,9 @@
 package com.seanshubin.detangler.scanner
 
-class ClassScannerImpl extends ClassScanner {
-  override def parseDependencies(classBytes: Seq[Byte]): (Seq[String], Seq[Seq[String]]) = ???
+import java.nio.file.Path
+
+import com.seanshubin.detangler.contract.FilesContract
+
+class ClassScannerImpl(files: FilesContract) extends ClassScanner {
+  override def loadBytes(path: Path): Iterable[Seq[Byte]] = Seq(files.readAllBytes(path))
 }

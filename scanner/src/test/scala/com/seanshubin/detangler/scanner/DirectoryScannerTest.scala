@@ -8,12 +8,12 @@ import org.scalatest.FunSuite
 
 import scala.collection.mutable.ArrayBuffer
 
-class FileScannerTest extends FunSuite {
+class DirectoryScannerTest extends FunSuite {
   test("the correct files") {
     val searchPaths = Seq("foo", "bar")
     val files = Seq("find-this.jar", "find-this.class", "do-not-find-this.txt", "find-this.war")
     val filesContract: FilesContract = new FilesContractStub(files)
-    val fileScanner = new FileScannerImpl(filesContract, searchPaths.map(stringToPath))
+    val fileScanner = new DirectoryScannerImpl(filesContract, searchPaths.map(stringToPath))
     val actual = fileScanner.findFiles()
     val expected = Seq(
       Paths.get("foo", "find-this.jar"),
