@@ -16,7 +16,7 @@ class DependencyDataTest extends FunSuite {
   val classH = Standalone(Seq("group/a", "package/d", "class/h"))
   val classI = Standalone(Seq("group/b", "package/e", "class/i"))
 
-  val accumulator = DependencyAccumulator.Empty.addValues(classF.path, Seq(classG.path, classH.path, classI.path))
+  val accumulator = DependencyAccumulator.empty[Standalone]().addValues(classF, Seq(classG, classH, classI))
   val dependencyData = DependencyData.fromMaps(accumulator.dependencies, accumulator.transpose().dependencies)
 
   test("root subset") {

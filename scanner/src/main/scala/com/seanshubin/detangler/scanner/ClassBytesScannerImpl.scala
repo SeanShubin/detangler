@@ -1,5 +1,13 @@
 package com.seanshubin.detangler.scanner
 
-class ClassBytesScannerImpl extends ClassBytesScanner {
-  override def parseDependencies(classBytes: Seq[Byte]): (Seq[String], Seq[Seq[String]]) = ???
+import java.io.{ByteArrayInputStream, DataInputStream}
+
+import com.seanshubin.detangler.bytecode.ClassParser
+
+class ClassBytesScannerImpl(classParser: ClassParser) extends ClassBytesScanner {
+  override def parseDependencies(classBytes: Seq[Byte]): (String, Seq[String]) = {
+    val byteArrayInputStream = new ByteArrayInputStream(classBytes.toArray)
+    val dataInput = new DataInputStream(byteArrayInputStream)
+    classParser.parseClassDependencies(dataInput)
+  }
 }

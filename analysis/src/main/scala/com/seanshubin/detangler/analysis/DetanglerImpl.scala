@@ -3,7 +3,7 @@ package com.seanshubin.detangler.analysis
 import com.seanshubin.detangler.model.{Detangled, Standalone}
 
 class DetanglerImpl(cycleFinder: CycleFinder[Standalone]) extends Detangler {
-  override def analyze(dependsOn: Map[Seq[String], Set[Seq[String]]], dependedOnBy: Map[Seq[String], Set[Seq[String]]]): Detangled = {
+  override def analyze(dependsOn: Map[Standalone, Set[Standalone]], dependedOnBy: Map[Standalone, Set[Standalone]]): Detangled = {
     val data = DependencyData.fromMaps(dependsOn, dependedOnBy)
     def analyzePath(value: Unit, path: Seq[String]): Aggregate = {
       val subset = data.subsetFor(path)

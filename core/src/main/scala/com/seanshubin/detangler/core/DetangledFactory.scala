@@ -45,15 +45,15 @@ object DetangledFactory {
     val h = Standalone(Seq("h"))
     val i = Standalone(Seq("i"))
     val j = Standalone(Seq("j"))
-    val accumulator = DependencyAccumulator.Empty.
-      addValues(a.path, Seq(b.path)).
-      addValues(b.path, Seq(c.path, d.path)).
-      addValues(d.path, Seq(e.path)).
-      addValues(e.path, Seq(f.path, g.path)).
-      addValues(f.path, Seq(d.path)).
-      addValues(g.path, Seq(h.path)).
-      addValues(h.path, Seq(g.path, i.path)).
-      addValues(i.path, Seq(j.path))
+    val accumulator = DependencyAccumulator.empty[Standalone]().
+      addValues(a, Seq(b)).
+      addValues(b, Seq(c, d)).
+      addValues(d, Seq(e)).
+      addValues(e, Seq(f, g)).
+      addValues(f, Seq(d)).
+      addValues(g, Seq(h)).
+      addValues(h, Seq(g, i)).
+      addValues(i, Seq(j))
     val cycleFinder = new CycleFinderWarshall[Standalone]
     val detangler = new DetanglerImpl(cycleFinder)
     val detangled = detangler.analyze(accumulator.dependencies, accumulator.transpose().dependencies)
@@ -66,8 +66,8 @@ object DetangledFactory {
     val classH = Standalone(Seq("group/a", "package/d", "class/h"))
     val classI = Standalone(Seq("group/b", "package/e", "class/i"))
 
-    val accumulator = DependencyAccumulator.Empty.
-      addValues(classF.path, Seq(classG.path, classH.path, classI.path))
+    val accumulator = DependencyAccumulator.empty[Standalone]().
+      addValues(classF, Seq(classG, classH, classI))
 
     val cycleFinder = new CycleFinderWarshall[Standalone]
     val detangler = new DetanglerImpl(cycleFinder)
@@ -82,11 +82,11 @@ object DetangledFactory {
     val classH = Standalone(Seq("group/a", "package/d", "class/h"))
     val classI = Standalone(Seq("group/b", "package/e", "class/i"))
 
-    val accumulator = DependencyAccumulator.Empty.
-      addValues(classF.path, Seq(classG.path, classH.path, classI.path)).
-      addValues(classG.path, Seq(classF.path)).
-      addValues(classH.path, Seq(classF.path)).
-      addValues(classI.path, Seq(classF.path))
+    val accumulator = DependencyAccumulator.empty[Standalone]().
+      addValues(classF, Seq(classG, classH, classI)).
+      addValues(classG, Seq(classF)).
+      addValues(classH, Seq(classF)).
+      addValues(classI, Seq(classF))
 
     val cycleFinder = new CycleFinderWarshall[Standalone]
     val detangler = new DetanglerImpl(cycleFinder)
@@ -95,7 +95,7 @@ object DetangledFactory {
   }
 
   def generatedSampleData(): Detangled = {
-    val modules: Seq[Seq[String]] = for {
+    val modules: Seq[Standalone] = for {
       i <- 1 to 10
       groupName = randomName(4)
       j <- 1 to 10
@@ -103,10 +103,10 @@ object DetangledFactory {
       k <- 1 to 10
       className = randomName(2)
     } yield {
-      Seq(groupName, packageName, className)
+      Standalone(Seq(groupName, packageName, className))
     }
-    def createDependencies(index: Int): (Seq[String], Seq[Seq[String]]) = {
-      val dependsOn: Seq[Seq[String]] = for {
+    def createDependencies(index: Int): (Standalone, Seq[Standalone]) = {
+      val dependsOn = for {
         i <- 1 to 10
       } yield {
         modules(randomBetween(index, 1000))

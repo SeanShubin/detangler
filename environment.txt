@@ -3,4 +3,9 @@
   searchPaths [
     .
   ]
+  level 3
+  startsWith {
+    include [[com seanshubin detangler]]
+    drop [[com seanshubin detangler]]
+  }
 }

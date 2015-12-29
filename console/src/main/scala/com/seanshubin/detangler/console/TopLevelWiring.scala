@@ -20,6 +20,12 @@ trait TopLevelWiring {
       override def reportDir: Path = configuration.reportDir
 
       override def searchPaths: Seq[Path] = configuration.searchPaths
+
+      override def level: Int = configuration.level
+
+      override def startsWithDrop: Seq[Seq[String]] = configuration.startsWith.drop
+
+      override def startsWithInclude: Seq[Seq[String]] = configuration.startsWith.include
     }.analyzer
   lazy val launcher: Runnable = new TopLevelRunnerImpl(
     commandLineArguments, configurationFactory, createRunner, notifications)

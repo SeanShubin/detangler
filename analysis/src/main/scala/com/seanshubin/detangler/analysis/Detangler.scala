@@ -1,7 +1,7 @@
 package com.seanshubin.detangler.analysis
 
-import com.seanshubin.detangler.model.Detangled
+import com.seanshubin.detangler.model.{Detangled, Standalone}
 
 trait Detangler {
-  def analyze(dependsOn: Map[Seq[String], Set[Seq[String]]], dependedOnBy: Map[Seq[String], Set[Seq[String]]]): Detangled
+  def analyze(dependsOn: Map[Standalone, Set[Standalone]], dependedOnBy: Map[Standalone, Set[Standalone]]): Detangled
 }

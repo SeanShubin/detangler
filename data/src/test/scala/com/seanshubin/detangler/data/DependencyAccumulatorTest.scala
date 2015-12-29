@@ -9,27 +9,27 @@ class DependencyAccumulatorTest extends FunSuite {
   val classI = Seq("group/b", "package/e", "class/i")
 
   test("empty") {
-    val accumulator = DependencyAccumulator.Empty
+    val accumulator = DependencyAccumulator.empty[Seq[String]]()
     assert(accumulator.dependencies === Map())
   }
 
   test("add one item") {
-    val accumulator = DependencyAccumulator.Empty.addValues(classF, Seq(classG))
+    val accumulator = DependencyAccumulator.empty[Seq[String]]().addValues(classF, Seq(classG))
     assert(accumulator.dependencies === Map(classF -> Set(classG), classG -> Set()))
   }
 
   test("do not depend on self") {
-    val accumulator = DependencyAccumulator.Empty.addValues(classF, Seq(classF))
+    val accumulator = DependencyAccumulator.empty[Seq[String]]().addValues(classF, Seq(classF))
     assert(accumulator.dependencies === Map(classF -> Set()))
   }
 
   test("remove duplicates") {
-    val accumulator = DependencyAccumulator.Empty.addValues(classF, Seq(classG, classG)).addValues(classF, Seq(classG, classG))
+    val accumulator = DependencyAccumulator.empty[Seq[String]]().addValues(classF, Seq(classG, classG)).addValues(classF, Seq(classG, classG))
     assert(accumulator.dependencies === Map(classF -> Set(classG), classG -> Set()))
   }
 
   test("add item without dependencies") {
-    val collector = DependencyAccumulator.Empty.addValues(classF, Seq())
+    val collector = DependencyAccumulator.empty[Seq[String]]().addValues(classF, Seq())
     assert(collector.dependencies === Map(classF -> Set()))
   }
 
@@ -48,7 +48,7 @@ class DependencyAccumulatorTest extends FunSuite {
   }
 
   test("transpose") {
-    val accumulator = DependencyAccumulator(Map(
+    val accumulator = DependencyAccumulator[Seq[String]](Map(
       classF -> Set(classG, classH),
       classG -> Set(classH, classI),
       classH -> Set(),

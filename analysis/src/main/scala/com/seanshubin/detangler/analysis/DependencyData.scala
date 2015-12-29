@@ -52,21 +52,11 @@ object DependencyData {
 
   def createEmpty(level: Int) = DependencyData(level = level, all = Set(), dependsOn = Map(), dependedOnBy = Map())
 
-  def fromMaps(dependsOnPaths: Map[Seq[String], Set[Seq[String]]],
-               dependedOnByPaths: Map[Seq[String], Set[Seq[String]]]): DependencyData = {
-    val dependsOn = pathsToModules(dependsOnPaths)
-    val dependedOnBy = pathsToModules(dependedOnByPaths)
+  def fromMaps(dependsOn: Map[Standalone, Set[Standalone]],
+               dependedOnBy: Map[Standalone, Set[Standalone]]): DependencyData = {
     val all = dependsOn.keySet
     val level = allSameLevel(all)
     DependencyData(level, all, dependsOn, dependedOnBy)
-  }
-
-  def pathsToModules(paths: Map[Seq[String], Set[Seq[String]]]): Map[Standalone, Set[Standalone]] = {
-    for {
-      (key, values) <- paths
-    } yield {
-      (Standalone(key), values.map(Standalone.apply))
-    }
   }
 
   def allSameLevel(entries: Set[Standalone]): Int = {

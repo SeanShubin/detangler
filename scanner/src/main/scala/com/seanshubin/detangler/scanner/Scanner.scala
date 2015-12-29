@@ -1,5 +1,5 @@
 package com.seanshubin.detangler.scanner
 
 trait Scanner {
-  def scanDependencies(): Iterable[(Seq[String], Seq[Seq[String]])]
+  def scanDependencies(): Iterable[(String, Seq[String])]
 }

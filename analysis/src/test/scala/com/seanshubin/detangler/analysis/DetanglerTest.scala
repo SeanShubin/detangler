@@ -17,15 +17,15 @@ class DetanglerTest extends FunSuite {
     val h = Standalone(Seq("h"))
     val i = Standalone(Seq("i"))
     val j = Standalone(Seq("j"))
-    val accumulator = DependencyAccumulator.Empty.
-      addValues(a.path, Seq(b.path)).
-      addValues(b.path, Seq(c.path, d.path)).
-      addValues(d.path, Seq(e.path)).
-      addValues(e.path, Seq(f.path, g.path)).
-      addValues(f.path, Seq(d.path)).
-      addValues(g.path, Seq(h.path)).
-      addValues(h.path, Seq(g.path, i.path)).
-      addValues(i.path, Seq(j.path))
+    val accumulator = DependencyAccumulator.empty[Standalone]().
+      addValues(a, Seq(b)).
+      addValues(b, Seq(c, d)).
+      addValues(d, Seq(e)).
+      addValues(e, Seq(f, g)).
+      addValues(f, Seq(d)).
+      addValues(g, Seq(h)).
+      addValues(h, Seq(g, i)).
+      addValues(i, Seq(j))
     val cycleDEF = Cycle(Set(d, e, f))
     val cycleGH = Cycle(Set(g, h))
     val expectedModules: Set[Module] = Set(a, b, cycleDEF, d, e, f, cycleGH, g, h, i, c, j)
@@ -62,8 +62,8 @@ class DetanglerTest extends FunSuite {
     val classH = Standalone(Seq("group/a", "package/d", "class/h"))
     val classI = Standalone(Seq("group/b", "package/e", "class/i"))
 
-    val accumulator = DependencyAccumulator.Empty.
-      addValues(classF.path, Seq(classG.path, classH.path, classI.path))
+    val accumulator = DependencyAccumulator.empty[Standalone]().
+      addValues(classF, Seq(classG, classH, classI))
 
     val cycleFinder = new CycleFinderWarshall[Standalone]
     val detangler = new DetanglerImpl(cycleFinder)
@@ -113,11 +113,11 @@ class DetanglerTest extends FunSuite {
     val packageCD = Cycle(Set(packageC, packageD))
     val classFG = Cycle(Set(classF, classG))
 
-    val accumulator = DependencyAccumulator.Empty.
-      addValues(classF.path, Seq(classG.path, classH.path, classI.path)).
-      addValues(classG.path, Seq(classF.path)).
-      addValues(classH.path, Seq(classF.path)).
-      addValues(classI.path, Seq(classF.path))
+    val accumulator = DependencyAccumulator.empty[Standalone]().
+      addValues(classF, Seq(classG, classH, classI)).
+      addValues(classG, Seq(classF)).
+      addValues(classH, Seq(classF)).
+      addValues(classI, Seq(classF))
 
     val cycleFinder = new CycleFinderWarshall[Standalone]
     val detangler = new DetanglerImpl(cycleFinder)

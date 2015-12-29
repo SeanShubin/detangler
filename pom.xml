@@ -19,6 +19,7 @@
         <module>analysis</module>
         <module>compare</module>
         <module>scanner</module>
+        <module>bytecode</module>
     </modules>
     <repositories>
         <repository>

@@ -1,19 +1,19 @@
 package com.seanshubin.detangler.data
 
-case class DependencyAccumulator(dependencies: Map[Seq[String], Set[Seq[String]]]) {
-  def addValues(target: Seq[String], dependsOn: Seq[Seq[String]]): DependencyAccumulator = {
+case class DependencyAccumulator[T](dependencies: Map[T, Set[T]]) {
+  def addValues(target: T, dependsOn: Seq[T]): DependencyAccumulator[T] = {
     if (dependencies.contains(target)) {
-      def addParameterValue(soFar: DependencyAccumulator, parameterValue: Seq[String]) = soFar.addValue(target, parameterValue)
+      def addParameterValue(soFar: DependencyAccumulator[T], parameterValue: T) = soFar.addValue(target, parameterValue)
       dependsOn.foldLeft(this)(addParameterValue)
     } else {
       addKey(target).addValues(target, dependsOn)
     }
   }
 
-  def transpose(): DependencyAccumulator = {
-    def transposeAndAddValues(accumulator: DependencyAccumulator, entry: (Seq[String], Set[Seq[String]])): DependencyAccumulator = {
+  def transpose(): DependencyAccumulator[T] = {
+    def transposeAndAddValues(accumulator: DependencyAccumulator[T], entry: (T, Set[T])): DependencyAccumulator[T] = {
       val (key, values) = entry
-      def transposeAndAddValue(accumulator: DependencyAccumulator, value: Seq[String]): DependencyAccumulator = {
+      def transposeAndAddValue(accumulator: DependencyAccumulator[T], value: T): DependencyAccumulator[T] = {
         accumulator.addValue(value, key)
       }
       values.foldLeft(accumulator)(transposeAndAddValue)
@@ -21,33 +21,39 @@ case class DependencyAccumulator(dependencies: Map[Seq[String], Set[Seq[String]]
     dependencies.foldLeft(keysOnly)(transposeAndAddValues)
   }
 
-  private def keysOnly: DependencyAccumulator = DependencyAccumulator(dependencies.keys.map((_, Set[Seq[String]]())).toMap)
+  private def keysOnly: DependencyAccumulator[T] = DependencyAccumulator[T](dependencies.keys.map((_, Set[T]())).toMap)
 
-  private def addValue(target: Seq[String], dependsOn: Seq[String]): DependencyAccumulator = {
+  private def addValue(target: T, dependsOn: T): DependencyAccumulator[T] = {
     if (dependencies.contains(dependsOn)) {
       if (target == dependsOn) {
         this
       } else {
-        DependencyAccumulator(dependencies.updated(target, dependencies(target) + dependsOn))
+        DependencyAccumulator[T](dependencies.updated(target, dependencies(target) + dependsOn))
       }
     } else {
       addKey(dependsOn).addValue(target, dependsOn)
     }
   }
 
-  private def addKey(target: Seq[String]): DependencyAccumulator = {
-    DependencyAccumulator(dependencies.updated(target, dependencies.getOrElse(target, Set())))
+  private def addKey(target: T): DependencyAccumulator[T] = {
+    DependencyAccumulator[T](dependencies.updated(target, dependencies.getOrElse(target, Set())))
   }
 }
 
 object DependencyAccumulator {
-  val Empty = new DependencyAccumulator(Map())
+  def empty[T](): DependencyAccumulator[T] = {
+    val emptyMap: Map[T, Set[T]] = Map()
+    val empty: DependencyAccumulator[T] = DependencyAccumulator(emptyMap)
+    empty
+  }
 
-  def fromIterable(iterable: Iterable[(Seq[String], Seq[Seq[String]])]): DependencyAccumulator = {
-    def addEntry(accumulator: DependencyAccumulator, entry: (Seq[String], Seq[Seq[String]])): DependencyAccumulator = {
+  def fromIterable[T](iterable: Iterable[(T, Seq[T])]): DependencyAccumulator[T] = {
+    def addEntry(accumulator: DependencyAccumulator[T], entry: (T, Seq[T])): DependencyAccumulator[T] = {
       val (key, values) = entry
       accumulator.addValues(key, values)
     }
-    iterable.foldLeft(Empty)(addEntry)
+    val emptyMap: Map[T, Set[T]] = Map()
+    val empty: DependencyAccumulator[T] = DependencyAccumulator(emptyMap)
+    iterable.foldLeft(empty)(addEntry)
   }
 }
