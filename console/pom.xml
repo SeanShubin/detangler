@@ -13,16 +13,6 @@
             <artifactId>detangler-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>com.seanshubin.detangler</groupId>-->
-        <!--<artifactId>detangler-report</artifactId>-->
-        <!--<version>${project.parent.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>com.seanshubin.detangler</groupId>-->
-        <!--<artifactId>detangler-model</artifactId>-->
-        <!--<version>${project.parent.version}</version>-->
-        <!--</dependency>-->
     </dependencies>
     <build>
         <sourceDirectory>src/main/scala</sourceDirectory>

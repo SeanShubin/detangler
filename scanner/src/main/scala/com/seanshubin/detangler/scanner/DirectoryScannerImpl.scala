@@ -27,7 +27,7 @@ class DirectoryScannerImpl(files: FilesContract, searchPaths: Seq[Path]) extends
     }
 
     override def visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult = {
-      if (FileTypes.isRelevant(file)) {
+      if (FileTypes.isRelevant(file.toString)) {
         filesFound.append(file)
       }
       FileVisitResult.CONTINUE

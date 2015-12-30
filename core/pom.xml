@@ -11,17 +11,17 @@
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
             <artifactId>detangler-analysis</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
             <artifactId>detangler-report</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
             <artifactId>detangler-scanner</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.seanshubin.devon</groupId>

@@ -1,7 +1,5 @@
 package com.seanshubin.detangler.scanner
 
-import java.nio.file.Path
-
 object FileTypes {
   private val classExt = ".class"
   private val jarExt = ".jar"
@@ -9,11 +7,15 @@ object FileTypes {
   private val relevantExtensions = Seq(classExt, jarExt, warExt)
   private val compressedExtensions = Seq(jarExt, warExt)
 
-  def isRelevant(path: Path): Boolean = {
-    relevantExtensions.exists(path.toString.endsWith)
+  def isClass(path: String): Boolean = {
+    path.endsWith(classExt)
   }
 
-  def isCompressed(path: Path): Boolean = {
-    compressedExtensions.exists(path.toString.endsWith)
+  def isRelevant(path: String): Boolean = {
+    relevantExtensions.exists(path.endsWith)
+  }
+
+  def isCompressed(path: String): Boolean = {
+    compressedExtensions.exists(path.endsWith)
   }
 }

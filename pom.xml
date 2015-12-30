@@ -20,6 +20,8 @@
         <module>compare</module>
         <module>scanner</module>
         <module>bytecode</module>
+        <module>zip</module>
+        <module>collection</module>
     </modules>
     <repositories>
         <repository>

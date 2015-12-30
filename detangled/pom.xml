@@ -11,7 +11,7 @@
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
             <artifactId>detangler-compare</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>

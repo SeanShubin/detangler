@@ -27,7 +27,7 @@ trait AfterConfigurationWiring {
   }.reporter
   lazy val filesContract: FilesContract = FilesDelegate
   lazy val directoryScanner: DirectoryScanner = new DirectoryScannerImpl(filesContract, searchPaths)
-  lazy val zipScanner: ZipScanner = new ZipScannerImpl
+  lazy val zipScanner: ZipScanner = new ZipScannerImpl(filesContract, FileTypes.isCompressed)
   lazy val classScanner: ClassScanner = new ClassScannerImpl(filesContract)
   lazy val fileScanner: FileScanner = new FileScannerImpl(zipScanner, classScanner)
   lazy val classParser: ClassParser = new ClassParserImpl

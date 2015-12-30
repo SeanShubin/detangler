@@ -11,17 +11,17 @@
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
             <artifactId>detangler-detangled</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
             <artifactId>detangler-contract</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
             <artifactId>detangler-contract</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
             <type>test-jar</type>
         </dependency>
         <dependency>
