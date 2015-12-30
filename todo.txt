@@ -1,13 +1,10 @@
-rename cycle to module
-
-report
-    arrows (reasons)
-    leaf pages should not drill down
-    breadcrumbs
-    cycles
-    graphs
-        work when graphvis installed
-        generate graphvis instructions when graphvis not installed
-    depends on external
-    depended on by external
-implementation
+entry points summary
+cycles summary
+cycle depends on
+cycle depended on by
+graphvis report
+generate graphvis instructions when graphvis not installed
+thresholds
+test coverage
+cycle html character
+remove dead code
