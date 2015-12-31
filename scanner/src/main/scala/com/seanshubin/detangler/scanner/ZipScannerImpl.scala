@@ -9,17 +9,10 @@ class ZipScannerImpl(files: FilesContract, isCompressed: String => Boolean) exte
   override def loadBytes(path: Path): Iterable[Seq[Byte]] = {
     val inputStream = files.newInputStream(path)
     val iterator = new ZipContentsIterator(inputStream, path.toString, isCompressed)
-    iterator.filter(zipContentsRelevant).map(display).map(_.bytes.toSeq).toIndexedSeq
+    iterator.filter(zipContentsRelevant).map(_.bytes.toSeq).toIndexedSeq
   }
 
   def zipContentsRelevant(zipContents: ZipContents): Boolean = {
-    FileTypes.isClass(zipContents.path.last)
-  }
-
-  def display(zipContents: ZipContents): ZipContents = {
-    val pathString = zipContents.path.mkString("/")
-    val bytesString = s"${zipContents.bytes.length} bytes"
-    println(s"$pathString $bytesString")
-    zipContents
+    FileTypes.isClass(zipContents.zipEntry.getName)
   }
 }

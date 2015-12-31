@@ -14,10 +14,27 @@ class ConfigurationFactoryImplTest extends FunSuite {
   test("complete configuration") {
     val content =
       """{
-        |  reportDir generated/report
-        |}
-        | """.stripMargin
+        |  reportDir report-dir
+        |  searchPaths
+        |  [
+        |    search-path-1
+        |    search-path-2
+        |  ]
+        |  level 3
+        |  startsWith
+        |  {
+        |    include [
+        |      [ com seanshubin ]
+        |      [ seanshubin ]
+        |    ]
+        |    drop [
+        |      [ com seanshubin ]
+        |      [ seanshubin ]
+        |    ]
+        |  }
+        |}""".stripMargin
     val expected = Right(Configuration.Sample)
+    devonMarshaller.valueToPretty(Configuration.Sample).foreach(println)
     val filesStub = new FilesStub(Map("environment.txt" -> content), charset)
     val configurationFactory = new ConfigurationFactoryImpl(filesStub, devonMarshaller, charset)
     val actual = configurationFactory.validate(args)
