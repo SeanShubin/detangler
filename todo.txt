@@ -1,10 +1,10 @@
-entry points summary
-cycles summary
 cycle depends on
 cycle depended on by
+cycle html character
 graphvis report
 generate graphvis instructions when graphvis not installed
+entry points summary
+cycles summary
 thresholds
 test coverage
-cycle html character
 remove dead code
