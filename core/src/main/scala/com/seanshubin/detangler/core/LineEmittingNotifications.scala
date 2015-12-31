@@ -1,6 +1,7 @@
 package com.seanshubin.detangler.core
 
 import java.io.{PrintWriter, StringWriter}
+import java.time.Duration
 
 import com.seanshubin.devon.core.devon.DevonMarshaller
 
@@ -18,6 +19,10 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller, emit: String =
 
   override def configurationError(lines: Seq[String]): Unit = {
     lines.foreach(emit)
+  }
+
+  override def timeTaken(duration: Duration): Unit = {
+    emit(DurationFormat.NanosecondsFormat.format(duration.toNanos))
   }
 
   private def exceptionLines(ex: Throwable): Seq[String] = {

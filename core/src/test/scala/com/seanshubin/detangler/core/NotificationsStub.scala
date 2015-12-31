@@ -1,5 +1,7 @@
 package com.seanshubin.detangler.core
 
+import java.time.Duration
+
 import scala.collection.mutable.ArrayBuffer
 
 class NotificationsStub extends Notifications {
@@ -14,4 +16,6 @@ class NotificationsStub extends Notifications {
   }
 
   override def topLevelException(exception: Throwable): Unit = ???
+
+  override def timeTaken(duration: Duration): Unit = ???
 }

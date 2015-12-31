@@ -11,15 +11,21 @@ class AfterConfigurationRunnerImpl(scanner: Scanner,
                                    detangler: Detangler,
                                    createReporter: (Detangled, Path) => Runnable,
                                    reportDir: Path,
-                                   stringToStandalone: String => Option[Standalone]
+                                   stringToStandalone: String => Option[Standalone],
+                                   notifications: Notifications,
+                                   timer: Timer
                                   ) extends Runnable {
   override def run(): Unit = {
-    val stringDependencies = scanner.scanDependencies()
-    val standaloneDependencies = stringDependencies.flatMap(convertToStandaloneModule)
-    val moduleAccumulator = DependencyAccumulator.fromIterable(standaloneDependencies)
-    val detangled = detangler.analyze(moduleAccumulator.dependencies, moduleAccumulator.transpose().dependencies)
-    val reporter = createReporter(detangled, reportDir)
-    reporter.run()
+    val timeTaken = timer.measureTime {
+      val stringDependencies = scanner.scanDependencies()
+      val standaloneDependencies = stringDependencies.flatMap(convertToStandaloneModule)
+      val moduleAccumulator = DependencyAccumulator.fromIterable(standaloneDependencies)
+      val detangled = detangler.analyze(moduleAccumulator.dependencies, moduleAccumulator.transpose().dependencies)
+      val reporter = createReporter(detangled, reportDir)
+      reporter.run()
+    }
+    notifications.timeTaken(timeTaken)
+
     //    createReporter(DetangledFactory.contrivedSample(), reportDir.resolve("contrived")).run()
     //    createReporter(DetangledFactory.generatedSampleData(), reportDir.resolve("random")).run()
     //    createReporter(DetangledFactory.sampleWithoutCycles(), reportDir.resolve("simple")).run()
