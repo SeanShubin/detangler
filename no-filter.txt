@@ -1,0 +1,11 @@
+{
+  reportDir generated/report
+  searchPaths [
+    .
+  ]
+  level 1
+  startsWith {
+    include [[]]
+    drop [[]]
+  }
+}
