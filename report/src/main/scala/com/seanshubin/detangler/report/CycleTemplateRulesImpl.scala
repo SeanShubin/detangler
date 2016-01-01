@@ -2,14 +2,22 @@ package com.seanshubin.detangler.report
 
 import com.seanshubin.detangler.model.{Cycle, Detangled, Standalone}
 
-class CycleTemplateRulesImpl(detangled: Detangled) extends CycleTemplateRules {
+class CycleTemplateRulesImpl(detangled: Detangled,
+                             dependsOnTemplateRules: DependencyTemplateRules,
+                             dependedOnByTemplateRules: DependencyTemplateRules) extends CycleTemplateRules {
   override def generate(cycleTemplate: HtmlElement, context: Standalone, cycle: Cycle): HtmlElement = {
     val cycleSummaryTemplate = cycleTemplate.select(".cycle-summary")
     val cycleDetailTemplate = cycleTemplate.select(".cycle-detail")
+    val dependencyTemplate = cycleTemplate.select(".cycle-dependency")
     val cycleSummary = generateSummary(cycleSummaryTemplate, cycle)
     val cycleDetail = generateDetail(cycleDetailTemplate, context, cycle)
-    val result = cycleTemplate.replace(".cycle-summary", cycleSummary).replace(".cycle-detail", cycleDetail)
-    result
+    val dependsOn = dependsOnTemplateRules.generate(dependencyTemplate, context, cycle)
+    val dependedOnBy = dependedOnByTemplateRules.generate(dependencyTemplate, context, cycle)
+    val a = cycleTemplate.replace(".cycle-summary", cycleSummary)
+    val b = a.replace(".cycle-detail", cycleDetail)
+    val c = replaceIfPositiveQuantity(".cycle-depends-on", a, dependsOn)
+    val d = replaceIfPositiveQuantity(".cycle-depended-on-by", b, dependedOnBy)
+    d
   }
 
   def generateSummary(summaryTemplate: HtmlElement, cycle: Cycle): HtmlElement = {
@@ -30,5 +38,14 @@ class CycleTemplateRulesImpl(detangled: Detangled) extends CycleTemplateRules {
 
   def generateCyclePart(cyclePartTemplate: HtmlElement, context: Standalone, part: Standalone): HtmlElement = {
     cyclePartTemplate.anchor(".name", HtmlRendering.htmlLink(context, part), HtmlRendering.htmlName(part))
+  }
+
+  private def replaceIfPositiveQuantity(cssQuery: String, base: HtmlElement, quantityAndElement: QuantityAndElement): HtmlElement = {
+    val QuantityAndElement(quantity, element) = quantityAndElement
+    if (quantity == 0) {
+      base.remove(cssQuery)
+    } else {
+      base.replace(cssQuery, element)
+    }
   }
 }
