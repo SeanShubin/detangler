@@ -47,7 +47,7 @@ class GraphGeneratorTest extends FunSuite {
         |  "c";
         |  "d";
         |  "a" -> "b";
-        |  subgraph cluster_b {
+        |  subgraph "cluster_b" {
         |    penwidth=2;
         |    pencolor=Red;
         |    "b" -> "c";
@@ -98,7 +98,7 @@ class GraphGeneratorTest extends FunSuite {
         |  "a" -> "b";
         |  "b" -> "c";
         |  "b" -> "d";
-        |  subgraph cluster_d {
+        |  subgraph "cluster_d" {
         |    penwidth=2;
         |    pencolor=Red;
         |    "d" -> "e";
@@ -106,7 +106,7 @@ class GraphGeneratorTest extends FunSuite {
         |    "f" -> "d";
         |  }
         |  "e" -> "g";
-        |  subgraph cluster_g {
+        |  subgraph "cluster_g" {
         |    penwidth=2;
         |    pencolor=Red;
         |    "g" -> "h";

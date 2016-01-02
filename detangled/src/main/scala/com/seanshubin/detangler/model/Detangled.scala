@@ -26,4 +26,8 @@ trait Detangled {
   def isLeaf(standalone: Standalone): Boolean
 
   def levelsDeep: Int
+
+  def plainDependsOnFor(standalone: Standalone): Map[String, Set[String]]
+
+  def plainCyclesFor(standalone: Standalone): Map[String, Set[String]]
 }

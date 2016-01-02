@@ -62,7 +62,8 @@ class GraphGeneratorImpl extends GraphGenerator {
       } yield {
         s"""    "$key" -> "$value";"""
       }
-      Seq(s"  subgraph cluster_$name {",
+      Seq(
+        s"""  subgraph "cluster_$name" {""",
         "    penwidth=2;",
         "    pencolor=Red;") ++ dependencies ++
         Seq("  }")

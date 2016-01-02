@@ -33,11 +33,9 @@ class DetangledBackedByTreeOfAggregate(level: Int,
 
   override def dependsOn(module: Module): Seq[Standalone] = sortByStandaloneInfo(lookupMetrics(module).dependsOn)
 
-  override def levelsDeep: Int = level
-
-  override def depth(module: Module): Int = lookupMetrics(module).depth
-
-  override def breadth(module: Module): Int = lookupMetrics(module).breadth
+  private def sortByStandaloneInfo(unsorted: Set[Standalone]): Seq[Standalone] = {
+    unsorted.toSeq.map(lookupMetrics).sortWith(Compare.lessThan(Metrics.compare)).map(_.id.asInstanceOf[Standalone])
+  }
 
   private def lookupMetrics(module: Module): Metrics = {
     if (module.isRoot) {
@@ -47,6 +45,41 @@ class DetangledBackedByTreeOfAggregate(level: Int,
       val metrics = aggregate.modules(module)
       metrics
     }
+  }
+
+  override def levelsDeep: Int = level
+
+  override def depth(module: Module): Int = lookupMetrics(module).depth
+
+  override def breadth(module: Module): Int = lookupMetrics(module).breadth
+
+  override def plainDependsOnFor(standalone: Standalone): Map[String, Set[String]] = {
+    val aggregate = treeOfAggregate.value(standalone.path)
+    val dependsOnStandalone = aggregate.dependsOnMap
+    val dependsOn = toPlain(dependsOnStandalone)
+    dependsOn
+  }
+
+  private def toPlain(standalone: Map[Standalone, Set[Standalone]]): Map[String, Set[String]] = {
+    standalone.map(toPlain)
+  }
+
+  private def toPlain(standalone: (Standalone, Set[Standalone])): (String, Set[String]) = {
+    val (standaloneKey, standaloneValues) = standalone
+    val key = toPlain(standaloneKey)
+    val values = standaloneValues.map(toPlain)
+    (key, values)
+  }
+
+  private def toPlain(standalone: Standalone): String = {
+    standalone.path.last
+  }
+
+  override def plainCyclesFor(standalone: Standalone): Map[String, Set[String]] = {
+    val aggregate = treeOfAggregate.value(standalone.path)
+    val cyclesStandalone = aggregate.cycles
+    val cycles = toPlain(cyclesStandalone)
+    cycles
   }
 
   private def reasonsFor(parts: Seq[Standalone]): Seq[Reason] = {
@@ -61,10 +94,6 @@ class DetangledBackedByTreeOfAggregate(level: Int,
     } yield {
       Reason(fromPart, toPart, reasonsFor(childStandalone(fromPart), childStandalone(toPart)))
     }
-  }
-
-  private def sortByStandaloneInfo(unsorted: Set[Standalone]): Seq[Standalone] = {
-    unsorted.toSeq.map(lookupMetrics).sortWith(Compare.lessThan(Metrics.compare)).map(_.id.asInstanceOf[Standalone])
   }
 
   private def sortByModuleInfo(unsorted: Set[Module]): Seq[Module] = {

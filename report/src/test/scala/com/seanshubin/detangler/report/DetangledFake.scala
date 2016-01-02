@@ -26,14 +26,18 @@ class DetangledFake(theRoot: Standalone, map: Map[Module, ModuleInfo], val level
   override def dependsOn(module: Module): Seq[Standalone] =
     map(module).dependsOn.filter(hasParentOf(module.parent)).toSeq
 
+  private def hasParentOf(parent: Standalone): Standalone => Boolean = (child) => child.path.init == parent.path
+
   override def dependedOnBy(module: Module): Seq[Standalone] =
     map(module).dependedOnBy.filter(hasParentOf(module.parent)).toSeq
-
-  private def hasParentOf(parent: Standalone): Standalone => Boolean = (child) => child.path.init == parent.path
 
   override def reasonsFor(standalone: Standalone): Seq[Reason] = reasonsFor(childStandalone(standalone))
 
   override def isLeaf(standalone: Standalone): Boolean = standalone.path.size == levelsDeep
+
+  override def plainDependsOnFor(standalone: Standalone): Map[String, Set[String]] = ???
+
+  override def plainCyclesFor(standalone: Standalone): Map[String, Set[String]] = ???
 
   private def reasonsFor(parts: Seq[Standalone]): Seq[Reason] = {
     reasonsFor(parts, parts)

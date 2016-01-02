@@ -4,6 +4,7 @@ import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.{Path, Paths}
 
 import com.seanshubin.detangler.contract.{ClassLoaderContract, ClassLoaderDelegate, FilesContract, FilesDelegate}
+import com.seanshubin.detangler.graphviz.{GraphGenerator, GraphGeneratorImpl}
 import com.seanshubin.detangler.model.Detangled
 
 object Prototype extends App {
@@ -26,7 +27,17 @@ object Prototype extends App {
       reasonsTemplateRules,
       HtmlRendering.fileNameFor,
       HtmlRendering.htmlName)
-    val reporter: Runnable = new Reporter(detangled, directory, filesContract, charset, classLoader, pageTemplateRules)
+    val graphTemplateRules: GraphTemplateRules = new GraphTemplateRulesImpl
+    val graphGenerator: GraphGenerator = new GraphGeneratorImpl
+    val reporter: Runnable = new Reporter(
+      detangled,
+      directory,
+      filesContract,
+      charset,
+      classLoader,
+      pageTemplateRules,
+      graphTemplateRules,
+      graphGenerator)
     reporter.run()
   }
 }

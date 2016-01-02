@@ -13,7 +13,8 @@ class PageTemplateRulesImpl(modulesTemplateRules: ModulesTemplateRules,
     val reasons = reasonsTemplateRules.generate(reasonsTemplate, context, context)
     val a = pageTemplate.replace(".modules", modules).replace(".reasons", reasons)
     val b = if (context.isRoot) a.remove(".parent") else a.anchor(".parent", parentLinkFunction(context), parentTextFunction(context))
-    val c = if (isLeafPage) b.removeAll(".delete-if-leaf") else b
-    c
+    val c = b.anchor(".graph", HtmlRendering.graphLink(context), HtmlRendering.graphText(context))
+    val d = if (isLeafPage) c.removeAll(".delete-if-leaf") else c
+    d
   }
 }

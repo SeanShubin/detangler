@@ -4,14 +4,11 @@ import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.Path
 
 import com.seanshubin.detangler.contract.{ClassLoaderContract, ClassLoaderDelegate, FilesContract, FilesDelegate}
+import com.seanshubin.detangler.graphviz.{GraphGenerator, GraphGeneratorImpl}
 import com.seanshubin.detangler.model.Detangled
 import com.seanshubin.detangler.report._
 
 trait ReporterWiring {
-  def detangled: Detangled
-
-  def reportDir: Path
-
   val filesContract: FilesContract = FilesDelegate
   val charset: Charset = StandardCharsets.UTF_8
   val classLoader: ClassLoaderContract = new ClassLoaderDelegate(getClass.getClassLoader)
@@ -27,5 +24,19 @@ trait ReporterWiring {
     reasonsTemplateRules,
     HtmlRendering.outerHtmlLinkFor,
     HtmlRendering.htmlName)
-  val reporter: Runnable = new Reporter(detangled, reportDir, filesContract, charset, classLoader, pageTemplateRules)
+  val graphTemplateRules: GraphTemplateRules = new GraphTemplateRulesImpl()
+  val graphGenerator: GraphGenerator = new GraphGeneratorImpl
+  val reporter: Runnable = new Reporter(
+    detangled,
+    reportDir,
+    filesContract,
+    charset,
+    classLoader,
+    pageTemplateRules,
+    graphTemplateRules,
+    graphGenerator)
+
+  def detangled: Detangled
+
+  def reportDir: Path
 }

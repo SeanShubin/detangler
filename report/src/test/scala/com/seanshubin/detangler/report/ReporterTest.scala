@@ -3,6 +3,7 @@ package com.seanshubin.detangler.report
 import java.nio.charset.StandardCharsets
 import java.nio.file.Paths
 
+import com.seanshubin.detangler.graphviz.GraphGenerator
 import org.scalatest.FunSuite
 
 class ReporterTest extends FunSuite {
@@ -26,13 +27,17 @@ class ReporterTest extends FunSuite {
       SampleData.packageE -> "<p>e text</p>"
     )
     val pageTemplateRules = new PageTemplateRulesStub(pageTextMap, charset)
+    val graphTemplateRules = new GraphTemplateRulesStub(charset)
+    val graphGenerator: GraphGenerator = ???
     val reporter: Runnable = new Reporter(
       SampleData.detangled,
       path,
       filesStub,
       charset,
       classLoader,
-      pageTemplateRules)
+      pageTemplateRules,
+      graphTemplateRules,
+      graphGenerator)
 
     //when
     reporter.run()
