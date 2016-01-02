@@ -1,7 +1,7 @@
 package com.seanshubin.detangler.collection
 
 object SeqDifference {
-  def diff[T](a: Seq[T], b: Seq[T]): DifferenceResult = {
+  def diff[T](a: Iterable[T], b: Iterable[T]): DifferenceResult = {
     def buildSeqDifference(index: Int, soFar: List[T], remainA: List[T], remainB: List[T]): DifferenceResult = {
       def composeSeqDifference(a: String, b: String): DifferenceResult = {
         val heading = s"sequences different at index $index"
