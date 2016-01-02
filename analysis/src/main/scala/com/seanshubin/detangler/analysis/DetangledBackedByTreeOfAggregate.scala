@@ -27,6 +27,8 @@ class DetangledBackedByTreeOfAggregate(level: Int,
 
   override def cycleSize(cycle: Cycle): Int = lookupMetrics(cycle).cycleParts.size
 
+  override def partOfCycle(standalone: Standalone): Option[Cycle] = lookupMetrics(standalone).partOfCycle
+
   override def childModules(standalone: Standalone): Seq[Module] = sortByModuleInfo(treeOfAggregate.value(standalone.path).modules.keySet)
 
   override def dependsOn(module: Module): Seq[Standalone] = sortByStandaloneInfo(lookupMetrics(module).dependsOn)

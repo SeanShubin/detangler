@@ -11,6 +11,7 @@ class DependencyTemplateRulesTest extends FunSuite {
         |  <ul class="standalone-append-dependency-row">
         |     <li class="standalone-dependency-row">
         |       <p><a class="name" href="replace-me">replace-me</a></p>
+        |       <p><a class="cycle-link" href="">&orarr;</a></p>
         |       <p class="depth">replace-me</p>
         |       <p class="breadth">replace-me</p>
         |       <p class="transitive">replace-me</p>

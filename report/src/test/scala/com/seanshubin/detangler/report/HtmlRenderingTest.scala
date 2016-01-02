@@ -39,6 +39,18 @@ class HtmlRenderingTest extends FunSuite {
     assert(HtmlRendering.htmlLink(SampleData.packageD, SampleData.classF) === "group-a--package-c.html#class-f")
   }
 
+  test("cycle id") {
+    assert(HtmlRendering.cycleId(SampleDataWithCycles.cycleAB) === "cycle-group-a")
+    assert(HtmlRendering.cycleId(SampleDataWithCycles.cycleCD) === "cycle-package-c")
+    assert(HtmlRendering.cycleId(SampleDataWithCycles.cycleFG) === "cycle-class-f")
+  }
+
+  test("cycle link") {
+    assert(HtmlRendering.cycleLink(SampleDataWithCycles.cycleAB) === "#cycle-group-a")
+    assert(HtmlRendering.cycleLink(SampleDataWithCycles.cycleCD) === "#cycle-package-c")
+    assert(HtmlRendering.cycleLink(SampleDataWithCycles.cycleFG) === "#cycle-class-f")
+  }
+
   test("reason name") {
     assert(HtmlRendering.reasonName(SampleData.groupA, SampleData.groupB) === "reason")
     assert(HtmlRendering.reasonName(SampleData.packageC, SampleData.packageD) === "reason")

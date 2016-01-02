@@ -1,6 +1,7 @@
 package com.seanshubin.detangler.report
 
-import com.seanshubin.detangler.model.Standalone
+import com.seanshubin.detangler.compare.Compare
+import com.seanshubin.detangler.model.{Cycle, Standalone}
 
 object HtmlRendering {
   def fileNameFor(standalone: Standalone): String = {
@@ -31,6 +32,14 @@ object HtmlRendering {
     }
   }
 
+  def cycleId(cycle: Cycle): String = {
+    "cycle-" + htmlId(firstInCycle(cycle))
+  }
+
+  def cycleLink(cycle: Cycle): String = {
+    "#" + cycleId(cycle)
+  }
+
   def innerHtmlLinkFor(standalone: Standalone): String = {
     "#" + htmlId(standalone)
   }
@@ -48,6 +57,10 @@ object HtmlRendering {
   }
 
   def reasonName(from: Standalone, to: Standalone): String = "reason"
+
+  private def firstInCycle(cycle: Cycle): Standalone = {
+    cycle.parts.toSeq.sortWith(Compare.lessThan(Standalone.compare)).head
+  }
 
   private val FileSystemCharacters = "/\\?%*:|\"<>. "
   private val CssSelectorCharacters = "~!@$%^&*()+=,./';:\"?><[]\\{}|`#"

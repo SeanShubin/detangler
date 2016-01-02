@@ -34,7 +34,6 @@ class ConfigurationFactoryImplTest extends FunSuite {
         |  }
         |}""".stripMargin
     val expected = Right(Configuration.Sample)
-    devonMarshaller.valueToPretty(Configuration.Sample).foreach(println)
     val filesStub = new FilesStub(Map("environment.txt" -> content), charset)
     val configurationFactory = new ConfigurationFactoryImpl(filesStub, devonMarshaller, charset)
     val actual = configurationFactory.validate(args)

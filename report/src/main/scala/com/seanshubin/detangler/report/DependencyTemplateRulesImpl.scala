@@ -22,18 +22,28 @@ class DependencyTemplateRulesImpl(detangled: Detangled, dependencyDirection: Dep
       case parent: Standalone =>
         val reasonName = dependencyDirection.name(parent, child)
         val reasonLink = dependencyDirection.link(parent, child)
-        dependencyRowTemplate.
+        cycleLink(dependencyRowTemplate, child).
           anchor(".name", HtmlRendering.htmlLink(context, child), HtmlRendering.htmlName(child)).
           text(".depth", detangled.depth(child).toString).
           text(".breadth", detangled.breadth(child).toString).
           text(".transitive", detangled.transitive(child).toString).
           anchor(".reason", reasonLink, reasonName)
       case parent: Cycle =>
-        dependencyRowTemplate.
+        cycleLink(dependencyRowTemplate, child).
           anchor(".name", HtmlRendering.htmlLink(context, child), HtmlRendering.htmlName(child)).
           text(".depth", detangled.depth(child).toString).
           text(".breadth", detangled.breadth(child).toString).
           text(".transitive", detangled.transitive(child).toString)
+    }
+  }
+
+  private def cycleLink(template: HtmlElement, standalone: Standalone): HtmlElement = {
+    detangled.partOfCycle(standalone) match {
+      case Some(cycle) =>
+        template.
+          attr(".cycle-link", "href", HtmlRendering.cycleLink(cycle))
+      case None =>
+        template.remove(".cycle-link")
     }
   }
 }

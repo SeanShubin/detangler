@@ -9,6 +9,8 @@ trait Detangled {
 
   def cycleParts(cycle: Cycle): Seq[Standalone]
 
+  def partOfCycle(standalone: Standalone): Option[Cycle]
+
   def breadth(module: Module): Int
 
   def depth(module: Module): Int

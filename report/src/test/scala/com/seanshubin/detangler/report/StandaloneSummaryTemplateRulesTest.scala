@@ -8,6 +8,7 @@ class StandaloneSummaryTemplateRulesTest extends FunSuite {
     val standaloneTemplateText =
       """<div class="standalone-summary">
         |  <p class="name">sample/group</p>
+        |  <a class="cycle-link" href="">&orarr;</a>
         |  <p class="depth">depth number</p>
         |  <p class="breadth">breadth number</p>
         |  <p class="transitive">transitive number</p>

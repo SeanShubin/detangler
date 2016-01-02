@@ -36,7 +36,8 @@ case class Aggregate(modules: Map[Module, Metrics],
       dependsOn = cycleDependsOn,
       dependedOnBy = cycleDependedOnBy,
       depth = depth,
-      transitiveDependencies = cycleTransitiveDependencies
+      transitiveDependencies = cycleTransitiveDependencies,
+      partOfCycle = None
     )
     val cycleEntry = (cycle, metrics)
     def createMetricsEntryForCyclePart(cyclePart: Standalone): (Module, Metrics) = {
@@ -50,7 +51,8 @@ case class Aggregate(modules: Map[Module, Metrics],
         dependsOn = dependsOnMap(cyclePart),
         dependedOnBy = dependedOnByMap(cyclePart),
         depth = depth,
-        transitiveDependencies = transitiveDependencies
+        transitiveDependencies = transitiveDependencies,
+        partOfCycle = Some(cycle)
       )
       (cyclePart, metrics)
     }
@@ -75,7 +77,8 @@ case class Aggregate(modules: Map[Module, Metrics],
       dependsOn = dependsOn,
       dependedOnBy = dependedOnByMap(standalone),
       depth = depth,
-      transitiveDependencies = transitiveDependencies
+      transitiveDependencies = transitiveDependencies,
+      partOfCycle = None
     )
     this.copy(modules = modules.updated(standalone, metrics))
   }

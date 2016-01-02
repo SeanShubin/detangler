@@ -6,6 +6,7 @@ class CycleTemplateRulesImpl(detangled: Detangled,
                              dependsOnTemplateRules: DependencyTemplateRules,
                              dependedOnByTemplateRules: DependencyTemplateRules) extends CycleTemplateRules {
   override def generate(cycleTemplate: HtmlElement, context: Standalone, cycle: Cycle): HtmlElement = {
+    val baseTemplate = cycleTemplate.remove(".cycle-dependency")
     val cycleSummaryTemplate = cycleTemplate.select(".cycle-summary")
     val cycleDetailTemplate = cycleTemplate.select(".cycle-detail")
     val dependencyTemplate = cycleTemplate.select(".cycle-dependency")
@@ -13,15 +14,16 @@ class CycleTemplateRulesImpl(detangled: Detangled,
     val cycleDetail = generateDetail(cycleDetailTemplate, context, cycle)
     val dependsOn = dependsOnTemplateRules.generate(dependencyTemplate, context, cycle)
     val dependedOnBy = dependedOnByTemplateRules.generate(dependencyTemplate, context, cycle)
-    val a = cycleTemplate.replace(".cycle-summary", cycleSummary)
+    val a = baseTemplate.replace(".cycle-summary", cycleSummary)
     val b = a.replace(".cycle-detail", cycleDetail)
-    val c = replaceIfPositiveQuantity(".cycle-depends-on", a, dependsOn)
-    val d = replaceIfPositiveQuantity(".cycle-depended-on-by", b, dependedOnBy)
+    val c = replaceIfPositiveQuantity(".cycle-depends-on", b, dependsOn)
+    val d = replaceIfPositiveQuantity(".cycle-depended-on-by", c, dependedOnBy)
     d
   }
 
   def generateSummary(summaryTemplate: HtmlElement, cycle: Cycle): HtmlElement = {
     summaryTemplate.
+      attr(".cycle-summary", "id", HtmlRendering.cycleId(cycle)).
       text(".size", detangled.cycleSize(cycle).toString).
       text(".depth", detangled.depth(cycle).toString).
       text(".breadth", detangled.breadth(cycle).toString).

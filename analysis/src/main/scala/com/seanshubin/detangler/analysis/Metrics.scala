@@ -1,7 +1,7 @@
 package com.seanshubin.detangler.analysis
 
 import com.seanshubin.detangler.compare.Compare
-import com.seanshubin.detangler.model.{Module, Standalone}
+import com.seanshubin.detangler.model.{Cycle, Module, Standalone}
 
 case class Metrics(id: Module,
                    children: Set[Module],
@@ -9,7 +9,8 @@ case class Metrics(id: Module,
                    dependsOn: Set[Standalone],
                    dependedOnBy: Set[Standalone],
                    depth: Int,
-                   transitiveDependencies: Set[Standalone]) {
+                   transitiveDependencies: Set[Standalone],
+                   partOfCycle: Option[Cycle]) {
   override def toString: String = {
     s"id = $id, depth = $depth, children = $children, cycleParts = $cycleParts, dependsOn = $dependsOn, dependedOnBy = $dependedOnBy, transitiveDependencies = $transitiveDependencies"
   }
@@ -29,7 +30,9 @@ object Metrics {
     dependsOn = Set(),
     dependedOnBy = Set(),
     depth = 0,
-    transitiveDependencies = Set())
+    transitiveDependencies = Set(),
+    partOfCycle = None
+  )
   val compare: (Metrics, Metrics) => Int = Compare.mergeCompareFunctions(Compare.reverse(compareDepth), compareId)
 
   def compareDepth(left: Metrics, right: Metrics): Int = {
