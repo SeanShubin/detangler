@@ -3,7 +3,7 @@ package com.seanshubin.detangler.report
 import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.{Path, Paths}
 
-import com.seanshubin.detangler.contract.{ClassLoaderContract, ClassLoaderDelegate, FilesContract, FilesDelegate}
+import com.seanshubin.detangler.contract._
 import com.seanshubin.detangler.graphviz.{GraphGenerator, GraphGeneratorImpl}
 import com.seanshubin.detangler.model.Detangled
 
@@ -29,6 +29,7 @@ object Prototype extends App {
       HtmlRendering.htmlName)
     val graphTemplateRules: GraphTemplateRules = new GraphTemplateRulesImpl
     val graphGenerator: GraphGenerator = new GraphGeneratorImpl
+    val createProcessBuilder: Seq[String] => ProcessBuilderContract = (command) => new ProcessBuilderDelegate(new ProcessBuilder(command: _*))
     val reporter: Runnable = new Reporter(
       detangled,
       directory,
@@ -37,7 +38,8 @@ object Prototype extends App {
       classLoader,
       pageTemplateRules,
       graphTemplateRules,
-      graphGenerator)
+      graphGenerator,
+      createProcessBuilder)
     reporter.run()
   }
 }

@@ -1,9 +1,13 @@
 package com.seanshubin.detangler.report
 
-import java.nio.charset.Charset
-
 import com.seanshubin.detangler.model.Standalone
 
-class GraphTemplateRulesStub(charset: Charset) extends GraphTemplateRules {
-  override def generate(graphTemplate: HtmlElement, standalone: Standalone): HtmlElement = ???
+import scala.collection.mutable.ArrayBuffer
+
+class GraphTemplateRulesStub(generateResult: HtmlElement) extends GraphTemplateRules {
+  val invocations = new ArrayBuffer[(HtmlElement, Standalone)]()
+
+  override def generate(graphTemplate: HtmlElement, standalone: Standalone): HtmlElement = {
+    generateResult
+  }
 }

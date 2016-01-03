@@ -1,22 +1,36 @@
 package com.seanshubin.detangler.report
 
-import java.io.{ByteArrayInputStream, InputStream, OutputStream}
+import java.io._
 import java.nio.charset.Charset
 
 import scala.annotation.tailrec
 
 object IoUtil {
   @tailrec
-  def copyInputStreamToOutputStream(inputStream: InputStream, outputStream: OutputStream): Unit = {
+  def copy(inputStream: InputStream, outputStream: OutputStream): Unit = {
     val ch = inputStream.read()
     if (ch != -1) {
       outputStream.write(ch)
-      copyInputStreamToOutputStream(inputStream, outputStream)
+      copy(inputStream, outputStream)
     }
   }
 
-  def stringToInputStream(text: String, charset: Charset): InputStream = {
+  def toInputStream(text: String, charset: Charset): InputStream = {
     val bytes = text.getBytes(charset)
     new ByteArrayInputStream(bytes)
+  }
+
+  def copy(inputStream: InputStream, printStream: PrintStream, charset: Charset): Unit = {
+    val reader = new BufferedReader(new InputStreamReader(inputStream, charset))
+    copy(reader, printStream)
+  }
+
+  @tailrec
+  def copy(bufferedReader: BufferedReader, printStream: PrintStream): Unit = {
+    val line = bufferedReader.readLine()
+    if (line != null) {
+      printStream.println(line)
+      copy(bufferedReader, printStream)
+    }
   }
 }

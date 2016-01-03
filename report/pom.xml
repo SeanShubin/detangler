@@ -26,6 +26,12 @@
         </dependency>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
+            <artifactId>detangler-collection</artifactId>
+            <version>${project.parent.version}</version>
+            <type>test-jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.seanshubin.detangler</groupId>
             <artifactId>detangler-graphviz</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

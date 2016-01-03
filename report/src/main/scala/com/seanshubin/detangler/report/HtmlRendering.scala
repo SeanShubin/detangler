@@ -24,7 +24,7 @@ object HtmlRendering {
   }
 
   def graphLink(context: Standalone): String = {
-    fileNameWithoutExtFor(context) + "-graph.html"
+    "graph-" + fileNameWithoutExtFor(context) + ".html"
   }
 
   def graphFile(context: Standalone): String = {
@@ -33,10 +33,6 @@ object HtmlRendering {
 
   def graphSourceFile(context: Standalone): String = {
     fileNameWithoutExtFor(context) + ".txt"
-  }
-
-  def graphTargetFile(context: Standalone): String = {
-    fileNameWithoutExtFor(context) + ".svg"
   }
 
   private def fileNameWithoutExtFor(standalone: Standalone): String = {
@@ -50,6 +46,10 @@ object HtmlRendering {
   private def makeFileSystemSafe(c: Char): Char = {
     if (FileSystemCharacters.contains(c)) '-'
     else c
+  }
+
+  def graphTargetFile(context: Standalone): String = {
+    fileNameWithoutExtFor(context) + ".svg"
   }
 
   def graphText(context: Standalone): String = {

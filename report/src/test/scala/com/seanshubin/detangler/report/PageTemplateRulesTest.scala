@@ -16,7 +16,8 @@ class PageTemplateRulesTest extends FunSuite {
     }
   }
   val pageTemplateText =
-    """<a class="parent"/>
+    """<a class="graph">graph</a>
+      |<a class="parent"/>
       |<p class="modules"/>
       |<p class="reasons"/>
     """.stripMargin

@@ -22,7 +22,7 @@ class HtmlElementTest extends FunSuite {
   val charset = StandardCharsets.UTF_8
 
   test("page from input stream") {
-    val element = HtmlElement.pageFromInputStream(IoUtil.stringToInputStream(sampleRawPage, charset), charset)
+    val element = HtmlElement.pageFromInputStream(IoUtil.toInputStream(sampleRawPage, charset), charset)
     assertLinesSame(element.toString, sampleGeneratedPage)
   }
 

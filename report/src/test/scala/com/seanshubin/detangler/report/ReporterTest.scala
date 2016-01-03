@@ -3,19 +3,25 @@ package com.seanshubin.detangler.report
 import java.nio.charset.StandardCharsets
 import java.nio.file.Paths
 
+import com.seanshubin.detangler.collection.SetDifference
+import com.seanshubin.detangler.contract.ProcessBuilderContract
 import com.seanshubin.detangler.graphviz.GraphGenerator
 import org.scalatest.FunSuite
 
 class ReporterTest extends FunSuite {
   test("generate report") {
     //given
-    val templatePageText = "template text"
+    val pageTemplateText = "page template text"
+    val graphTemplateText = "graph template text"
     val path = Paths.get("generated", getClass.getSimpleName)
     val charset = StandardCharsets.UTF_8
     val filesStub = new FilesStub(charset)
+    val graphTarget = Seq("graph target")
+    val graphTemplateElement = HtmlElement.fragmentFromString("<p>graph</p>")
     val resourceMap = Map(
+      "template-graph.html" -> graphTemplateText,
       "style.css" -> "style text",
-      "template.html" -> templatePageText
+      "template.html" -> pageTemplateText
     )
     val classLoader = new ClassLoaderStub(resourceMap, charset)
     val pageTextMap = Map(
@@ -27,8 +33,12 @@ class ReporterTest extends FunSuite {
       SampleData.packageE -> "<p>e text</p>"
     )
     val pageTemplateRules = new PageTemplateRulesStub(pageTextMap, charset)
-    val graphTemplateRules = new GraphTemplateRulesStub(charset)
-    val graphGenerator: GraphGenerator = ???
+    val graphTemplateRules = new GraphTemplateRulesStub(graphTemplateElement)
+    val graphGenerator: GraphGenerator = new GraphGeneratorStub(graphTarget)
+    val process = new ProcessStub
+    val createProcessBuilder: Seq[String] => ProcessBuilderContract =
+      (command) => new ProcessBuilderStub(command, process)
+
     val reporter: Runnable = new Reporter(
       SampleData.detangled,
       path,
@@ -37,22 +47,30 @@ class ReporterTest extends FunSuite {
       classLoader,
       pageTemplateRules,
       graphTemplateRules,
-      graphGenerator)
+      graphGenerator,
+      createProcessBuilder
+    )
 
     //when
     reporter.run()
 
     //then
-    val setDifference = SetDifference(filesStub.fileNames(), Set(
+    val setDifference = SetDifference.diff(filesStub.fileNames(), Set(
       "group-a--package-c.html",
       "group-a--package-d.html",
       "group-a.html",
       "group-b--package-e.html",
       "group-b.html",
       "index.html",
+      "graph-group-a--package-c.html",
+      "graph-group-a--package-d.html",
+      "graph-group-a.html",
+      "graph-group-b--package-e.html",
+      "graph-group-b.html",
+      "graph-index.html",
       "style.css"
     ))
-    assert(setDifference.isSame, setDifference.message)
+    assert(setDifference.isSame, setDifference.messageLines.mkString("\n"))
     assert(filesStub.stringContentsOf("index.html") === "<p>index text</p>")
     assert(filesStub.stringContentsOf("style.css") === "style text")
     assert(filesStub.stringContentsOf("group-a.html") === "<p>a text</p>")

@@ -4,12 +4,11 @@ import java.io.InputStream
 import java.nio.charset.Charset
 import java.nio.file.Path
 
-import com.seanshubin.detangler.contract.{ClassLoaderContract, FilesContract}
+import com.seanshubin.detangler.contract.{ClassLoaderContract, FilesContract, ProcessBuilderContract}
 import com.seanshubin.detangler.graphviz.GraphGenerator
 import com.seanshubin.detangler.model.{Detangled, Standalone}
 
 import scala.collection.JavaConversions
-import scala.sys.process.{Process, ProcessBuilder}
 
 class Reporter(detangled: Detangled,
                directory: Path,
@@ -18,7 +17,8 @@ class Reporter(detangled: Detangled,
                classLoader: ClassLoaderContract,
                pageTemplateRules: PageTemplateRules,
                graphTemplateRules: GraphTemplateRules,
-               graphGenerator: GraphGenerator) extends Runnable {
+               graphGenerator: GraphGenerator,
+               createProcessBuilder: Seq[String] => ProcessBuilderContract) extends Runnable {
   override def run(): Unit = {
     filesContract.createDirectories(directory)
     copyResource("style.css", directory.resolve("style.css"))
@@ -37,7 +37,7 @@ class Reporter(detangled: Detangled,
     val inputStream = loadResource(name)
     if (inputStream == null) throw new RuntimeException(s"Unable to find resource named '$name'")
     val outputStream = filesContract.newOutputStream(destination)
-    IoUtil.copyInputStreamToOutputStream(inputStream, outputStream)
+    IoUtil.copy(inputStream, outputStream)
   }
 
   private def generatePages(standalone: Standalone): Unit = {
@@ -87,16 +87,7 @@ class Reporter(detangled: Detangled,
     val target = HtmlRendering.graphTargetFile(standalone)
     val command = Seq("dot", "-Tsvg", s"-o$target", source)
 
-    val processBuilder: ProcessBuilder = Process(command, directory.toFile)
-    val processLogger = new ArrayBufferProcessLogger()
-    val process: Process = processBuilder.run(processLogger)
-    val exitCode = process.exitValue()
-    val standardOutput: Seq[String] = processLogger.outputBuffer
-    val standardError: Seq[String] = processLogger.errorBuffer
-    if (exitCode != 0) {
-      standardOutput.foreach(println)
-      println("-" * 80)
-      standardError.foreach(println)
-    }
+    val processBuilder = createProcessBuilder(command).directory(directory.toFile)
+    processBuilder.start()
   }
 }

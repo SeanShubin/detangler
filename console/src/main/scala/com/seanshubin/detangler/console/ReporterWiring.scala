@@ -3,7 +3,7 @@ package com.seanshubin.detangler.console
 import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.Path
 
-import com.seanshubin.detangler.contract.{ClassLoaderContract, ClassLoaderDelegate, FilesContract, FilesDelegate}
+import com.seanshubin.detangler.contract._
 import com.seanshubin.detangler.graphviz.{GraphGenerator, GraphGeneratorImpl}
 import com.seanshubin.detangler.model.Detangled
 import com.seanshubin.detangler.report._
@@ -26,6 +26,7 @@ trait ReporterWiring {
     HtmlRendering.htmlName)
   val graphTemplateRules: GraphTemplateRules = new GraphTemplateRulesImpl()
   val graphGenerator: GraphGenerator = new GraphGeneratorImpl
+  val createProcessBuilder: Seq[String] => ProcessBuilderContract = (commands) => new ProcessBuilderDelegate(new ProcessBuilder(commands: _*))
   val reporter: Runnable = new Reporter(
     detangled,
     reportDir,
@@ -34,7 +35,8 @@ trait ReporterWiring {
     classLoader,
     pageTemplateRules,
     graphTemplateRules,
-    graphGenerator)
+    graphGenerator,
+    createProcessBuilder)
 
   def detangled: Detangled
 

@@ -1,6 +1,7 @@
 package com.seanshubin.detangler.report
 
 import java.io.{ByteArrayOutputStream, OutputStream}
+import java.lang.Iterable
 import java.nio.charset.Charset
 import java.nio.file.attribute.FileAttribute
 import java.nio.file.{OpenOption, Path}
@@ -36,6 +37,10 @@ class FilesStub(charset: Charset) extends FilesNotImplemented {
       writeResults = writeResults + (path.getFileName.toString -> outputStream)
       outputStream
     }
+  }
+
+  override def write(path: Path, lines: Iterable[_ <: CharSequence], cs: Charset, options: OpenOption*): Path = {
+    path
   }
 
   override def createDirectories(dir: Path, attrs: FileAttribute[_]*): Path = {
