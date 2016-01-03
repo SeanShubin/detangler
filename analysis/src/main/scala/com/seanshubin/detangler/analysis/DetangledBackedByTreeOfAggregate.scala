@@ -5,7 +5,8 @@ import com.seanshubin.detangler.model._
 
 class DetangledBackedByTreeOfAggregate(level: Int,
                                        treeOfAggregate: Tree[Aggregate],
-                                       allDependsOn: Map[Standalone, Set[Standalone]]) extends Detangled {
+                                       allDependsOn: Map[Standalone, Set[Standalone]],
+                                       entryPointSet: Set[Standalone]) extends Detangled {
   override def reasonsFor(standalone: Standalone): Seq[Reason] = reasonsFor(childStandalone(standalone))
 
   override def cycleParts(cycle: Cycle): Seq[Standalone] = sortByStandaloneInfo(lookupMetrics(cycle).cycleParts)
@@ -74,6 +75,8 @@ class DetangledBackedByTreeOfAggregate(level: Int,
   private def toPlain(standalone: Standalone): String = {
     standalone.path.last
   }
+
+  override def entryPoints(): Seq[Standalone] = entryPointSet.toSeq.sortWith(Compare.lessThan(Standalone.compare))
 
   override def plainCyclesFor(standalone: Standalone): Map[String, Set[String]] = {
     val aggregate = treeOfAggregate.value(standalone.path)

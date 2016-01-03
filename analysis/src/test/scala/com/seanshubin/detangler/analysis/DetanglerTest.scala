@@ -17,6 +17,7 @@ class DetanglerTest extends FunSuite {
     val h = Standalone(Seq("h"))
     val i = Standalone(Seq("i"))
     val j = Standalone(Seq("j"))
+    val k = Standalone(Seq("k"))
     val accumulator = DependencyAccumulator.empty[Standalone]().
       addValues(a, Seq(b)).
       addValues(b, Seq(c, d)).
@@ -25,10 +26,11 @@ class DetanglerTest extends FunSuite {
       addValues(f, Seq(d)).
       addValues(g, Seq(h)).
       addValues(h, Seq(g, i)).
-      addValues(i, Seq(j))
+      addValues(i, Seq(j)).
+      addValues(k, Seq())
     val cycleDEF = Cycle(Set(d, e, f))
     val cycleGH = Cycle(Set(g, h))
-    val expectedModules: Set[Module] = Set(a, b, cycleDEF, d, e, f, cycleGH, g, h, i, c, j)
+    val expectedModules: Set[Module] = Set(a, b, cycleDEF, d, e, f, cycleGH, g, h, i, c, j, k)
 
     val cycleFinder = new CycleFinderWarshall[Standalone]
     val detangler = new DetanglerImpl(cycleFinder)
@@ -48,6 +50,7 @@ class DetanglerTest extends FunSuite {
     checkStandalone(detangled, j, 0, 0, 0, Set(), Set(i), Set())
     checkCycle(detangled, cycleDEF, 1, 6, 4, Set(d, e, f), Set(g), Set(b))
     checkCycle(detangled, cycleGH, 1, 3, 2, Set(g, h), Set(i), Set(e))
+    assert(detangled.entryPoints() === Seq(a, k))
   }
 
   test("multiple levels deep") {
@@ -96,6 +99,7 @@ class DetanglerTest extends FunSuite {
     assert(classReason.from === classF)
     assert(classReason.to === classI)
     assert(classReason.reasons.size === 0)
+    assert(detangled.entryPoints() === Seq(classF))
   }
 
   test("multiple levels deep with cycles") {
@@ -139,6 +143,8 @@ class DetanglerTest extends FunSuite {
     checkCycle(detangled, groupAB, 0, 2, 0, Set(groupA, groupB), Set(), Set())
     checkCycle(detangled, packageCD, 0, 2, 0, Set(packageC, packageD), Set(), Set())
     checkCycle(detangled, classFG, 0, 2, 0, Set(classF, classG), Set(), Set())
+
+    assert(detangled.entryPoints().size === 0)
   }
 
   def checkStandalone(detangled: Detangled,
