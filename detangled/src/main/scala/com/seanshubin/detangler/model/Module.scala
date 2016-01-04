@@ -57,9 +57,12 @@ case class Cycle(parts: Set[Standalone]) extends Module {
   override def parent: Standalone = parts.head.parent
 
   override def toString: String = {
-    val lessThan = Compare.lessThan(Standalone.compare)
     s"""${parts.toSeq.sortWith(lessThan).mkString("-")}"""
   }
+
+  def standalone: Standalone = parts.toSeq.sortWith(lessThan).head
+
+  private val lessThan = Compare.lessThan(Standalone.compare)
 }
 
 object Cycle {

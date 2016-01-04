@@ -20,6 +20,10 @@ class Reporter(detangled: Detangled,
                graphGenerator: GraphGenerator,
                createProcessBuilder: Seq[String] => ProcessBuilderContract) extends Runnable {
   override def run(): Unit = {
+    println("entry points")
+    detangled.entryPoints().map(HtmlRendering.outerHtmlLinkFor).foreach(println)
+    println("cycles")
+    detangled.cycles().map(HtmlRendering.outerHtmlLinkFor).foreach(println)
     filesContract.createDirectories(directory)
     copyResource("style.css", directory.resolve("style.css"))
     generatePages(Standalone.Root)
