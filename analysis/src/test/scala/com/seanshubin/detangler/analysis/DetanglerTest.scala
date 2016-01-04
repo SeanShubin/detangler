@@ -51,6 +51,7 @@ class DetanglerTest extends FunSuite {
     checkCycle(detangled, cycleDEF, 1, 6, 4, Set(d, e, f), Set(g), Set(b))
     checkCycle(detangled, cycleGH, 1, 3, 2, Set(g, h), Set(i), Set(e))
     assert(detangled.entryPoints() === Seq(a, k))
+    assert(detangled.cycles() === Seq(cycleDEF, cycleGH))
   }
 
   test("multiple levels deep") {
@@ -100,6 +101,8 @@ class DetanglerTest extends FunSuite {
     assert(classReason.to === classI)
     assert(classReason.reasons.size === 0)
     assert(detangled.entryPoints() === Seq(classF))
+
+    assert(detangled.cycles() === Seq())
   }
 
   test("multiple levels deep with cycles") {
@@ -145,6 +148,7 @@ class DetanglerTest extends FunSuite {
     checkCycle(detangled, classFG, 0, 2, 0, Set(classF, classG), Set(), Set())
 
     assert(detangled.entryPoints().size === 0)
+    assert(detangled.cycles() === Seq(groupAB, packageCD, classFG))
   }
 
   def checkStandalone(detangled: Detangled,

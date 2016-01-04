@@ -38,6 +38,10 @@ class DetangledBackedByTreeOfAggregate(level: Int,
     unsorted.toSeq.map(lookupMetrics).sortWith(Compare.lessThan(Metrics.compare)).map(_.id.asInstanceOf[Standalone])
   }
 
+  override def levelsDeep: Int = level
+
+  override def depth(module: Module): Int = lookupMetrics(module).depth
+
   private def lookupMetrics(module: Module): Metrics = {
     if (module.isRoot) {
       Metrics.Empty
@@ -48,10 +52,6 @@ class DetangledBackedByTreeOfAggregate(level: Int,
     }
   }
 
-  override def levelsDeep: Int = level
-
-  override def depth(module: Module): Int = lookupMetrics(module).depth
-
   override def breadth(module: Module): Int = lookupMetrics(module).breadth
 
   override def plainDependsOnFor(standalone: Standalone): Map[String, Set[String]] = {
@@ -59,6 +59,15 @@ class DetangledBackedByTreeOfAggregate(level: Int,
     val dependsOnStandalone = aggregate.dependsOnMap
     val dependsOn = toPlain(dependsOnStandalone)
     dependsOn
+  }
+
+  override def entryPoints(): Seq[Standalone] = entryPointSet.toSeq.sortWith(Compare.lessThan(Standalone.compare))
+
+  override def plainCyclesFor(standalone: Standalone): Map[String, Set[String]] = {
+    val aggregate = treeOfAggregate.value(standalone.path)
+    val cyclesStandalone = aggregate.cycleMap
+    val cycles = toPlain(cyclesStandalone)
+    cycles
   }
 
   private def toPlain(standalone: Map[Standalone, Set[Standalone]]): Map[String, Set[String]] = {
@@ -76,14 +85,7 @@ class DetangledBackedByTreeOfAggregate(level: Int,
     standalone.path.last
   }
 
-  override def entryPoints(): Seq[Standalone] = entryPointSet.toSeq.sortWith(Compare.lessThan(Standalone.compare))
-
-  override def plainCyclesFor(standalone: Standalone): Map[String, Set[String]] = {
-    val aggregate = treeOfAggregate.value(standalone.path)
-    val cyclesStandalone = aggregate.cycles
-    val cycles = toPlain(cyclesStandalone)
-    cycles
-  }
+  override def cycles(): Seq[Cycle] = treeOfAggregate.breadthFirst().filter(_.hasCycle).flatMap(_.getCycles)
 
   private def reasonsFor(parts: Seq[Standalone]): Seq[Reason] = {
     reasonsFor(parts, parts)

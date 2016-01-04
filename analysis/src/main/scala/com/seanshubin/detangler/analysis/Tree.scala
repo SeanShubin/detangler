@@ -1,6 +1,10 @@
 package com.seanshubin.detangler.analysis
 
 case class Tree[T](value: T, path: Seq[String] = Seq(), branches: Seq[Tree[T]] = Seq()) {
+  def breadthFirst(): Seq[T] = {
+    Seq(value) ++ branches.flatMap(_.breadthFirst())
+  }
+
 
   import Tree._
 

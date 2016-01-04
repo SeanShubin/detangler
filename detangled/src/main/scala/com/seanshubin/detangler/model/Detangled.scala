@@ -1,6 +1,8 @@
 package com.seanshubin.detangler.model
 
 trait Detangled {
+  def cycles(): Seq[Cycle]
+
   def entryPoints(): Seq[Standalone]
 
   def childModules(standalone: Standalone): Seq[Module]

@@ -1,5 +1,6 @@
 package com.seanshubin.detangler.analysis
 
+import com.seanshubin.detangler.collection.SeqDifference
 import org.scalatest.FunSuite
 
 class TreeTest extends FunSuite {
@@ -51,4 +52,27 @@ class TreeTest extends FunSuite {
     assert(actual.value(classI) === "(bei)")
   }
 
+  test("breadth first") {
+    val tree = Tree.Empty.add(classF).add(classG).add(classH).add(classI)
+    def composeName(value: Unit, path: Seq[String]): String = {
+      def modifyPathPart(pathPart: String): String = {
+        pathPart.dropWhile(_ != '/').tail
+      }
+      path.map(modifyPathPart).mkString("(", "", ")")
+    }
+    val actual = tree.breadthFirst()
+    val expected = Seq(
+      root,
+      groupA,
+      groupB,
+      packageC,
+      packageD,
+      packageE,
+      classF,
+      classG,
+      classH,
+      classI)
+    val diff = SeqDifference.diff(actual, expected)
+
+  }
 }

@@ -1,15 +1,16 @@
 package com.seanshubin.detangler.analysis
 
+import com.seanshubin.detangler.compare.Compare
 import com.seanshubin.detangler.model.{Cycle, Module, Standalone}
 
 case class Aggregate(modules: Map[Module, Metrics],
                      dependsOnMap: Map[Standalone, Set[Standalone]],
                      dependedOnByMap: Map[Standalone, Set[Standalone]],
-                     cycles: Map[Standalone, Set[Standalone]]) {
+                     cycleMap: Map[Standalone, Set[Standalone]]) {
   def add(standalone: Standalone): Aggregate = {
     if (modules.contains(standalone)) this
     else {
-      if (cycles.contains(standalone)) {
+      if (cycleMap.contains(standalone)) {
         addCycle(standalone)
       } else {
         addStandalone(standalone)
@@ -18,7 +19,7 @@ case class Aggregate(modules: Map[Module, Metrics],
   }
 
   private def addCycle(standalone: Standalone): Aggregate = {
-    val cycleParts = cycles(standalone)
+    val cycleParts = cycleMap(standalone)
     val cycleDependsOn = cycleParts.flatMap(dependsOnMap).diff(cycleParts)
     val afterComputingDependsOn = cycleDependsOn.foldLeft(this)(Aggregate.add)
     afterComputingDependsOn.addCycleWithoutComputingDependsOn(cycleParts, cycleDependsOn)
@@ -81,6 +82,12 @@ case class Aggregate(modules: Map[Module, Metrics],
       partOfCycle = None
     )
     this.copy(modules = modules.updated(standalone, metrics))
+  }
+
+  def hasCycle: Boolean = cycleMap.nonEmpty
+
+  def getCycles: Seq[Cycle] = {
+    cycleMap.values.toSet.map(Cycle.apply).toSeq.sortWith(Compare.lessThan(Cycle.compare))
   }
 
   override def toString: String = {
