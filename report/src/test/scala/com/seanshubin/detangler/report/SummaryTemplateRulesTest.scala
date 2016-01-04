@@ -1,5 +1,6 @@
 package com.seanshubin.detangler.report
 
+import com.seanshubin.detangler.model.{Cycle, Standalone}
 import org.scalatest.FunSuite
 
 class SummaryTemplateRulesTest extends FunSuite {
@@ -27,6 +28,20 @@ class SummaryTemplateRulesTest extends FunSuite {
         |  </li>
         |</ul>
       """.stripMargin
+    val template = HtmlElement.fragmentFromString(templateText)
+    val classA = Standalone(Seq("a"))
+    val classB = Standalone(Seq("b"))
+    val classC = Standalone(Seq("c"))
+    val classD = Standalone(Seq("d"))
+    val classE = Standalone(Seq("e"))
+    val classF = Standalone(Seq("f"))
+    val cycleCD = Cycle(Set(classC, classD))
+    val cycleEF = Cycle(Set(classE, classF))
+    val entryPoints = Seq(classA, classB)
+    val cycles = Seq(cycleCD, cycleEF)
 
+    //    val summaryTemplateRules = new SummaryTemplateRulesImpl
+    //    val generated = summaryTemplateRules.generate(template, entryPoints, cycles)
+    //    println(generated)
   }
 }

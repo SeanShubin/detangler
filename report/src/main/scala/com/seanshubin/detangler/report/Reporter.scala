@@ -15,17 +15,15 @@ class Reporter(detangled: Detangled,
                filesContract: FilesContract,
                charset: Charset,
                classLoader: ClassLoaderContract,
+               summaryTemplateRules: SummaryTemplateRules,
                pageTemplateRules: PageTemplateRules,
                graphTemplateRules: GraphTemplateRules,
                graphGenerator: GraphGenerator,
                createProcessBuilder: Seq[String] => ProcessBuilderContract) extends Runnable {
   override def run(): Unit = {
-    println("entry points")
-    detangled.entryPoints().map(HtmlRendering.outerHtmlLinkFor).foreach(println)
-    println("cycles")
-    detangled.cycles().map(HtmlRendering.outerHtmlLinkFor).foreach(println)
     filesContract.createDirectories(directory)
     copyResource("style.css", directory.resolve("style.css"))
+    generateSummary()
     generatePages(Standalone.Root)
   }
 
@@ -42,6 +40,18 @@ class Reporter(detangled: Detangled,
     if (inputStream == null) throw new RuntimeException(s"Unable to find resource named '$name'")
     val outputStream = filesContract.newOutputStream(destination)
     IoUtil.copy(inputStream, outputStream)
+  }
+
+  private def generateSummary(): Unit = {
+    println("entry points")
+    detangled.entryPoints().map(HtmlRendering.outerHtmlLinkFor).foreach(println)
+    println("cycles")
+    detangled.cycles().map(HtmlRendering.outerHtmlLinkFor).foreach(println)
+    val summaryTemplate = loadTemplate("summary.html")
+    val content = summaryTemplateRules.generate(summaryTemplate, detangled.entryPoints(), detangled.cycles()).toString
+    val fileName = "summary.html"
+    val file = directory.resolve(fileName)
+    filesContract.write(file, content.getBytes(charset))
   }
 
   private def generatePages(standalone: Standalone): Unit = {

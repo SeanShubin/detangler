@@ -30,12 +30,14 @@ object Prototype extends App {
     val graphTemplateRules: GraphTemplateRules = new GraphTemplateRulesImpl
     val graphGenerator: GraphGenerator = new GraphGeneratorImpl
     val createProcessBuilder: Seq[String] => ProcessBuilderContract = (command) => new ProcessBuilderDelegate(new ProcessBuilder(command: _*))
+    val summaryTemplateRules: SummaryTemplateRules = new SummaryTemplateRulesImpl(detangled)
     val reporter: Runnable = new Reporter(
       detangled,
       directory,
       filesContract,
       charset,
       classLoader,
+      summaryTemplateRules,
       pageTemplateRules,
       graphTemplateRules,
       graphGenerator,

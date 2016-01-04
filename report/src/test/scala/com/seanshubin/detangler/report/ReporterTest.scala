@@ -34,6 +34,7 @@ class ReporterTest extends FunSuite {
     )
     val pageTemplateRules = new PageTemplateRulesStub(pageTextMap, charset)
     val graphTemplateRules = new GraphTemplateRulesStub(graphTemplateElement)
+    val summaryTemplateRules = new SummaryTemplateRulesStub()
     val graphGenerator: GraphGenerator = new GraphGeneratorStub(graphTarget)
     val process = new ProcessStub
     val createProcessBuilder: Seq[String] => ProcessBuilderContract =
@@ -45,6 +46,7 @@ class ReporterTest extends FunSuite {
       filesStub,
       charset,
       classLoader,
+      summaryTemplateRules,
       pageTemplateRules,
       graphTemplateRules,
       graphGenerator,

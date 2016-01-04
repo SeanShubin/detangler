@@ -27,12 +27,14 @@ trait ReporterWiring {
   val graphTemplateRules: GraphTemplateRules = new GraphTemplateRulesImpl()
   val graphGenerator: GraphGenerator = new GraphGeneratorImpl
   val createProcessBuilder: Seq[String] => ProcessBuilderContract = (commands) => new ProcessBuilderDelegate(new ProcessBuilder(commands: _*))
+  val summaryTemplateRules: SummaryTemplateRules = new SummaryTemplateRulesImpl(detangled)
   val reporter: Runnable = new Reporter(
     detangled,
     reportDir,
     filesContract,
     charset,
     classLoader,
+    summaryTemplateRules,
     pageTemplateRules,
     graphTemplateRules,
     graphGenerator,
