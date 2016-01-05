@@ -17,5 +17,7 @@ class NotificationsStub extends Notifications {
 
   override def topLevelException(exception: Throwable): Unit = ???
 
-  override def timeTaken(caption: String, duration: Duration): Unit = ???
+  override def startTiming(caption: String): Unit = ???
+
+  override def endTiming(caption: String, duration: Duration): Unit = ???
 }

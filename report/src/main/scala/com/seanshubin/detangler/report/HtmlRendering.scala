@@ -7,8 +7,10 @@ object HtmlRendering {
   private val FileSystemCharacters = "/\\?%*:|\"<>. "
   private val CssSelectorCharacters = "~!@$%^&*()+=,./';:\"?><[]\\{}|`#"
 
-  def fileNameFor(standalone: Standalone): String = {
-    fileNameWithoutExtFor(standalone) + ".html"
+  def summaryFileName: String = "index.html"
+
+  def reportFile(standalone: Standalone): String = {
+    "report-" + baseFileName(standalone) + ".html"
   }
 
   def htmlName(standalone: Standalone): String = {
@@ -24,23 +26,15 @@ object HtmlRendering {
   }
 
   def graphLink(context: Standalone): String = {
-    "graph-" + fileNameWithoutExtFor(context) + ".html"
-  }
-
-  def graphFile(context: Standalone): String = {
-    fileNameWithoutExtFor(context) + ".svg"
+    "graph-" + baseFileName(context) + ".html"
   }
 
   def graphSourceFile(context: Standalone): String = {
-    fileNameWithoutExtFor(context) + ".txt"
+    "graph-" + baseFileName(context) + ".txt"
   }
 
-  private def fileNameWithoutExtFor(standalone: Standalone): String = {
-    if (standalone.path.isEmpty) {
-      "index"
-    } else {
-      standalone.path.mkString("--").map(makeFileSystemSafe)
-    }
+  private def baseFileName(standalone: Standalone): String = {
+    standalone.path.mkString("--").map(makeFileSystemSafe)
   }
 
   private def makeFileSystemSafe(c: Char): Char = {
@@ -49,7 +43,7 @@ object HtmlRendering {
   }
 
   def graphTargetFile(context: Standalone): String = {
-    fileNameWithoutExtFor(context) + ".svg"
+    "graph-" + baseFileName(context) + ".svg"
   }
 
   def graphText(context: Standalone): String = {
@@ -84,9 +78,9 @@ object HtmlRendering {
   def outerHtmlLinkFor(module: Module): String = {
     module match {
       case standalone: Standalone =>
-        fileNameFor(Standalone(standalone.path.init)) + "#" + htmlId(standalone)
+        reportFile(Standalone(standalone.path.init)) + "#" + htmlId(standalone)
       case cycle: Cycle =>
-        fileNameFor(Standalone(cycle.standalone.path.init)) + "#cycle-" + htmlId(cycle.standalone)
+        reportFile(Standalone(cycle.standalone.path.init)) + "#cycle-" + htmlId(cycle.standalone)
     }
   }
 

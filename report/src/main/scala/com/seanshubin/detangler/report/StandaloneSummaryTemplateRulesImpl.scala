@@ -10,7 +10,7 @@ class StandaloneSummaryTemplateRulesImpl(detangled: Detangled) extends Standalon
       text(".depth", detangled.depth(standalone).toString).
       text(".breadth", detangled.breadth(standalone).toString).
       text(".transitive", detangled.transitive(standalone).toString).
-      anchor(".composed-of", HtmlRendering.fileNameFor(standalone), "parts")
+      anchor(".composed-of", HtmlRendering.reportFile(standalone), "parts")
   }
 
   private def cycleLink(template: HtmlElement, standalone: Standalone): HtmlElement = {

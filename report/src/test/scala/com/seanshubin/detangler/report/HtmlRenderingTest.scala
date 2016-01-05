@@ -4,9 +4,9 @@ import org.scalatest.FunSuite
 
 class HtmlRenderingTest extends FunSuite {
   test("file names") {
-    assert(HtmlRendering.fileNameFor(SampleData.root) === "index.html")
-    assert(HtmlRendering.fileNameFor(SampleData.groupA) === "group-a.html")
-    assert(HtmlRendering.fileNameFor(SampleData.packageC) === "group-a--package-c.html")
+    assert(HtmlRendering.reportFile(SampleData.root) === "index.html")
+    assert(HtmlRendering.reportFile(SampleData.groupA) === "group-a.html")
+    assert(HtmlRendering.reportFile(SampleData.packageC) === "group-a--package-c.html")
   }
 
   test("html id") {

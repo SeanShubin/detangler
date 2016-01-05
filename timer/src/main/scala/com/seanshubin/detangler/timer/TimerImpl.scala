@@ -2,12 +2,14 @@ package com.seanshubin.detangler.timer
 
 import java.time.{Clock, Duration}
 
-class TimerImpl(clock: Clock) extends Timer {
-  override def measureTime[T](block: => T): (Duration, T) = {
+class TimerImpl(clock: Clock, startEvent: String => Unit, endEvent: (String, Duration) => Unit) extends Timer {
+  override def measureTime[T](name: String)(f: => T): T = {
+    startEvent(name)
     val before = clock.instant()
-    val result = block
+    val result = f
     val after = clock.instant()
     val duration = Duration.between(before, after)
-    (duration, result)
+    endEvent(name, duration)
+    result
   }
 }

@@ -25,7 +25,7 @@ object Prototype extends App {
     val pageTemplateRules: PageTemplateRules = new PageTemplateRulesImpl(
       modulesTemplateRules,
       reasonsTemplateRules,
-      HtmlRendering.fileNameFor,
+      HtmlRendering.reportFile,
       HtmlRendering.htmlName)
     val graphTemplateRules: GraphTemplateRules = new GraphTemplateRulesImpl
     val graphGenerator: GraphGenerator = new GraphGeneratorImpl

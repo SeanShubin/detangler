@@ -45,14 +45,14 @@ class Reporter(detangled: Detangled,
   private def generateSummary(): Unit = {
     val summaryTemplate = loadTemplate("summary.html")
     val content = summaryTemplateRules.generate(summaryTemplate, detangled.entryPoints(), detangled.cycles()).toString
-    val fileName = "summary.html"
+    val fileName = HtmlRendering.summaryFileName
     val file = directory.resolve(fileName)
     filesContract.write(file, content.getBytes(charset))
   }
 
   private def generatePages(standalone: Standalone): Unit = {
-    val pageTemplate = loadTemplate("template.html")
-    val graphTemplate = loadTemplate("template-graph.html")
+    val pageTemplate = loadTemplate("report.html")
+    val graphTemplate = loadTemplate("graph.html")
     val children = detangled.childStandalone(standalone)
     if (children.nonEmpty) {
       val isLeafPage = standalone.path.size >= detangled.levelsDeep - 1
@@ -72,7 +72,7 @@ class Reporter(detangled: Detangled,
 
   private def generateDependenciesPage(standalone: Standalone, pageTemplate: HtmlElement, isLeafPage: Boolean): Path = {
     val content = pageTemplateRules.generate(pageTemplate, standalone, isLeafPage).toString
-    val fileName = HtmlRendering.fileNameFor(standalone)
+    val fileName = HtmlRendering.reportFile(standalone)
     val file = directory.resolve(fileName)
     filesContract.write(file, content.getBytes(charset))
   }

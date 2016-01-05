@@ -13,33 +13,22 @@ class AfterConfigurationRunnerImpl(scanner: Scanner,
                                    createReporter: (Detangled, Path) => Runnable,
                                    reportDir: Path,
                                    stringToStandalone: String => Option[Standalone],
-                                   notifications: Notifications,
                                    timer: Timer) extends Runnable {
   override def run(): Unit = {
-    val (timeTaken, _) = timer.measureTime {
-      val (scanTime, stringDependencies) = timer.measureTime {
-        scanner.scanDependencies()
-      }
-      notifications.timeTaken("scanner", scanTime)
-
-      val (accumulatorTime, moduleAccumulator) = timer.measureTime {
+    timer.measureTime("total") {
+      val stringDependencies = timer.measureTime("scanner")(scanner.scanDependencies())
+      val moduleAccumulator = timer.measureTime("accumulator") {
         val standaloneDependencies = stringDependencies.flatMap(convertToStandaloneModule)
         DependencyAccumulator.fromIterable(standaloneDependencies)
       }
-      notifications.timeTaken("accumulator", accumulatorTime)
-
-      val (detangledTime, detangled) = timer.measureTime {
+      val detangled = timer.measureTime("detangler") {
         detangler.analyze(moduleAccumulator.dependencies, moduleAccumulator.transpose().dependencies)
       }
-      notifications.timeTaken("detangler", detangledTime)
-
-      val (reporterTime, _) = timer.measureTime {
+      timer.measureTime("reporter") {
         val reporter = createReporter(detangled, reportDir)
         reporter.run()
       }
-      notifications.timeTaken("reporter", reporterTime)
     }
-    notifications.timeTaken("total", timeTaken)
 
     //    createReporter(DetangledFactory.contrivedSample(), reportDir.resolve("contrived")).run()
     //    createReporter(DetangledFactory.generatedSampleData(), reportDir.resolve("random")).run()

@@ -39,12 +39,11 @@ trait AfterConfigurationWiring {
   lazy val classBytesScanner: ClassBytesScanner = new ClassBytesScannerImpl(classParser)
   lazy val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
   lazy val notifications: Notifications = new LineEmittingNotifications(devonMarshaller, emitLine)
-  lazy val timer: Timer = new TimerImpl(clock)
+  lazy val timer: Timer = new TimerImpl(clock, notifications.startTiming, notifications.endTiming)
   lazy val scanner: Scanner = new ScannerImpl(
     directoryScanner,
     fileScanner,
     classBytesScanner,
-    notifications.timeTaken,
     timer)
   lazy val cycleFinder: CycleFinder[Standalone] = new CycleFinderWarshall[Standalone]
   lazy val detangler: Detangler = new DetanglerImpl(cycleFinder)
@@ -53,5 +52,5 @@ trait AfterConfigurationWiring {
     startsWithInclude,
     startsWithDrop)
   lazy val analyzer: Runnable = new AfterConfigurationRunnerImpl(
-    scanner, detangler, createReporter, reportDir, stringToStandaloneFunction, notifications, timer)
+    scanner, detangler, createReporter, reportDir, stringToStandaloneFunction, timer)
 }

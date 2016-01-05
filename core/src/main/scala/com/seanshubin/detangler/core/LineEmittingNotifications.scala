@@ -21,9 +21,12 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller, emit: String =
     lines.foreach(emit)
   }
 
-  override def timeTaken(caption: String, duration: Duration): Unit = {
-    val formattedDuration = DurationFormat.NanosecondsFormat.format(duration.toNanos)
-    emit(s"$caption $formattedDuration")
+  override def startTiming(caption: String): Unit = {
+  }
+
+  override def endTiming(caption: String, duration: Duration): Unit = {
+    val formattedDuration = DurationFormat.MillisecondsFormat.format(duration.toMillis)
+    emit(s"($formattedDuration) $caption")
   }
 
   private def exceptionLines(ex: Throwable): Seq[String] = {
