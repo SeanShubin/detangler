@@ -34,7 +34,11 @@ object StringToStandaloneFunction {
     } yield {
         if (index < level - 2) {
           if (index > size - 2) {
-            s"placeholder-level-${index + 1}"
+            if(size > 1) {
+              s"root-of-${parts(size - 2)}"
+            } else {
+              "-root-"
+            }
           } else {
             parts(index)
           }
@@ -42,7 +46,11 @@ object StringToStandaloneFunction {
           if (level < size + 1) {
             parts.slice(level - 2, size - 1).mkString("/")
           } else {
-            s"placeholder-level-${index + 1}"
+            if(size > 1) {
+              s"root-of-${parts(size - 2)}"
+            } else {
+              "-root-"
+            }
           }
         } else {
           if (level < 2) {
