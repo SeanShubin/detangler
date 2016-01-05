@@ -14,27 +14,53 @@
 </fieldset>
 <fieldset>
     <legend>cycles</legend>
+    <ul class="cycles append-cycle">
+        <li class="cycle append-cycle">
+            <table>
+                <thead>
+                <tr>
+                    <th>name</th>
+                    <th>depth</th>
+                    <th>breadth</th>
+                    <th>transitive</th>
+                </tr>
+                </thead>
+                <tbody class="append-cycle-part">
+                <tr class="cycle-part">
+                    <td><a class="name" href="link">name</a></td>
+                    <td class="depth">depth</td>
+                    <td class="breadth">breadth</td>
+                    <td class="transitive">transitive</td>
+                </tr>
+                </tbody>
+            </table>
+        </li>
+    </ul>
 </fieldset>
 <fieldset class="entry-points">
     <legend>entry points</legend>
-    <table>
-        <thead>
-        <tr>
-            <th>name</th>
-            <th>depth</th>
-            <th>breadth</th>
-            <th>transitive</th>
-        </tr>
-        </thead>
-        <tbody class="append-entry-point">
-        <tr class="entry-point">
-            <td><a class="name" href="link">name</a></td>
-            <td class="depth">depth</td>
-            <td class="breadth">breadth</td>
-            <td class="transitive">transitive</td>
-        </tr>
-        </tbody>
-    </table>
+    <ul>
+        <li>
+            <table>
+                <thead>
+                <tr>
+                    <th>name</th>
+                    <th>depth</th>
+                    <th>breadth</th>
+                    <th>transitive</th>
+                </tr>
+                </thead>
+                <tbody class="append-entry-point">
+                <tr class="entry-point">
+                    <td><a class="name" href="link">name</a></td>
+                    <td class="depth">depth</td>
+                    <td class="breadth">breadth</td>
+                    <td class="transitive">transitive</td>
+                </tr>
+                </tbody>
+            </table>
+        </li>
+    </ul>
 </fieldset>
 </body>
 </html>

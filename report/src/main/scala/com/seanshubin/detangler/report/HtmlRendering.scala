@@ -75,6 +75,22 @@ object HtmlRendering {
     "#" + htmlId(standalone)
   }
 
+  def parentLink(standalone: Standalone): String = {
+    if (standalone.isRoot) {
+      "index.html"
+    } else {
+      outerHtmlLinkFor(standalone)
+    }
+  }
+
+  def parentName(standalone: Standalone): String = {
+    if (standalone.isRoot) {
+      "back to summary"
+    } else {
+      htmlName(standalone)
+    }
+  }
+
   def outerHtmlLinkFor(module: Module): String = {
     module match {
       case standalone: Standalone =>
