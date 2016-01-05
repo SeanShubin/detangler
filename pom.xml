@@ -23,6 +23,7 @@
         <module>zip</module>
         <module>collection</module>
         <module>graphviz</module>
+        <module>timer</module>
     </modules>
     <repositories>
         <repository>

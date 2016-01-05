@@ -10,6 +10,11 @@
     <dependencies>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
+            <artifactId>detangler-timer</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.seanshubin.detangler</groupId>
             <artifactId>detangler-zip</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

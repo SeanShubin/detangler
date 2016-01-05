@@ -9,6 +9,7 @@ import com.seanshubin.detangler.contract.{FilesContract, FilesDelegate}
 import com.seanshubin.detangler.core._
 import com.seanshubin.detangler.model.{Detangled, Standalone}
 import com.seanshubin.detangler.scanner._
+import com.seanshubin.detangler.timer.{Timer, TimerImpl}
 import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
 
 trait AfterConfigurationWiring {
@@ -36,16 +37,21 @@ trait AfterConfigurationWiring {
   lazy val fileScanner: FileScanner = new FileScannerImpl(zipScanner, classScanner)
   lazy val classParser: ClassParser = new ClassParserImpl
   lazy val classBytesScanner: ClassBytesScanner = new ClassBytesScannerImpl(classParser)
-  lazy val scanner: Scanner = new ScannerImpl(directoryScanner, fileScanner, classBytesScanner)
+  lazy val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
+  lazy val notifications: Notifications = new LineEmittingNotifications(devonMarshaller, emitLine)
+  lazy val timer: Timer = new TimerImpl(clock)
+  lazy val scanner: Scanner = new ScannerImpl(
+    directoryScanner,
+    fileScanner,
+    classBytesScanner,
+    notifications.timeTaken,
+    timer)
   lazy val cycleFinder: CycleFinder[Standalone] = new CycleFinderWarshall[Standalone]
   lazy val detangler: Detangler = new DetanglerImpl(cycleFinder)
   lazy val stringToStandaloneFunction: String => Option[Standalone] = new StringToStandaloneFunction(
     level,
     startsWithInclude,
     startsWithDrop)
-  lazy val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
-  lazy val notifications: Notifications = new LineEmittingNotifications(devonMarshaller, emitLine)
-  lazy val timer: Timer = new TimerImpl(clock)
   lazy val analyzer: Runnable = new AfterConfigurationRunnerImpl(
     scanner, detangler, createReporter, reportDir, stringToStandaloneFunction, notifications, timer)
 }

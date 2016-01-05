@@ -17,21 +17,21 @@ object DetangledFactory {
     startSound <- startSounds
     middleSound <- middleSounds
   } yield {
-    startSound + middleSound
-  }
+      startSound + middleSound
+    }
   val middleSyllables = for {
     startSound <- startSounds
     middleSound <- middleSounds
     endSound <- endSounds
   } yield {
-    startSound + middleSound + endSound
-  }
+      startSound + middleSound + endSound
+    }
   val endSyllables = for {
     middleSound <- middleSounds
     endSound <- endSounds
   } yield {
-    middleSound + endSound
-  }
+      middleSound + endSound
+    }
   val allSyllables = startSyllables ++ middleSyllables ++ endSyllables
 
   def contrivedSample(): Detangled = {
@@ -103,14 +103,14 @@ object DetangledFactory {
       k <- 1 to 10
       className = randomName(2)
     } yield {
-      Standalone(Seq(groupName, packageName, className))
-    }
+        Standalone(Seq(groupName, packageName, className))
+      }
     def createDependencies(index: Int): (Standalone, Seq[Standalone]) = {
       val dependsOn = for {
         i <- 1 to 10
       } yield {
-        modules(randomBetween(index, 1000))
-      }
+          modules(randomBetween(index, 1000))
+        }
       val from = modules(index)
       (from, dependsOn)
     }

@@ -1,7 +1,7 @@
 package com.seanshubin.detangler.report
 
 import com.seanshubin.detangler.compare.Compare
-import com.seanshubin.detangler.model.{Module, Cycle, Standalone}
+import com.seanshubin.detangler.model.{Cycle, Module, Standalone}
 
 object HtmlRendering {
   private val FileSystemCharacters = "/\\?%*:|\"<>. "
@@ -83,9 +83,9 @@ object HtmlRendering {
 
   def outerHtmlLinkFor(module: Module): String = {
     module match {
-      case standalone:Standalone =>
+      case standalone: Standalone =>
         fileNameFor(Standalone(standalone.path.init)) + "#" + htmlId(standalone)
-      case cycle:Cycle =>
+      case cycle: Cycle =>
         fileNameFor(Standalone(cycle.standalone.path.init)) + "#cycle-" + htmlId(cycle.standalone)
     }
   }

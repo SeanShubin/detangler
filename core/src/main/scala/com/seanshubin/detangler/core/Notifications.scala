@@ -9,5 +9,5 @@ trait Notifications {
 
   def topLevelException(exception: Throwable)
 
-  def timeTaken(duration: Duration)
+  def timeTaken(caption: String, duration: Duration)
 }

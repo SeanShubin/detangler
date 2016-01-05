@@ -6,6 +6,7 @@ import com.seanshubin.detangler.analysis.Detangler
 import com.seanshubin.detangler.data.DependencyAccumulator
 import com.seanshubin.detangler.model.{Detangled, Standalone}
 import com.seanshubin.detangler.scanner.Scanner
+import com.seanshubin.detangler.timer.Timer
 
 class AfterConfigurationRunnerImpl(scanner: Scanner,
                                    detangler: Detangler,
@@ -13,18 +14,32 @@ class AfterConfigurationRunnerImpl(scanner: Scanner,
                                    reportDir: Path,
                                    stringToStandalone: String => Option[Standalone],
                                    notifications: Notifications,
-                                   timer: Timer
-                                  ) extends Runnable {
+                                   timer: Timer) extends Runnable {
   override def run(): Unit = {
-    val timeTaken = timer.measureTime {
-      val stringDependencies = scanner.scanDependencies()
-      val standaloneDependencies = stringDependencies.flatMap(convertToStandaloneModule)
-      val moduleAccumulator = DependencyAccumulator.fromIterable(standaloneDependencies)
-      val detangled = detangler.analyze(moduleAccumulator.dependencies, moduleAccumulator.transpose().dependencies)
-      val reporter = createReporter(detangled, reportDir)
-      reporter.run()
+    val (timeTaken, _) = timer.measureTime {
+      val (scanTime, stringDependencies) = timer.measureTime {
+        scanner.scanDependencies()
+      }
+      notifications.timeTaken("scanner", scanTime)
+
+      val (accumulatorTime, moduleAccumulator) = timer.measureTime {
+        val standaloneDependencies = stringDependencies.flatMap(convertToStandaloneModule)
+        DependencyAccumulator.fromIterable(standaloneDependencies)
+      }
+      notifications.timeTaken("accumulator", accumulatorTime)
+
+      val (detangledTime, detangled) = timer.measureTime {
+        detangler.analyze(moduleAccumulator.dependencies, moduleAccumulator.transpose().dependencies)
+      }
+      notifications.timeTaken("detangler", detangledTime)
+
+      val (reporterTime, _) = timer.measureTime {
+        val reporter = createReporter(detangled, reportDir)
+        reporter.run()
+      }
+      notifications.timeTaken("reporter", reporterTime)
     }
-    notifications.timeTaken(timeTaken)
+    notifications.timeTaken("total", timeTaken)
 
     //    createReporter(DetangledFactory.contrivedSample(), reportDir.resolve("contrived")).run()
     //    createReporter(DetangledFactory.generatedSampleData(), reportDir.resolve("random")).run()

@@ -43,10 +43,6 @@ class Reporter(detangled: Detangled,
   }
 
   private def generateSummary(): Unit = {
-    println("entry points")
-    detangled.entryPoints().map(HtmlRendering.outerHtmlLinkFor).foreach(println)
-    println("cycles")
-    detangled.cycles().map(HtmlRendering.outerHtmlLinkFor).foreach(println)
     val summaryTemplate = loadTemplate("summary.html")
     val content = summaryTemplateRules.generate(summaryTemplate, detangled.entryPoints(), detangled.cycles()).toString
     val fileName = "summary.html"

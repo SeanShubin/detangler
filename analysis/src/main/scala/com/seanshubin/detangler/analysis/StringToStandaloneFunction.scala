@@ -32,26 +32,26 @@ object StringToStandaloneFunction {
     val standaloneParts = for {
       index <- 0 until level
     } yield {
-      if (index < level - 2) {
-        if (index > size - 2) {
-          s"missing-level-${index + 1}"
+        if (index < level - 2) {
+          if (index > size - 2) {
+            s"placeholder-level-${index + 1}"
+          } else {
+            parts(index)
+          }
+        } else if (index < level - 1) {
+          if (level < size + 1) {
+            parts.slice(level - 2, size - 1).mkString("/")
+          } else {
+            s"placeholder-level-${index + 1}"
+          }
         } else {
-          parts(index)
-        }
-      } else if (index < level - 1) {
-        if (level < size + 1) {
-          parts.slice(level - 2, size - 1).mkString("/")
-        } else {
-          s"missing-level-${index + 1}"
-        }
-      } else {
-        if (level < 2) {
-          parts.mkString("/")
-        } else {
-          parts.last
+          if (level < 2) {
+            parts.mkString("/")
+          } else {
+            parts.last
+          }
         }
       }
-    }
     Standalone(standaloneParts)
   }
 }
