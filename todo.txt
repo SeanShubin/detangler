@@ -8,3 +8,5 @@ cycles summary
 thresholds
 test coverage
 remove dead code
+named levels instead of "placeholder"
+maven plugin
