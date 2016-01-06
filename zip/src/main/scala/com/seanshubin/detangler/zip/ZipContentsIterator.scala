@@ -6,7 +6,10 @@ import java.util.zip.{ZipEntry, ZipInputStream}
 import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 
-class ZipContentsIterator(inputStream: InputStream, name: String, isZip: String => Boolean) extends Iterator[ZipContents] {
+class ZipContentsIterator(inputStream: InputStream,
+                          name: String,
+                          isZip: String => Boolean,
+                          accept: (Seq[String], ZipEntry) => Boolean) extends Iterator[ZipContents] {
 
   private case class History(name: String, zipInputStream: ZipInputStream)
 
@@ -80,14 +83,22 @@ class ZipContentsIterator(inputStream: InputStream, name: String, isZip: String 
       }
     } else {
       if (entry.isDirectory) {
-        maybeNextEntry = Some(entry)
+        moveCursorForward()
       } else if (isZip(entry.getName)) {
         val zipInputStream = new ZipInputStream(latestZipInputStream)
         path = History(entry.getName, zipInputStream) :: path
         moveCursorForward()
       } else {
-        maybeNextEntry = Some(entry)
+        if (accept(pathNames, entry)) {
+          maybeNextEntry = Some(entry)
+        } else {
+          moveCursorForward()
+        }
       }
     }
   }
+}
+
+object ZipContentsIterator {
+  val AcceptAll: (Seq[String], ZipEntry) => Boolean = (path, entry) => true
 }

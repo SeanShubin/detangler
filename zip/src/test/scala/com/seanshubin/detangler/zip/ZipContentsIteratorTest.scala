@@ -50,7 +50,7 @@ class ZipContentsIteratorTest extends FunSuite {
     }
     val name = "data.zip"
     val inputStream = getClass.getClassLoader.getResourceAsStream(name)
-    val iterator = new ZipContentsIterator(inputStream, name, isZip)
+    val iterator = new ZipContentsIterator(inputStream, name, isZip, ZipContentsIterator.AcceptAll)
     val actual = iterator.flatMap(operateOnCursor).toIndexedSeq.map(scrubLine)
     val difference = SeqDifference.diff(expected, actual)
     assert(difference.isSame, difference.messageLines.mkString("\n"))

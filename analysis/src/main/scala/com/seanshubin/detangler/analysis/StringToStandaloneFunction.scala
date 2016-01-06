@@ -34,7 +34,7 @@ object StringToStandaloneFunction {
     } yield {
         if (index < level - 2) {
           if (index > size - 2) {
-            if(size > 1) {
+            if (size > 1) {
               s"root-of-${parts(size - 2)}"
             } else {
               "-root-"
@@ -46,7 +46,7 @@ object StringToStandaloneFunction {
           if (level < size + 1) {
             parts.slice(level - 2, size - 1).mkString("/")
           } else {
-            if(size > 1) {
+            if (size > 1) {
               s"root-of-${parts(size - 2)}"
             } else {
               "-root-"

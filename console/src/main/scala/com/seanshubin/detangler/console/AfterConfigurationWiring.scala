@@ -32,7 +32,12 @@ trait AfterConfigurationWiring {
   }.reporter
   lazy val filesContract: FilesContract = FilesDelegate
   lazy val directoryScanner: DirectoryScanner = new DirectoryScannerImpl(filesContract, searchPaths)
-  lazy val zipScanner: ZipScanner = new ZipScannerImpl(filesContract, FileTypes.isCompressed)
+  lazy val stringToStandaloneFunction: String => Option[Standalone] = new StringToStandaloneFunction(
+    level,
+    startsWithInclude,
+    startsWithDrop)
+  lazy val acceptNameFunction: String => Boolean = new AcceptNameFunction(stringToStandaloneFunction)
+  lazy val zipScanner: ZipScanner = new ZipScannerImpl(filesContract, FileTypes.isCompressed, acceptNameFunction)
   lazy val classScanner: ClassScanner = new ClassScannerImpl(filesContract)
   lazy val fileScanner: FileScanner = new FileScannerImpl(zipScanner, classScanner)
   lazy val classParser: ClassParser = new ClassParserImpl
@@ -47,10 +52,6 @@ trait AfterConfigurationWiring {
     timer)
   lazy val cycleFinder: CycleFinder[Standalone] = new CycleFinderWarshall[Standalone]
   lazy val detangler: Detangler = new DetanglerImpl(cycleFinder)
-  lazy val stringToStandaloneFunction: String => Option[Standalone] = new StringToStandaloneFunction(
-    level,
-    startsWithInclude,
-    startsWithDrop)
   lazy val analyzer: Runnable = new AfterConfigurationRunnerImpl(
     scanner, detangler, createReporter, reportDir, stringToStandaloneFunction, timer)
 }
