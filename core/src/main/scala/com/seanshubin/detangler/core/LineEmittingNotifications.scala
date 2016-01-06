@@ -22,6 +22,7 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller, emit: String =
   }
 
   override def startTiming(caption: String): Unit = {
+    emit(s"start timer for '$caption'")
   }
 
   override def endTiming(caption: String, duration: Duration): Unit = {
