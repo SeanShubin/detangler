@@ -1,11 +1,21 @@
 {
-  reportDir generated/report
+  reportDir generated/detangler
   searchPaths [
-    .
+    console/target/detangler.jar
   ]
   level 2
   startsWith {
     include [[com seanshubin detangler]]
     drop [[com seanshubin detangler]]
+  }
+  globalLimits {
+    cycleSize 0
+    cycleCount 0
+  }
+  limitByPath {
+    [module] {
+      cycleSize 3
+      cycleCount 1
+    }
   }
 }
