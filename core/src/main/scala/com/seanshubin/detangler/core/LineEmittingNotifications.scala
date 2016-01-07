@@ -6,6 +6,8 @@ import java.time.Duration
 import com.seanshubin.devon.core.devon.DevonMarshaller
 
 class LineEmittingNotifications(devonMarshaller: DevonMarshaller, emit: String => Unit) extends Notifications {
+  private val timingLock = new Object
+  private var timingIndent = 0
   override def topLevelException(exception: Throwable): Unit = {
     exceptionLines(exception).foreach(emit)
   }
@@ -22,12 +24,22 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller, emit: String =
   }
 
   override def startTiming(caption: String): Unit = {
-    emit(s"start timer for '$caption'")
+    timingLock.synchronized {
+      emit(indent(timingIndent) + s"start timer for '$caption'")
+      timingIndent += 1
+    }
   }
 
   override def endTiming(caption: String, duration: Duration): Unit = {
-    val formattedDuration = DurationFormat.MillisecondsFormat.format(duration.toMillis)
-    emit(s"($formattedDuration) $caption")
+    timingLock.synchronized {
+      timingIndent -= 1
+      val formattedDuration = DurationFormat.MillisecondsFormat.format(duration.toMillis)
+      emit(indent(timingIndent) + s"($formattedDuration) $caption")
+    }
+  }
+
+  private def indent(indentLevel: Int): String = {
+    "  " * indentLevel
   }
 
   private def exceptionLines(ex: Throwable): Seq[String] = {

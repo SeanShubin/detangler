@@ -1,9 +1,9 @@
 {
-  reportDir generated/report
+  reportDir generated/no-filter
   searchPaths [
-    .
+    console/target/detangler.jar
   ]
-  level 1
+  level 3
   startsWith {
     include [[]]
     drop [[]]
