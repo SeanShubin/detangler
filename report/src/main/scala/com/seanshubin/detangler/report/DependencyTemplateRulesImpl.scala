@@ -18,6 +18,12 @@ class DependencyTemplateRulesImpl(detangled: Detangled, dependencyDirection: Dep
   }
 
   private def generateRow(dependencyRowTemplate: HtmlElement, context: Standalone, parentModule: Module, child: Standalone): HtmlElement = {
+    val partCount = detangled.childModules(child).size
+    val partString = if (partCount == 1) {
+      "1 part"
+    } else {
+      s"$partCount parts"
+    }
     parentModule match {
       case parent: Standalone =>
         val reasonName = dependencyDirection.name(parent, child)
@@ -27,13 +33,15 @@ class DependencyTemplateRulesImpl(detangled: Detangled, dependencyDirection: Dep
           text(".depth", detangled.depth(child).toString).
           text(".breadth", detangled.breadth(child).toString).
           text(".transitive", detangled.transitive(child).toString).
-          anchor(".reason", reasonLink, reasonName)
+          anchor(".reason", reasonLink, reasonName).
+          anchor(".composed-of", HtmlRendering.reportFile(child), partString)
       case parent: Cycle =>
         cycleLink(dependencyRowTemplate, child).
           anchor(".name", HtmlRendering.htmlLink(context, child), HtmlRendering.htmlName(child)).
           text(".depth", detangled.depth(child).toString).
           text(".breadth", detangled.breadth(child).toString).
-          text(".transitive", detangled.transitive(child).toString)
+          text(".transitive", detangled.transitive(child).toString).
+          anchor(".composed-of", HtmlRendering.reportFile(child), partString)
     }
   }
 
