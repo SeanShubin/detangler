@@ -18,4 +18,8 @@ object FileTypes {
   def isCompressed(path: String): Boolean = {
     compressedExtensions.exists(path.endsWith)
   }
+
+  def isJar(path: String): Boolean = {
+    path.endsWith(jarExt)
+  }
 }
