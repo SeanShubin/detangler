@@ -2,10 +2,16 @@ package com.seanshubin.detangler.scanner
 
 import java.nio.file.Path
 
-class FileScannerImpl(zipScanner: ZipScanner, classScanner: ClassScanner) extends FileScanner {
+import com.seanshubin.detangler.timer.Timer
+
+class FileScannerImpl(zipScanner: ZipScanner,
+                      classScanner: ClassScanner,
+                      timer: Timer) extends FileScanner {
   override def loadBytes(jarOrClass: Path): Iterable[Seq[Byte]] = {
     if (FileTypes.isCompressed(jarOrClass.toString)) {
-      zipScanner.loadBytes(jarOrClass)
+      timer.measureTime(s"scan compressed file $jarOrClass") {
+        zipScanner.loadBytes(jarOrClass)
+      }
     } else {
       classScanner.loadBytes(jarOrClass)
     }

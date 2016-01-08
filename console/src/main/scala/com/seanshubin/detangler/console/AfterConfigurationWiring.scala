@@ -39,12 +39,12 @@ trait AfterConfigurationWiring {
   lazy val acceptNameFunction: String => Boolean = new AcceptNameFunction(stringToStandaloneFunction)
   lazy val zipScanner: ZipScanner = new ZipScannerImpl(filesContract, FileTypes.isCompressed, acceptNameFunction)
   lazy val classScanner: ClassScanner = new ClassScannerImpl(filesContract)
-  lazy val fileScanner: FileScanner = new FileScannerImpl(zipScanner, classScanner)
+  lazy val timer: Timer = new TimerImpl(clock, notifications.startTiming, notifications.endTiming)
+  lazy val fileScanner: FileScanner = new FileScannerImpl(zipScanner, classScanner, timer)
   lazy val classParser: ClassParser = new ClassParserImpl
   lazy val classBytesScanner: ClassBytesScanner = new ClassBytesScannerImpl(classParser)
   lazy val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
   lazy val notifications: Notifications = new LineEmittingNotifications(devonMarshaller, emitLine)
-  lazy val timer: Timer = new TimerImpl(clock, notifications.startTiming, notifications.endTiming)
   lazy val scanner: Scanner = new ScannerImpl(
     directoryScanner,
     fileScanner,
