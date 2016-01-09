@@ -1,5 +1,6 @@
 package com.seanshubin.detangler.core
 
+import java.nio.file.Path
 import java.time.Duration
 
 import scala.collection.mutable.ArrayBuffer
@@ -20,4 +21,6 @@ class NotificationsStub extends Notifications {
   override def startTiming(caption: String): Unit = ???
 
   override def endTiming(caption: String, duration: Duration): Unit = ???
+
+  override def warnNoRelevantClassesInPath(path: Path): Unit = ???
 }

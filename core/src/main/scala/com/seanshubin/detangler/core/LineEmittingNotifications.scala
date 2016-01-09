@@ -1,11 +1,13 @@
 package com.seanshubin.detangler.core
 
 import java.io.{PrintWriter, StringWriter}
+import java.nio.file.Path
 import java.time.Duration
 
 import com.seanshubin.devon.core.devon.DevonMarshaller
 
-class LineEmittingNotifications(devonMarshaller: DevonMarshaller, emit: String => Unit) extends Notifications {
+class LineEmittingNotifications(devonMarshaller: DevonMarshaller,
+                                emit: String => Unit) extends Notifications {
   private val timingLock = new Object
   private var timingIndent = 0
   override def topLevelException(exception: Throwable): Unit = {
@@ -36,6 +38,10 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller, emit: String =
       val formattedDuration = DurationFormat.MillisecondsFormat.format(duration.toMillis)
       emit(indent(timingIndent) + s"($formattedDuration) $caption")
     }
+  }
+
+  override def warnNoRelevantClassesInPath(path: Path): Unit = {
+    emit(s"no relevant classes found in $path")
   }
 
   private def indent(indentLevel: Int): String = {

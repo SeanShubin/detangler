@@ -37,7 +37,11 @@ trait AfterConfigurationWiring {
     startsWithInclude,
     startsWithDrop)
   lazy val acceptNameFunction: String => Boolean = new AcceptNameFunction(stringToStandaloneFunction)
-  lazy val zipScanner: ZipScanner = new ZipScannerImpl(filesContract, FileTypes.isCompressed, acceptNameFunction)
+  lazy val zipScanner: ZipScanner = new ZipScannerImpl(
+    filesContract,
+    FileTypes.isCompressed,
+    acceptNameFunction,
+    notifications.warnNoRelevantClassesInPath)
   lazy val classScanner: ClassScanner = new ClassScannerImpl(filesContract)
   lazy val timer: Timer = new TimerImpl(clock, notifications.startTiming, notifications.endTiming)
   lazy val fileScanner: FileScanner = new FileScannerImpl(zipScanner, classScanner, timer)

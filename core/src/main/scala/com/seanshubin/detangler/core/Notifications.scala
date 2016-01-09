@@ -1,5 +1,6 @@
 package com.seanshubin.detangler.core
 
+import java.nio.file.Path
 import java.time.Duration
 
 trait Notifications {
@@ -12,4 +13,6 @@ trait Notifications {
   def startTiming(caption: String)
 
   def endTiming(caption: String, duration: Duration)
+
+  def warnNoRelevantClassesInPath(path: Path)
 }
