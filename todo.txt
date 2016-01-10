@@ -1,12 +1,9 @@
-cycle depends on
-cycle depended on by
-cycle html character
-graphvis report
 generate graphvis instructions when graphvis not installed
-entry points summary
-cycles summary
-thresholds
+entry points summary sort by depth at each level
+table of contents
+file name ignore list
+enforce thresholds
+generate threshold config
 test coverage
 remove dead code
-named levels instead of "placeholder"
 maven plugin

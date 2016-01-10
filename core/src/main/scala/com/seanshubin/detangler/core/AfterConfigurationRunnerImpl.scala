@@ -29,11 +29,6 @@ class AfterConfigurationRunnerImpl(scanner: Scanner,
         reporter.run()
       }
     }
-
-    //    createReporter(DetangledFactory.contrivedSample(), reportDir.resolve("contrived")).run()
-    //    createReporter(DetangledFactory.generatedSampleData(), reportDir.resolve("random")).run()
-    //    createReporter(DetangledFactory.sampleWithoutCycles(), reportDir.resolve("simple")).run()
-    //    createReporter(DetangledFactory.sampleWithCycles(), reportDir.resolve("cycles")).run()
   }
 
   private def convertToStandaloneModule(stringDependency: (String, Seq[String])): Option[(Standalone, Seq[Standalone])] = {

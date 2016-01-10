@@ -10,6 +10,8 @@ sealed trait Module {
   def toString: String
 
   def typeOrder: Int
+
+  def level: Int
 }
 
 object Module {
@@ -34,7 +36,7 @@ case class Standalone(path: Seq[String]) extends Module {
 
   override def isRoot: Boolean = path.isEmpty
 
-  def level: Int = path.size
+  override def level: Int = path.size
 
   def atLevel(targetLevel: Int): Standalone = Standalone(path.take(targetLevel))
 }
@@ -59,6 +61,8 @@ case class Cycle(parts: Set[Standalone]) extends Module {
   override def toString: String = {
     s"""${parts.toSeq.sortWith(lessThan).mkString("-")}"""
   }
+
+  override def level: Int = standalone.level
 
   def standalone: Standalone = parts.toSeq.sortWith(lessThan).head
 

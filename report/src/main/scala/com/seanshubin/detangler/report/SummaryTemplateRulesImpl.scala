@@ -23,16 +23,15 @@ class SummaryTemplateRulesImpl(detangled: Detangled) extends SummaryTemplateRule
     val cyclePartTemplate = cycleTemplate.select(".cycle-part")
     def generateCyclePartFunction(cyclePart: Standalone): HtmlElement = generateCyclePart(cyclePartTemplate, cyclePart)
     val cyclePartFragments = cycle.parts.map(generateCyclePartFunction)
-    val cycleFragment = emptyCycleTemplate.append(".append-cycle-part", cyclePartFragments)
+    val cycleText = s"${cycle.parts.size} part cycle at level ${cycle.level}"
+    val cycleLink = HtmlRendering.outerHtmlLinkFor(cycle)
+    val cycleFragment = emptyCycleTemplate.anchor(".cycle-link", cycleLink, cycleText).append(".append-cycle-part", cyclePartFragments)
     cycleFragment
   }
 
   private def generateCyclePart(cyclePartTemplate: HtmlElement, cyclePart: Standalone): HtmlElement = {
     cyclePartTemplate.
-      anchor(".name", HtmlRendering.outerHtmlLinkFor(cyclePart), HtmlRendering.htmlName(cyclePart)).
-      text(".depth", detangled.depth(cyclePart).toString).
-      text(".breadth", detangled.depth(cyclePart).toString).
-      text(".transitive", detangled.depth(cyclePart).toString)
+      anchor(".name", HtmlRendering.outerHtmlLinkFor(cyclePart), HtmlRendering.htmlName(cyclePart))
   }
 
   private def generateEntryPoints(template: HtmlElement, entryPoints: Seq[Standalone]): HtmlElement = {
