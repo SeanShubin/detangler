@@ -45,7 +45,7 @@ class Reporter(detangled: Detangled,
   private def generateSummary(): Unit = {
     val summaryTemplate = loadTemplate("summary.html")
     val content = summaryTemplateRules.generate(summaryTemplate, detangled.entryPoints(), detangled.cycles()).toString
-    val fileName = HtmlRendering.summaryFileName
+    val fileName = HtmlRender.navigateHigherLink(Standalone.Root)
     val file = directory.resolve(fileName)
     filesContract.write(file, content.getBytes(charset))
   }
@@ -72,29 +72,29 @@ class Reporter(detangled: Detangled,
 
   private def generateDependenciesPage(standalone: Standalone, pageTemplate: HtmlElement, isLeafPage: Boolean): Path = {
     val content = pageTemplateRules.generate(pageTemplate, standalone, isLeafPage).toString
-    val fileName = HtmlRendering.reportFile(standalone)
+    val fileName = HtmlRender.reportPageLink(standalone)
     val file = directory.resolve(fileName)
     filesContract.write(file, content.getBytes(charset))
   }
 
   private def generateGraphPage(standalone: Standalone, graphTemplate: HtmlElement): Path = {
     val content = graphTemplateRules.generate(graphTemplate, standalone).toString
-    val fileName = HtmlRendering.graphLink(standalone)
+    val fileName = HtmlRender.graphLink(standalone)
     val file = directory.resolve(fileName)
     filesContract.write(file, content.getBytes(charset))
   }
 
   private def generateGraphSource(standalone: Standalone): Path = {
     val lines = graphGenerator.generate(detangled.plainDependsOnFor(standalone), detangled.plainCyclesFor(standalone))
-    val fileName = HtmlRendering.graphSourceFile(standalone)
+    val fileName = HtmlRender.graphSourceLink(standalone)
     val file = directory.resolve(fileName)
     val javaLines = JavaConversions.asJavaCollection(lines)
     filesContract.write(file, javaLines, charset)
   }
 
   private def renderGraph(standalone: Standalone): Unit = {
-    val source = HtmlRendering.graphSourceFile(standalone)
-    val target = HtmlRendering.graphTargetFile(standalone)
+    val source = HtmlRender.graphSourceLink(standalone)
+    val target = HtmlRender.graphTargetLink(standalone)
     val command = Seq("dot", "-Tsvg", s"-o$target", source)
 
     val processBuilder = createProcessBuilder(command).directory(directory.toFile)

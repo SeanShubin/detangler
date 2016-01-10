@@ -4,62 +4,62 @@ import org.scalatest.FunSuite
 
 class HtmlRenderingTest extends FunSuite {
   test("file names") {
-    assert(HtmlRendering.reportFile(SampleData.root) === "index.html")
-    assert(HtmlRendering.reportFile(SampleData.groupA) === "group-a.html")
-    assert(HtmlRendering.reportFile(SampleData.packageC) === "group-a--package-c.html")
+    assert(HtmlRender.reportPageLink(SampleData.root) === "report.html")
+    assert(HtmlRender.reportPageLink(SampleData.groupA) === "report--group-a.html")
+    assert(HtmlRender.reportPageLink(SampleData.packageC) === "report--group-a--package-c.html")
   }
 
   test("html id") {
-    assert(HtmlRendering.htmlId(SampleData.groupA) === "group-a")
-    assert(HtmlRendering.htmlId(SampleData.packageC) === "package-c")
-    assert(HtmlRendering.htmlId(SampleData.classF) === "class-f")
+    assert(HtmlRender.id(SampleData.groupA) === "group-a")
+    assert(HtmlRender.id(SampleData.packageC) === "package-c")
+    assert(HtmlRender.id(SampleData.classF) === "class-f")
   }
 
   test("html name") {
-    assert(HtmlRendering.htmlName(SampleData.groupA) === "group/a")
-    assert(HtmlRendering.htmlName(SampleData.packageC) === "package/c")
-    assert(HtmlRendering.htmlName(SampleData.classF) === "class/f")
+    assert(HtmlRender.moduleLinkName(SampleData.groupA) === "group/a")
+    assert(HtmlRender.moduleLinkName(SampleData.packageC) === "package/c")
+    assert(HtmlRender.moduleLinkName(SampleData.classF) === "class/f")
   }
 
   test("html link") {
-    assert(HtmlRendering.htmlLink(SampleData.root, SampleData.groupA) === "#group-a")
-    assert(HtmlRendering.htmlLink(SampleData.root, SampleData.packageC) === "group-a.html#package-c")
-    assert(HtmlRendering.htmlLink(SampleData.root, SampleData.classF) === "group-a--package-c.html#class-f")
-    assert(HtmlRendering.htmlLink(SampleData.groupA, SampleData.groupA) === "index.html#group-a")
-    assert(HtmlRendering.htmlLink(SampleData.groupA, SampleData.packageC) === "#package-c")
-    assert(HtmlRendering.htmlLink(SampleData.groupA, SampleData.classF) === "group-a--package-c.html#class-f")
-    assert(HtmlRendering.htmlLink(SampleData.groupB, SampleData.groupA) === "index.html#group-a")
-    assert(HtmlRendering.htmlLink(SampleData.groupB, SampleData.packageC) === "group-a.html#package-c")
-    assert(HtmlRendering.htmlLink(SampleData.groupB, SampleData.classF) === "group-a--package-c.html#class-f")
-    assert(HtmlRendering.htmlLink(SampleData.packageC, SampleData.groupA) === "index.html#group-a")
-    assert(HtmlRendering.htmlLink(SampleData.packageC, SampleData.packageC) === "group-a.html#package-c")
-    assert(HtmlRendering.htmlLink(SampleData.packageC, SampleData.classF) === "#class-f")
-    assert(HtmlRendering.htmlLink(SampleData.packageD, SampleData.groupA) === "index.html#group-a")
-    assert(HtmlRendering.htmlLink(SampleData.packageD, SampleData.packageC) === "group-a.html#package-c")
-    assert(HtmlRendering.htmlLink(SampleData.packageD, SampleData.classF) === "group-a--package-c.html#class-f")
+    assert(HtmlRender.moduleLink(SampleData.root, SampleData.groupA) === "#group-a")
+    assert(HtmlRender.moduleLink(SampleData.root, SampleData.packageC) === "report--group-a.html#package-c")
+    assert(HtmlRender.moduleLink(SampleData.root, SampleData.classF) === "report--group-a--package-c.html#class-f")
+    assert(HtmlRender.moduleLink(SampleData.groupA, SampleData.groupA) === "report.html#group-a")
+    assert(HtmlRender.moduleLink(SampleData.groupA, SampleData.packageC) === "#package-c")
+    assert(HtmlRender.moduleLink(SampleData.groupA, SampleData.classF) === "report--group-a--package-c.html#class-f")
+    assert(HtmlRender.moduleLink(SampleData.groupB, SampleData.groupA) === "report.html#group-a")
+    assert(HtmlRender.moduleLink(SampleData.groupB, SampleData.packageC) === "report--group-a.html#package-c")
+    assert(HtmlRender.moduleLink(SampleData.groupB, SampleData.classF) === "report--group-a--package-c.html#class-f")
+    assert(HtmlRender.moduleLink(SampleData.packageC, SampleData.groupA) === "report.html#group-a")
+    assert(HtmlRender.moduleLink(SampleData.packageC, SampleData.packageC) === "report--group-a.html#package-c")
+    assert(HtmlRender.moduleLink(SampleData.packageC, SampleData.classF) === "#class-f")
+    assert(HtmlRender.moduleLink(SampleData.packageD, SampleData.groupA) === "report.html#group-a")
+    assert(HtmlRender.moduleLink(SampleData.packageD, SampleData.packageC) === "report--group-a.html#package-c")
+    assert(HtmlRender.moduleLink(SampleData.packageD, SampleData.classF) === "report--group-a--package-c.html#class-f")
   }
 
   test("cycle id") {
-    assert(HtmlRendering.cycleId(SampleDataWithCycles.cycleAB) === "cycle-group-a")
-    assert(HtmlRendering.cycleId(SampleDataWithCycles.cycleCD) === "cycle-package-c")
-    assert(HtmlRendering.cycleId(SampleDataWithCycles.cycleFG) === "cycle-class-f")
+    assert(HtmlRender.id(SampleDataWithCycles.cycleAB) === "cycle-group-a")
+    assert(HtmlRender.id(SampleDataWithCycles.cycleCD) === "cycle-package-c")
+    assert(HtmlRender.id(SampleDataWithCycles.cycleFG) === "cycle-class-f")
   }
 
   test("cycle link") {
-    assert(HtmlRendering.cycleLink(SampleDataWithCycles.cycleAB) === "#cycle-group-a")
-    assert(HtmlRendering.cycleLink(SampleDataWithCycles.cycleCD) === "#cycle-package-c")
-    assert(HtmlRendering.cycleLink(SampleDataWithCycles.cycleFG) === "#cycle-class-f")
+    assert(HtmlRender.relativeModuleLink(SampleDataWithCycles.cycleAB) === "#cycle-group-a")
+    assert(HtmlRender.relativeModuleLink(SampleDataWithCycles.cycleCD) === "#cycle-package-c")
+    assert(HtmlRender.relativeModuleLink(SampleDataWithCycles.cycleFG) === "#cycle-class-f")
   }
 
   test("reason name") {
-    assert(HtmlRendering.reasonName(SampleData.groupA, SampleData.groupB) === "reason")
-    assert(HtmlRendering.reasonName(SampleData.packageC, SampleData.packageD) === "reason")
-    assert(HtmlRendering.reasonName(SampleData.classF, SampleData.classG) === "reason")
+    assert(HtmlRender.reasonLinkName(SampleData.groupA, SampleData.groupB) === "reason")
+    assert(HtmlRender.reasonLinkName(SampleData.packageC, SampleData.packageD) === "reason")
+    assert(HtmlRender.reasonLinkName(SampleData.classF, SampleData.classG) === "reason")
   }
 
   test("reason link") {
-    assert(HtmlRendering.reasonLink(SampleData.groupA, SampleData.groupB) === "#group-a---group-b")
-    assert(HtmlRendering.reasonLink(SampleData.packageC, SampleData.packageD) === "#group-a--package-c---group-a--package-d")
-    assert(HtmlRendering.reasonLink(SampleData.classF, SampleData.classG) === "#group-a--package-c--class-f---group-a--package-c--class-g")
+    assert(HtmlRender.reasonLink(SampleData.groupA, SampleData.groupB) === "#group-a---group-b")
+    assert(HtmlRender.reasonLink(SampleData.packageC, SampleData.packageD) === "#group-a--package-c---group-a--package-d")
+    assert(HtmlRender.reasonLink(SampleData.classF, SampleData.classG) === "#group-a--package-c--class-f---group-a--package-c--class-g")
   }
 }

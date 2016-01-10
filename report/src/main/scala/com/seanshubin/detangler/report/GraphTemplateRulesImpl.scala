@@ -4,8 +4,8 @@ import com.seanshubin.detangler.model.Standalone
 
 class GraphTemplateRulesImpl() extends GraphTemplateRules {
   override def generate(graphTemplate: HtmlElement, context: Standalone): HtmlElement = {
-    val graphFile = HtmlRendering.graphTargetFile(context)
-    val reportFile = HtmlRendering.reportFile(context)
+    val graphFile = HtmlRender.graphTargetLink(context)
+    val reportFile = HtmlRender.reportPageLink(context)
 
     graphTemplate.
       anchor(".parent", reportFile, reportFile).

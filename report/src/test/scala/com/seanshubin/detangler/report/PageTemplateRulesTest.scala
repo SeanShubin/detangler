@@ -4,8 +4,6 @@ import com.seanshubin.detangler.model.Standalone
 import org.scalatest.FunSuite
 
 class PageTemplateRulesTest extends FunSuite {
-  val parentLinkFunction = (standalone: Standalone) => "the parent link"
-  val parentTextFunction = (standalone: Standalone) => "the parent text"
   val modulesTemplateRules = new ModulesTemplateRules {
     override def generate(modulesTemplate: HtmlElement, standalone: Standalone): HtmlElement =
       HtmlElement.fragmentFromString( s"""<p class="modules">the modules</p>""")
@@ -21,7 +19,7 @@ class PageTemplateRulesTest extends FunSuite {
       |<p class="modules"/>
       |<p class="reasons"/>
     """.stripMargin
-  val pageTemplateRules = new PageTemplateRulesImpl(modulesTemplateRules, reasonsTemplateRules, parentLinkFunction, parentTextFunction)
+  val pageTemplateRules = new PageTemplateRulesImpl(modulesTemplateRules, reasonsTemplateRules)
   val pageTemplate = HtmlElement.pageFromString(pageTemplateText)
 
   test("root page template") {

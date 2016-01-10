@@ -8,7 +8,6 @@ import org.jsoup.nodes.{Document, Element}
 
 import scala.collection.JavaConversions
 
-
 class HtmlElement(originalElement: Element) {
 
   override def toString: String = originalElement.toString

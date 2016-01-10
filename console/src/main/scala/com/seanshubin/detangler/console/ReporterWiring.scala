@@ -25,9 +25,7 @@ trait ReporterWiring {
   val reasonsTemplateRules: ReasonsTemplateRules = new ReasonsTemplateRulesImpl(detangled)
   val pageTemplateRules: PageTemplateRules = new PageTemplateRulesImpl(
     modulesTemplateRules,
-    reasonsTemplateRules,
-    HtmlRendering.parentLink,
-    HtmlRendering.parentLinkName)
+    reasonsTemplateRules)
   val graphTemplateRules: GraphTemplateRules = new GraphTemplateRulesImpl()
   val graphGenerator: GraphGenerator = new GraphGeneratorImpl
   val createProcessBuilder: Seq[String] => ProcessBuilderContract = (commands) => new ProcessBuilderDelegate(new ProcessBuilder(commands: _*))

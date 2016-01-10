@@ -24,9 +24,7 @@ object Prototype extends App {
     val reasonsTemplateRules: ReasonsTemplateRules = new ReasonsTemplateRulesImpl(detangled)
     val pageTemplateRules: PageTemplateRules = new PageTemplateRulesImpl(
       modulesTemplateRules,
-      reasonsTemplateRules,
-      HtmlRendering.reportFile,
-      HtmlRendering.htmlName)
+      reasonsTemplateRules)
     val graphTemplateRules: GraphTemplateRules = new GraphTemplateRulesImpl
     val graphGenerator: GraphGenerator = new GraphGeneratorImpl
     val createProcessBuilder: Seq[String] => ProcessBuilderContract = (command) => new ProcessBuilderDelegate(new ProcessBuilder(command: _*))

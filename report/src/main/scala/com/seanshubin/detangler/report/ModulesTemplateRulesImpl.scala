@@ -16,7 +16,10 @@ class ModulesTemplateRulesImpl(standaloneTemplateRules: StandaloneTemplateRules,
     result
   }
 
-  private def composeModule(context: Standalone, module: Module, standaloneTemplate: HtmlElement, cycleTemplate: HtmlElement): HtmlElement = {
+  private def composeModule(context: Standalone,
+                            module: Module,
+                            standaloneTemplate: HtmlElement,
+                            cycleTemplate: HtmlElement): HtmlElement = {
     module match {
       case cycle: Cycle => composeCycle(cycleTemplate, context, cycle)
       case standalone: Standalone => composeStandalone(standaloneTemplate, context, standalone)

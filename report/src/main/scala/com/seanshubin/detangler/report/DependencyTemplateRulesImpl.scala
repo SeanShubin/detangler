@@ -24,24 +24,27 @@ class DependencyTemplateRulesImpl(detangled: Detangled, dependencyDirection: Dep
     } else {
       s"$partCount parts"
     }
+    val reportLink = HtmlRender.reportPageLink(child)
+    val childLink = HtmlRender.moduleLink(context, child)
+    val childName = HtmlRender.moduleLinkName(child)
     parentModule match {
       case parent: Standalone =>
         val reasonName = dependencyDirection.name(parent, child)
         val reasonLink = dependencyDirection.link(parent, child)
         cycleLink(dependencyRowTemplate, child).
-          anchor(".name", HtmlRendering.htmlLink(context, child), HtmlRendering.htmlName(child)).
+          anchor(".name", childLink, childName).
           text(".depth", detangled.depth(child).toString).
           text(".breadth", detangled.breadth(child).toString).
           text(".transitive", detangled.transitive(child).toString).
           anchor(".reason", reasonLink, reasonName).
-          anchor(".composed-of", HtmlRendering.reportFile(child), partString)
+          anchor(".composed-of", reportLink, partString)
       case parent: Cycle =>
         cycleLink(dependencyRowTemplate, child).
-          anchor(".name", HtmlRendering.htmlLink(context, child), HtmlRendering.htmlName(child)).
+          anchor(".name", childLink, childName).
           text(".depth", detangled.depth(child).toString).
           text(".breadth", detangled.breadth(child).toString).
           text(".transitive", detangled.transitive(child).toString).
-          anchor(".composed-of", HtmlRendering.reportFile(child), partString)
+          anchor(".composed-of", reportLink, partString)
     }
   }
 
@@ -49,7 +52,7 @@ class DependencyTemplateRulesImpl(detangled: Detangled, dependencyDirection: Dep
     detangled.partOfCycle(standalone) match {
       case Some(cycle) =>
         template.
-          attr(".cycle-link", "href", HtmlRendering.cycleLink(cycle))
+          attr(".cycle-link", "href", HtmlRender.relativeModuleLink(cycle))
       case None =>
         template.remove(".cycle-link")
     }

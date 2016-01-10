@@ -10,6 +10,7 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller,
                                 emit: String => Unit) extends Notifications {
   private val timingLock = new Object
   private var timingIndent = 0
+
   override def topLevelException(exception: Throwable): Unit = {
     exceptionLines(exception).foreach(emit)
   }

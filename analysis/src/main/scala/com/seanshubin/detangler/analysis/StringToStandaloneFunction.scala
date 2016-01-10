@@ -32,34 +32,34 @@ object StringToStandaloneFunction {
     val standaloneParts = for {
       index <- 0 until level
     } yield {
-        if (index < level - 2) {
-          if (index > size - 2) {
-            if (size > 1) {
-              s"root-of-${parts(size - 2)}"
-            } else {
-              "-root-"
-            }
+      if (index < level - 2) {
+        if (index > size - 2) {
+          if (size > 1) {
+            s"root-of-${parts(size - 2)}"
           } else {
-            parts(index)
-          }
-        } else if (index < level - 1) {
-          if (level < size + 1) {
-            parts.slice(level - 2, size - 1).mkString("/")
-          } else {
-            if (size > 1) {
-              s"root-of-${parts(size - 2)}"
-            } else {
-              "-root-"
-            }
+            "-root-"
           }
         } else {
-          if (level < 2) {
-            parts.mkString("/")
+          parts(index)
+        }
+      } else if (index < level - 1) {
+        if (level < size + 1) {
+          parts.slice(level - 2, size - 1).mkString("/")
+        } else {
+          if (size > 1) {
+            s"root-of-${parts(size - 2)}"
           } else {
-            parts.last
+            "-root-"
           }
         }
+      } else {
+        if (level < 2) {
+          parts.mkString("/")
+        } else {
+          parts.last
+        }
       }
+    }
     Standalone(standaloneParts)
   }
 }

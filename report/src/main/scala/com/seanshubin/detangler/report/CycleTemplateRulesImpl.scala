@@ -23,7 +23,7 @@ class CycleTemplateRulesImpl(detangled: Detangled,
 
   def generateSummary(summaryTemplate: HtmlElement, cycle: Cycle): HtmlElement = {
     summaryTemplate.
-      attr(".cycle-summary", "id", HtmlRendering.cycleId(cycle)).
+      attr(".cycle-summary", "id", HtmlRender.id(cycle)).
       text(".size", detangled.cycleSize(cycle).toString).
       text(".depth", detangled.depth(cycle).toString).
       text(".breadth", detangled.breadth(cycle).toString).
@@ -39,7 +39,9 @@ class CycleTemplateRulesImpl(detangled: Detangled,
   }
 
   def generateCyclePart(cyclePartTemplate: HtmlElement, context: Standalone, part: Standalone): HtmlElement = {
-    cyclePartTemplate.anchor(".name", HtmlRendering.htmlLink(context, part), HtmlRendering.htmlName(part))
+    val link = HtmlRender.moduleLink(context, part)
+    val name = HtmlRender.moduleLinkName(part)
+    cyclePartTemplate.anchor(".name", link, name)
   }
 
   private def replaceIfPositiveQuantity(cssQuery: String, base: HtmlElement, quantityAndElement: QuantityAndElement): HtmlElement = {

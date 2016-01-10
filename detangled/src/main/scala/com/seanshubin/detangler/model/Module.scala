@@ -12,6 +12,8 @@ sealed trait Module {
   def typeOrder: Int
 
   def level: Int
+
+  def standalone: Standalone
 }
 
 object Module {
@@ -37,6 +39,8 @@ case class Standalone(path: Seq[String]) extends Module {
   override def isRoot: Boolean = path.isEmpty
 
   override def level: Int = path.size
+
+  override def standalone: Standalone = this
 
   def atLevel(targetLevel: Int): Standalone = Standalone(path.take(targetLevel))
 }

@@ -6,16 +6,16 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-<fieldset>
+<fieldset class="table-of-contents">
     <legend>dependency report</legend>
     <ul>
-        <li><a href="report-.html">report</a></li>
+        <li><a class="root" href="root-anchor">root-name</a></li>
     </ul>
 </fieldset>
-<fieldset>
+<fieldset class="cycles">
     <legend>cycles</legend>
-    <ul class="cycles append-cycle">
-        <li class="cycle append-cycle">
+    <ul class="append-cycle">
+        <li class="cycle">
             <fieldset class="append-cycle-part">
                 <legend>
                     <a class="cycle-link" href="cycle-link">cycle-size</a>

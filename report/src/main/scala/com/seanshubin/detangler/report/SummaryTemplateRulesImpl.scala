@@ -4,9 +4,20 @@ import com.seanshubin.detangler.model.{Cycle, Detangled, Standalone}
 
 class SummaryTemplateRulesImpl(detangled: Detangled) extends SummaryTemplateRules {
   override def generate(template: HtmlElement, entryPoints: Seq[Standalone], cycles: Seq[Cycle]): HtmlElement = {
+    val tableOfContentsFragment = generateTableOfContents(template)
     val entryPointsFragment = generateEntryPoints(template, entryPoints)
     val cyclesFragment = generateCycles(template, cycles)
-    template.replace(".entry-points", entryPointsFragment).replace(".cycles", cyclesFragment)
+    template.
+      replace(".table-of-contents", tableOfContentsFragment).
+      replace(".entry-points", entryPointsFragment).
+      replace(".cycles", cyclesFragment)
+  }
+
+  private def generateTableOfContents(template: HtmlElement): HtmlElement = {
+    val tableOfContentsFragment = template.select(".table-of-contents")
+    val rootLink = HtmlRender.reportPageLink(Standalone.Root)
+    val rootName = HtmlRender.reportPageLinkName(Standalone.Root)
+    tableOfContentsFragment.anchor(".root", rootLink, rootName)
   }
 
   private def generateCycles(template: HtmlElement, cycles: Seq[Cycle]): HtmlElement = {
@@ -23,10 +34,10 @@ class SummaryTemplateRulesImpl(detangled: Detangled) extends SummaryTemplateRule
     val cyclePartTemplate = cycleTemplate.select(".cycle-part")
     def generateCyclePartFunction(cyclePart: Standalone): HtmlElement = generateCyclePart(cyclePartTemplate, cyclePart)
     val cyclePartFragments = cycle.parts.map(generateCyclePartFunction)
-    val parentName = HtmlRendering.parentModuleName(cycle.parent)
-    val parentLink = HtmlRendering.reportFile(cycle.parent)
+    val parentLink = HtmlRender.reportPageLink(cycle.parent)
+    val parentName = HtmlRender.reportPageLinkName(cycle.parent)
     val cycleText = s"${cycle.parts.size} part cycle"
-    val cycleLink = HtmlRendering.outerHtmlLinkFor(cycle)
+    val cycleLink = HtmlRender.absoluteModuleLink(cycle)
     val cycleFragment = emptyCycleTemplate.
       anchor(".cycle-link", cycleLink, cycleText).
       text(".level", cycle.level.toString).
@@ -36,14 +47,17 @@ class SummaryTemplateRulesImpl(detangled: Detangled) extends SummaryTemplateRule
   }
 
   private def generateCyclePart(cyclePartTemplate: HtmlElement, cyclePart: Standalone): HtmlElement = {
+    val link = HtmlRender.absoluteModuleLink(cyclePart)
+    val name = HtmlRender.moduleLinkName(cyclePart)
     cyclePartTemplate.
-      anchor(".name", HtmlRendering.outerHtmlLinkFor(cyclePart), HtmlRendering.htmlName(cyclePart))
+      anchor(".name", link, name)
   }
 
   private def generateEntryPoints(template: HtmlElement, entryPoints: Seq[Standalone]): HtmlElement = {
     val emptyEntryPointsFragment = template.select(".entry-points").remove(".entry-point")
     val entryPointTemplate = template.select(".entry-point")
-    val entryPointsFragment = emptyEntryPointsFragment.append(".append-entry-point", generateEntryPointElements(entryPointTemplate, entryPoints))
+    val entryPointsFragment = emptyEntryPointsFragment.append(
+      ".append-entry-point", generateEntryPointElements(entryPointTemplate, entryPoints))
     entryPointsFragment
   }
 
@@ -55,8 +69,10 @@ class SummaryTemplateRulesImpl(detangled: Detangled) extends SummaryTemplateRule
   }
 
   private def generateEntryPoint(template: HtmlElement, standalone: Standalone): HtmlElement = {
+    val link = HtmlRender.absoluteModuleLink(standalone)
+    val name = HtmlRender.moduleLinkName(standalone)
     template.
-      anchor(".name", HtmlRendering.outerHtmlLinkFor(standalone), HtmlRendering.htmlName(standalone)).
+      anchor(".name", link, name).
       text(".depth", detangled.depth(standalone).toString).
       text(".breadth", detangled.depth(standalone).toString).
       text(".transitive", detangled.depth(standalone).toString)

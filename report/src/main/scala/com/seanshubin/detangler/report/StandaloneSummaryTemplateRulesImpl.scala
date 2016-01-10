@@ -10,20 +10,21 @@ class StandaloneSummaryTemplateRulesImpl(detangled: Detangled) extends Standalon
     } else {
       s"$partCount parts"
     }
+    val reportLink = HtmlRender.reportPageLink(standalone)
     cycleLink(summaryTemplate, standalone).
-      attr(".standalone-summary", "id", HtmlRendering.htmlId(standalone)).
-      text(".name", HtmlRendering.htmlName(standalone)).
+      attr(".standalone-summary", "id", HtmlRender.id(standalone)).
+      text(".name", HtmlRender.moduleLinkName(standalone)).
       text(".depth", detangled.depth(standalone).toString).
       text(".breadth", detangled.breadth(standalone).toString).
       text(".transitive", detangled.transitive(standalone).toString).
-      anchor(".composed-of", HtmlRendering.reportFile(standalone), partString)
+      anchor(".composed-of", reportLink, partString)
   }
 
   private def cycleLink(template: HtmlElement, standalone: Standalone): HtmlElement = {
     val element = detangled.partOfCycle(standalone) match {
       case Some(cycle) =>
         template.
-          attr(".cycle-link", "href", HtmlRendering.cycleLink(cycle))
+          attr(".cycle-link", "href", HtmlRender.relativeModuleLink(cycle))
       case None =>
         template.remove(".cycle-link")
     }
