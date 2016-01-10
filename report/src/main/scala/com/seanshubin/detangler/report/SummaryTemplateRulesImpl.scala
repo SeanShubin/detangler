@@ -23,9 +23,15 @@ class SummaryTemplateRulesImpl(detangled: Detangled) extends SummaryTemplateRule
     val cyclePartTemplate = cycleTemplate.select(".cycle-part")
     def generateCyclePartFunction(cyclePart: Standalone): HtmlElement = generateCyclePart(cyclePartTemplate, cyclePart)
     val cyclePartFragments = cycle.parts.map(generateCyclePartFunction)
-    val cycleText = s"${cycle.parts.size} part cycle at level ${cycle.level}"
+    val parentName = HtmlRendering.parentModuleName(cycle.parent)
+    val parentLink = HtmlRendering.reportFile(cycle.parent)
+    val cycleText = s"${cycle.parts.size} part cycle"
     val cycleLink = HtmlRendering.outerHtmlLinkFor(cycle)
-    val cycleFragment = emptyCycleTemplate.anchor(".cycle-link", cycleLink, cycleText).append(".append-cycle-part", cyclePartFragments)
+    val cycleFragment = emptyCycleTemplate.
+      anchor(".cycle-link", cycleLink, cycleText).
+      text(".level", cycle.level.toString).
+      anchor(".parent-link", parentLink, parentName).
+      append(".append-cycle-part", cyclePartFragments)
     cycleFragment
   }
 

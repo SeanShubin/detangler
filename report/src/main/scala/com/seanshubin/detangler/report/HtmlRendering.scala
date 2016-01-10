@@ -83,9 +83,17 @@ object HtmlRendering {
     }
   }
 
-  def parentName(standalone: Standalone): String = {
+  def parentLinkName(standalone: Standalone): String = {
     if (standalone.isRoot) {
       "back to summary"
+    } else {
+      htmlName(standalone)
+    }
+  }
+
+  def parentModuleName(standalone: Standalone): String = {
+    if (standalone.isRoot) {
+      "-root-"
     } else {
       htmlName(standalone)
     }
