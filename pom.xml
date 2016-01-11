@@ -13,7 +13,7 @@
         <module>contract</module>
         <module>core</module>
         <module>console</module>
-        <module>detangled</module>
+        <module>model</module>
         <module>data</module>
         <module>report</module>
         <module>analysis</module>
