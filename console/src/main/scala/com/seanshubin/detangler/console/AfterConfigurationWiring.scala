@@ -21,6 +21,8 @@ trait AfterConfigurationWiring {
 
   def startsWithInclude: Seq[Seq[String]]
 
+  def startsWithExclude: Seq[Seq[String]]
+
   def startsWithDrop: Seq[Seq[String]]
 
   lazy val emitLine: String => Unit = println
@@ -35,6 +37,7 @@ trait AfterConfigurationWiring {
   lazy val stringToStandaloneFunction: String => Option[Standalone] = new StringToStandaloneFunction(
     level,
     startsWithInclude,
+    startsWithExclude,
     startsWithDrop)
   lazy val acceptNameFunction: String => Boolean = new AcceptNameFunction(stringToStandaloneFunction)
   lazy val zipScanner: ZipScanner = new ZipScannerImpl(

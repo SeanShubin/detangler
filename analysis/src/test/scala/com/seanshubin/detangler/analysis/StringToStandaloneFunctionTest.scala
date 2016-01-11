@@ -7,8 +7,9 @@ class StringToStandaloneFunctionTest extends FunSuite {
   test("string to standalone") {
     val level = 3
     val includeStartsWithSeq = Seq(Seq("com", "seanshubin"), Seq("seanshubin"))
+    val excludeStartsWithSeq = Seq(Seq("com", "seanshubin", "unchecked"))
     val dropStartsWithSeq = Seq(Seq("com", "seanshubin"), Seq("seanshubin"))
-    val f = new StringToStandaloneFunction(level, includeStartsWithSeq, dropStartsWithSeq)
+    val f = new StringToStandaloneFunction(level, includeStartsWithSeq, excludeStartsWithSeq, dropStartsWithSeq)
     assert(f("com/seanshubin/foo/bar/baz/Hello$baz") === Some(Standalone(Seq("foo", "bar/baz", "Hello"))))
     assert(f("seanshubin/foo/bar/baz/World$baz") === Some(Standalone(Seq("foo", "bar/baz", "World"))))
     assert(f("org/foo/bar/baz/Irrelevant$baz") === None)
