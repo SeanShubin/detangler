@@ -2,43 +2,6 @@ package com.seanshubin.detangler.core
 
 import java.nio.file.{Path, Paths}
 
-case class Limits(cycleCount: Option[Int], cycleSize: Option[Int]) {
-  def replaceNullsWithDefaults(): Limits = {
-    val newCycleCount = cycleCount match {
-      case Some(_) => cycleCount
-      case None => Limits.Default.cycleCount
-    }
-    val newCycleSize = cycleSize match {
-      case Some(_) => cycleSize
-      case None => Limits.Default.cycleSize
-    }
-    Limits(newCycleCount, newCycleSize)
-  }
-}
-
-object Limits {
-  val Default = Limits(cycleCount = Some(0), cycleSize = Some(0))
-  val Sample = Limits(cycleCount = Some(1), cycleSize = Some(2))
-}
-
-case class LimitConfiguration(globalLimits: Limits, moduleLimits: Map[Seq[String], Limits]) {
-  def replaceNullsWithDefaults(): LimitConfiguration = {
-    val newGlobalLimits = Option(globalLimits).getOrElse(LimitConfiguration.Default.globalLimits)
-    val newModuleLimits = Option(moduleLimits).getOrElse(LimitConfiguration.Default.moduleLimits)
-    LimitConfiguration(newGlobalLimits, newModuleLimits)
-  }
-}
-
-object LimitConfiguration {
-  val Default = LimitConfiguration(
-    globalLimits = Limits.Default,
-    moduleLimits = Map())
-  val Sample = LimitConfiguration(
-    globalLimits = Limits.Default,
-    moduleLimits = Map(
-      Seq("com", "seanshubin", "cycles") -> Limits.Sample))
-}
-
 case class StartsWithConfiguration(include: Seq[Seq[String]], exclude: Seq[Seq[String]], drop: Seq[Seq[String]]) {
   def replaceNullsWithDefaults(): StartsWithConfiguration = {
     val newInclude = Option(include).getOrElse(StartsWithConfiguration.Default.include)
@@ -65,7 +28,7 @@ case class Configuration(reportDir: Path,
                          searchPaths: Seq[Path],
                          level: Option[Int],
                          startsWith: StartsWithConfiguration,
-                         limits: LimitConfiguration) {
+                         allowedInCycle: Seq[Seq[String]]) {
   def replaceNullsWithDefaults(): Configuration = {
     val newReportDir = Option(reportDir).getOrElse(Configuration.Default.reportDir)
     val newSearchPaths = Option(searchPaths).getOrElse(Configuration.Default.searchPaths)
@@ -74,8 +37,8 @@ case class Configuration(reportDir: Path,
       case None => Configuration.Default.level
     }
     val newStartsWith = Option(startsWith).getOrElse(Configuration.Default.startsWith).replaceNullsWithDefaults()
-    val newLimits = Option(limits).getOrElse(Configuration.Default.limits).replaceNullsWithDefaults()
-    Configuration(newReportDir, newSearchPaths, newLevel, newStartsWith, newLimits)
+    val newAllowedInCycle = Option(allowedInCycle).getOrElse(Configuration.Default.allowedInCycle)
+    Configuration(newReportDir, newSearchPaths, newLevel, newStartsWith, newAllowedInCycle)
   }
 }
 
@@ -85,7 +48,7 @@ object Configuration {
     searchPaths = Seq(Paths.get(".")),
     level = Some(1),
     startsWith = StartsWithConfiguration.Default,
-    limits = LimitConfiguration.Default
+    allowedInCycle = Seq()
   )
 
   val Sample = Configuration(
@@ -93,5 +56,5 @@ object Configuration {
     searchPaths = Seq(Paths.get("search-path-1"), Paths.get("search-path-2")),
     level = Some(3),
     startsWith = StartsWithConfiguration.Sample,
-    limits = LimitConfiguration.Sample)
+    allowedInCycle = Seq(Seq("branch"), Seq("tree"), Seq("leaf")))
 }

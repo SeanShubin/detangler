@@ -1,5 +1,5 @@
 {
-  reportDir generated/detangler
+  reportDir generated/self
   searchPaths [
     console/target/detangler.jar
   ]
@@ -8,14 +8,9 @@
     include [[com seanshubin detangler]]
     drop [[com seanshubin detangler]]
   }
-  globalLimits {
-    cycleSize 0
-    cycleCount 0
-  }
-  limitByPath {
-    [module] {
-      cycleSize 3
-      cycleCount 1
-    }
-  }
+  allowedInCycle [
+    [model Cycle]
+    [model Standalone]
+    [model Module]
+  ]
 }
