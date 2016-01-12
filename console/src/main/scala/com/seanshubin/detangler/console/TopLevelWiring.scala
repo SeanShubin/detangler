@@ -21,7 +21,7 @@ trait TopLevelWiring {
 
       override def searchPaths: Seq[Path] = configuration.searchPaths
 
-      override def level: Int = configuration.level
+      override def level: Int = configuration.level.get
 
       override def startsWithDrop: Seq[Seq[String]] = configuration.startsWith.drop
 

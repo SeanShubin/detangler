@@ -17,7 +17,8 @@ class ConfigurationFactoryImpl(files: FilesContract,
           val bytes = files.readAllBytes(configFilePath)
           val text = new String(bytes.toArray, charset)
           val devon = devonMarshaller.fromString(text)
-          val config = devonMarshaller.toValue(devon, classOf[Configuration])
+          val configWithNulls = devonMarshaller.toValue(devon, classOf[Configuration])
+          val config = configWithNulls.replaceNullsWithDefaults()
           Right(config)
         } else {
           Left(Seq(s"Configuration file named '$configFilePath' not found"))
