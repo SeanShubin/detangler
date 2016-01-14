@@ -56,6 +56,14 @@ object HtmlRender {
     }
   }
 
+  def standaloneLinkQualifiedName(standalone: Standalone): String = {
+    if (standalone.isRoot) {
+      "-root-"
+    } else {
+      standalone.path.mkString("/")
+    }
+  }
+
   def absoluteModuleLink(module: Module): String = {
     val fileName = makeReportFileName(module.parent)
     val relativeLink = relativeModuleLink(module)
