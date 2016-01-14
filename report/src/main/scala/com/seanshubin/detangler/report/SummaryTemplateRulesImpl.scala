@@ -77,7 +77,8 @@ class SummaryTemplateRulesImpl(detangled: Detangled) extends SummaryTemplateRule
     template.
       anchor(".name", link, name).
       text(".depth", detangled.depth(standalone).toString).
-      text(".breadth", detangled.depth(standalone).toString).
-      text(".transitive", detangled.depth(standalone).toString)
+      text(".breadth", detangled.breadth(standalone).toString).
+      text(".transitive", detangled.transitive(standalone).toString).
+      anchor(".graph", HtmlRender.graphLink(standalone.parent), HtmlRender.graphLinkName(standalone.parent))
   }
 }

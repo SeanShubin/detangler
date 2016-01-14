@@ -43,6 +43,8 @@ case class Standalone(path: Seq[String]) extends Module {
   override def standalone: Standalone = this
 
   def atLevel(targetLevel: Int): Standalone = Standalone(path.take(targetLevel))
+
+  def compareTo(that: Standalone) = Standalone.compare(this, that)
 }
 
 object Standalone {
@@ -69,6 +71,8 @@ case class Cycle(parts: Set[Standalone]) extends Module {
   override def level: Int = standalone.level
 
   def standalone: Standalone = parts.toSeq.sortWith(lessThan).head
+
+  def size: Int = parts.size
 
   private val lessThan = Compare.lessThan(Standalone.compare)
 }

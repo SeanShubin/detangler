@@ -61,7 +61,7 @@ class DetangledBackedByTreeOfAggregate(level: Int,
     dependsOn
   }
 
-  override def entryPoints(): Seq[Standalone] = entryPointSet.toSeq.sortWith(Compare.lessThan(Standalone.compare))
+  override def entryPoints(): Seq[Standalone] = entryPointSet.toSeq.sortWith(Compare.lessThan(entryPointCompare))
 
   override def plainCyclesFor(standalone: Standalone): Map[String, Set[String]] = {
     val aggregate = treeOfAggregate.value(standalone.path)
@@ -85,7 +85,8 @@ class DetangledBackedByTreeOfAggregate(level: Int,
     standalone.path.last
   }
 
-  override def cycles(): Seq[Cycle] = treeOfAggregate.breadthFirst().filter(_.hasCycle).flatMap(_.getCycles)
+  override def cycles(): Seq[Cycle] =
+    treeOfAggregate.breadthFirst().filter(_.hasCycle).flatMap(_.getCycles).sortWith(Compare.lessThan(cycleCompare))
 
   private def reasonsFor(parts: Seq[Standalone]): Seq[Reason] = {
     reasonsFor(parts, parts)
@@ -103,5 +104,19 @@ class DetangledBackedByTreeOfAggregate(level: Int,
 
   private def sortByModuleInfo(unsorted: Set[Module]): Seq[Module] = {
     unsorted.toSeq.map(lookupMetrics).sortWith(Compare.lessThan(Metrics.compare)).map(_.id)
+  }
+
+  private val entryPointCompare: (Standalone, Standalone) => Int = (left, right) => {
+    def depthCompare(left: Standalone, right: Standalone): Int = depth(left).compareTo(depth(right))
+    val depthThenStandaloneCompare = Compare.mergeCompareFunctions(Compare.reverse(depthCompare), Standalone.compare)
+    depthThenStandaloneCompare(left, right)
+  }
+
+  private val cycleCompare: (Cycle, Cycle) => Int = (left, right) => {
+    def levelCompare(left: Cycle, right: Cycle): Int = left.level.compareTo(right.level)
+    def sizeCompare(left: Cycle, right: Cycle): Int = left.size.compareTo(right.size)
+    def parentCompare(left: Cycle, right: Cycle): Int = left.parent.compareTo(right.parent)
+    val mergedCompare = Compare.mergeCompareFunctions(levelCompare, Compare.reverse(sizeCompare), parentCompare, Cycle.compare)
+    mergedCompare(left, right)
   }
 }
