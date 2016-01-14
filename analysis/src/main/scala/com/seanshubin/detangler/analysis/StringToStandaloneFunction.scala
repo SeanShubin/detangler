@@ -8,8 +8,12 @@ class StringToStandaloneFunction(level: Int,
                                  dropStartsWithSeq: Seq[Seq[String]]) extends (String => Option[Standalone]) {
   override def apply(target: String): Option[Standalone] = {
     val parts = splitIntoParts(target)
-    val includeContains = includeStartsWithSeq.exists(includeStartsWith => parts.startsWith(includeStartsWith))
-    val excludeContains = excludeStartsWithSeq.exists(excludeStartsWith => parts.startsWith(excludeStartsWith))
+    val includeContains =
+      includeStartsWithSeq.isEmpty ||
+        includeStartsWithSeq.exists(includeStartsWith => parts.startsWith(includeStartsWith))
+    val excludeContains =
+      excludeStartsWithSeq.nonEmpty &&
+        excludeStartsWithSeq.exists(excludeStartsWith => parts.startsWith(excludeStartsWith))
     if (includeContains && !excludeContains) {
       val trimmedParts = dropStartsWithSeq.find(dropStartsWith => parts.startsWith(dropStartsWith)) match {
         case Some(drop) => parts.drop(drop.size)
