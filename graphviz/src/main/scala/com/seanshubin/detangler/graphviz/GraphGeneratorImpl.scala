@@ -1,12 +1,16 @@
 package com.seanshubin.detangler.graphviz
 
 class GraphGeneratorImpl extends GraphGenerator {
-  def generate(dependsOn: Map[String, Set[String]], cycles: Map[String, Set[String]]): Iterable[String] = {
+  def generate(dependsOn: Map[String, Set[String]], cycles: Map[String, Set[String]], entryPoints: Set[String]): Iterable[String] = {
     val sortedKeys = dependsOn.keys.toSeq.sorted
     val singleKeys = for {
       key <- sortedKeys
     } yield {
-      SingleGenerator(key)
+        if (entryPoints.contains(key)) {
+          SingleEntryPointGenerator(key)
+        } else {
+          SingleGenerator(key)
+        }
     }
     def addDependency(soFar: Accumulator, key: String): Accumulator = {
       val generators = for {
@@ -49,6 +53,10 @@ class GraphGeneratorImpl extends GraphGenerator {
 
   case class SingleGenerator(key: String) extends LinesGenerator {
     override def generate: Seq[String] = Seq( s"""  "$key";""")
+  }
+
+  case class SingleEntryPointGenerator(key: String) extends LinesGenerator {
+    override def generate: Seq[String] = Seq( s"""  "$key" [style=bold];""")
   }
 
   case class DependencyGenerator(key: String, value: String) extends LinesGenerator {

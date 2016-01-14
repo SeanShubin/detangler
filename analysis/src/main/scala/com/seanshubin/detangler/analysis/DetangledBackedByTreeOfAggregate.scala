@@ -70,6 +70,11 @@ class DetangledBackedByTreeOfAggregate(level: Int,
     cycles
   }
 
+  override def plainEntryPointsFor(standalone: Standalone): Set[String] = {
+    def isChild(potentialChild: Standalone): Boolean = potentialChild.parent == standalone
+    entryPointSet.filter(isChild).map(toPlain)
+  }
+
   private def toPlain(standalone: Map[Standalone, Set[Standalone]]): Map[String, Set[String]] = {
     standalone.map(toPlain)
   }

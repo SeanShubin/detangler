@@ -34,4 +34,6 @@ trait Detangled {
   def plainDependsOnFor(standalone: Standalone): Map[String, Set[String]]
 
   def plainCyclesFor(standalone: Standalone): Map[String, Set[String]]
+
+  def plainEntryPointsFor(standalone: Standalone): Set[String]
 }

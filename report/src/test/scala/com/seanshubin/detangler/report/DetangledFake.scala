@@ -43,6 +43,8 @@ class DetangledFake(theRoot: Standalone, map: Map[Module, ModuleInfo], val level
 
   override def entryPoints(): Seq[Standalone] = ???
 
+  override def plainEntryPointsFor(standalone: Standalone): Set[String] = ???
+
   private def reasonsFor(parts: Seq[Standalone]): Seq[Reason] = {
     reasonsFor(parts, parts)
   }

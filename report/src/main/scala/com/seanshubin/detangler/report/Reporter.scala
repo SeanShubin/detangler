@@ -85,7 +85,10 @@ class Reporter(detangled: Detangled,
   }
 
   private def generateGraphSource(standalone: Standalone): Path = {
-    val lines = graphGenerator.generate(detangled.plainDependsOnFor(standalone), detangled.plainCyclesFor(standalone))
+    val lines = graphGenerator.generate(
+      detangled.plainDependsOnFor(standalone),
+      detangled.plainCyclesFor(standalone),
+      detangled.plainEntryPointsFor(standalone))
     val fileName = HtmlRender.graphSourceLink(standalone)
     val file = directory.resolve(fileName)
     val javaLines = JavaConversions.asJavaCollection(lines)

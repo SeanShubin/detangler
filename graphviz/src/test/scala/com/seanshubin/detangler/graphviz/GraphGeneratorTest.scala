@@ -12,10 +12,11 @@ class GraphGeneratorTest extends FunSuite {
       "c" -> Set("d"),
       "d" -> Set())
     val cycles: Map[String, Set[String]] = Map()
-    val actual = graphGenerator.generate(dependsOn, cycles)
+    val entryPoints: Set[String] = Set("a")
+    val actual = graphGenerator.generate(dependsOn, cycles, entryPoints)
     val expected =
       """digraph detangled {
-        |  "a";
+        |  "a" [style=bold];
         |  "b";
         |  "c";
         |  "d";
@@ -39,10 +40,11 @@ class GraphGeneratorTest extends FunSuite {
     val cycles: Map[String, Set[String]] = Map(
       "b" -> Set("b", "c"),
       "c" -> Set("b", "c"))
-    val actual = graphGenerator.generate(dependsOn, cycles)
+    val entryPoints: Set[String] = Set("a")
+    val actual = graphGenerator.generate(dependsOn, cycles, entryPoints)
     val expected =
       """digraph detangled {
-        |  "a";
+        |  "a" [style=bold];
         |  "b";
         |  "c";
         |  "d";
@@ -81,10 +83,11 @@ class GraphGeneratorTest extends FunSuite {
       "g" -> Set("g", "h"),
       "h" -> Set("g", "h")
     )
-    val actual = graphGenerator.generate(dependsOn, cycles)
+    val entryPoints: Set[String] = Set("a", "k")
+    val actual = graphGenerator.generate(dependsOn, cycles, entryPoints)
     val expected =
       """digraph detangled {
-        |  "a";
+        |  "a" [style=bold];
         |  "b";
         |  "c";
         |  "d";
@@ -94,7 +97,7 @@ class GraphGeneratorTest extends FunSuite {
         |  "h";
         |  "i";
         |  "j";
-        |  "k";
+        |  "k" [style=bold];
         |  "a" -> "b";
         |  "b" -> "c";
         |  "b" -> "d";
