@@ -46,7 +46,7 @@ object Configuration {
   val Default = Configuration(
     reportDir = Paths.get("generated", "detangled"),
     searchPaths = Seq(Paths.get(".")),
-    level = Some(1),
+    level = Some(2),
     startsWith = StartsWithConfiguration.Default,
     allowedInCycle = Seq()
   )
