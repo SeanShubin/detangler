@@ -28,6 +28,8 @@ trait TopLevelWiring {
       override def startsWithInclude: Seq[Seq[String]] = configuration.startsWith.include
 
       override def startsWithExclude: Seq[Seq[String]] = configuration.startsWith.exclude
+
+      override def allowedCycles: Seq[Seq[String]] = configuration.allowedInCycle
     }.analyzer
   lazy val launcher: Runnable = new TopLevelRunnerImpl(
     commandLineArguments, configurationFactory, createRunner, notifications)

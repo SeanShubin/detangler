@@ -5,13 +5,15 @@ import java.nio.file.Path
 
 import com.seanshubin.detangler.contract._
 import com.seanshubin.detangler.graphviz.{GraphGenerator, GraphGeneratorImpl}
-import com.seanshubin.detangler.model.Detangled
+import com.seanshubin.detangler.model.{Standalone, Detangled}
 import com.seanshubin.detangler.report._
 
 trait ReporterWiring {
   def detangled: Detangled
 
   def reportDir: Path
+
+  def allowedCycles:Set[Standalone]
 
   val filesContract: FilesContract = FilesDelegate
   val charset: Charset = StandardCharsets.UTF_8
@@ -29,7 +31,7 @@ trait ReporterWiring {
   val graphTemplateRules: GraphTemplateRules = new GraphTemplateRulesImpl()
   val graphGenerator: GraphGenerator = new GraphGeneratorImpl
   val createProcessBuilder: Seq[String] => ProcessBuilderContract = (commands) => new ProcessBuilderDelegate(new ProcessBuilder(commands: _*))
-  val summaryTemplateRules: SummaryTemplateRules = new SummaryTemplateRulesImpl(detangled)
+  val summaryTemplateRules: SummaryTemplateRules = new SummaryTemplateRulesImpl(detangled, allowedCycles)
   val reporter: Runnable = new Reporter(
     detangled,
     reportDir,

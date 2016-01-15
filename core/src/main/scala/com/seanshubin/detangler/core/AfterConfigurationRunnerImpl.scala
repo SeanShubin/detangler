@@ -10,8 +10,9 @@ import com.seanshubin.detangler.timer.Timer
 
 class AfterConfigurationRunnerImpl(scanner: Scanner,
                                    detangler: Detangler,
-                                   createReporter: (Detangled, Path) => Runnable,
+                                   createReporter: (Detangled, Path, Set[Standalone]) => Runnable,
                                    reportDir: Path,
+                                   allowedCyclesAsStrings:Seq[Seq[String]],
                                    stringToStandalone: String => Option[Standalone],
                                    timer: Timer) extends Runnable {
   override def run(): Unit = {
@@ -24,8 +25,9 @@ class AfterConfigurationRunnerImpl(scanner: Scanner,
       val detangled = timer.measureTime("detangler") {
         detangler.analyze(moduleAccumulator.dependencies, moduleAccumulator.transpose().dependencies)
       }
+      val allowedCycles:Set[Standalone] = allowedCyclesAsStrings.map(Standalone.apply).toSet
       timer.measureTime("reporter") {
-        val reporter = createReporter(detangled, reportDir)
+        val reporter = createReporter(detangled, reportDir, allowedCycles)
         reporter.run()
       }
     }

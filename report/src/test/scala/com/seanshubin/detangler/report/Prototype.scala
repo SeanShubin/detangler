@@ -5,7 +5,7 @@ import java.nio.file.{Path, Paths}
 
 import com.seanshubin.detangler.contract._
 import com.seanshubin.detangler.graphviz.{GraphGenerator, GraphGeneratorImpl}
-import com.seanshubin.detangler.model.Detangled
+import com.seanshubin.detangler.model.{Standalone, Detangled}
 
 object Prototype extends App {
   runFromPath(Paths.get("generated", "cycles-false"), SampleData.detangled)
@@ -28,7 +28,8 @@ object Prototype extends App {
     val graphTemplateRules: GraphTemplateRules = new GraphTemplateRulesImpl
     val graphGenerator: GraphGenerator = new GraphGeneratorImpl
     val createProcessBuilder: Seq[String] => ProcessBuilderContract = (command) => new ProcessBuilderDelegate(new ProcessBuilder(command: _*))
-    val summaryTemplateRules: SummaryTemplateRules = new SummaryTemplateRulesImpl(detangled)
+    val allowedCycles:Set[Standalone] = Set()
+    val summaryTemplateRules: SummaryTemplateRules = new SummaryTemplateRulesImpl(detangled, allowedCycles)
     val reporter: Runnable = new Reporter(
       detangled,
       directory,

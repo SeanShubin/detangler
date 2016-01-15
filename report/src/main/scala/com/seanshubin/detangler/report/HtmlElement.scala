@@ -64,6 +64,16 @@ class HtmlElement(originalElement: Element) {
     new HtmlElement(element)
   }
 
+  def replaceOrRemove(cssQuery: String, maybeContent: Option[HtmlElement]): HtmlElement = {
+    maybeContent match {
+      case Some(content) =>
+        val element = clonedElement
+        select(cssQuery, element).replaceWith(content.clonedElement)
+        new HtmlElement(element)
+      case None => this.remove(cssQuery)
+    }
+  }
+
   def text(): String = {
     originalElement.text()
   }
