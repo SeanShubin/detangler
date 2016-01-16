@@ -28,7 +28,8 @@ case class Configuration(reportDir: Path,
                          searchPaths: Seq[Path],
                          level: Option[Int],
                          startsWith: StartsWithConfiguration,
-                         allowedInCycle: Seq[Seq[String]]) {
+                         allowedInCycle: Seq[Seq[String]],
+                         ignoreFiles: Seq[Path]) {
   def replaceNullsWithDefaults(): Configuration = {
     val newReportDir = Option(reportDir).getOrElse(Configuration.Default.reportDir)
     val newSearchPaths = Option(searchPaths).getOrElse(Configuration.Default.searchPaths)
@@ -38,7 +39,8 @@ case class Configuration(reportDir: Path,
     }
     val newStartsWith = Option(startsWith).getOrElse(Configuration.Default.startsWith).replaceNullsWithDefaults()
     val newAllowedInCycle = Option(allowedInCycle).getOrElse(Configuration.Default.allowedInCycle)
-    Configuration(newReportDir, newSearchPaths, newLevel, newStartsWith, newAllowedInCycle)
+    val newIgnoreFiles = Option(ignoreFiles).getOrElse(Configuration.Default.ignoreFiles)
+    Configuration(newReportDir, newSearchPaths, newLevel, newStartsWith, newAllowedInCycle, newIgnoreFiles)
   }
 }
 
@@ -48,7 +50,8 @@ object Configuration {
     searchPaths = Seq(Paths.get(".")),
     level = Some(2),
     startsWith = StartsWithConfiguration.Default,
-    allowedInCycle = Seq()
+    allowedInCycle = Seq(),
+    ignoreFiles = Seq()
   )
 
   val Sample = Configuration(
@@ -56,5 +59,6 @@ object Configuration {
     searchPaths = Seq(Paths.get("search-path-1"), Paths.get("search-path-2")),
     level = Some(3),
     startsWith = StartsWithConfiguration.Sample,
-    allowedInCycle = Seq(Seq("branch"), Seq("tree"), Seq("leaf")))
+    allowedInCycle = Seq(Seq("branch"), Seq("tree"), Seq("leaf")),
+    ignoreFiles = Seq(Paths.get("ignore-file.jar")))
 }

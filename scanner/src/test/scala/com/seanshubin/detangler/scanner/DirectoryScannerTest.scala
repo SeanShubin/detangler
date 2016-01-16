@@ -13,7 +13,8 @@ class DirectoryScannerTest extends FunSuite {
     val searchPaths = Seq("foo", "bar")
     val files = Seq("find-this.jar", "find-this.class", "do-not-find-this.txt", "find-this.war")
     val filesContract: FilesContract = new FilesContractStub(files)
-    val fileScanner = new DirectoryScannerImpl(filesContract, searchPaths.map(stringToPath))
+    val ignoreFiles: Seq[Path] = Seq()
+    val fileScanner = new DirectoryScannerImpl(filesContract, searchPaths.map(stringToPath), ignoreFiles)
     val actual = fileScanner.findFiles()
     val expected = Seq(
       Paths.get("foo", "find-this.jar"),

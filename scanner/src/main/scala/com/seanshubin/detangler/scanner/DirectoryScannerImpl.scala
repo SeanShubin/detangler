@@ -8,7 +8,9 @@ import com.seanshubin.detangler.contract.FilesContract
 
 import scala.collection.mutable.ArrayBuffer
 
-class DirectoryScannerImpl(files: FilesContract, searchPaths: Seq[Path]) extends DirectoryScanner {
+class DirectoryScannerImpl(files: FilesContract,
+                           searchPaths: Seq[Path],
+                           ignoreFiles: Seq[Path]) extends DirectoryScanner {
   override def findFiles(): Iterable[Path] = {
     searchPaths.flatMap(findFilesFromPath)
   }
@@ -27,7 +29,7 @@ class DirectoryScannerImpl(files: FilesContract, searchPaths: Seq[Path]) extends
     }
 
     override def visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult = {
-      if (FileTypes.isRelevant(file.toString)) {
+      if (FileTypes.isRelevant(file.toString) && !ignoreFiles.contains(file)) {
         filesFound.append(file)
       }
       FileVisitResult.CONTINUE

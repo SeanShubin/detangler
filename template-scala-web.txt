@@ -1,0 +1,17 @@
+{
+  reportDir generated/template-scala-web
+  searchPaths [
+    ../template-scala-web
+  ]
+  level 3
+  startsWith {
+    include [[com seanshubin]]
+    drop [[com seanshubin]]
+    exclude []
+  }
+  allowedInCycle []
+  ignoreFiles
+  [
+    ../template-scala-web/gui/target/template-scala-web-gui-1.0-SNAPSHOT.jar
+  ]
+}

@@ -25,7 +25,8 @@ trait AfterConfigurationWiring {
     override def configurationWriter: ConfigurationWriter = AfterConfigurationWiring.this.configurationWriter
   }.reporter
   lazy val filesContract: FilesContract = FilesDelegate
-  lazy val directoryScanner: DirectoryScanner = new DirectoryScannerImpl(filesContract, searchPaths)
+  lazy val directoryScanner: DirectoryScanner =
+    new DirectoryScannerImpl(filesContract, searchPaths, ignoreFiles)
   lazy val stringToStandaloneFunction: String => Option[Standalone] = new StringToStandaloneFunction(
     level,
     startsWithInclude,
@@ -69,4 +70,6 @@ trait AfterConfigurationWiring {
   def allowedCycles: Seq[Seq[String]]
 
   def configurationWriter: ConfigurationWriter
+
+  def ignoreFiles: Seq[Path]
 }

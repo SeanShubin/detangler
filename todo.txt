@@ -1,3 +1,5 @@
+all by level
+jar ignore list
 enforce thresholds
 generate threshold config
 fully qualify entry points

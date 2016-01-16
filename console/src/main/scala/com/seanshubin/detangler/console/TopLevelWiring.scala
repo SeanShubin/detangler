@@ -31,6 +31,8 @@ trait TopLevelWiring {
 
       override def allowedCycles: Seq[Seq[String]] = configuration.allowedInCycle
 
+      override def ignoreFiles: Seq[Path] = configuration.ignoreFiles
+
       override def configurationWriter: ConfigurationWriter = new ConfigurationWriterDevon(configuration, devonMarshaller)
     }.analyzer
   lazy val launcher: Runnable = new TopLevelRunnerImpl(

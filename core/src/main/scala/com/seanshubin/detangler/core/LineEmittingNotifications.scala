@@ -15,6 +15,15 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller,
     exceptionLines(exception).foreach(emit)
   }
 
+  private def exceptionLines(ex: Throwable): Seq[String] = {
+    val stringWriter = new StringWriter()
+    val printWriter = new PrintWriter(stringWriter)
+    ex.printStackTrace(printWriter)
+    val s = stringWriter.toString
+    val lines = s.split( """\r\n|\r|\n""").toSeq
+    lines
+  }
+
   override def effectiveConfiguration(configuration: Configuration): Unit = {
     val devon = devonMarshaller.fromValue(configuration)
     val pretty = devonMarshaller.toPretty(devon)
@@ -41,20 +50,11 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller,
     }
   }
 
-  override def warnNoRelevantClassesInPath(path: Path): Unit = {
-    emit(s"no relevant classes found in $path")
-  }
-
   private def indent(indentLevel: Int): String = {
     "  " * indentLevel
   }
 
-  private def exceptionLines(ex: Throwable): Seq[String] = {
-    val stringWriter = new StringWriter()
-    val printWriter = new PrintWriter(stringWriter)
-    ex.printStackTrace(printWriter)
-    val s = stringWriter.toString
-    val lines = s.split( """\r\n|\r|\n""").toSeq
-    lines
+  override def warnNoRelevantClassesInPath(path: Path): Unit = {
+    emit(s"WARNING: no relevant classes found in $path, this probably warrants configuring your includes, excludes, or ignored files")
   }
 }
