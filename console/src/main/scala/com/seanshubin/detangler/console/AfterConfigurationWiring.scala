@@ -13,28 +13,14 @@ import com.seanshubin.detangler.timer.{Timer, TimerImpl}
 import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
 
 trait AfterConfigurationWiring {
-  def searchPaths: Seq[Path]
-
-  def reportDir: Path
-
-  def level: Int
-
-  def startsWithInclude: Seq[Seq[String]]
-
-  def startsWithExclude: Seq[Seq[String]]
-
-  def startsWithDrop: Seq[Seq[String]]
-
-  def allowedCycles: Seq[Seq[String]]
-
   lazy val emitLine: String => Unit = println
   lazy val clock: Clock = Clock.systemUTC()
-  lazy val createReporter: (Detangled, Path, Set[Standalone]) => Runnable = (theDetangled, theReportDir, theAllowedCycles) => new ReporterWiring {
+  lazy val createReporter: (Detangled, Path, Seq[Standalone]) => Runnable = (theDetangled, theReportDir, theAllowedCycles) => new ReporterWiring {
     override def detangled: Detangled = theDetangled
 
     override def reportDir: Path = theReportDir
 
-    override def allowedCycles: Set[Standalone] = theAllowedCycles
+    override def allowedCycles: Seq[Standalone] = theAllowedCycles
   }.reporter
   lazy val filesContract: FilesContract = FilesDelegate
   lazy val directoryScanner: DirectoryScanner = new DirectoryScannerImpl(filesContract, searchPaths)
@@ -65,4 +51,18 @@ trait AfterConfigurationWiring {
   lazy val detangler: Detangler = new DetanglerImpl(cycleFinder)
   lazy val analyzer: Runnable = new AfterConfigurationRunnerImpl(
     scanner, detangler, createReporter, reportDir, allowedCycles, stringToStandaloneFunction, timer)
+
+  def searchPaths: Seq[Path]
+
+  def reportDir: Path
+
+  def level: Int
+
+  def startsWithInclude: Seq[Seq[String]]
+
+  def startsWithExclude: Seq[Seq[String]]
+
+  def startsWithDrop: Seq[Seq[String]]
+
+  def allowedCycles: Seq[Seq[String]]
 }

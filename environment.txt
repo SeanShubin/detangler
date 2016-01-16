@@ -10,8 +10,8 @@
     exclude []
   }
   allowedInCycle [
-    [model Cycle]
     [model Standalone]
     [model Module]
+    [model Reason]
   ]
 }

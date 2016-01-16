@@ -6,14 +6,18 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-<fieldset class="table-of-contents">
-    <legend>dependency report</legend>
+<fieldset id="table-of-contents">
+    <legend>table of contents</legend>
     <ul>
         <li><a class="root" href="root-anchor">root-name</a></li>
+        <li><a href="#new-cycle-parts">new cycle parts</a></li>
+        <li><a href="#no-longer-part-of-cycle">no longer part of cycle</a></li>
+        <li><a href="#cycles">cycles</a></li>
+        <li><a href="#entry-points">entry points</a></li>
     </ul>
 </fieldset>
-<fieldset class="new-cycles">
-    <legend>new cycles</legend>
+<fieldset id="cycle-changes-template">
+    <legend class="caption">cycle changes</legend>
     <table>
         <thead>
         <tr>
@@ -35,7 +39,9 @@
         </tbody>
     </table>
 </fieldset>
-<fieldset class="cycles">
+<fieldset id="new-cycle-parts"></fieldset>
+<fieldset id="no-longer-part-of-cycle"></fieldset>
+<fieldset id="cycles">
     <legend>cycles</legend>
     <ul class="append-cycle">
         <li class="cycle">
@@ -55,7 +61,7 @@
         </li>
     </ul>
 </fieldset>
-<fieldset class="entry-points">
+<fieldset id="entry-points">
     <legend>entry points</legend>
     <ul>
         <li>

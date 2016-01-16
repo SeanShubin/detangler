@@ -28,7 +28,7 @@ object Prototype extends App {
     val graphTemplateRules: GraphTemplateRules = new GraphTemplateRulesImpl
     val graphGenerator: GraphGenerator = new GraphGeneratorImpl
     val createProcessBuilder: Seq[String] => ProcessBuilderContract = (command) => new ProcessBuilderDelegate(new ProcessBuilder(command: _*))
-    val allowedCycles:Set[Standalone] = Set()
+    val allowedCycles: Seq[Standalone] = Seq()
     val summaryTemplateRules: SummaryTemplateRules = new SummaryTemplateRulesImpl(detangled, allowedCycles)
     val reporter: Runnable = new Reporter(
       detangled,

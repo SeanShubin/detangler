@@ -9,12 +9,6 @@ import com.seanshubin.detangler.model.{Standalone, Detangled}
 import com.seanshubin.detangler.report._
 
 trait ReporterWiring {
-  def detangled: Detangled
-
-  def reportDir: Path
-
-  def allowedCycles:Set[Standalone]
-
   val filesContract: FilesContract = FilesDelegate
   val charset: Charset = StandardCharsets.UTF_8
   val classLoader: ClassLoaderContract = new ClassLoaderDelegate(getClass.getClassLoader)
@@ -43,4 +37,10 @@ trait ReporterWiring {
     graphTemplateRules,
     graphGenerator,
     createProcessBuilder)
+
+  def detangled: Detangled
+
+  def reportDir: Path
+
+  def allowedCycles: Seq[Standalone]
 }

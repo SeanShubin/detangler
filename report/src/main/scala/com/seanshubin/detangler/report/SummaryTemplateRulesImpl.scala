@@ -2,53 +2,62 @@ package com.seanshubin.detangler.report
 
 import com.seanshubin.detangler.model.{Cycle, Detangled, Standalone}
 
-class SummaryTemplateRulesImpl(detangled: Detangled, allowedCycles: Set[Standalone]) extends SummaryTemplateRules {
+class SummaryTemplateRulesImpl(detangled: Detangled, allowedCycles: Seq[Standalone]) extends SummaryTemplateRules {
   override def generate(template: HtmlElement, entryPoints: Seq[Standalone], cycles: Seq[Cycle]): HtmlElement = {
+    val empty = template.remove("#cycle-changes-template")
+    val cycleChangesTemplate = template.select("#cycle-changes-template")
     val tableOfContentsFragment = generateTableOfContents(template)
     val entryPointsFragment = generateEntryPoints(template, entryPoints)
     val cyclesFragment = generateCycles(template, cycles)
-    val newCyclesFragment = generateNewCycles(template, cycles)
-    template.
-      replaceOrRemove(".new-cycles", newCyclesFragment).
-      replace(".table-of-contents", tableOfContentsFragment).
-      replace(".entry-points", entryPointsFragment).
-      replace(".cycles", cyclesFragment)
+    val cycleParts = cycles.flatMap(_.parts)
+    val newCycleParts = cycleParts.filterNot(allowedCycles.contains)
+    val noLongerCycleParts = allowedCycles.filterNot(cycleParts.contains)
+    val newCyclesFragment = generateChangedCycles(cycleChangesTemplate, "new cycle parts", newCycleParts)
+    val removedCyclesFragment = generateChangedCycles(cycleChangesTemplate, "no longer part of cycle", noLongerCycleParts)
+    empty.
+      replaceOrRemove("#new-cycle-parts", newCyclesFragment).
+      replaceOrRemove("#no-longer-part-of-cycle", removedCyclesFragment).
+      replace("#table-of-contents", tableOfContentsFragment).
+      replace("#entry-points", entryPointsFragment).
+      replace("#cycles", cyclesFragment)
   }
 
   private def generateTableOfContents(template: HtmlElement): HtmlElement = {
-    val tableOfContentsFragment = template.select(".table-of-contents")
+    val tableOfContentsFragment = template.select("#table-of-contents")
     val rootLink = HtmlRender.reportPageLink(Standalone.Root)
     val rootName = HtmlRender.reportPageLinkName(Standalone.Root)
     tableOfContentsFragment.anchor(".root", rootLink, rootName)
   }
 
-  private def generateNewCycles(template: HtmlElement, cycles: Seq[Cycle]): Option[HtmlElement] = {
-    val newCycleParts = cycles.flatMap(_.parts).filterNot(allowedCycles.contains)
-    if(newCycleParts.isEmpty){
+  private def generateChangedCycles(template: HtmlElement, caption: String, cycleParts: Seq[Standalone]): Option[HtmlElement] = {
+    if (cycleParts.isEmpty) {
       None
     } else{
-      val emptyTemplate = template.select(".new-cycles").remove(".new-cycle-part")
+      val emptyTemplate = template.remove(".new-cycle-part")
       val rowTemplate = template.select(".new-cycle-part")
       def generateNewCycleFunction(standalone: Standalone): HtmlElement = generateNewCycle(rowTemplate, standalone)
-      val fragments = newCycleParts.map(generateNewCycleFunction)
-      val cyclesFragment = emptyTemplate.append(".append-new-cycle-part", fragments)
+      val fragments = cycleParts.map(generateNewCycleFunction)
+      val cyclesFragment = emptyTemplate.append(".append-new-cycle-part", fragments).text(".caption", caption)
       Some(cyclesFragment)
     }
   }
 
   private def generateNewCycle(template: HtmlElement, standalone: Standalone): HtmlElement = {
-    val cycle = detangled.partOfCycle(standalone).get
-    template.
-      attr(".cycle-link", "href", HtmlRender.absoluteModuleLink(cycle)).
+    val a = template.
       anchor(".name", HtmlRender.absoluteModuleLink(standalone), HtmlRender.standaloneLinkQualifiedName(standalone)).
       text(".depth", detangled.depth(standalone).toString).
       text(".breadth", detangled.breadth(standalone).toString).
       text(".transitive", detangled.transitive(standalone).toString).
       anchor(".graph", HtmlRender.graphLink(standalone.parent), HtmlRender.graphLinkName(standalone.parent))
+    val b = detangled.partOfCycle(standalone) match {
+      case Some(cycle) => a.attr(".cycle-link", "href", HtmlRender.absoluteModuleLink(cycle))
+      case None => a.remove(".cycle-link")
+    }
+    b
   }
 
   private def generateCycles(template: HtmlElement, cycles: Seq[Cycle]): HtmlElement = {
-    val emptyCyclesFragment = template.select(".cycles").remove(".cycle")
+    val emptyCyclesFragment = template.select("#cycles").remove(".cycle")
     val cycleTemplate = template.select(".cycle")
     def generateCycleFunction(cycle: Cycle): HtmlElement = generateCycle(cycleTemplate, cycle)
     val cycleFragments = cycles.map(generateCycleFunction)
@@ -84,7 +93,7 @@ class SummaryTemplateRulesImpl(detangled: Detangled, allowedCycles: Set[Standalo
   }
 
   private def generateEntryPoints(template: HtmlElement, entryPoints: Seq[Standalone]): HtmlElement = {
-    val emptyEntryPointsFragment = template.select(".entry-points").remove(".entry-point")
+    val emptyEntryPointsFragment = template.select("#entry-points").remove(".entry-point")
     val entryPointTemplate = template.select(".entry-point")
     val entryPointsFragment = emptyEntryPointsFragment.append(
       ".append-entry-point", generateEntryPointElements(entryPointTemplate, entryPoints))
