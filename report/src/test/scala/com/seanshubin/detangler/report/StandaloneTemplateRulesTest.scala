@@ -20,15 +20,15 @@ class StandaloneTemplateRulesTest extends FunSuite {
   test("standalone") {
     //given
     val dependsOnTemplateRules = new DependencyTemplateRules {
-      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): QuantityAndElement = {
+      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): Option[HtmlElement] = {
         val element = HtmlElement.fragmentFromString(s"<p>depends on ${standalone.toString}</p>")
-        QuantityAndElement(1, element)
+        Some(element)
       }
     }
     val dependedOnByTemplateRules = new DependencyTemplateRules {
-      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): QuantityAndElement = {
+      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): Option[HtmlElement] = {
         val element = HtmlElement.fragmentFromString(s"<p>depended on by ${standalone.toString}</p>")
-        QuantityAndElement(1, element)
+        Some(element)
       }
     }
     val standaloneTemplate = HtmlElement.fragmentFromString(standaloneTemplateText)
@@ -50,16 +50,15 @@ class StandaloneTemplateRulesTest extends FunSuite {
   test("no depends on") {
     //given
     val dependsOnTemplateRules = new DependencyTemplateRules {
-      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): QuantityAndElement = {
-        val element = HtmlElement.fragmentFromString(s"<p>depends on ${standalone.toString}</p>")
-        QuantityAndElement(0, element)
+      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): Option[HtmlElement] = {
+        None
       }
 
     }
     val dependedOnByTemplateRules = new DependencyTemplateRules {
-      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): QuantityAndElement = {
+      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): Option[HtmlElement] = {
         val element = HtmlElement.fragmentFromString(s"<p>depended on by ${standalone.toString}</p>")
-        QuantityAndElement(1, element)
+        Some(element)
       }
     }
     val standaloneTemplate = HtmlElement.fragmentFromString(standaloneTemplateText)
@@ -80,16 +79,15 @@ class StandaloneTemplateRulesTest extends FunSuite {
   test("no depended on by") {
     //given
     val dependsOnTemplateRules = new DependencyTemplateRules {
-      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): QuantityAndElement = {
+      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): Option[HtmlElement] = {
         val element = HtmlElement.fragmentFromString(s"<p>depends on ${standalone.toString}</p>")
-        QuantityAndElement(1, element)
+        Some(element)
       }
 
     }
     val dependedOnByTemplateRules = new DependencyTemplateRules {
-      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): QuantityAndElement = {
-        val element = HtmlElement.fragmentFromString(s"<p>depended on by ${standalone.toString}</p>")
-        QuantityAndElement(0, element)
+      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): Option[HtmlElement] = {
+        None
       }
     }
     val standaloneTemplate = HtmlElement.fragmentFromString(standaloneTemplateText)
@@ -110,16 +108,15 @@ class StandaloneTemplateRulesTest extends FunSuite {
   test("no dependencies") {
     //given
     val dependsOnTemplateRules = new DependencyTemplateRules {
-      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): QuantityAndElement = {
-        val element = HtmlElement.fragmentFromString(s"<p>depends on ${standalone.toString}</p>")
-        QuantityAndElement(0, element)
+      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): Option[HtmlElement] = {
+        None
       }
 
     }
     val dependedOnByTemplateRules = new DependencyTemplateRules {
-      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): QuantityAndElement = {
+      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): Option[HtmlElement] = {
         val element = HtmlElement.fragmentFromString(s"<p>depended on by ${standalone.toString}</p>")
-        QuantityAndElement(0, element)
+        None
       }
     }
     val standaloneTemplate = HtmlElement.fragmentFromString(standaloneTemplateText)

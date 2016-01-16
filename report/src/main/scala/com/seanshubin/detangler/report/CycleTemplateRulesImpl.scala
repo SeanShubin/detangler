@@ -16,8 +16,8 @@ class CycleTemplateRulesImpl(detangled: Detangled,
     val dependedOnBy = dependedOnByTemplateRules.generate(dependencyTemplate, context, cycle)
     val a = baseTemplate.replace(".cycle-summary", cycleSummary)
     val b = a.replace(".cycle-detail", cycleDetail)
-    val c = replaceIfPositiveQuantity(".cycle-depends-on", b, dependsOn)
-    val d = replaceIfPositiveQuantity(".cycle-depended-on-by", c, dependedOnBy)
+    val c = b.replaceOrRemove(".cycle-depends-on", dependsOn)
+    val d = c.replaceOrRemove(".cycle-depended-on-by", dependedOnBy)
     d
   }
 
@@ -42,14 +42,5 @@ class CycleTemplateRulesImpl(detangled: Detangled,
     val link = HtmlRender.moduleLink(context, part)
     val name = HtmlRender.moduleLinkName(part)
     cyclePartTemplate.anchor(".name", link, name)
-  }
-
-  private def replaceIfPositiveQuantity(cssQuery: String, base: HtmlElement, quantityAndElement: QuantityAndElement): HtmlElement = {
-    val QuantityAndElement(quantity, element) = quantityAndElement
-    if (quantity == 0) {
-      base.remove(cssQuery)
-    } else {
-      base.replace(cssQuery, element)
-    }
   }
 }

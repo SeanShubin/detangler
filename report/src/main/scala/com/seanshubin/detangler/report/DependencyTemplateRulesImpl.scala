@@ -5,16 +5,20 @@ import com.seanshubin.detangler.model.{Cycle, Detangled, Module, Standalone}
 class DependencyTemplateRulesImpl(detangled: Detangled, dependencyDirection: DependencyDirection) extends DependencyTemplateRules {
   override def generate(dependencyTemplate: HtmlElement,
                         context: Standalone,
-                        module: Module): QuantityAndElement = {
+                        module: Module): Option[HtmlElement] = {
     val baseTemplate = dependencyTemplate.remove(".standalone-dependency-row")
     val dependencyRowTemplate = dependencyTemplate.select(".standalone-dependency-row")
     val childModules = dependencyDirection.dependenciesFor(detangled, module)
-    def generateRowFunction(x: Standalone) = generateRow(dependencyRowTemplate, context, module, x)
-    val rows = childModules.map(generateRowFunction)
-    val result = baseTemplate.
-      text(".caption", s"${dependencyDirection.caption} (${childModules.size})").
-      append(".standalone-append-dependency-row", rows)
-    QuantityAndElement(childModules.size, result)
+    if (childModules.isEmpty) {
+      None
+    } else {
+      def generateRowFunction(x: Standalone) = generateRow(dependencyRowTemplate, context, module, x)
+      val rows = childModules.map(generateRowFunction)
+      val result = baseTemplate.
+        text(".caption", s"${dependencyDirection.caption} (${childModules.size})").
+        append(".standalone-append-dependency-row", rows)
+      Some(result)
+    }
   }
 
   private def generateRow(dependencyRowTemplate: HtmlElement, context: Standalone, parentModule: Module, child: Standalone): HtmlElement = {

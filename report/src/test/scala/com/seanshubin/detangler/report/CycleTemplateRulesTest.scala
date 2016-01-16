@@ -12,15 +12,15 @@ class CycleTemplateRulesTest extends FunSuite {
   test("cycle") {
     //given
     val dependsOnTemplateRules = new DependencyTemplateRules {
-      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): QuantityAndElement = {
+      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): Option[HtmlElement] = {
         val element = HtmlElement.fragmentFromString(s"<p>depends on ${standalone.toString}</p>")
-        QuantityAndElement(1, element)
+        Some(element)
       }
     }
     val dependedOnByTemplateRules = new DependencyTemplateRules {
-      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): QuantityAndElement = {
+      override def generate(standaloneTemplate: HtmlElement, context: Standalone, standalone: Module): Option[HtmlElement] = {
         val element = HtmlElement.fragmentFromString(s"<p>depended on by ${standalone.toString}</p>")
-        QuantityAndElement(1, element)
+        Some(element)
       }
     }
     val detangled = SampleDataWithCycles.detangled

@@ -13,17 +13,8 @@ class StandaloneTemplateRulesImpl(standaloneSummaryTemplateRules: StandaloneSumm
     val dependsOn = dependsOnTemplateRules.generate(dependencyTemplate, context, standalone)
     val dependedOnBy = dependedOnByTemplateRules.generate(dependencyTemplate, context, standalone)
     val a = baseTemplate.replace(".standalone-summary", summary)
-    val b = replaceIfPositiveQuantity(".standalone-depends-on", a, dependsOn)
-    val c = replaceIfPositiveQuantity(".standalone-depended-on-by", b, dependedOnBy)
+    val b = a.replaceOrRemove(".standalone-depends-on", dependsOn)
+    val c = b.replaceOrRemove(".standalone-depended-on-by", dependedOnBy)
     c
-  }
-
-  private def replaceIfPositiveQuantity(cssQuery: String, base: HtmlElement, quantityAndElement: QuantityAndElement): HtmlElement = {
-    val QuantityAndElement(quantity, element) = quantityAndElement
-    if (quantity == 0) {
-      base.remove(cssQuery)
-    } else {
-      base.replace(cssQuery, element)
-    }
   }
 }
