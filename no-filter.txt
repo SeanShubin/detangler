@@ -1,11 +1,12 @@
 {
   reportDir generated/no-filter
-  searchPaths [
-    console/target/detangler.jar
-  ]
+  searchPaths [console/target/detangler.jar]
   level 3
-  startsWith {
-    include [[]]
-    drop [[]]
+  startsWith
+  {
+    include[]
+    exclude[]
+    drop[]
   }
+  allowedInCycle []
 }

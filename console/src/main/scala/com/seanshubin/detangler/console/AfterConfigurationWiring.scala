@@ -21,6 +21,8 @@ trait AfterConfigurationWiring {
     override def reportDir: Path = theReportDir
 
     override def allowedCycles: Seq[Standalone] = theAllowedCycles
+
+    override def configurationWriter: ConfigurationWriter = AfterConfigurationWiring.this.configurationWriter
   }.reporter
   lazy val filesContract: FilesContract = FilesDelegate
   lazy val directoryScanner: DirectoryScanner = new DirectoryScannerImpl(filesContract, searchPaths)
@@ -65,4 +67,6 @@ trait AfterConfigurationWiring {
   def startsWithDrop: Seq[Seq[String]]
 
   def allowedCycles: Seq[Seq[String]]
+
+  def configurationWriter: ConfigurationWriter
 }

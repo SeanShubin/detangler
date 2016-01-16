@@ -12,7 +12,7 @@ class AfterConfigurationRunnerImpl(scanner: Scanner,
                                    detangler: Detangler,
                                    createReporter: (Detangled, Path, Seq[Standalone]) => Runnable,
                                    reportDir: Path,
-                                   allowedCyclesAsStrings:Seq[Seq[String]],
+                                   allowedCyclesAsStrings: Seq[Seq[String]],
                                    stringToStandalone: String => Option[Standalone],
                                    timer: Timer) extends Runnable {
   override def run(): Unit = {

@@ -4,8 +4,9 @@ import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.Path
 
 import com.seanshubin.detangler.contract._
+import com.seanshubin.detangler.core.ConfigurationWriter
 import com.seanshubin.detangler.graphviz.{GraphGenerator, GraphGeneratorImpl}
-import com.seanshubin.detangler.model.{Standalone, Detangled}
+import com.seanshubin.detangler.model.{Detangled, Standalone}
 import com.seanshubin.detangler.report._
 
 trait ReporterWiring {
@@ -36,11 +37,15 @@ trait ReporterWiring {
     pageTemplateRules,
     graphTemplateRules,
     graphGenerator,
-    createProcessBuilder)
+    createProcessBuilder,
+    configurationWriter.configurationLines,
+    configurationWriter.configurationLinesAllowCycles)
 
   def detangled: Detangled
 
   def reportDir: Path
 
   def allowedCycles: Seq[Standalone]
+
+  def configurationWriter: ConfigurationWriter
 }

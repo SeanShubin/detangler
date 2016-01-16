@@ -6,11 +6,11 @@ class GraphGeneratorImpl extends GraphGenerator {
     val singleKeys = for {
       key <- sortedKeys
     } yield {
-        if (entryPoints.contains(key)) {
-          SingleEntryPointGenerator(key)
-        } else {
-          SingleGenerator(key)
-        }
+      if (entryPoints.contains(key)) {
+        SingleEntryPointGenerator(key)
+      } else {
+        SingleGenerator(key)
+      }
     }
     def addDependency(soFar: Accumulator, key: String): Accumulator = {
       val generators = for {

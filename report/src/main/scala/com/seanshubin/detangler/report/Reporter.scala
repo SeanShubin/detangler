@@ -19,11 +19,15 @@ class Reporter(detangled: Detangled,
                pageTemplateRules: PageTemplateRules,
                graphTemplateRules: GraphTemplateRules,
                graphGenerator: GraphGenerator,
-               createProcessBuilder: Seq[String] => ProcessBuilderContract) extends Runnable {
+               createProcessBuilder: Seq[String] => ProcessBuilderContract,
+               configurationLines: Seq[String],
+               allowCyclesConfigurationLines: Seq[Seq[String]] => Seq[String]) extends Runnable {
   override def run(): Unit = {
     filesContract.createDirectories(directory)
     copyResource("style.css", directory.resolve("style.css"))
     generateSummary()
+    generateConfiguration(configurationLines)
+    generateAllowCyclesConfiguration()
     generatePages(Standalone.Root)
   }
 
@@ -102,5 +106,21 @@ class Reporter(detangled: Detangled,
 
     val processBuilder = createProcessBuilder(command).directory(directory.toFile)
     processBuilder.start()
+  }
+
+  private def generateConfiguration(lines: Seq[String]): Unit = {
+    writeLines("effective-configuration.txt", lines)
+  }
+
+  private def generateAllowCyclesConfiguration(): Unit = {
+    val plainCycleParts = detangled.cycles().flatMap(_.parts).map(_.path)
+    val lines = allowCyclesConfigurationLines(plainCycleParts)
+    writeLines("allow-cycles-configuration.txt", lines)
+  }
+
+  private def writeLines(fileName: String, lines: Seq[String]): Unit = {
+    val javaLines = JavaConversions.asJavaIterable(lines)
+    val path = directory.resolve(fileName)
+    filesContract.write(path, javaLines, charset)
   }
 }

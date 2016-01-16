@@ -32,7 +32,7 @@ class SummaryTemplateRulesImpl(detangled: Detangled, allowedCycles: Seq[Standalo
   private def generateChangedCycles(template: HtmlElement, caption: String, cycleParts: Seq[Standalone]): Option[HtmlElement] = {
     if (cycleParts.isEmpty) {
       None
-    } else{
+    } else {
       val emptyTemplate = template.remove(".new-cycle-part")
       val rowTemplate = template.select(".new-cycle-part")
       def generateNewCycleFunction(standalone: Standalone): HtmlElement = generateNewCycle(rowTemplate, standalone)
