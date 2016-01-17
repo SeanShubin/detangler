@@ -6,6 +6,7 @@ import java.nio.file.Paths
 import com.seanshubin.detangler.collection.SetDifference
 import com.seanshubin.detangler.contract.ProcessBuilderContract
 import com.seanshubin.detangler.graphviz.GraphGenerator
+import com.seanshubin.detangler.model.Standalone
 import org.scalatest.FunSuite
 
 class ReporterTest extends FunSuite {
@@ -41,9 +42,12 @@ class ReporterTest extends FunSuite {
     val process = new ProcessStub
     val createProcessBuilder: Seq[String] => ProcessBuilderContract =
       (command) => new ProcessBuilderStub(command, process)
+    val allowedInCycles: Seq[Standalone] = Seq()
+    def notifyNewCycleParts(newCycleParts: Seq[Standalone]): Unit = {}
 
     val reporter: Runnable = new Reporter(
       SampleData.detangled,
+      allowedInCycles,
       path,
       filesStub,
       charset,
@@ -54,8 +58,8 @@ class ReporterTest extends FunSuite {
       graphGenerator,
       createProcessBuilder,
       configurationLines,
-      allowCyclesConfigurationLines
-    )
+      allowCyclesConfigurationLines,
+      notifyNewCycleParts)
 
     //when
     reporter.run()

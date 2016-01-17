@@ -3,7 +3,9 @@ package com.seanshubin.detangler.report
 import com.seanshubin.detangler.model.{Cycle, Detangled, Standalone}
 
 class SummaryTemplateRulesImpl(detangled: Detangled, allowedCycles: Seq[Standalone]) extends SummaryTemplateRules {
-  override def generate(template: HtmlElement, entryPoints: Seq[Standalone], cycles: Seq[Cycle]): HtmlElement = {
+  override def generate(template: HtmlElement): HtmlElement = {
+    val entryPoints = detangled.entryPoints()
+    val cycles = detangled.cycles()
     val empty = template.remove("#cycle-changes-template")
     val cycleChangesTemplate = template.select("#cycle-changes-template")
     val tableOfContentsFragment = generateTableOfContents(template)

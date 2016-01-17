@@ -15,7 +15,8 @@ import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
 trait AfterConfigurationWiring {
   lazy val emitLine: String => Unit = println
   lazy val clock: Clock = Clock.systemUTC()
-  lazy val createReporter: (Detangled, Path, Seq[Standalone]) => Runnable = (theDetangled, theReportDir, theAllowedCycles) => new ReporterWiring {
+  lazy val createReporter: (Detangled, Path, Seq[Standalone], Notifications) =>
+    Runnable = (theDetangled, theReportDir, theAllowedCycles, theNotifications) => new ReporterWiring {
     override def detangled: Detangled = theDetangled
 
     override def reportDir: Path = theReportDir
@@ -23,6 +24,8 @@ trait AfterConfigurationWiring {
     override def allowedCycles: Seq[Standalone] = theAllowedCycles
 
     override def configurationWriter: ConfigurationWriter = AfterConfigurationWiring.this.configurationWriter
+
+    override def notifications: Notifications = theNotifications
   }.reporter
   lazy val filesContract: FilesContract = FilesDelegate
   lazy val directoryScanner: DirectoryScanner =
@@ -53,7 +56,7 @@ trait AfterConfigurationWiring {
   lazy val cycleFinder: CycleFinder[Standalone] = new CycleFinderWarshall[Standalone]
   lazy val detangler: Detangler = new DetanglerImpl(cycleFinder)
   lazy val analyzer: Runnable = new AfterConfigurationRunnerImpl(
-    scanner, detangler, createReporter, reportDir, allowedCycles, stringToStandaloneFunction, timer)
+    scanner, detangler, createReporter, reportDir, allowedCycles, stringToStandaloneFunction, timer, notifications)
 
   def searchPaths: Seq[Path]
 

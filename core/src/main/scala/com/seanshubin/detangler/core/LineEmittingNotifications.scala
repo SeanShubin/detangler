@@ -4,6 +4,7 @@ import java.io.{PrintWriter, StringWriter}
 import java.nio.file.Path
 import java.time.Duration
 
+import com.seanshubin.detangler.model.Standalone
 import com.seanshubin.devon.core.devon.DevonMarshaller
 
 class LineEmittingNotifications(devonMarshaller: DevonMarshaller,
@@ -56,5 +57,15 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller,
 
   override def warnNoRelevantClassesInPath(path: Path): Unit = {
     emit(s"WARNING: no relevant classes found in $path, this probably warrants configuring your includes, excludes, or ignored files")
+  }
+
+  override def newCycleParts(cycleParts: Seq[Standalone]): Unit = {
+    if (cycleParts.isEmpty) {
+      emit("SUCCESS: no new cycles")
+    } else {
+      val cycleName = if (cycleParts.size == 1) "cycle" else "cycles"
+      emit(s"FAILURE: ${cycleParts.size} new $cycleName")
+      cycleParts.map(_.toString).foreach(emit)
+    }
   }
 }

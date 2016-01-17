@@ -11,6 +11,7 @@ import com.seanshubin.detangler.model.{Detangled, Standalone}
 import scala.collection.JavaConversions
 
 class Reporter(detangled: Detangled,
+               allowedCycles: Seq[Standalone],
                directory: Path,
                filesContract: FilesContract,
                charset: Charset,
@@ -21,7 +22,8 @@ class Reporter(detangled: Detangled,
                graphGenerator: GraphGenerator,
                createProcessBuilder: Seq[String] => ProcessBuilderContract,
                configurationLines: Seq[String],
-               allowCyclesConfigurationLines: Seq[Seq[String]] => Seq[String]) extends Runnable {
+               allowCyclesConfigurationLines: Seq[Seq[String]] => Seq[String],
+               notifyNewCycleParts: Seq[Standalone] => Unit) extends Runnable {
   override def run(): Unit = {
     filesContract.createDirectories(directory)
     copyResource("style.css", directory.resolve("style.css"))
@@ -29,6 +31,7 @@ class Reporter(detangled: Detangled,
     generateConfiguration(configurationLines)
     generateAllowCyclesConfiguration()
     generatePages(Standalone.Root)
+    shutdown()
   }
 
   def loadResource(name: String): InputStream = {
@@ -48,7 +51,7 @@ class Reporter(detangled: Detangled,
 
   private def generateSummary(): Unit = {
     val summaryTemplate = loadTemplate("summary.html")
-    val content = summaryTemplateRules.generate(summaryTemplate, detangled.entryPoints(), detangled.cycles()).toString
+    val content = summaryTemplateRules.generate(summaryTemplate).toString
     val fileName = HtmlRender.navigateHigherLink(Standalone.Root)
     val file = directory.resolve(fileName)
     filesContract.write(file, content.getBytes(charset))
@@ -122,5 +125,17 @@ class Reporter(detangled: Detangled,
     val javaLines = JavaConversions.asJavaIterable(lines)
     val path = directory.resolve(fileName)
     filesContract.write(path, javaLines, charset)
+  }
+
+  private def shutdown(): Unit = {
+    val cycles = detangled.cycles()
+    val cycleParts = cycles.flatMap(_.parts)
+    val newCycleParts = cycleParts.filterNot(allowedCycles.contains)
+    notifyNewCycleParts(newCycleParts)
+    if (newCycleParts.size == 1) {
+      throw new RuntimeException("1 new cycle part")
+    } else if (newCycleParts.nonEmpty) {
+      throw new RuntimeException(s"${newCycleParts.size} new cycle parts")
+    }
   }
 }

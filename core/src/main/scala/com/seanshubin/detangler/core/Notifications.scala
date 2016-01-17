@@ -3,6 +3,8 @@ package com.seanshubin.detangler.core
 import java.nio.file.Path
 import java.time.Duration
 
+import com.seanshubin.detangler.model.Standalone
+
 trait Notifications {
   def effectiveConfiguration(configuration: Configuration)
 
@@ -15,4 +17,6 @@ trait Notifications {
   def endTiming(caption: String, duration: Duration)
 
   def warnNoRelevantClassesInPath(path: Path)
+
+  def newCycleParts(cycleParts: Seq[Standalone])
 }

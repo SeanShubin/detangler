@@ -4,7 +4,7 @@ import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.Path
 
 import com.seanshubin.detangler.contract._
-import com.seanshubin.detangler.core.ConfigurationWriter
+import com.seanshubin.detangler.core.{ConfigurationWriter, Notifications}
 import com.seanshubin.detangler.graphviz.{GraphGenerator, GraphGeneratorImpl}
 import com.seanshubin.detangler.model.{Detangled, Standalone}
 import com.seanshubin.detangler.report._
@@ -29,6 +29,7 @@ trait ReporterWiring {
   val summaryTemplateRules: SummaryTemplateRules = new SummaryTemplateRulesImpl(detangled, allowedCycles)
   val reporter: Runnable = new Reporter(
     detangled,
+    allowedCycles,
     reportDir,
     filesContract,
     charset,
@@ -39,7 +40,8 @@ trait ReporterWiring {
     graphGenerator,
     createProcessBuilder,
     configurationWriter.configurationLines,
-    configurationWriter.configurationLinesAllowCycles)
+    configurationWriter.configurationLinesAllowCycles,
+    notifications.newCycleParts)
 
   def detangled: Detangled
 
@@ -48,4 +50,6 @@ trait ReporterWiring {
   def allowedCycles: Seq[Standalone]
 
   def configurationWriter: ConfigurationWriter
+
+  def notifications: Notifications
 }

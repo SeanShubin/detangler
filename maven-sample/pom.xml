@@ -19,6 +19,17 @@
                 <groupId>com.seanshubin.detangler</groupId>
                 <artifactId>detangler-maven-plugin</artifactId>
                 <version>${project.parent.version}</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <detanglerConfig>detangler.txt</detanglerConfig>
+                </configuration>
             </plugin>
         </plugins>
     </build>

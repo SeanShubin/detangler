@@ -3,6 +3,8 @@ package com.seanshubin.detangler.core
 import java.nio.file.Path
 import java.time.Duration
 
+import com.seanshubin.detangler.model.Standalone
+
 import scala.collection.mutable.ArrayBuffer
 
 class NotificationsStub extends Notifications {
@@ -23,4 +25,6 @@ class NotificationsStub extends Notifications {
   override def endTiming(caption: String, duration: Duration): Unit = ???
 
   override def warnNoRelevantClassesInPath(path: Path): Unit = ???
+
+  override def newCycleParts(cycleParts: Seq[Standalone]): Unit = ???
 }
