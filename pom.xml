@@ -24,6 +24,8 @@
         <module>collection</module>
         <module>graphviz</module>
         <module>timer</module>
+        <module>maven-plugin</module>
+        <module>maven-sample</module>
     </modules>
     <repositories>
         <repository>
