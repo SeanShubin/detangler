@@ -11,7 +11,7 @@
     <dependencies>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-core</artifactId>
+            <artifactId>detangler-console</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

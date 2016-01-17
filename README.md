@@ -44,3 +44,24 @@ Here is how they would be broken down into levels
 | com.seanshubin | detangler | root-of-detangler | Metrics               |
 | com.seanshubin | -root-    | -root-            | CollectionUtil        |
 
+
+# Running from maven
+
+In the file maven-sample/pom.xml
+```xml
+<project>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.seanshubin.detangler</groupId>
+                <artifactId>detangler-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+
+At the console
+```text
+mvn -f maven-sample/ detangler:report -DdetanglerConfig=detangler.txt
+```

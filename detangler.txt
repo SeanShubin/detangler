@@ -1,5 +1,5 @@
 {
-  reportDir generated/self
+  reportDir generated/detangler/
   searchPaths [
     console/target/detangler.jar
   ]
