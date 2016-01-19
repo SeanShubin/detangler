@@ -36,6 +36,8 @@ class AfterConfigurationRunnerImpl(scanner: Scanner,
     reportResult match {
       case ReportResult.Failure(message) =>
         throw new RuntimeException(message)
+      case ReportResult.Success =>
+      //do nothing
     }
   }
 
