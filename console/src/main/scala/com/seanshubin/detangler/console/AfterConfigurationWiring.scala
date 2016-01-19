@@ -8,6 +8,7 @@ import com.seanshubin.detangler.bytecode.{ClassParser, ClassParserImpl}
 import com.seanshubin.detangler.contract.{FilesContract, FilesDelegate}
 import com.seanshubin.detangler.core._
 import com.seanshubin.detangler.model.{Detangled, Standalone}
+import com.seanshubin.detangler.report.ReportResult
 import com.seanshubin.detangler.scanner._
 import com.seanshubin.detangler.timer.{Timer, TimerImpl}
 import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
@@ -16,7 +17,7 @@ trait AfterConfigurationWiring {
   lazy val emitLine: String => Unit = println
   lazy val clock: Clock = Clock.systemUTC()
   lazy val createReporter: (Detangled, Path, Seq[Standalone], Notifications) =>
-    Runnable = (theDetangled, theReportDir, theAllowedCycles, theNotifications) => new ReporterWiring {
+    () => ReportResult = (theDetangled, theReportDir, theAllowedCycles, theNotifications) => new ReporterWiring {
     override def detangled: Detangled = theDetangled
 
     override def reportDir: Path = theReportDir

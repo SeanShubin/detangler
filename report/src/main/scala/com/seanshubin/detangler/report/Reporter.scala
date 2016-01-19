@@ -23,8 +23,9 @@ class Reporter(detangled: Detangled,
                createProcessBuilder: Seq[String] => ProcessBuilderContract,
                configurationLines: Seq[String],
                allowCyclesConfigurationLines: Seq[Seq[String]] => Seq[String],
-               notifyNewCycleParts: Seq[Standalone] => Unit) extends Runnable {
-  override def run(): Unit = {
+               notifyNewCycleParts: Seq[Standalone] => Unit) extends (() => ReportResult) {
+
+  override def apply(): ReportResult = {
     filesContract.createDirectories(directory)
     copyResource("style.css", directory.resolve("style.css"))
     generateSummary()
@@ -127,15 +128,17 @@ class Reporter(detangled: Detangled,
     filesContract.write(path, javaLines, charset)
   }
 
-  private def shutdown(): Unit = {
+  private def shutdown(): ReportResult = {
     val cycles = detangled.cycles()
     val cycleParts = cycles.flatMap(_.parts)
     val newCycleParts = cycleParts.filterNot(allowedCycles.contains)
     notifyNewCycleParts(newCycleParts)
     if (newCycleParts.size == 1) {
-      throw new RuntimeException("1 new cycle part")
+      ReportResult.Failure("1 new cycle part")
     } else if (newCycleParts.nonEmpty) {
-      throw new RuntimeException(s"${newCycleParts.size} new cycle parts")
+      ReportResult.Failure(s"${newCycleParts.size} new cycle parts")
+    } else {
+      ReportResult.Success
     }
   }
 }

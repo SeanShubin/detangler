@@ -45,7 +45,7 @@ class ReporterTest extends FunSuite {
     val allowedInCycles: Seq[Standalone] = Seq()
     def notifyNewCycleParts(newCycleParts: Seq[Standalone]): Unit = {}
 
-    val reporter: Runnable = new Reporter(
+    val reporter: () => ReportResult = new Reporter(
       SampleData.detangled,
       allowedInCycles,
       path,
@@ -62,7 +62,7 @@ class ReporterTest extends FunSuite {
       notifyNewCycleParts)
 
     //when
-    reporter.run()
+    reporter.apply()
 
     //then
     val setDifference = SetDifference.diff(filesStub.fileNames(), Set(
