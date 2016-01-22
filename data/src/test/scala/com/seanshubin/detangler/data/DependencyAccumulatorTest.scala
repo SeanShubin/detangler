@@ -14,32 +14,32 @@ class DependencyAccumulatorTest extends FunSuite {
   }
 
   test("add one item") {
-    val accumulator = DependencyAccumulator.empty[Seq[String]]().addValues(classF, Seq(classG))
+    val accumulator = DependencyAccumulator.empty[Seq[String]]().addValues(classF, Set(classG))
     assert(accumulator.dependencies === Map(classF -> Set(classG), classG -> Set()))
   }
 
   test("do not depend on self") {
-    val accumulator = DependencyAccumulator.empty[Seq[String]]().addValues(classF, Seq(classF))
+    val accumulator = DependencyAccumulator.empty[Seq[String]]().addValues(classF, Set(classF))
     assert(accumulator.dependencies === Map(classF -> Set()))
   }
 
   test("remove duplicates") {
-    val accumulator = DependencyAccumulator.empty[Seq[String]]().addValues(classF, Seq(classG, classG)).addValues(classF, Seq(classG, classG))
+    val accumulator = DependencyAccumulator.empty[Seq[String]]().addValues(classF, Set(classG, classG)).addValues(classF, Set(classG, classG))
     assert(accumulator.dependencies === Map(classF -> Set(classG), classG -> Set()))
   }
 
   test("add item without dependencies") {
-    val collector = DependencyAccumulator.empty[Seq[String]]().addValues(classF, Seq())
+    val collector = DependencyAccumulator.empty[Seq[String]]().addValues(classF, Set())
     assert(collector.dependencies === Map(classF -> Set()))
   }
 
   test("from iterator") {
-    val rawDataSeq: Seq[(Seq[String], Seq[Seq[String]])] = Seq(
-      classF -> Seq(classG),
-      classF -> Seq(classH),
-      classF -> Seq(classI)
+    val rawDataSeq: Seq[(Seq[String], Set[Seq[String]])] = Seq(
+      classF -> Set(classG),
+      classF -> Set(classH),
+      classF -> Set(classI)
     )
-    val accumulator = DependencyAccumulator.fromIterable(rawDataSeq)
+    val accumulator = DependencyAccumulator.fromIterable(rawDataSeq.map(Seq(_).toMap))
     assert(accumulator.dependencies === Map(
       classF -> Set(classG, classH, classI),
       classG -> Set(),

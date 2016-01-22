@@ -11,14 +11,14 @@ class ZipScannerImpl(files: FilesContract,
                      isCompressed: String => Boolean,
                      acceptName: String => Boolean,
                      warnNoRelevantClassesInPath: Path => Unit) extends ZipScanner {
-  override def loadBytes(path: Path): Iterable[Seq[Byte]] = {
+  override def loadBytes(path: Path): Iterable[ScannedBytes] = {
     withInputStream(path) { inputStream =>
       val iterator = new ZipContentsIterator(inputStream, path.toString, isCompressed, acceptEntry)
       val bytesIterable = iterator.filter(zipContentsRelevant).map(_.bytes.toSeq).toIterable
       if (bytesIterable.isEmpty) {
         warnNoRelevantClassesInPath(path)
       }
-      reifyBeforeStreamCloses(bytesIterable)
+      reifyBeforeStreamCloses(path, bytesIterable)
     }
   }
 
@@ -26,8 +26,8 @@ class ZipScannerImpl(files: FilesContract,
     FileTypes.isClass(zipContents.zipEntry.getName)
   }
 
-  private def reifyBeforeStreamCloses(x: Iterable[Seq[Byte]]): Iterable[Seq[Byte]] = {
-    x.toIndexedSeq
+  private def reifyBeforeStreamCloses(path:Path, x: Iterable[Seq[Byte]]): Iterable[ScannedBytes] = {
+    x.map(ScannedBytes(path.toString, _)).toIndexedSeq
   }
 
   private def withInputStream[T](path: Path)(f: InputStream => T): T = {

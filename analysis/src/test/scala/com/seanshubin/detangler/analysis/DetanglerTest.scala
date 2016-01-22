@@ -19,15 +19,15 @@ class DetanglerTest extends FunSuite {
     val j = Standalone(Seq("j"))
     val k = Standalone(Seq("k"))
     val accumulator = DependencyAccumulator.empty[Standalone]().
-      addValues(a, Seq(b)).
-      addValues(b, Seq(c, d)).
-      addValues(d, Seq(e)).
-      addValues(e, Seq(f, g)).
-      addValues(f, Seq(d)).
-      addValues(g, Seq(h)).
-      addValues(h, Seq(g, i)).
-      addValues(i, Seq(j)).
-      addValues(k, Seq())
+      addValues(a, Set(b)).
+      addValues(b, Set(c, d)).
+      addValues(d, Set(e)).
+      addValues(e, Set(f, g)).
+      addValues(f, Set(d)).
+      addValues(g, Set(h)).
+      addValues(h, Set(g, i)).
+      addValues(i, Set(j)).
+      addValues(k, Set())
     val cycleDEF = Cycle(Set(d, e, f))
     val cycleGH = Cycle(Set(g, h))
     val expectedModules: Set[Module] = Set(a, b, cycleDEF, d, e, f, cycleGH, g, h, i, c, j, k)
@@ -67,7 +67,7 @@ class DetanglerTest extends FunSuite {
     val classI = Standalone(Seq("group/b", "package/e", "class/i"))
 
     val accumulator = DependencyAccumulator.empty[Standalone]().
-      addValues(classF, Seq(classG, classH, classI))
+      addValues(classF, Set(classG, classH, classI))
 
     val cycleFinder = new CycleFinderWarshall[Standalone]
     val detangler = new DetanglerImpl(cycleFinder)
@@ -121,10 +121,10 @@ class DetanglerTest extends FunSuite {
     val classFG = Cycle(Set(classF, classG))
 
     val accumulator = DependencyAccumulator.empty[Standalone]().
-      addValues(classF, Seq(classG, classH, classI)).
-      addValues(classG, Seq(classF)).
-      addValues(classH, Seq(classF)).
-      addValues(classI, Seq(classF))
+      addValues(classF, Set(classG, classH, classI)).
+      addValues(classG, Set(classF)).
+      addValues(classH, Set(classF)).
+      addValues(classI, Set(classF))
 
     val cycleFinder = new CycleFinderWarshall[Standalone]
     val detangler = new DetanglerImpl(cycleFinder)

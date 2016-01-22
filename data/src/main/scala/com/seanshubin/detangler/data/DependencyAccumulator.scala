@@ -1,13 +1,21 @@
 package com.seanshubin.detangler.data
 
 case class DependencyAccumulator[T](dependencies: Map[T, Set[T]]) {
-  def addValues(target: T, dependsOn: Seq[T]): DependencyAccumulator[T] = {
+  def addValues(target: T, dependsOn: Set[T]): DependencyAccumulator[T] = {
     if (dependencies.contains(target)) {
       def addParameterValue(soFar: DependencyAccumulator[T], parameterValue: T) = soFar.addValue(target, parameterValue)
       dependsOn.foldLeft(this)(addParameterValue)
     } else {
       addKey(target).addValues(target, dependsOn)
     }
+  }
+
+  def addValues(map:Map[T, Set[T]]): DependencyAccumulator[T] = {
+    def addMapEntry(accumulator: DependencyAccumulator[T], entry:(T, Set[T])):DependencyAccumulator[T] ={
+      val (target, dependsOn) = entry
+      accumulator.addValues(target, dependsOn)
+    }
+    map.toSeq.foldLeft(this)(addMapEntry)
   }
 
   def transpose(): DependencyAccumulator[T] = {
@@ -47,13 +55,12 @@ object DependencyAccumulator {
     empty
   }
 
-  def fromIterable[T](iterable: Iterable[(T, Seq[T])]): DependencyAccumulator[T] = {
-    def addEntry(accumulator: DependencyAccumulator[T], entry: (T, Seq[T])): DependencyAccumulator[T] = {
-      val (key, values) = entry
-      accumulator.addValues(key, values)
+  def fromIterable[T](iterable: Iterable[Map[T, Set[T]]]): DependencyAccumulator[T] = {
+    def addMap(accumulator: DependencyAccumulator[T], map: Map[T, Set[T]]): DependencyAccumulator[T] = {
+      accumulator.addValues(map)
     }
     val emptyMap: Map[T, Set[T]] = Map()
     val empty: DependencyAccumulator[T] = DependencyAccumulator(emptyMap)
-    iterable.foldLeft(empty)(addEntry)
+    iterable.foldLeft(empty)(addMap)
   }
 }

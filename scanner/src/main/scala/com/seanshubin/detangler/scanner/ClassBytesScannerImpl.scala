@@ -5,9 +5,11 @@ import java.io.{ByteArrayInputStream, DataInputStream}
 import com.seanshubin.detangler.bytecode.ClassParser
 
 class ClassBytesScannerImpl(classParser: ClassParser) extends ClassBytesScanner {
-  override def parseDependencies(classBytes: Seq[Byte]): (String, Seq[String]) = {
-    val byteArrayInputStream = new ByteArrayInputStream(classBytes.toArray)
+  override def parseDependencies(scannedBytes: ScannedBytes): ScannedDependencies = {
+    val byteArrayInputStream = new ByteArrayInputStream(scannedBytes.bytes.toArray)
     val dataInput = new DataInputStream(byteArrayInputStream)
-    classParser.parseClassDependencies(dataInput)
+    val (name, dependencies) = classParser.parseClassDependencies(dataInput)
+    val sourceName = scannedBytes.sourceName
+    ScannedDependencies(sourceName, name , dependencies)
   }
 }

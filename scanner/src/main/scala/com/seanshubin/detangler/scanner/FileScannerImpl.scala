@@ -7,7 +7,7 @@ import com.seanshubin.detangler.timer.Timer
 class FileScannerImpl(zipScanner: ZipScanner,
                       classScanner: ClassScanner,
                       timer: Timer) extends FileScanner {
-  override def loadBytes(jarOrClass: Path): Iterable[Seq[Byte]] = {
+  override def loadBytes(jarOrClass: Path): Iterable[ScannedBytes] = {
     if (FileTypes.isCompressed(jarOrClass.toString)) {
       timer.measureTime(s"scan compressed file $jarOrClass") {
         zipScanner.loadBytes(jarOrClass)

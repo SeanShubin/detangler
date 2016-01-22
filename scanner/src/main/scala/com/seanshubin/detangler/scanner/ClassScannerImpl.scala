@@ -5,5 +5,7 @@ import java.nio.file.Path
 import com.seanshubin.detangler.contract.FilesContract
 
 class ClassScannerImpl(files: FilesContract) extends ClassScanner {
-  override def loadBytes(path: Path): Iterable[Seq[Byte]] = Seq(files.readAllBytes(path))
+  override def loadBytes(path: Path): Iterable[ScannedBytes] = {
+    Seq(ScannedBytes(path.toString, files.readAllBytes(path)))
+  }
 }
