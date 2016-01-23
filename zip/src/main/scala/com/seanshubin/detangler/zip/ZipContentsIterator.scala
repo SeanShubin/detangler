@@ -83,7 +83,7 @@ class ZipContentsIterator(inputStream: InputStream,
       }
     } else {
       if (entry.isDirectory) {
-        moveCursorForward()
+        maybeNextEntry = Some(entry)
       } else if (isZip(entry.getName)) {
         val zipInputStream = new ZipInputStream(latestZipInputStream)
         path = History(entry.getName, zipInputStream) :: path
