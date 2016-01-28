@@ -6,19 +6,19 @@ class GraphGeneratorImpl extends GraphGenerator {
     val singleKeys = for {
       key <- sortedKeys
     } yield {
-      if (entryPoints.contains(key)) {
-        SingleEntryPointGenerator(key)
-      } else {
-        SingleGenerator(key)
+        if (entryPoints.contains(key)) {
+          SingleEntryPointGenerator(key)
+        } else {
+          SingleGenerator(key)
+        }
       }
-    }
     def addDependency(soFar: Accumulator, key: String): Accumulator = {
       val generators = for {
         value <- dependsOn(key).toSeq.sorted
         if !cycles.getOrElse(key, Set()).contains(value)
       } yield {
-        DependencyGenerator(key, value)
-      }
+          DependencyGenerator(key, value)
+        }
       val generatorsInCycle: Option[CycleGenerator] =
         if (cycles.contains(key) && !cycles(key).exists(soFar.alreadyProcessed.contains)) {
           val cycle = cycles(key)
@@ -29,8 +29,8 @@ class GraphGeneratorImpl extends GraphGenerator {
             value <- values.toSeq.sorted
             if cycles(key).contains(value)
           } yield {
-            (cycleKey, value)
-          }
+              (cycleKey, value)
+            }
           Some(CycleGenerator(sortedCycleKeys.head, parts))
         } else {
           None
@@ -68,8 +68,8 @@ class GraphGeneratorImpl extends GraphGenerator {
       val dependencies = for {
         (key, value) <- parts
       } yield {
-        s"""    "$key" -> "$value";"""
-      }
+          s"""    "$key" -> "$value";"""
+        }
       Seq(
         s"""  subgraph "cluster_$name" {""",
         "    penwidth=2;",
