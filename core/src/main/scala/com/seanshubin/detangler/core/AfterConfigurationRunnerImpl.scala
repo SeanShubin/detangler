@@ -16,7 +16,8 @@ class AfterConfigurationRunnerImpl(scanner: Scanner,
                                    allowedCyclesAsStrings: Seq[Seq[String]],
                                    stringToStandalone: String => Option[Standalone],
                                    timer: Timer,
-                                   notifications: Notifications) extends Runnable {
+                                   notifications: Notifications,
+                                   canFailBuild: Boolean) extends Runnable {
   override def run(): Unit = {
     val reportResult: ReportResult = timer.measureTime("total") {
       val stringDependencies = timer.measureTime("scanner")(scanner.scanDependencies())
@@ -35,7 +36,9 @@ class AfterConfigurationRunnerImpl(scanner: Scanner,
     }
     reportResult match {
       case ReportResult.Failure(message) =>
-        throw new RuntimeException(message)
+        if (canFailBuild) {
+          throw new RuntimeException(message)
+        }
       case ReportResult.Success =>
       //do nothing
     }

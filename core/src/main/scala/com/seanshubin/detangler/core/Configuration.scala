@@ -2,7 +2,9 @@ package com.seanshubin.detangler.core
 
 import java.nio.file.{Path, Paths}
 
-case class StartsWithConfiguration(include: Seq[Seq[String]], exclude: Seq[Seq[String]], drop: Seq[Seq[String]]) {
+case class StartsWithConfiguration(include: Seq[Seq[String]],
+                                   exclude: Seq[Seq[String]],
+                                   drop: Seq[Seq[String]]) {
   def replaceNullsWithDefaults(): StartsWithConfiguration = {
     val newInclude = Option(include).getOrElse(StartsWithConfiguration.Default.include)
     val newExclude = Option(exclude).getOrElse(StartsWithConfiguration.Default.exclude)
@@ -29,7 +31,8 @@ case class Configuration(reportDir: Path,
                          level: Option[Int],
                          startsWith: StartsWithConfiguration,
                          allowedInCycle: Seq[Seq[String]],
-                         ignoreFiles: Seq[Path]) {
+                         ignoreFiles: Seq[Path],
+                         canFailBuild: Option[Boolean]) {
   def replaceNullsWithDefaults(): Configuration = {
     val newReportDir = Option(reportDir).getOrElse(Configuration.Default.reportDir)
     val newSearchPaths = Option(searchPaths).getOrElse(Configuration.Default.searchPaths)
@@ -40,7 +43,18 @@ case class Configuration(reportDir: Path,
     val newStartsWith = Option(startsWith).getOrElse(Configuration.Default.startsWith).replaceNullsWithDefaults()
     val newAllowedInCycle = Option(allowedInCycle).getOrElse(Configuration.Default.allowedInCycle)
     val newIgnoreFiles = Option(ignoreFiles).getOrElse(Configuration.Default.ignoreFiles)
-    Configuration(newReportDir, newSearchPaths, newLevel, newStartsWith, newAllowedInCycle, newIgnoreFiles)
+    val newCanFailBuild = canFailBuild match {
+      case Some(_) => canFailBuild
+      case None => Configuration.Default.canFailBuild
+    }
+    Configuration(
+      newReportDir,
+      newSearchPaths,
+      newLevel,
+      newStartsWith,
+      newAllowedInCycle,
+      newIgnoreFiles,
+      newCanFailBuild)
   }
 }
 
@@ -51,7 +65,8 @@ object Configuration {
     level = Some(2),
     startsWith = StartsWithConfiguration.Default,
     allowedInCycle = Seq(),
-    ignoreFiles = Seq()
+    ignoreFiles = Seq(),
+    canFailBuild = Some(false)
   )
 
   val Sample = Configuration(
@@ -60,5 +75,6 @@ object Configuration {
     level = Some(3),
     startsWith = StartsWithConfiguration.Sample,
     allowedInCycle = Seq(Seq("branch"), Seq("tree"), Seq("leaf")),
-    ignoreFiles = Seq(Paths.get("ignore-file.jar")))
+    ignoreFiles = Seq(Paths.get("ignore-file.jar")),
+    canFailBuild = Some(true))
 }

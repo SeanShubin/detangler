@@ -2,7 +2,7 @@
 
 Analyzes dependency structure and cycles
 
-# Levels
+## Levels
 - there must be at least 1 level
 - the last level is always the class level
 - the second to last level is the package level
@@ -12,7 +12,7 @@ Analyzes dependency structure and cycles
     - placeholders will be created if necessary
 
 
-# 3 level example
+## 3 level example
 
 Suppose you had the following configuration
 
@@ -45,7 +45,7 @@ Here is how they would be broken down into levels
 | com.seanshubin | -root-    | -root-            | CollectionUtil        |
 
 
-# Running from maven
+## Running from maven
 
 In the file maven-sample/pom.xml
 ```xml

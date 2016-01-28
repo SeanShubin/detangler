@@ -34,6 +34,8 @@ trait TopLevelWiring {
       override def ignoreFiles: Seq[Path] = configuration.ignoreFiles
 
       override def configurationWriter: ConfigurationWriter = new ConfigurationWriterDevon(configuration, devonMarshaller)
+
+      override def canFailBuild: Boolean = configuration.canFailBuild.get
     }.analyzer
   lazy val launcher: Runnable = new TopLevelRunnerImpl(
     commandLineArguments, configurationFactory, createRunner, notifications)

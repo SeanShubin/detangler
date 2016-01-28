@@ -16,9 +16,9 @@ object MapUtilities {
     val newEntries = for {
       key <- allKeys
     } yield {
-        val mergedValues = left.getOrElse(key, Set()) ++ right.getOrElse(key, Set())
-        (key, mergedValues)
-      }
+      val mergedValues = left.getOrElse(key, Set()) ++ right.getOrElse(key, Set())
+      (key, mergedValues)
+    }
     newEntries.toMap
   }
 }

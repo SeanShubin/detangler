@@ -57,7 +57,15 @@ trait AfterConfigurationWiring {
   lazy val cycleFinder: CycleFinder[Standalone] = new CycleFinderWarshall[Standalone]
   lazy val detangler: Detangler = new DetanglerImpl(cycleFinder)
   lazy val analyzer: Runnable = new AfterConfigurationRunnerImpl(
-    scanner, detangler, createReporter, reportDir, allowedCycles, stringToStandaloneFunction, timer, notifications)
+    scanner,
+    detangler,
+    createReporter,
+    reportDir,
+    allowedCycles,
+    stringToStandaloneFunction,
+    timer,
+    notifications,
+    canFailBuild)
 
   def searchPaths: Seq[Path]
 
@@ -76,4 +84,6 @@ trait AfterConfigurationWiring {
   def configurationWriter: ConfigurationWriter
 
   def ignoreFiles: Seq[Path]
+
+  def canFailBuild: Boolean
 }
