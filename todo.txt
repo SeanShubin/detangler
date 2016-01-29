@@ -1,14 +1,10 @@
+summary info
+  total number of standalone modules
+  total number of connections
 all by level
 jar ignore list
-enforce thresholds
-generate threshold config
-fully qualify entry points
-sort cycles by level, depth, size, name
-sort entry points by level, depth, name
 generate graphvis instructions when graphvis not installed
 entry points summary sort by depth at each level
 table of contents
-file name ignore list
 test coverage
 remove dead code
-maven plugin

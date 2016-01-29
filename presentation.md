@@ -18,6 +18,7 @@ Mitigating architectural chaos as complexity increases
 - High Cohesion
 - Design By Contract
 - Dependency Inversion Principle
+- Stable Dependencies Principle
 
 ## How to read the report
 - Granularity
