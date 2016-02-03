@@ -6,6 +6,8 @@ import java.time.Duration
 import com.seanshubin.detangler.model.Standalone
 
 trait Notifications {
+  def reportGenerated(indexPath: Path): Unit
+
   def effectiveConfiguration(configuration: Configuration)
 
   def configurationError(lines: Seq[String])

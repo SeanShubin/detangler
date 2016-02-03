@@ -39,8 +39,8 @@ class AfterConfigurationRunnerImpl(scanner: Scanner,
         if (canFailBuild) {
           throw new RuntimeException(message)
         }
-      case ReportResult.Success =>
-      //do nothing
+      case ReportResult.Success(indexPath) =>
+        notifications.reportGenerated(indexPath)
     }
   }
 

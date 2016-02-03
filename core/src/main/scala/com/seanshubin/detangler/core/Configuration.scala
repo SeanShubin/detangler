@@ -30,9 +30,9 @@ case class Configuration(reportDir: Path,
                          searchPaths: Seq[Path],
                          level: Option[Int],
                          startsWith: StartsWithConfiguration,
-                         allowedInCycle: Seq[Seq[String]],
                          ignoreFiles: Seq[Path],
-                         canFailBuild: Option[Boolean]) {
+                         canFailBuild: Option[Boolean],
+                         allowedInCycle: Seq[Seq[String]]) {
   def replaceNullsWithDefaults(): Configuration = {
     val newReportDir = Option(reportDir).getOrElse(Configuration.Default.reportDir)
     val newSearchPaths = Option(searchPaths).getOrElse(Configuration.Default.searchPaths)
@@ -52,9 +52,9 @@ case class Configuration(reportDir: Path,
       newSearchPaths,
       newLevel,
       newStartsWith,
-      newAllowedInCycle,
       newIgnoreFiles,
-      newCanFailBuild)
+      newCanFailBuild,
+      newAllowedInCycle)
   }
 }
 

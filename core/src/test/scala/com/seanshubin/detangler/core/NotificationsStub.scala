@@ -27,4 +27,6 @@ class NotificationsStub extends Notifications {
   override def warnNoRelevantClassesInPath(path: Path): Unit = ???
 
   override def newCycleParts(cycleParts: Seq[Standalone]): Unit = ???
+
+  override def reportGenerated(indexPath: Path): Unit = ???
 }

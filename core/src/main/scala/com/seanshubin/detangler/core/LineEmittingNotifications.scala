@@ -16,19 +16,11 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller,
     exceptionLines(exception).foreach(emit)
   }
 
-  private def exceptionLines(ex: Throwable): Seq[String] = {
-    val stringWriter = new StringWriter()
-    val printWriter = new PrintWriter(stringWriter)
-    ex.printStackTrace(printWriter)
-    val s = stringWriter.toString
-    val lines = s.split( """\r\n|\r|\n""").toSeq
-    lines
-  }
-
-  override def effectiveConfiguration(configuration: Configuration): Unit = {
+  override def effectiveConfiguration(configurationWithAllowedCycles: Configuration): Unit = {
+    val configuration = configurationWithAllowedCycles.copy(allowedInCycle = Seq())
     val devon = devonMarshaller.fromValue(configuration)
     val pretty = devonMarshaller.toPretty(devon)
-    emit("Effective configuration:")
+    emit("Effective configuration excluding allowed cycles:")
     pretty.foreach(emit)
   }
 
@@ -51,10 +43,6 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller,
     }
   }
 
-  private def indent(indentLevel: Int): String = {
-    "  " * indentLevel
-  }
-
   override def warnNoRelevantClassesInPath(path: Path): Unit = {
     emit(s"WARNING: no relevant classes found in $path, this probably warrants configuring your includes, excludes, or ignored files")
   }
@@ -67,5 +55,25 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller,
       emit(s"FAILURE: ${cycleParts.size} new $cycleName")
       cycleParts.map(_.toString).foreach(emit)
     }
+  }
+
+
+  override def reportGenerated(indexPath: Path): Unit = {
+    emit("")
+    emit("Detangler finished, see report at:")
+    emit(indexPath.toString)
+  }
+
+  private def exceptionLines(ex: Throwable): Seq[String] = {
+    val stringWriter = new StringWriter()
+    val printWriter = new PrintWriter(stringWriter)
+    ex.printStackTrace(printWriter)
+    val s = stringWriter.toString
+    val lines = s.split( """\r\n|\r|\n""").toSeq
+    lines
+  }
+
+  private def indent(indentLevel: Int): String = {
+    "  " * indentLevel
   }
 }

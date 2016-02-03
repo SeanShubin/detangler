@@ -25,6 +25,10 @@ class Reporter(detangled: Detangled,
                allowCyclesConfigurationLines: Seq[Seq[String]] => Seq[String],
                notifyNewCycleParts: Seq[Standalone] => Unit) extends (() => ReportResult) {
 
+  val summaryTemplate = loadTemplate("summary.html")
+  val pageTemplate = loadTemplate("report.html")
+  val graphTemplate = loadTemplate("graph.html")
+
   override def apply(): ReportResult = {
     filesContract.createDirectories(directory)
     copyResource("style.css", directory.resolve("style.css"))
@@ -32,7 +36,7 @@ class Reporter(detangled: Detangled,
     generateConfiguration(configurationLines)
     generateAllowCyclesConfiguration()
     generatePages(Standalone.Root)
-    shutdown()
+    checkForNewCycles()
   }
 
   def loadResource(name: String): InputStream = {
@@ -51,7 +55,6 @@ class Reporter(detangled: Detangled,
   }
 
   private def generateSummary(): Unit = {
-    val summaryTemplate = loadTemplate("summary.html")
     val content = summaryTemplateRules.generate(summaryTemplate).toString
     val fileName = HtmlRender.navigateHigherLink(Standalone.Root)
     val file = directory.resolve(fileName)
@@ -59,8 +62,6 @@ class Reporter(detangled: Detangled,
   }
 
   private def generatePages(standalone: Standalone): Unit = {
-    val pageTemplate = loadTemplate("report.html")
-    val graphTemplate = loadTemplate("graph.html")
     val children = detangled.childStandalone(standalone)
     if (children.nonEmpty) {
       val isLeafPage = standalone.path.size >= detangled.levelsDeep - 1
@@ -128,7 +129,7 @@ class Reporter(detangled: Detangled,
     filesContract.write(path, javaLines, charset)
   }
 
-  private def shutdown(): ReportResult = {
+  private def checkForNewCycles(): ReportResult = {
     val cycles = detangled.cycles()
     val cycleParts = cycles.flatMap(_.parts)
     val newCycleParts = cycleParts.filterNot(allowedCycles.contains)
@@ -138,7 +139,7 @@ class Reporter(detangled: Detangled,
     } else if (newCycleParts.nonEmpty) {
       ReportResult.Failure(s"${newCycleParts.size} new cycle parts")
     } else {
-      ReportResult.Success
+      ReportResult.Success(directory.resolve("index.html"))
     }
   }
 }

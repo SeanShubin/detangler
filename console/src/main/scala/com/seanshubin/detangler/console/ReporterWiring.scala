@@ -39,7 +39,7 @@ trait ReporterWiring {
     graphTemplateRules,
     graphGenerator,
     createProcessBuilder,
-    configurationWriter.configurationLines,
+    configurationWriter.configurationLines(),
     configurationWriter.configurationLinesAllowCycles,
     notifications.newCycleParts)
 
