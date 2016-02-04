@@ -5,7 +5,9 @@ Mitigating architectural chaos as complexity increases
 ## Why use tooling?
 - the problem is that complexity continually increases
 - no amount of discipline, intelligence, or skill can scale arbitrarily if the tool you are using is the human brain
-    - brain can only keep track of 7 things at a time, and only 2 nesting levels 
+    - brain can only keep track of 7 things at a time, and only 2 nesting levels
+    - detecting new tangles requires knowledge you will not be paying attention to
+        - you are thinking about the where you are going, not how you got here
 - automated feedback can narrow the relevant information to what a human brain can keep track of
 
 ## Methodology
