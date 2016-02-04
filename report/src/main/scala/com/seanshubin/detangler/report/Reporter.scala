@@ -1,6 +1,6 @@
 package com.seanshubin.detangler.report
 
-import java.io.InputStream
+import java.io.{IOException, InputStream}
 import java.nio.charset.Charset
 import java.nio.file.Path
 
@@ -104,13 +104,19 @@ class Reporter(detangled: Detangled,
     filesContract.write(file, javaLines, charset)
   }
 
-  private def renderGraph(standalone: Standalone): Unit = {
+  private def renderGraph(standalone: Standalone): Boolean = {
     val source = HtmlRender.graphSourceLink(standalone)
     val target = HtmlRender.graphTargetLink(standalone)
-    val command = Seq("dot", "-Tsvg", s"-o$target", source)
+    val command = Seq("dota", "-Tsvg", s"-o$target", source)
 
     val processBuilder = createProcessBuilder(command).directory(directory.toFile)
-    processBuilder.start()
+    try {
+      processBuilder.start()
+      true
+    } catch {
+      case ex: IOException =>
+        false
+    }
   }
 
   private def generateConfiguration(lines: Seq[String]): Unit = {

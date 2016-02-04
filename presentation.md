@@ -11,7 +11,7 @@ Mitigating architectural chaos as complexity increases
 - Quantify a problem
 - Fail a build if the quantity increases
 - Fix a single occurrence of the problem
-- Lower the threshold
+- Lower the quantity that the build tolerates
 
 ## Prerequisite Concepts
 - Low Coupling
