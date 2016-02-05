@@ -34,8 +34,8 @@ class PageTemplateRulesTest extends FunSuite {
     //when
     val actual = pageTemplateRules.generate(pageTemplate, SampleData.groupA, isLeafPage = false)
     //then
-    assert(actual.select(".parent").text() === "the parent text")
-    assert(actual.select(".parent").attr("href") === "the parent link")
+    assert(actual.select(".parent").text() === "group/a")
+    assert(actual.select(".parent").attr("href") === "report.html")
     assert(actual.select(".modules").text() === "the modules")
     assert(actual.select(".reasons").text() === "the reasons")
   }

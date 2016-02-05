@@ -6,7 +6,8 @@ import org.scalatest.FunSuite
 class SummaryTemplateRulesTest extends FunSuite {
   test("generate summary") {
     val templateText =
-      """<ul class="contents">
+      """<div>
+        |<ul class="contents">
         |  <li class="content">
         |    <a class="name" href="index.html">root</a>
         |  </li>
@@ -27,6 +28,7 @@ class SummaryTemplateRulesTest extends FunSuite {
         |    <p class="transitive"></p>
         |  </li>
         |</ul>
+        |</div>
       """.stripMargin
     val template = HtmlElement.fragmentFromString(templateText)
     val classA = Standalone(Seq("a"))
@@ -39,9 +41,5 @@ class SummaryTemplateRulesTest extends FunSuite {
     val cycleEF = Cycle(Set(classE, classF))
     val entryPoints = Seq(classA, classB)
     val cycles = Seq(cycleCD, cycleEF)
-
-    //    val summaryTemplateRules = new SummaryTemplateRulesImpl
-    //    val generated = summaryTemplateRules.generate(template, entryPoints, cycles)
-    //    println(generated)
   }
 }

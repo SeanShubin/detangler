@@ -24,7 +24,7 @@ class StandaloneSummaryTemplateRulesTest extends FunSuite {
     assert(actual.select(".depth").text() === "1")
     assert(actual.select(".breadth").text() === "1")
     assert(actual.select(".transitive").text() === "1")
-    assert(actual.select(".composed-of").text() === "parts")
-    assert(actual.select(".composed-of").attr("href") === "group-a.html")
+    assert(actual.select(".composed-of").text() === "2 parts")
+    assert(actual.select(".composed-of").attr("href") === "report--group-a.html")
   }
 }

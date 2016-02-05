@@ -39,11 +39,11 @@ class DetangledFake(theRoot: Standalone, map: Map[Module, ModuleInfo], val level
 
   override def plainCyclesFor(standalone: Standalone): Map[String, Set[String]] = Map()
 
-  override def cycles(): Seq[Cycle] = ???
+  override def cycles(): Seq[Cycle] = Seq()
 
   override def entryPoints(): Seq[Standalone] = ???
 
-  override def plainEntryPointsFor(standalone: Standalone): Set[String] = ???
+  override def plainEntryPointsFor(standalone: Standalone): Set[String] = Set()
 
   private def reasonsFor(parts: Seq[Standalone]): Seq[Reason] = {
     reasonsFor(parts, parts)

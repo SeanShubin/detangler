@@ -13,16 +13,20 @@ class ReporterTest extends FunSuite {
   test("generate report") {
     //given
     val pageTemplateText = "page template text"
+    val summaryTemplateText = "summary template text"
     val graphTemplateText = "graph template text"
+    val reportTemplateText = "report template text"
     val path = Paths.get("generated", getClass.getSimpleName)
     val charset = StandardCharsets.UTF_8
     val filesStub = new FilesStub(charset)
     val graphTarget = Seq("graph target")
     val graphTemplateElement = HtmlElement.fragmentFromString("<p>graph</p>")
     val resourceMap = Map(
-      "template-graph.html" -> graphTemplateText,
+      "graph.html" -> graphTemplateText,
       "style.css" -> "style text",
-      "template.html" -> pageTemplateText
+      "template.html" -> pageTemplateText,
+      "summary.html" -> summaryTemplateText,
+      "report.html" -> reportTemplateText
     )
     val configurationLines = Seq("configuration line")
     def allowCyclesConfigurationLines(cycles: Seq[Seq[String]]): Seq[String] = Seq("allow cycles configuration line")
@@ -66,28 +70,28 @@ class ReporterTest extends FunSuite {
 
     //then
     val setDifference = SetDifference.diff(filesStub.fileNames(), Set(
-      "group-a--package-c.html",
-      "group-a--package-d.html",
-      "group-a.html",
-      "group-b--package-e.html",
-      "group-b.html",
+      "report--group-a--package-c.html",
+      "report--group-a--package-d.html",
+      "report--group-a.html",
+      "report--group-b--package-e.html",
+      "report--group-b.html",
       "index.html",
-      "graph-group-a--package-c.html",
-      "graph-group-a--package-d.html",
-      "graph-group-a.html",
-      "graph-group-b--package-e.html",
-      "graph-group-b.html",
-      "graph-index.html",
+      "report.html",
+      "graph--group-a--package-c.html",
+      "graph--group-a--package-d.html",
+      "graph--group-a.html",
+      "graph--group-b--package-e.html",
+      "graph--group-b.html",
+      "graph.html",
       "style.css"
     ))
     assert(setDifference.isSame, setDifference.messageLines.mkString("\n"))
-    assert(filesStub.stringContentsOf("index.html") === "<p>index text</p>")
     assert(filesStub.stringContentsOf("style.css") === "style text")
-    assert(filesStub.stringContentsOf("group-a.html") === "<p>a text</p>")
-    assert(filesStub.stringContentsOf("group-b.html") === "<p>b text</p>")
-    assert(filesStub.stringContentsOf("group-a--package-c.html") === "<p>c text</p>")
-    assert(filesStub.stringContentsOf("group-a--package-d.html") === "<p>d text</p>")
-    assert(filesStub.stringContentsOf("group-b--package-e.html") === "<p>e text</p>")
+    assert(filesStub.stringContentsOf("report--group-a.html") === "<p>a text</p>")
+    assert(filesStub.stringContentsOf("report--group-b.html") === "<p>b text</p>")
+    assert(filesStub.stringContentsOf("report--group-a--package-c.html") === "<p>c text</p>")
+    assert(filesStub.stringContentsOf("report--group-a--package-d.html") === "<p>d text</p>")
+    assert(filesStub.stringContentsOf("report--group-b--package-e.html") === "<p>e text</p>")
     assert(filesStub.directoriesCreated === Seq(Paths.get("generated", "ReporterTest")))
   }
 }

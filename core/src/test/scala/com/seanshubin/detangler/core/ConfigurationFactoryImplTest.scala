@@ -15,24 +15,35 @@ class ConfigurationFactoryImplTest extends FunSuite {
     val content =
       """{
         |  reportDir report-dir
-        |  searchPaths
-        |  [
-        |    search-path-1
-        |    search-path-2
-        |  ]
+        |  searchPaths [ search-path-1 search-path-2 ]
         |  level 3
         |  startsWith
         |  {
-        |    include [
+        |    include
+        |    [
         |      [ com seanshubin ]
         |      [ seanshubin ]
         |    ]
-        |    drop [
+        |    exclude
+        |    [
+        |      [ com seanshubin unchecked ]
+        |    ]
+        |    drop
+        |    [
         |      [ com seanshubin ]
         |      [ seanshubin ]
         |    ]
         |  }
-        |}""".stripMargin
+        |  ignoreFiles [ ignore-file.jar ]
+        |  canFailBuild true
+        |  allowedInCycle
+        |  [
+        |    [ branch ]
+        |    [ tree ]
+        |    [ leaf ]
+        |  ]
+        |}
+        | """.stripMargin
     val expected = Right(Configuration.Sample)
     val filesStub = new FilesStub(Map("environment.txt" -> content), charset)
     val configurationFactory = new ConfigurationFactoryImpl(filesStub, devonMarshaller, charset)
@@ -41,13 +52,6 @@ class ConfigurationFactoryImplTest extends FunSuite {
   }
 
   test("missing configuration file") {
-    val content =
-      """{
-        |  servePathOverride gui/src/main/resources/
-        |  optionalPathPrefix /template
-        |}
-        | """.stripMargin
-
     val expected = Left(Seq("Configuration file named 'environment.txt' not found"))
     val filesStub = new FilesStub(Map(), charset)
     val configurationFactory = new ConfigurationFactoryImpl(filesStub, devonMarshaller, charset)

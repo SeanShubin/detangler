@@ -16,6 +16,7 @@ class DependencyTemplateRulesTest extends FunSuite {
         |       <p class="breadth">replace-me</p>
         |       <p class="transitive">replace-me</p>
         |       <p><a class="reason" href="replace-me">replace-me</a></p>
+        |       <p><a class="composed-of" href="replace-me">replace-me</a></p>
         |     </li>
         |  </ul>
         |</div>

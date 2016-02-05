@@ -25,15 +25,15 @@ class ReasonsTemplateRulesTest extends FunSuite {
     assert(groupElement.select(".to").text() === "group/b")
 
     val packageElement = actual.select("#group-a--package-c---group-b--package-e").remove("#group-a--package-c--class-f---group-b--package-e--class-i")
-    assert(packageElement.select(".from").attr("href") === "group-a.html#package-c")
+    assert(packageElement.select(".from").attr("href") === "report--group-a.html#package-c")
     assert(packageElement.select(".from").text() === "package/c")
-    assert(packageElement.select(".to").attr("href") === "group-b.html#package-e")
+    assert(packageElement.select(".to").attr("href") === "report--group-b.html#package-e")
     assert(packageElement.select(".to").text() === "package/e")
 
     val classElement = actual.select("#group-a--package-c--class-f---group-b--package-e--class-i")
-    assert(classElement.select(".from").attr("href") === "group-a--package-c.html#class-f")
+    assert(classElement.select(".from").attr("href") === "report--group-a--package-c.html#class-f")
     assert(classElement.select(".from").text() === "class/f")
-    assert(classElement.select(".to").attr("href") === "group-b--package-e.html#class-i")
+    assert(classElement.select(".to").attr("href") === "report--group-b--package-e.html#class-i")
     assert(classElement.select(".to").text() === "class/i")
   }
 }

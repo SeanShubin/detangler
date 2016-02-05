@@ -34,3 +34,4 @@ Mitigating architectural chaos as complexity increases
 
 ## Find problem by digging down reasons tree
 
+[INFO] com.seanshubin.detangler:detangler-report ......... FAILURE [17.374s]
