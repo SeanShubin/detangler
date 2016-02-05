@@ -7,7 +7,7 @@ import scala.collection.mutable.ArrayBuffer
 class GraphTemplateRulesStub(generateResult: HtmlElement) extends GraphTemplateRules {
   val invocations = new ArrayBuffer[(HtmlElement, Standalone)]()
 
-  override def generate(graphTemplate: HtmlElement, standalone: Standalone): HtmlElement = {
+  override def generate(graphTemplate: HtmlElement, standalone: Standalone, graphRenderResult: GraphRenderResult): HtmlElement = {
     generateResult
   }
 }

@@ -68,7 +68,6 @@ class Reporter(detangled: Detangled,
       generateDependenciesPage(standalone, pageTemplate, isLeafPage)
       generateGraphPage(standalone, graphTemplate)
       generateGraphSource(standalone)
-      renderGraph(standalone)
       children.foreach(generatePages)
     }
   }
@@ -87,7 +86,8 @@ class Reporter(detangled: Detangled,
   }
 
   private def generateGraphPage(standalone: Standalone, graphTemplate: HtmlElement): Path = {
-    val content = graphTemplateRules.generate(graphTemplate, standalone).toString
+    val renderGraphResult = renderGraph(standalone)
+    val content = graphTemplateRules.generate(graphTemplate, standalone, renderGraphResult).toString
     val fileName = HtmlRender.graphLink(standalone)
     val file = directory.resolve(fileName)
     filesContract.write(file, content.getBytes(charset))
@@ -104,18 +104,18 @@ class Reporter(detangled: Detangled,
     filesContract.write(file, javaLines, charset)
   }
 
-  private def renderGraph(standalone: Standalone): Boolean = {
+  private def renderGraph(standalone: Standalone): GraphRenderResult = {
     val source = HtmlRender.graphSourceLink(standalone)
     val target = HtmlRender.graphTargetLink(standalone)
-    val command = Seq("dota", "-Tsvg", s"-o$target", source)
+    val command = Seq("dot", "-Tsvg", s"-o$target", source)
 
     val processBuilder = createProcessBuilder(command).directory(directory.toFile)
     try {
       processBuilder.start()
-      true
+      GraphRenderSuccess
     } catch {
       case ex: IOException =>
-        false
+        GraphRenderFailure(command)
     }
   }
 
