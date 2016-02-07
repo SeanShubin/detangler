@@ -22,7 +22,6 @@
             <groupId>com.seanshubin.detangler</groupId>
             <artifactId>detangler-contract</artifactId>
             <version>${project.parent.version}</version>
-            <type>test-jar</type>
         </dependency>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
@@ -34,6 +33,12 @@
             <groupId>com.seanshubin.detangler</groupId>
             <artifactId>detangler-graphviz</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.seanshubin.detangler</groupId>
+            <artifactId>detangler-contract-test</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>

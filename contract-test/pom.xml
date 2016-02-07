@@ -5,12 +5,17 @@
         <artifactId>detangler-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>detangler-contract</artifactId>
+    <artifactId>detangler-contract-test</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.seanshubin.detangler</groupId>
+            <artifactId>detangler-contract</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
     <build>

@@ -20,6 +20,12 @@
         </dependency>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
+            <artifactId>detangler-contract-test</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.seanshubin.detangler</groupId>
             <artifactId>detangler-bytecode</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
@@ -36,7 +42,6 @@
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
             <artifactId>detangler-contract</artifactId>
-            <type>test-jar</type>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
