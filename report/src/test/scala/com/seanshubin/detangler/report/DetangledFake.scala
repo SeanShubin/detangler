@@ -45,6 +45,8 @@ class DetangledFake(theRoot: Standalone, map: Map[Module, ModuleInfo], val level
 
   override def plainEntryPointsFor(standalone: Standalone): Set[String] = Set()
 
+  override def contains(standalone: Standalone): Boolean = ???
+
   private def reasonsFor(parts: Seq[Standalone]): Seq[Reason] = {
     reasonsFor(parts, parts)
   }

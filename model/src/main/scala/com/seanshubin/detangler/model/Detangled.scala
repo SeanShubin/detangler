@@ -36,4 +36,6 @@ trait Detangled {
   def plainCyclesFor(standalone: Standalone): Map[String, Set[String]]
 
   def plainEntryPointsFor(standalone: Standalone): Set[String]
+
+  def contains(standalone: Standalone): Boolean
 }

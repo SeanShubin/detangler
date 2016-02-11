@@ -43,6 +43,23 @@ case class Tree[T](value: T, path: Seq[String] = Seq(), branches: Seq[Tree[T]] =
     apply(valuePath).value
   }
 
+  def contains(valuePath: Seq[String]): Boolean = {
+    if (path == valuePath) {
+      true
+    } else if (isSuperPath(path, valuePath)) {
+      val immediateBranchKeys = branches.map(_.path)
+      val nextChildDown = valuePath.take(path.size + 1)
+      val index = immediateBranchKeys.indexOf(nextChildDown)
+      if (index == -1) {
+        false
+      } else {
+        branches(index).contains(valuePath)
+      }
+    } else {
+      throw new RuntimeException(s"$path is not a super path of $valuePath")
+    }
+  }
+
   def apply(valuePath: Seq[String]): Tree[T] = {
     if (path == valuePath) {
       this

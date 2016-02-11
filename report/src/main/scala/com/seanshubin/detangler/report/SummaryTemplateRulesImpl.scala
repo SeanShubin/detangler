@@ -45,17 +45,27 @@ class SummaryTemplateRulesImpl(detangled: Detangled, allowedCycles: Seq[Standalo
   }
 
   private def generateNewCycle(template: HtmlElement, standalone: Standalone): HtmlElement = {
-    val a = template.
-      anchor(".name", HtmlRender.absoluteModuleLink(standalone), HtmlRender.standaloneLinkQualifiedName(standalone)).
-      text(".depth", detangled.depth(standalone).toString).
-      text(".breadth", detangled.breadth(standalone).toString).
-      text(".transitive", detangled.transitive(standalone).toString).
-      anchor(".graph", HtmlRender.graphLink(standalone.parent), HtmlRender.graphLinkName(standalone.parent))
-    val b = detangled.partOfCycle(standalone) match {
-      case Some(cycle) => a.attr(".cycle-link", "href", HtmlRender.absoluteModuleLink(cycle))
-      case None => a.remove(".cycle-link")
+    if (detangled.contains(standalone)) {
+      val a = template.
+        anchor(".name", HtmlRender.absoluteModuleLink(standalone), HtmlRender.standaloneLinkQualifiedName(standalone)).
+        text(".depth", detangled.depth(standalone).toString).
+        text(".breadth", detangled.breadth(standalone).toString).
+        text(".transitive", detangled.transitive(standalone).toString).
+        anchor(".graph", HtmlRender.graphLink(standalone.parent), HtmlRender.graphLinkName(standalone.parent))
+      val b = detangled.partOfCycle(standalone) match {
+        case Some(cycle) => a.attr(".cycle-link", "href", HtmlRender.absoluteModuleLink(cycle))
+        case None => a.remove(".cycle-link")
+      }
+      b
+    } else {
+      template.
+        anchor(".name", HtmlRender.absoluteModuleLink(standalone), HtmlRender.standaloneLinkQualifiedName(standalone)).
+        text(".depth", "N/A").
+        text(".breadth", "N/A").
+        text(".transitive", "N/A").
+        anchor(".graph", HtmlRender.graphLink(standalone.parent), HtmlRender.graphLinkName(standalone.parent)).
+        remove(".cycle-link")
     }
-    b
   }
 
   private def generateCycles(template: HtmlElement, cycles: Seq[Cycle]): HtmlElement = {

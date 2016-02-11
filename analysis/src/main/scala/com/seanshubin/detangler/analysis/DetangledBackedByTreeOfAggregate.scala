@@ -93,6 +93,13 @@ class DetangledBackedByTreeOfAggregate(level: Int,
   override def cycles(): Seq[Cycle] =
     treeOfAggregate.breadthFirst().filter(_.hasCycle).flatMap(_.getCycles).sortWith(Compare.lessThan(cycleCompare))
 
+  override def contains(standalone: Standalone): Boolean = {
+    if (treeOfAggregate.contains(standalone.parent.path)) {
+      val aggregate = treeOfAggregate.value(standalone.parent.path)
+      aggregate.modules.contains(standalone)
+    } else false
+  }
+
   private def reasonsFor(parts: Seq[Standalone]): Seq[Reason] = {
     reasonsFor(parts, parts)
   }
