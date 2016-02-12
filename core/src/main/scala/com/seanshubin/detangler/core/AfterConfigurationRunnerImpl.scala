@@ -35,12 +35,13 @@ class AfterConfigurationRunnerImpl(scanner: Scanner,
       }
     }
     reportResult match {
-      case ReportResult.Failure(message) =>
+      case ReportResult.Failure(reportIndex, message) =>
+        notifications.reportGenerated(reportIndex)
         if (canFailBuild) {
           throw new RuntimeException(message)
         }
-      case ReportResult.Success(indexPath) =>
-        notifications.reportGenerated(indexPath)
+      case ReportResult.Success(reportIndex) =>
+        notifications.reportGenerated(reportIndex)
     }
   }
 

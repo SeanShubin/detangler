@@ -140,12 +140,13 @@ class Reporter(detangled: Detangled,
     val cycleParts = cycles.flatMap(_.parts)
     val newCycleParts = cycleParts.filterNot(allowedCycles.contains)
     notifyNewCycleParts(newCycleParts)
+    val reportIndex = directory.resolve("index.html")
     if (newCycleParts.size == 1) {
-      ReportResult.Failure("1 new cycle part")
+      ReportResult.Failure(reportIndex, "1 new cycle part")
     } else if (newCycleParts.nonEmpty) {
-      ReportResult.Failure(s"${newCycleParts.size} new cycle parts")
+      ReportResult.Failure(reportIndex, s"${newCycleParts.size} new cycle parts")
     } else {
-      ReportResult.Success(directory.resolve("index.html"))
+      ReportResult.Success(reportIndex)
     }
   }
 }
