@@ -1,5 +1,6 @@
 package com.seanshubin.detangler.report
 
+import com.seanshubin.detangler.compare.Compare
 import com.seanshubin.detangler.model.{Cycle, Detangled, Standalone}
 
 class SummaryTemplateRulesImpl(detangled: Detangled, allowedCycles: Seq[Standalone]) extends SummaryTemplateRules {
@@ -81,7 +82,7 @@ class SummaryTemplateRulesImpl(detangled: Detangled, allowedCycles: Seq[Standalo
     val emptyCycleTemplate = cycleTemplate.remove(".cycle-part")
     val cyclePartTemplate = cycleTemplate.select(".cycle-part")
     def generateCyclePartFunction(cyclePart: Standalone): HtmlElement = generateCyclePart(cyclePartTemplate, cyclePart)
-    val cyclePartFragments = cycle.parts.map(generateCyclePartFunction)
+    val cyclePartFragments = cycle.parts.toSeq.sortWith(Compare.lessThan(Standalone.compare)).map(generateCyclePartFunction)
     val parentLink = HtmlRender.reportPageLink(cycle.parent)
     val parentName = HtmlRender.standaloneLinkQualifiedName(cycle.parent)
     val cycleText = s"${cycle.parts.size} part cycle"
