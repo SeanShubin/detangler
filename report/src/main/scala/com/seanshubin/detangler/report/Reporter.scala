@@ -66,8 +66,8 @@ class Reporter(detangled: Detangled,
     if (children.nonEmpty) {
       val isLeafPage = standalone.path.size >= detangled.levelsDeep - 1
       generateDependenciesPage(standalone, pageTemplate, isLeafPage)
-      generateGraphPage(standalone, graphTemplate)
       generateGraphSource(standalone)
+      generateGraphPage(standalone, graphTemplate)
       children.foreach(generatePages)
     }
   }
