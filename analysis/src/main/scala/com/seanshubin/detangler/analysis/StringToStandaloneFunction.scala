@@ -6,7 +6,8 @@ class StringToStandaloneFunction(level: Int,
                                  includeStartsWithSeq: Seq[Seq[String]],
                                  excludeStartsWithSeq: Seq[Seq[String]],
                                  dropStartsWithSeq: Seq[Seq[String]]) extends (String => Option[Standalone]) {
-  override def apply(target: String): Option[Standalone] = {
+  override def apply(originalTarget: String): Option[Standalone] = {
+    val target = removePrefix("WEB-INF/classes/", originalTarget)
     val parts = splitIntoParts(target)
     val includeContains =
       includeStartsWithSeq.isEmpty ||
@@ -31,6 +32,11 @@ class StringToStandaloneFunction(level: Int,
   }
 
   private def dropDollarAndAfter(target: String): String = target.takeWhile(_ != '$')
+
+  private def removePrefix(prefix: String, target: String): String = {
+    if (target.startsWith(prefix)) target.substring(prefix.size)
+    else target
+  }
 }
 
 object StringToStandaloneFunction {
