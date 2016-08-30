@@ -49,16 +49,22 @@ Here is how they would be broken down into levels
 
 In the file maven-sample/pom.xml
 ```xml
-<project>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.seanshubin.detangler</groupId>
-                <artifactId>detangler-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-</project>
+<plugin>
+    <groupId>com.seanshubin.detangler</groupId>
+    <artifactId>detangler-maven-plugin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <executions>
+        <execution>
+            <phase>verify</phase>
+            <goals>
+                <goal>report</goal>
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+        <detanglerConfig>detangler.txt</detanglerConfig>
+    </configuration>
+</plugin>
 ```
 
 At the console
