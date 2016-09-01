@@ -40,11 +40,6 @@
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-contract</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
         </dependency>

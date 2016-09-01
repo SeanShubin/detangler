@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.seanshubin.detangler</groupId>
     <version>1.0-SNAPSHOT</version>
-    <artifactId>detangler-maven</artifactId>
+    <artifactId>detangler-self</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
     <build>
         <plugins>
