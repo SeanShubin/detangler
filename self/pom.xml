@@ -1,7 +1,7 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.seanshubin.detangler</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.9</version>
     <artifactId>detangler-self</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
     <build>
@@ -9,7 +9,7 @@
             <plugin>
                 <groupId>com.seanshubin.detangler</groupId>
                 <artifactId>detangler-maven-plugin</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>0.9</version>
                 <executions>
                     <execution>
                         <phase>verify</phase>
