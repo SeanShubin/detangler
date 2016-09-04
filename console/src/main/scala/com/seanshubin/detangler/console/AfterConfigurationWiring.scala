@@ -6,7 +6,7 @@ import java.time.Clock
 import com.seanshubin.detangler.analysis._
 import com.seanshubin.detangler.bytecode.{ClassParser, ClassParserImpl}
 import com.seanshubin.detangler.contract.{FilesContract, FilesDelegate}
-import com.seanshubin.detangler.core._
+import com.seanshubin.detangler.domain._
 import com.seanshubin.detangler.model.{Detangled, Standalone}
 import com.seanshubin.detangler.report.ReportResult
 import com.seanshubin.detangler.scanner._

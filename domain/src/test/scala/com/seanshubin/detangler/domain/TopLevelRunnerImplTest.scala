@@ -1,4 +1,4 @@
-package com.seanshubin.detangler.core
+package com.seanshubin.detangler.domain
 
 import org.scalatest.FunSuite
 

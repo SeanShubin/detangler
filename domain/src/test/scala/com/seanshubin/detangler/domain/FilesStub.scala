@@ -1,4 +1,4 @@
-package com.seanshubin.detangler.core
+package com.seanshubin.detangler.domain
 
 import java.nio.charset.Charset
 import java.nio.file.{LinkOption, Path}

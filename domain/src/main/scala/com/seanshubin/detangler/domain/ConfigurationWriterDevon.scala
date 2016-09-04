@@ -1,4 +1,4 @@
-package com.seanshubin.detangler.core
+package com.seanshubin.detangler.domain
 
 import com.seanshubin.detangler.compare.Compare
 import com.seanshubin.devon.core.devon.DevonMarshaller

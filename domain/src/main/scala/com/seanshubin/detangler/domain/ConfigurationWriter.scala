@@ -1,4 +1,4 @@
-package com.seanshubin.detangler.core
+package com.seanshubin.detangler.domain
 
 trait ConfigurationWriter {
   def configurationLines(): Seq[String]

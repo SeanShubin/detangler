@@ -4,7 +4,7 @@ import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.Path
 
 import com.seanshubin.detangler.contract.{FilesContract, FilesDelegate}
-import com.seanshubin.detangler.core._
+import com.seanshubin.detangler.domain._
 import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
 
 trait TopLevelWiring {

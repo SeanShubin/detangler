@@ -1,4 +1,4 @@
-package com.seanshubin.detangler.core
+package com.seanshubin.detangler.domain
 
 class RunnableStub extends Runnable {
   var runCallCount = 0

@@ -4,7 +4,7 @@ import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.Path
 
 import com.seanshubin.detangler.contract._
-import com.seanshubin.detangler.core.{ConfigurationWriter, Notifications}
+import com.seanshubin.detangler.domain.{ConfigurationWriter, Notifications}
 import com.seanshubin.detangler.graphviz.{GraphGenerator, GraphGeneratorImpl}
 import com.seanshubin.detangler.model.{Detangled, Standalone}
 import com.seanshubin.detangler.report._

@@ -1,4 +1,4 @@
-package com.seanshubin.detangler.core
+package com.seanshubin.detangler.domain
 
 import java.io.{PrintWriter, StringWriter}
 import java.nio.file.Path
