@@ -56,7 +56,6 @@
         <module>graphviz</module>
         <module>timer</module>
         <module>maven-plugin</module>
-        <module>self</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -179,7 +178,13 @@
         </license>
     </licenses>
     <!--<organization>...</organization>-->
-    <!--<developers>...</developers>-->
+    <developers>
+        <developer>
+            <name>Sean Shubin</name>
+            <organization>Sean Shubin</organization>
+            <organizationUrl>http://seanshubin.com/</organizationUrl>
+        </developer>
+    </developers>
     <!--<contributors>...</contributors>-->
 
     <!-- Environment Settings -->
@@ -196,7 +201,7 @@
     <!--<pluginRepositories>...</pluginRepositories>-->
     <distributionManagement>
         <repository>
-            <id>maven staging</id>
+            <id>maven-staging</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
     </distributionManagement>
