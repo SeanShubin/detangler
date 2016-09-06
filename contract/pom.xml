@@ -13,8 +13,4 @@
             <artifactId>scala-library</artifactId>
         </dependency>
     </dependencies>
-    <build>
-        <sourceDirectory>src/main/scala</sourceDirectory>
-        <testSourceDirectory>src/test/scala</testSourceDirectory>
-    </build>
 </project>
