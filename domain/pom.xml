@@ -5,7 +5,7 @@
         <artifactId>detangler-parent</artifactId>
         <version>0.9</version>
     </parent>
-    <artifactId>detangler-core</artifactId>
+    <artifactId>detangler-domain</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
     <dependencies>
         <dependency>

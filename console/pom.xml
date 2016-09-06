@@ -10,7 +10,7 @@
     <dependencies>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-core</artifactId>
+            <artifactId>detangler-domain</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
