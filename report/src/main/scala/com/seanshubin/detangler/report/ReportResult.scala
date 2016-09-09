@@ -9,4 +9,5 @@ object ReportResult {
   case class Success(reportIndex: Path) extends ReportResult
 
   case class Failure(reportIndex: Path, message: String) extends ReportResult
+
 }
