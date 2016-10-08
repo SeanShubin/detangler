@@ -5,8 +5,7 @@ import java.nio.file.Path
 
 import com.seanshubin.detangler.contract.{FilesContract, FilesDelegate}
 import com.seanshubin.detangler.domain._
-import com.seanshubin.devon.domain.DevonMarshallerWiring
-import com.seanshubin.devon.parserules.DevonMarshaller
+import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
 
 trait TopLevelWiring {
   lazy val emitLine: String => Unit = println

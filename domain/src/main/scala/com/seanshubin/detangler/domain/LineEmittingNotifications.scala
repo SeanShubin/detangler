@@ -5,7 +5,7 @@ import java.nio.file.Path
 import java.time.Duration
 
 import com.seanshubin.detangler.model.Standalone
-import com.seanshubin.devon.parserules.DevonMarshaller
+import com.seanshubin.devon.core.devon.DevonMarshaller
 
 class LineEmittingNotifications(devonMarshaller: DevonMarshaller,
                                 emit: String => Unit) extends Notifications {

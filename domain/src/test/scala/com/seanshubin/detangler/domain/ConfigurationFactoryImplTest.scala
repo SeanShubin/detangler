@@ -2,8 +2,7 @@ package com.seanshubin.detangler.domain
 
 import java.nio.charset.{Charset, StandardCharsets}
 
-import com.seanshubin.devon.domain.DevonMarshallerWiring
-import com.seanshubin.devon.parserules.DevonMarshaller
+import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
 import org.scalatest.FunSuite
 
 class ConfigurationFactoryImplTest extends FunSuite {
