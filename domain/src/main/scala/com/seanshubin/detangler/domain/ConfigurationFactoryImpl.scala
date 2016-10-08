@@ -4,7 +4,7 @@ import java.nio.charset.Charset
 import java.nio.file.Paths
 
 import com.seanshubin.detangler.contract.FilesContract
-import com.seanshubin.devon.core.devon.DevonMarshaller
+import com.seanshubin.devon.parserules.DevonMarshaller
 
 class ConfigurationFactoryImpl(files: FilesContract,
                                devonMarshaller: DevonMarshaller,
