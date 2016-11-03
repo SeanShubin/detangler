@@ -26,7 +26,7 @@
         </dependency>
         <dependency>
             <groupId>com.seanshubin.devon</groupId>
-            <artifactId>devon-core</artifactId>
+            <artifactId>devon-domain</artifactId>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -34,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_2.11</artifactId>
+            <artifactId>scalatest_2.12.0-RC2</artifactId>
         </dependency>
     </dependencies>
     <build>

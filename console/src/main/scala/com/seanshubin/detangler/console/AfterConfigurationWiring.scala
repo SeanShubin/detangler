@@ -11,7 +11,7 @@ import com.seanshubin.detangler.model.{Detangled, Standalone}
 import com.seanshubin.detangler.report.ReportResult
 import com.seanshubin.detangler.scanner._
 import com.seanshubin.detangler.timer.{Timer, TimerImpl}
-import com.seanshubin.devon.core.devon.{DevonMarshaller, DevonMarshallerWiring}
+import com.seanshubin.devon.domain.{DevonMarshaller, DevonMarshallerWiring}
 
 trait AfterConfigurationWiring {
   lazy val emitLine: String => Unit = println

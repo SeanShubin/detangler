@@ -1,7 +1,7 @@
 package com.seanshubin.detangler.domain
 
 import com.seanshubin.detangler.compare.Compare
-import com.seanshubin.devon.core.devon.DevonMarshaller
+import com.seanshubin.devon.domain.DevonMarshaller
 
 class ConfigurationWriterDevon(configuration: Configuration,
                                devonMarshaller: DevonMarshaller) extends ConfigurationWriter {
