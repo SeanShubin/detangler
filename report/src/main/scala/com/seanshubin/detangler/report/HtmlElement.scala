@@ -6,7 +6,7 @@ import java.nio.charset.Charset
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 
-import scala.collection.JavaConversions
+import scala.collection.JavaConverters._
 
 class HtmlElement(originalElement: Element) {
 
@@ -36,7 +36,7 @@ class HtmlElement(originalElement: Element) {
 
   private def selectAll(cssQuery: String, from: Element): Iterable[Element] = {
     val elements = from.select(cssQuery)
-    JavaConversions.collectionAsScalaIterable(elements)
+    elements.asScala
   }
 
   def select(cssQuery: String): HtmlElement = {

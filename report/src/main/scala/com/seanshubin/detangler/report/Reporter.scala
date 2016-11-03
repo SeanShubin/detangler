@@ -8,7 +8,7 @@ import com.seanshubin.detangler.contract.{ClassLoaderContract, FilesContract, Pr
 import com.seanshubin.detangler.graphviz.GraphGenerator
 import com.seanshubin.detangler.model.{Detangled, Standalone}
 
-import scala.collection.JavaConversions
+import scala.collection.JavaConverters._
 
 class Reporter(detangled: Detangled,
                allowedCycles: Seq[Standalone],
@@ -100,7 +100,7 @@ class Reporter(detangled: Detangled,
       detangled.plainEntryPointsFor(standalone))
     val fileName = HtmlRender.graphSourceLink(standalone)
     val file = directory.resolve(fileName)
-    val javaLines = JavaConversions.asJavaCollection(lines)
+    val javaLines = lines.asJava
     filesContract.write(file, javaLines, charset)
   }
 
@@ -130,7 +130,7 @@ class Reporter(detangled: Detangled,
   }
 
   private def writeLines(fileName: String, lines: Seq[String]): Unit = {
-    val javaLines = JavaConversions.asJavaIterable(lines)
+    val javaLines = lines.asJava
     val path = directory.resolve(fileName)
     filesContract.write(path, javaLines, charset)
   }
