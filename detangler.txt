@@ -1,5 +1,5 @@
 {
-  reportDir maven-sample/target/detangled/
+  reportDir console/target/detangled/
   searchPaths [
     console/target/detangler.jar
   ]

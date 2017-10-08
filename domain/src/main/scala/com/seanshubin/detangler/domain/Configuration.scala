@@ -36,7 +36,7 @@ case class Configuration(reportDir: Path,
 
 object Configuration {
   val Default = Configuration(
-    reportDir = Paths.get("generated", "detangled"),
+    reportDir = Paths.get("target", "detangled"),
     searchPaths = Seq(Paths.get(".")),
     level = Some(2),
     startsWith = StartsWithConfiguration.Default,
