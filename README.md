@@ -52,7 +52,7 @@ In the file maven-sample/pom.xml
 <plugin>
     <groupId>com.seanshubin.detangler</groupId>
     <artifactId>detangler-maven-plugin</artifactId>
-    <version>0.9</version>
+    <version>0.9.1</version>
     <executions>
         <execution>
             <phase>verify</phase>
