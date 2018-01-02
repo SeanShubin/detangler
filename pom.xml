@@ -175,8 +175,8 @@
     <!--<ciManagement>...</ciManagement>-->
     <!--<mailingLists>...</mailingLists>-->
     <scm>
-        <connection>scm:git:git@github.com:SeanShubin/detangler.git</connection>
-        <developerConnection>scm:git:git@github.com:SeanShubin/detangler.git</developerConnection>
+        <connection>git@github.com:SeanShubin/detangler.git</connection>
+        <developerConnection>git@github.com:SeanShubin/detangler.git</developerConnection>
         <url>https://github.com/SeanShubin/detangler</url>
     </scm>
     <!--<prerequisites>...</prerequisites>-->
