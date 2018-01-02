@@ -3,13 +3,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <!-- The Basics -->
     <groupId>com.seanshubin.detangler</groupId>
     <artifactId>detangler-parent</artifactId>
     <version>0.9.1</version>
     <packaging>pom</packaging>
     <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_2.12</artifactId>
@@ -73,8 +75,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <!-- Build Settings -->
     <build>
         <sourceDirectory>src/main/scala</sourceDirectory>
         <testSourceDirectory>src/test/scala</testSourceDirectory>
@@ -154,8 +154,6 @@
         </pluginManagement>
     </build>
     <!--<reporting>...</reporting>-->
-
-    <!-- More Project Information -->
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Analyzes dependency structure and cycles</description>
     <url>https://github.com/SeanShubin/detangler</url>
@@ -175,8 +173,6 @@
         </developer>
     </developers>
     <!--<contributors>...</contributors>-->
-
-    <!-- Environment Settings -->
     <!--<issueManagement>...</issueManagement>-->
     <!--<ciManagement>...</ciManagement>-->
     <!--<mailingLists>...</mailingLists>-->
