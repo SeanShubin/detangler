@@ -14,7 +14,7 @@
     scala-library {
       group org.scala-lang
       artifact scala-library
-      version 1.1.2
+      version 2.12.4
     }
     scala-test {
       group org.scalatest
@@ -25,7 +25,7 @@
     devon {
       group com.seanshubin.devon
       artifact devon-domain
-      version 2.12.4
+      version 1.1.2
     }
     jsoup {
       group org.jsoup
