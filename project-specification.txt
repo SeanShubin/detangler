@@ -1,0 +1,65 @@
+{
+  type maven-plugin
+  prefix [com seanshubin]
+  name [detanangler]
+  description 'Analyzes dependency structure and cycles'
+  version 0.9.1
+  developer {
+    name 'Sean Shubin'
+    githubName SeanShubin
+    organization 'Sean Shubin'
+    url http://seanshubin.com/
+  }
+  dependencies {
+    scala-library {
+      group org.scala-lang
+      artifact scala-library
+      version 1.1.2
+    }
+    scala-test {
+      group org.scalatest
+      artifact scalatest_2.12
+      version 3.0.4
+      scope test
+    }
+    devon {
+      group com.seanshubin.devon
+      artifact devon-domain
+      version 2.12.4
+    }
+    jsoup {
+      group org.jsoup
+      artifact jsoup
+      version 1.11.2
+    }
+    maven-plugin-api {
+      group org.apache.maven
+      artifact maven-plugin-api
+      version 3.5.2
+    }
+    maven-plugin-annotations {
+      group org.apache.maven.plugin-tools
+      artifact maven-plugin-annotations
+      version 3.5
+      scope provided
+    }
+  }
+  modules {
+    analysis       [model data collection devon]
+    bytecode       [collection]
+    collection     []
+    compare        []
+    console        [domain]
+    contract       []
+    contract-test  [contract]
+    data           []
+    domain         [analysis report scanner contract-test devon]
+    graphviz       [collection compare]
+    maven-plugin   [console maven-plugin-api maven-plugin-annotations]
+    model          [compare]
+    report         [model contract collection graphviz contract-test jsoup]
+    scanner        [timer zip contract-test bytecode data contract]
+    timer          []
+    zip            [collection]
+  }
+}
