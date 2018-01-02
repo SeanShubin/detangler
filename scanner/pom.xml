@@ -1,53 +1,52 @@
-<project>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <!--<groupId>...</groupId>-->
+    <artifactId>detangler-scanner</artifactId>
+    <!--<version>...</version>-->
+    <!--<packaging>...</packaging>-->
+    <dependencies>
+        <dependency>
+            <groupId>com.seanshubin.detangler</groupId>
+            <artifactId>detangler-timer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.seanshubin.detangler</groupId>
+            <artifactId>detangler-zip</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.seanshubin.detangler</groupId>
+            <artifactId>detangler-contract-test</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.seanshubin.detangler</groupId>
+            <artifactId>detangler-bytecode</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.seanshubin.detangler</groupId>
+            <artifactId>detangler-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.seanshubin.detangler</groupId>
+            <artifactId>detangler-contract</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
     <parent>
         <groupId>com.seanshubin.detangler</groupId>
         <artifactId>detangler-parent</artifactId>
         <version>0.9.1</version>
     </parent>
-    <artifactId>detangler-scanner</artifactId>
-    <name>${project.groupId}:${project.artifactId}</name>
-    <dependencies>
-        <dependency>
-            <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-timer</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-zip</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-contract-test</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-bytecode</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-data</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.seanshubin.detangler</groupId>
-            <artifactId>detangler-contract</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_2.12</artifactId>
-        </dependency>
-    </dependencies>
+    <!--<dependencyManagement>...</dependencyManagement>-->
+    <!--<modules>...</modules>-->
+    <!--<properties>...</properties>-->
     <build>
         <sourceDirectory>src/main/scala</sourceDirectory>
         <testSourceDirectory>src/test/scala</testSourceDirectory>
@@ -58,4 +57,22 @@
             </plugin>
         </plugins>
     </build>
+    <!--<reporting>...</reporting>-->
+    <name>${project.groupId}:${project.artifactId}</name>
+    <!--<description>...</description>-->
+    <!--<url>...</url>-->
+    <!--<inceptionYear>...</inceptionYear>-->
+    <!--<licenses>...</licenses>-->
+    <!--<organization>...</organization>-->
+    <!--<developers>...</developers>-->
+    <!--<contributors>...</contributors>-->
+    <!--<issueManagement>...</issueManagement>-->
+    <!--<ciManagement>...</ciManagement>-->
+    <!--<mailingLists>...</mailingLists>-->
+    <!--<scm>...</scm>-->
+    <!--<prerequisites>...</prerequisites>-->
+    <!--<repositories>...</repositories>-->
+    <!--<pluginRepositories>...</pluginRepositories>-->
+    <!--<distributionManagement>...</distributionManagement>-->
+    <!--<profiles>...</profiles>-->
 </project>
