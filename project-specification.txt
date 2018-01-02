@@ -1,7 +1,7 @@
 {
   type maven-plugin
   prefix [com seanshubin]
-  name [detanangler]
+  name [detangler]
   description 'Analyzes dependency structure and cycles'
   version 0.9.1
   developer {
