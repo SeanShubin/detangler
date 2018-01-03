@@ -1,5 +1,4 @@
 {
-  type maven-plugin
   prefix [com seanshubin]
   name [detangler]
   description 'Analyzes dependency structure and cycles'
@@ -62,4 +61,12 @@
     timer          []
     zip            [collection]
   }
+  detangler []
+  entryPoint [
+    {
+      module console
+      entryPoint com.seanshubin.detangler.console.ConsoleApplication
+    }
+  ]
+  mavenPlugin [ maven-plugin ]
 }
