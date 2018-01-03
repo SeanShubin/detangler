@@ -62,11 +62,8 @@
     zip            [collection]
   }
   detangler []
-  entryPoint [
-    {
-      module console
-      entryPoint com.seanshubin.detangler.console.ConsoleApplication
-    }
-  ]
+  consoleEntryPoint {
+    console com.seanshubin.detangler.console.ConsoleApplication
+  }
   mavenPlugin [ maven-plugin ]
 }
