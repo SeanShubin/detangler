@@ -6,6 +6,7 @@
   developer {
     name 'Sean Shubin'
     githubName SeanShubin
+    mavenUserName SeanShubin
     organization 'Sean Shubin'
     url http://seanshubin.com/
   }
