@@ -61,7 +61,6 @@
     timer          []
     zip            [collection]
   }
-  detangler []
   consoleEntryPoint {
     console com.seanshubin.detangler.console.ConsoleApplication
   }
