@@ -1,9 +1,11 @@
-package com.seanshubin.detangler.contract
+package com.seanshubin.detangler.contract.test
 
 import java.io.{Console, InputStream, PrintStream}
 import java.nio.channels.Channel
 import java.util
 import java.util.Properties
+
+import com.seanshubin.detangler.contract.SystemContract
 
 trait SystemNotImplemented extends SystemContract {
   override def in: InputStream = ???

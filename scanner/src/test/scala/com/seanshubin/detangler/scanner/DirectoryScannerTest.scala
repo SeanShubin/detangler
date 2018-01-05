@@ -3,7 +3,8 @@ package com.seanshubin.detangler.scanner
 import java.nio.file.attribute.BasicFileAttributes
 import java.nio.file.{FileVisitor, Path, Paths}
 
-import com.seanshubin.detangler.contract.{FilesContract, FilesNotImplemented}
+import com.seanshubin.detangler.contract.FilesContract
+import com.seanshubin.detangler.contract.test.FilesNotImplemented
 import org.scalatest.FunSuite
 
 import scala.collection.mutable.ArrayBuffer

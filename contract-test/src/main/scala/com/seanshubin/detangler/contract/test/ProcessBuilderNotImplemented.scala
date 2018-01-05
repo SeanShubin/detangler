@@ -1,8 +1,10 @@
-package com.seanshubin.detangler.contract
+package com.seanshubin.detangler.contract.test
 
 import java.io.File
 import java.lang.ProcessBuilder.Redirect
 import java.util
+
+import com.seanshubin.detangler.contract.ProcessBuilderContract
 
 class ProcessBuilderNotImplemented extends ProcessBuilderContract {
   override def command(command: util.List[String]): ProcessBuilderContract = ???

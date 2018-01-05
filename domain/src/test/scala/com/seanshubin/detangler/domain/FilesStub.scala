@@ -3,7 +3,7 @@ package com.seanshubin.detangler.domain
 import java.nio.charset.Charset
 import java.nio.file.{LinkOption, Path}
 
-import com.seanshubin.detangler.contract.FilesNotImplemented
+import com.seanshubin.detangler.contract.test.FilesNotImplemented
 
 class FilesStub(fileContentByName: Map[String, String], charset: Charset) extends FilesNotImplemented {
   override def exists(path: Path, options: LinkOption*): Boolean = {

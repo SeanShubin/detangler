@@ -1,8 +1,10 @@
-package com.seanshubin.detangler.contract
+package com.seanshubin.detangler.contract.test
 
 import java.io.InputStream
 import java.net.URL
 import java.util
+
+import com.seanshubin.detangler.contract.ClassLoaderContract
 
 trait ClassLoaderNotImplemented extends ClassLoaderContract {
   override def loadClass(name: String): Class[_] = ???

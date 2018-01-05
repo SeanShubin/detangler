@@ -1,15 +1,16 @@
-package com.seanshubin.detangler.contract
+package com.seanshubin.detangler.contract.test
 
 import java.io.{BufferedReader, BufferedWriter, InputStream, OutputStream}
-import java.lang.Iterable
 import java.nio.channels.SeekableByteChannel
 import java.nio.charset.Charset
 import java.nio.file.DirectoryStream.Filter
 import java.nio.file._
 import java.nio.file.attribute._
-import java.util
 import java.util.function.BiPredicate
 import java.util.stream.Stream
+import java.{lang, util}
+
+import com.seanshubin.detangler.contract.FilesContract
 
 trait FilesNotImplemented extends FilesContract {
   override def newInputStream(path: Path, options: OpenOption*): InputStream = ???
@@ -86,9 +87,9 @@ trait FilesNotImplemented extends FilesContract {
 
   override def write(path: Path, bytes: Seq[Byte], options: OpenOption*): Path = ???
 
-  override def write(path: Path, lines: Iterable[_ <: CharSequence], cs: Charset, options: OpenOption*): Path = ???
+  override def write(path: Path, lines: lang.Iterable[_ <: CharSequence], cs: Charset, options: OpenOption*): Path = ???
 
-  override def write(path: Path, lines: Iterable[_ <: CharSequence], options: OpenOption*): Path = ???
+  override def write(path: Path, lines: lang.Iterable[_ <: CharSequence], options: OpenOption*): Path = ???
 
   override def isDirectory(path: Path, options: LinkOption*): Boolean = ???
 
