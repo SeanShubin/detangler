@@ -3,9 +3,6 @@
 # halt the script if we encounter any errors
 set -e
 
-# make sure we don't inherit any state from dependencies in our local repository
-rm -rf ~/.m2/repository/com/seanshubin/devon/
-
 # make sure we don't inherit any state from our local repository
 rm -rf ~/.m2/repository/com/seanshubin/detangler/
 
