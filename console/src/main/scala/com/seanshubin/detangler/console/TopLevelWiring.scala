@@ -15,7 +15,7 @@ trait TopLevelWiring {
   lazy val notifications: Notifications = new LineEmittingNotifications(devonMarshaller, emitLine)
   lazy val configurationFactory: ConfigurationFactory = new ConfigurationFactoryImpl(
     files, devonMarshaller, charset)
-  lazy val createRunner: Configuration => Runnable = (configuration) =>
+  lazy val createRunner: (Configuration, Seq[Seq[String]]) => Runnable = (configuration, theAllowedCycles) =>
     new AfterConfigurationWiring {
       override def reportDir: Path = configuration.reportDir
 
@@ -29,7 +29,7 @@ trait TopLevelWiring {
 
       override def startsWithExclude: Seq[Seq[String]] = configuration.startsWith.exclude
 
-      override def allowedCycles: Seq[Seq[String]] = configuration.allowedInCycle
+      override def allowedCycles: Seq[Seq[String]] = theAllowedCycles
 
       override def ignoreFiles: Seq[Path] = configuration.ignoreFiles
 

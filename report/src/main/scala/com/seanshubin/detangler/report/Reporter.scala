@@ -126,7 +126,7 @@ class Reporter(detangled: Detangled,
   private def generateAllowCyclesConfiguration(): Unit = {
     val plainCycleParts = detangled.cycles().flatMap(_.parts).map(_.path)
     val lines = allowCyclesConfigurationLines(plainCycleParts)
-    writeLines("allow-cycles-configuration.txt", lines)
+    writeLines("detangler-allowed-in-cycle.txt", lines)
   }
 
   private def writeLines(fileName: String, lines: Seq[String]): Unit = {

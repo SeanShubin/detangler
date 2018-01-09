@@ -9,7 +9,7 @@ import com.seanshubin.devon.domain.DevonMarshaller
 class ConfigurationFactoryImpl(files: FilesContract,
                                devonMarshaller: DevonMarshaller,
                                charset: Charset) extends ConfigurationFactory {
-  override def validate(args: Seq[String]): Either[Seq[String], Configuration] = {
+  override def validate(args: Seq[String]): Either[Seq[String], (Configuration, Seq[Seq[String]])] = {
     if (args.length == 1) {
       val configFilePath = Paths.get(args(0))
       try {
@@ -19,7 +19,7 @@ class ConfigurationFactoryImpl(files: FilesContract,
           val devon = devonMarshaller.fromString(text)
           val configWithNulls = devonMarshaller.toValue(devon, classOf[Configuration])
           val config = configWithNulls.replaceNullsWithDefaults()
-          Right(config)
+          validateAllowedCycles(config)
         } else {
           Left(Seq(s"Configuration file named '$configFilePath' not found"))
         }
@@ -34,6 +34,23 @@ class ConfigurationFactoryImpl(files: FilesContract,
         "Expected exactly one argument, the name of the configuration file",
         "A typical configuration file might look something like this",
         "") ++ prettySampleLines)
+    }
+  }
+
+  private def validateAllowedCycles(configuration: Configuration): Either[Seq[String], (Configuration, Seq[Seq[String]])] = {
+    val path = configuration.allowedInCycle
+    if (path == null) {
+      Right(configuration, Seq())
+    } else {
+      if (files.exists(configuration.allowedInCycle)) {
+        val bytes = files.readAllBytes(path)
+        val text = new String(bytes.toArray, charset)
+        val iterator = devonMarshaller.stringToIterator(text)
+        val allowedCycles = iterator.map(devon => devonMarshaller.toValue(devon, classOf[Seq[String]]))
+        Right((configuration, allowedCycles.toSeq))
+      } else {
+        Left(Seq(s"File for allowed cycles '$path' does not exist"))
+      }
     }
   }
 }

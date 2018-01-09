@@ -9,10 +9,6 @@
     drop [[com seanshubin detangler]]
     exclude []
   }
-  allowedInCycle [
-    [model Module]
-    [model Standalone]
-    [model Cycle]
-  ]
+  allowedInCycle detangler-allowed-in-cycle.txt
   canFailBuild true
 }

@@ -8,7 +8,7 @@ case class Configuration(reportDir: Path,
                          startsWith: StartsWithConfiguration,
                          ignoreFiles: Seq[Path],
                          canFailBuild: Option[Boolean],
-                         allowedInCycle: Seq[Seq[String]]) {
+                         allowedInCycle: Path) {
   def replaceNullsWithDefaults(): Configuration = {
     val newReportDir = Option(reportDir).getOrElse(Configuration.Default.reportDir)
     val newSearchPaths = Option(searchPaths).getOrElse(Configuration.Default.searchPaths)
@@ -40,7 +40,7 @@ object Configuration {
     searchPaths = Seq(Paths.get(".")),
     level = Some(2),
     startsWith = StartsWithConfiguration.Default,
-    allowedInCycle = Seq(),
+    allowedInCycle = Paths.get("detangler-allowed-in-cycle.txt"),
     ignoreFiles = Seq(),
     canFailBuild = Some(false)
   )
@@ -50,7 +50,9 @@ object Configuration {
     searchPaths = Seq(Paths.get("search-path-1"), Paths.get("search-path-2")),
     level = Some(3),
     startsWith = StartsWithConfiguration.Sample,
-    allowedInCycle = Seq(Seq("branch"), Seq("tree"), Seq("leaf")),
+    allowedInCycle = Paths.get("detangler-allowed-in-cycle.txt"),
     ignoreFiles = Seq(Paths.get("ignore-file.jar")),
     canFailBuild = Some(true))
+
+  val SampleAllowedInCycles = Seq(Seq("branch"), Seq("tree"), Seq("leaf"))
 }

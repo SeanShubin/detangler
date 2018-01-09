@@ -16,11 +16,10 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller,
     exceptionLines(exception).foreach(emit)
   }
 
-  override def effectiveConfiguration(configurationWithAllowedCycles: Configuration): Unit = {
-    val configuration = configurationWithAllowedCycles.copy(allowedInCycle = Seq())
+  override def effectiveConfiguration(configuration: Configuration): Unit = {
     val devon = devonMarshaller.fromValue(configuration)
     val pretty = devonMarshaller.toPretty(devon)
-    emit("Effective configuration excluding allowed cycles:")
+    emit("Effective configuration:")
     pretty.foreach(emit)
   }
 

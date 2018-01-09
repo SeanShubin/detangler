@@ -36,16 +36,19 @@ class ConfigurationFactoryImplTest extends FunSuite {
         |  }
         |  ignoreFiles [ ignore-file.jar ]
         |  canFailBuild true
-        |  allowedInCycle
-        |  [
-        |    [ branch ]
-        |    [ tree ]
-        |    [ leaf ]
-        |  ]
+        |  allowedInCycle detangler-allowed-in-cycle.txt
         |}
         | """.stripMargin
-    val expected = Right(Configuration.Sample)
-    val filesStub = new FilesStub(Map("environment.txt" -> content), charset)
+    val detanglerAllowedInCycleContent =
+      """[ branch ]
+        |[ tree ]
+        |[ leaf ]
+        |""".stripMargin
+
+    val expected = Right((Configuration.Sample, Configuration.SampleAllowedInCycles))
+    val filesStub = new FilesStub(Map(
+      "environment.txt" -> content,
+      "detangler-allowed-in-cycle.txt" -> detanglerAllowedInCycleContent), charset)
     val configurationFactory = new ConfigurationFactoryImpl(filesStub, devonMarshaller, charset)
     val actual = configurationFactory.validate(args)
     assert(actual === expected)
