@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>detangler-maven-plugin</artifactId>
+    <packaging>maven-plugin</packaging>
     <dependencies>
         <dependency>
             <groupId>com.seanshubin.detangler</groupId>
@@ -35,6 +36,9 @@
             <plugin>
                 <artifactId>maven-plugin-plugin</artifactId>
                 <version>3.5</version>
+                <configuration>
+                    <goalPrefix>plugin</goalPrefix>
+                </configuration>
                 <executions>
                     <execution>
                         <id>default-descriptor</id>
