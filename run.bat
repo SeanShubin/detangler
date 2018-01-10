@@ -1,1 +1,1 @@
-java -jar console\target\detangler.jar detangler.txt
+java -jar console\target\detangler.jar console\detangler.txt

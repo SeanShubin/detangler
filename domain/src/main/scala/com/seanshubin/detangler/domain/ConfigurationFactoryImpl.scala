@@ -21,19 +21,14 @@ class ConfigurationFactoryImpl(files: FilesContract,
           val config = configWithNulls.replaceNullsWithDefaults()
           validateAllowedCycles(config)
         } else {
-          Left(Seq(s"Configuration file named '$configFilePath' not found"))
+          createError(s"Configuration file named '$configFilePath' not found")
         }
       } catch {
         case ex: Throwable =>
-          Left(Seq(s"There was a problem reading the configuration file '$configFilePath': ${ex.getMessage}"))
+          createError(s"There was a problem reading the configuration file '$configFilePath': ${ex.getMessage}")
       }
     } else {
-      val sampleConfigDevon = devonMarshaller.fromValue(Configuration.Sample)
-      val prettySampleLines = devonMarshaller.toPretty(sampleConfigDevon)
-      Left(Seq(
-        "Expected exactly one argument, the name of the configuration file",
-        "A typical configuration file might look something like this",
-        "") ++ prettySampleLines)
+      createError("Expected exactly one argument, the name of the configuration file")
     }
   }
 
@@ -52,5 +47,14 @@ class ConfigurationFactoryImpl(files: FilesContract,
         Left(Seq(s"File for allowed cycles '$path' does not exist"))
       }
     }
+  }
+
+  private def createError(message:String):Either[Seq[String], (Configuration, Seq[Seq[String]])] = {
+    val sampleConfigDevon = devonMarshaller.fromValue(Configuration.Sample)
+    val prettySampleLines = devonMarshaller.toPretty(sampleConfigDevon)
+    Left(Seq(
+      message,
+      "A typical configuration file might look something like this",
+      "") ++ prettySampleLines)
   }
 }

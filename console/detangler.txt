@@ -1,5 +1,5 @@
 {
-  reportDir console/target/detangled/
+  reportDir console/target/detangled
   searchPaths [
     console/target/detangler.jar
   ]
@@ -9,6 +9,6 @@
     drop [[com seanshubin detangler]]
     exclude []
   }
-  allowedInCycle detangler-allowed-in-cycle.txt
+  allowedInCycle console/detangler-allowed-in-cycle.txt
   canFailBuild true
 }

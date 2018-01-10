@@ -2,7 +2,7 @@ package com.seanshubin.detangler.domain
 
 import java.nio.charset.{Charset, StandardCharsets}
 
-import com.seanshubin.devon.domain.{DevonMarshaller, DevonMarshallerWiring}
+import com.seanshubin.devon.domain.{Devon, DevonMarshaller, DevonMarshallerWiring}
 import org.scalatest.FunSuite
 
 class ConfigurationFactoryImplTest extends FunSuite {
@@ -10,6 +10,8 @@ class ConfigurationFactoryImplTest extends FunSuite {
   val args = Seq(configFileName)
   val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
   val charset: Charset = StandardCharsets.UTF_8
+  val sampleConfigDevon:Devon = devonMarshaller.fromValue(Configuration.Sample)
+  val prettySampleLines:Seq[String] = devonMarshaller.toPretty(sampleConfigDevon)
 
   test("complete configuration") {
     val content =
@@ -55,7 +57,10 @@ class ConfigurationFactoryImplTest extends FunSuite {
   }
 
   test("missing configuration file") {
-    val expected = Left(Seq("Configuration file named 'environment.txt' not found"))
+    val expected = Left(Seq(
+      "Configuration file named 'environment.txt' not found",
+    "A typical configuration file might look something like this",
+    "") ++ prettySampleLines)
     val filesStub = new FilesStub(Map(), charset)
     val configurationFactory = new ConfigurationFactoryImpl(filesStub, devonMarshaller, charset)
     val actual = configurationFactory.validate(args)
@@ -64,7 +69,10 @@ class ConfigurationFactoryImplTest extends FunSuite {
 
   test("malformed configuration") {
     val content = "{"
-    val expected = Left(Seq("There was a problem reading the configuration file 'environment.txt': Could not match 'element', expected one of: map, array, string, null"))
+    val expected = Left(Seq(
+      "There was a problem reading the configuration file 'environment.txt': Could not match 'element', expected one of: map, array, string, null",
+      "A typical configuration file might look something like this",
+      "") ++ prettySampleLines)
     val filesStub = new FilesStub(Map("environment.txt" -> content), charset)
     val configurationFactory = new ConfigurationFactoryImpl(filesStub, devonMarshaller, charset)
     val actual = configurationFactory.validate(args)
