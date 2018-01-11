@@ -38,6 +38,7 @@
       scope provided
     }
   }
+  global [scala-library scala-test]
   modules {
     analysis       [model data collection devon]
     bytecode       [collection]
