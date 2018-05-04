@@ -37,19 +37,18 @@ class ConfigurationFactoryImpl(files: FilesContract,
     if (path == null) {
       Right(configuration, Seq())
     } else {
-      if (files.exists(configuration.allowedInCycle)) {
-        val bytes = files.readAllBytes(path)
-        val text = new String(bytes.toArray, charset)
-        val iterator = devonMarshaller.stringToIterator(text)
-        val allowedCycles = iterator.map(devon => devonMarshaller.toValue(devon, classOf[Seq[String]]))
-        Right((configuration, allowedCycles.toSeq))
-      } else {
-        Left(Seq(s"File for allowed cycles '$path' does not exist"))
+      if (!files.exists(configuration.allowedInCycle)) {
+        files.createFile(configuration.allowedInCycle)
       }
+      val bytes = files.readAllBytes(path)
+      val text = new String(bytes.toArray, charset)
+      val iterator = devonMarshaller.stringToIterator(text)
+      val allowedCycles = iterator.map(devon => devonMarshaller.toValue(devon, classOf[Seq[String]]))
+      Right((configuration, allowedCycles.toSeq))
     }
   }
 
-  private def createError(message:String):Either[Seq[String], (Configuration, Seq[Seq[String]])] = {
+  private def createError(message: String): Either[Seq[String], (Configuration, Seq[Seq[String]])] = {
     val sampleConfigDevon = devonMarshaller.fromValue(Configuration.Sample)
     val prettySampleLines = devonMarshaller.toPretty(sampleConfigDevon)
     Left(Seq(

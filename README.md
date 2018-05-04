@@ -45,14 +45,34 @@ Here is how they would be broken down into levels
 | com.seanshubin | -root-    | -root-            | CollectionUtil        |
 
 
-## Running from maven
+## Configuration File
+```
+{
+  reportDir console/target/detangled
+  searchPaths [
+    console/target/detangler.jar
+  ]
+  level 2
+  startsWith {
+    include [[com seanshubin detangler]]
+    drop [[com seanshubin detangler]]
+    exclude []
+  }
+  allowedInCycle console/detangler-allowed-in-cycle.txt
+  canFailBuild true
+}
+```
 
+## Running from the command line
+`java -jar console/target/detangler.jar console/detangler.txt`
+
+## Running from maven
 In the file maven-sample/pom.xml
 ```xml
 <plugin>
     <groupId>com.seanshubin.detangler</groupId>
     <artifactId>detangler-maven-plugin</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.2</version>
     <executions>
         <execution>
             <phase>verify</phase>
