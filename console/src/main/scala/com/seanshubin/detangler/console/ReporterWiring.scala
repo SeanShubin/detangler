@@ -24,7 +24,7 @@ trait ReporterWiring {
     modulesTemplateRules,
     reasonsTemplateRules)
   val graphTemplateRules: GraphTemplateRules = new GraphTemplateRulesImpl()
-  val tableOfContentsTemplateRules:TableOfContentsTemplateRules = new TableOfContentsTemplateRulesImpl(detangled)
+  val tableOfContentsTemplateRules: TableOfContentsTemplateRules = new TableOfContentsTemplateRulesImpl(detangled)
   val graphGenerator: GraphGenerator = new GraphGeneratorImpl
   val createProcessBuilder: Seq[String] => ProcessBuilderContract = commands => new ProcessBuilderDelegate(new ProcessBuilder(commands: _*))
   val summaryTemplateRules: SummaryTemplateRules = new SummaryTemplateRulesImpl(detangled, allowedCycles)

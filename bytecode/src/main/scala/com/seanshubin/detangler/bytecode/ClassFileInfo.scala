@@ -20,7 +20,9 @@ case class ClassFileInfo(magic: Int,
       case ClassInfo(nameIndex) => nameIndex
     }
     val classNames = classNameIndices.map(classNameIndexToName)
+
     def nameMatchesThis(name: String) = name == thisClassName
+
     val classNamesBesidesThis = classNames.filterNot(nameMatchesThis)
     classNamesBesidesThis
   }
@@ -121,6 +123,7 @@ object ClassFileInfo {
     val minorVersion = in.readShort()
     val majorVersion = in.readShort()
     val constantPoolCount = in.readShort()
+
     def readRemainingConstants(soFar: Seq[ConstantPoolInfo], remainingIndices: Int): Seq[ConstantPoolInfo] = {
       if (remainingIndices == 0) soFar
       else {
@@ -130,6 +133,7 @@ object ClassFileInfo {
         }
       }
     }
+
     val constantPool = readRemainingConstants(Seq(Unusable), constantPoolCount - 1)
     val accessFlags = in.readShort()
     val thisClass = in.readShort()

@@ -30,7 +30,9 @@ class ReporterTest extends FunSuite {
       "report.html" -> reportTemplateText
     )
     val configurationLines = Seq("configuration line")
+
     def allowCyclesConfigurationLines(cycles: Seq[Seq[String]]): Seq[String] = Seq("allow cycles configuration line")
+
     val classLoader = new ClassLoaderStub(resourceMap, charset)
     val pageTextMap = Map(
       SampleData.root -> "<p>index text</p>",
@@ -49,6 +51,7 @@ class ReporterTest extends FunSuite {
     val createProcessBuilder: Seq[String] => ProcessBuilderContract =
       command => ProcessBuilderStub(command, process)
     val allowedInCycles: Seq[Standalone] = Seq()
+
     def notifyNewCycleParts(newCycleParts: Seq[Standalone]): Unit = {}
 
     val reporter: () => ReportResult = new Reporter(

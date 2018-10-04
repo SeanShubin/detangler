@@ -2,23 +2,23 @@ package com.seanshubin.detangler.domain
 
 import java.lang
 import java.nio.charset.{Charset, StandardCharsets}
-import java.nio.file.{LinkOption, OpenOption, Path, Paths}
 import java.nio.file.attribute.FileAttribute
+import java.nio.file.{LinkOption, OpenOption, Path, Paths}
 
 import com.seanshubin.detangler.contract.test.FilesNotImplemented
 import com.seanshubin.devon.domain.{Devon, DevonMarshaller, DevonMarshallerWiring}
 import org.scalatest.FunSuite
 
-import scala.collection.mutable.ArrayBuffer
 import scala.collection.JavaConverters._
+import scala.collection.mutable.ArrayBuffer
 
 class ConfigurationFactoryImplTest extends FunSuite {
   val configFileName: String = "detangler.txt"
   val args = Seq(configFileName)
   val devonMarshaller: DevonMarshaller = DevonMarshallerWiring.Default
   val charset: Charset = StandardCharsets.UTF_8
-  val sampleConfigDevon:Devon = devonMarshaller.fromValue(Configuration.Sample)
-  val prettySampleLines:Seq[String] = devonMarshaller.toPretty(sampleConfigDevon)
+  val sampleConfigDevon: Devon = devonMarshaller.fromValue(Configuration.Sample)
+  val prettySampleLines: Seq[String] = devonMarshaller.toPretty(sampleConfigDevon)
 
   test("complete configuration") {
     val content =
@@ -75,8 +75,9 @@ class ConfigurationFactoryImplTest extends FunSuite {
       Paths.get("detangler.txt") -> sampleBytes,
       Paths.get("detangler-allowed-in-cycle.txt") -> Seq(),
     )
-    val files = new FilesNotImplemented{
+    val files = new FilesNotImplemented {
       override def exists(path: Path, options: LinkOption*): Boolean = false
+
       override def createFile(path: Path, attrs: FileAttribute[_]*): Path = {
         createFileInvocations.append(path)
         path
@@ -102,7 +103,7 @@ class ConfigurationFactoryImplTest extends FunSuite {
     assert(createFileInvocations(1) === Paths.get("detangler-allowed-in-cycle.txt"))
     assert(writeInvocations.size === 1)
     assert(writeInvocations(0)._1 === Paths.get("detangler.txt"))
-    assert(writeInvocations(0)._2.asScala.toSeq ===  sampleLines)
+    assert(writeInvocations(0)._2.asScala.toSeq === sampleLines)
     assert(actual === expected)
   }
 

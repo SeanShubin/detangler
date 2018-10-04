@@ -6,13 +6,13 @@ class ReasonsTemplateRulesTest extends FunSuite {
   test("reasons") {
     //given
     val reasonsTemplateText =
-    """<div class="reasons append-reason">
-      |  <div class="reason append-reasons">
-      |    <a class="from" href="">from</a>
-      |    <a class="to" href="">to</a>
-      |  </div>
-      |</div>
-      | """.stripMargin
+      """<div class="reasons append-reason">
+        |  <div class="reason append-reasons">
+        |    <a class="from" href="">from</a>
+        |    <a class="to" href="">to</a>
+        |  </div>
+        |</div>
+        | """.stripMargin
     val reasonsTemplate = HtmlElement.fragmentFromString(reasonsTemplateText)
     val reasonsTemplateRules = new ReasonsTemplateRulesImpl(SampleData.detangled)
     //when

@@ -13,9 +13,9 @@ class DetangledBackedByTreeOfAggregate(level: Int,
 
   override def allStandalone(): Seq[Standalone] = allStandalone(Standalone.Root)
 
-  private def allStandalone(parent:Standalone):Seq[Standalone] = {
+  private def allStandalone(parent: Standalone): Seq[Standalone] = {
     val children = childStandalone(parent)
-    if(children.isEmpty) {
+    if (children.isEmpty) {
       Seq(parent)
     } else {
       children.sortWith(Compare.lessThan(Standalone.compare)).flatMap(child => allStandalone(child))
@@ -83,6 +83,7 @@ class DetangledBackedByTreeOfAggregate(level: Int,
 
   override def plainEntryPointsFor(standalone: Standalone): Set[String] = {
     def isChild(potentialChild: Standalone): Boolean = potentialChild.parent == standalone
+
     entryPointSet.filter(isChild).map(toPlain)
   }
 
@@ -131,14 +132,18 @@ class DetangledBackedByTreeOfAggregate(level: Int,
 
   private val entryPointCompare: (Standalone, Standalone) => Int = (left, right) => {
     def depthCompare(left: Standalone, right: Standalone): Int = depth(left).compareTo(depth(right))
+
     val depthThenStandaloneCompare = Compare.mergeCompareFunctions(Compare.reverse(depthCompare), Standalone.compare)
     depthThenStandaloneCompare(left, right)
   }
 
   private val cycleCompare: (Cycle, Cycle) => Int = (left, right) => {
     def levelCompare(left: Cycle, right: Cycle): Int = left.level.compareTo(right.level)
+
     def sizeCompare(left: Cycle, right: Cycle): Int = left.size.compareTo(right.size)
+
     def parentCompare(left: Cycle, right: Cycle): Int = left.parent.compareTo(right.parent)
+
     val mergedCompare = Compare.mergeCompareFunctions(levelCompare, Compare.reverse(sizeCompare), parentCompare, Cycle.compare)
     mergedCompare(left, right)
   }

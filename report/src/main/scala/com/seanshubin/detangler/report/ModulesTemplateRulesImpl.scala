@@ -10,7 +10,9 @@ class ModulesTemplateRulesImpl(standaloneTemplateRules: StandaloneTemplateRules,
     val standaloneTemplate = modulesTemplate.select(".standalone")
     val cycleTemplate = modulesTemplate.select(".cycle")
     val children = detangled.childModules(standalone)
+
     def composeModuleFunction(module: Module): HtmlElement = composeModule(standalone, module, standaloneTemplate, cycleTemplate)
+
     val moduleElements = children.map(composeModuleFunction)
     val result = baseTemplate.append(".append-module", moduleElements)
     result

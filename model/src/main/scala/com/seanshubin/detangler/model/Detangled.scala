@@ -5,7 +5,7 @@ trait Detangled {
 
   def entryPoints(): Seq[Standalone]
 
-  def allStandalone():Seq[Standalone]
+  def allStandalone(): Seq[Standalone]
 
   def childModules(standalone: Standalone): Seq[Module]
 

@@ -37,6 +37,7 @@ class ZipContentsIterator(inputStream: InputStream,
     if (zipEntry.getSize == -1) {
       //sometimes this api tells me the size is -1 even though there are bytes to be read
       val arrayBuffer = new ArrayBuffer[Byte]()
+
       @tailrec
       def readRemainingBytes(): Unit = {
         val theByte = latestZipInputStream.read()
@@ -45,6 +46,7 @@ class ZipContentsIterator(inputStream: InputStream,
           readRemainingBytes()
         }
       }
+
       readRemainingBytes()
       arrayBuffer.toArray
     } else {

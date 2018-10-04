@@ -13,15 +13,18 @@ case class DependencyData(level: Int,
     } else {
       def isRelevant(standalone: Standalone): Boolean =
         standalone.path.startsWith(path)
+
       def isEntryRelevant(entry: (Standalone, Set[Standalone])): Boolean = {
         val (key, _) = entry
         isRelevant(key)
       }
+
       def filterDependencies(entry: (Standalone, Set[Standalone])): (Standalone, Set[Standalone]) = {
         val (key, oldValue) = entry
         val newValue = oldValue.filter(isRelevant)
         (key, newValue)
       }
+
       val newAll = all.filter(isRelevant)
       val newDependsOn = dependsOn.filter(isEntryRelevant).map(filterDependencies)
       val newDependedOnBy = dependedOnBy.filter(isEntryRelevant).map(filterDependencies)
@@ -61,7 +64,9 @@ object DependencyData {
 
   def allSameLevel(entries: Set[Standalone]): Int = {
     val firstLevel = entries.head.level
+
     def sameLevel(entry: Standalone): Boolean = entry.level == firstLevel
+
     if (entries.forall(sameLevel)) firstLevel
     else throw new RuntimeException("Data found at different granularity")
   }
@@ -88,7 +93,9 @@ object DependencyData {
   def promoteToParent(soFar: Map[Standalone, Set[Standalone]], current: (Standalone, Set[Standalone])): Map[Standalone, Set[Standalone]] = {
     val (childKey, childValues) = current
     val key = childKey.parent
+
     def matchesKey(standalone: Standalone): Boolean = standalone == key
+
     val valuesToAdd = childValues.map(_.parent).filterNot(matchesKey)
     val newValues = soFar.get(key) match {
       case Some(oldValues) => oldValues ++ valuesToAdd
