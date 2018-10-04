@@ -21,6 +21,7 @@ class ReporterTest extends FunSuite {
     val filesStub = new FilesStub(charset)
     val graphTarget = Seq("graph target")
     val graphTemplateElement = HtmlElement.fragmentFromString("<p>graph</p>")
+    val tableOfContentsTemplateElement = HtmlElement.fragmentFromString("<p>table-of-contents</p>")
     val resourceMap = Map(
       "graph.html" -> graphTemplateText,
       "style.css" -> "style text",
@@ -41,11 +42,12 @@ class ReporterTest extends FunSuite {
     )
     val pageTemplateRules = new PageTemplateRulesStub(pageTextMap, charset)
     val graphTemplateRules = new GraphTemplateRulesStub(graphTemplateElement)
+    val tableOfContentsRules = new TableOfContentsTemplateRulesStub(tableOfContentsTemplateElement)
     val summaryTemplateRules = new SummaryTemplateRulesStub()
     val graphGenerator: GraphGenerator = new GraphGeneratorStub(graphTarget)
     val process = new ProcessStub
     val createProcessBuilder: Seq[String] => ProcessBuilderContract =
-      (command) => new ProcessBuilderStub(command, process)
+      command => ProcessBuilderStub(command, process)
     val allowedInCycles: Seq[Standalone] = Seq()
     def notifyNewCycleParts(newCycleParts: Seq[Standalone]): Unit = {}
 
@@ -59,6 +61,7 @@ class ReporterTest extends FunSuite {
       summaryTemplateRules,
       pageTemplateRules,
       graphTemplateRules,
+      tableOfContentsRules,
       graphGenerator,
       createProcessBuilder,
       configurationLines,

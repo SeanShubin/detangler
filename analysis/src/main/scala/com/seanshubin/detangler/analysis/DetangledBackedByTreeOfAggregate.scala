@@ -11,6 +11,17 @@ class DetangledBackedByTreeOfAggregate(level: Int,
 
   override def cycleParts(cycle: Cycle): Seq[Standalone] = sortByStandaloneInfo(lookupMetrics(cycle).cycleParts)
 
+  override def allStandalone(): Seq[Standalone] = allStandalone(Standalone.Root)
+
+  private def allStandalone(parent:Standalone):Seq[Standalone] = {
+    val children = childStandalone(parent)
+    if(children.isEmpty) {
+      Seq(parent)
+    } else {
+      children.sortWith(Compare.lessThan(Standalone.compare)).flatMap(child => allStandalone(child))
+    }
+  }
+
   override def isLeaf(standalone: Standalone): Boolean = ???
 
   override def dependedOnBy(module: Module): Seq[Standalone] = sortByStandaloneInfo(lookupMetrics(module).dependedOnBy)

@@ -5,6 +5,8 @@ trait Detangled {
 
   def entryPoints(): Seq[Standalone]
 
+  def allStandalone():Seq[Standalone]
+
   def childModules(standalone: Standalone): Seq[Module]
 
   def childStandalone(standalone: Standalone): Seq[Standalone]

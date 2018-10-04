@@ -20,13 +20,13 @@ class SummaryTemplateRulesImpl(detangled: Detangled, allowedCycles: Seq[Standalo
     empty.
       replaceOrRemove("#new-cycle-parts", newCyclesFragment).
       replaceOrRemove("#no-longer-part-of-cycle", removedCyclesFragment).
-      replace("#table-of-contents", tableOfContentsFragment).
+      replace("#summary", tableOfContentsFragment).
       replace("#entry-points", entryPointsFragment).
       replace("#cycles", cyclesFragment)
   }
 
   private def generateTableOfContents(template: HtmlElement): HtmlElement = {
-    val tableOfContentsFragment = template.select("#table-of-contents")
+    val tableOfContentsFragment = template.select("#summary")
     val rootLink = HtmlRender.reportPageLink(Standalone.Root)
     val rootName = HtmlRender.reportPageLinkName(Standalone.Root)
     tableOfContentsFragment.anchor(".root", rootLink, rootName)

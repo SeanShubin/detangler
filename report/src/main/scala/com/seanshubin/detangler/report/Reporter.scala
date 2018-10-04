@@ -19,6 +19,7 @@ class Reporter(detangled: Detangled,
                summaryTemplateRules: SummaryTemplateRules,
                pageTemplateRules: PageTemplateRules,
                graphTemplateRules: GraphTemplateRules,
+               tableOfContentsTemplateRules: TableOfContentsTemplateRules,
                graphGenerator: GraphGenerator,
                createProcessBuilder: Seq[String] => ProcessBuilderContract,
                configurationLines: Seq[String],
@@ -28,10 +29,12 @@ class Reporter(detangled: Detangled,
   val summaryTemplate = loadTemplate("summary.html")
   val pageTemplate = loadTemplate("report.html")
   val graphTemplate = loadTemplate("graph.html")
+  val tableOfContentsTemplate = loadTemplate("table-of-contents.html")
 
   override def apply(): ReportResult = {
     filesContract.createDirectories(directory)
     copyResource("style.css", directory.resolve("style.css"))
+    generateTableOfContents()
     generateSummary()
     generateConfiguration(configurationLines)
     generateAllowCyclesConfiguration()
@@ -52,6 +55,13 @@ class Reporter(detangled: Detangled,
     if (inputStream == null) throw new RuntimeException(s"Unable to find resource named '$name'")
     val outputStream = filesContract.newOutputStream(destination)
     IoUtil.copy(inputStream, outputStream)
+  }
+
+  private def generateTableOfContents(): Unit = {
+    val content = tableOfContentsTemplateRules.generate(tableOfContentsTemplate).toString
+    val fileName = "table-of-contents.html"
+    val file = directory.resolve(fileName)
+    filesContract.write(file, content.getBytes(charset))
   }
 
   private def generateSummary(): Unit = {
