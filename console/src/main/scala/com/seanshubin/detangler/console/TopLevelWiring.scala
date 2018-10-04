@@ -36,6 +36,8 @@ trait TopLevelWiring {
       override def configurationWriter: ConfigurationWriter = new ConfigurationWriterDevon(configuration, devonMarshaller)
 
       override def canFailBuild: Boolean = configuration.canFailBuild.get
+
+      override def ignoreJavadoc: Boolean = configuration.ignoreJavadoc.get
     }.analyzer
   lazy val launcher: Runnable = new TopLevelRunnerImpl(
     commandLineArguments, configurationFactory, createRunner, notifications)

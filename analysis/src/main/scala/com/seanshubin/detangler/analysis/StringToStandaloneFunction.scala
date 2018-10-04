@@ -5,7 +5,8 @@ import com.seanshubin.detangler.model.Standalone
 class StringToStandaloneFunction(level: Int,
                                  includeStartsWithSeq: Seq[Seq[String]],
                                  excludeStartsWithSeq: Seq[Seq[String]],
-                                 dropStartsWithSeq: Seq[Seq[String]]) extends (String => Option[Standalone]) {
+                                 dropStartsWithSeq: Seq[Seq[String]],
+                                 ignoreJavadoc: Boolean) extends (String => Option[Standalone]) {
   override def apply(originalTarget: String): Option[Standalone] = {
     val target = removePrefix("WEB-INF/classes/", originalTarget)
     val parts = splitIntoParts(target)
@@ -15,7 +16,8 @@ class StringToStandaloneFunction(level: Int,
     val excludeContains =
       excludeStartsWithSeq.nonEmpty &&
         excludeStartsWithSeq.exists(excludeStartsWith => parts.startsWith(excludeStartsWith))
-    if (includeContains && !excludeContains) {
+    val ignoreBecauseJavadoc = ignoreJavadoc && isJavadoc(parts)
+    if (includeContains && !excludeContains && !ignoreBecauseJavadoc) {
       val trimmedParts = dropStartsWithSeq.find(dropStartsWith => parts.startsWith(dropStartsWith)) match {
         case Some(drop) => parts.drop(drop.size)
         case None => parts
@@ -25,6 +27,10 @@ class StringToStandaloneFunction(level: Int,
     } else {
       None
     }
+  }
+
+  private def isJavadoc(parts: Seq[String]): Boolean = {
+    parts.size > 1 && parts(parts.size - 2) == "javadoc"
   }
 
   private def splitIntoParts(target: String): Seq[String] = {

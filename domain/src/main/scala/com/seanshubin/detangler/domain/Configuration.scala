@@ -8,6 +8,7 @@ case class Configuration(reportDir: Path,
                          startsWith: StartsWithConfiguration,
                          ignoreFiles: Seq[Path],
                          canFailBuild: Option[Boolean],
+                         ignoreJavadoc: Option[Boolean],
                          allowedInCycle: Path) {
   def replaceNullsWithDefaults(): Configuration = {
     val newReportDir = Option(reportDir).getOrElse(Configuration.Default.reportDir)
@@ -23,6 +24,10 @@ case class Configuration(reportDir: Path,
       case Some(_) => canFailBuild
       case None => Configuration.Default.canFailBuild
     }
+    val newIgnoreJavadoc = ignoreJavadoc match {
+      case Some(_) => ignoreJavadoc
+      case None => Configuration.Default.ignoreJavadoc
+    }
     Configuration(
       newReportDir,
       newSearchPaths,
@@ -30,6 +35,7 @@ case class Configuration(reportDir: Path,
       newStartsWith,
       newIgnoreFiles,
       newCanFailBuild,
+      newIgnoreJavadoc,
       newAllowedInCycle)
   }
 }
@@ -42,7 +48,8 @@ object Configuration {
     startsWith = StartsWithConfiguration.Default,
     allowedInCycle = Paths.get("detangler-allowed-in-cycle.txt"),
     ignoreFiles = Seq(),
-    canFailBuild = Some(false)
+    canFailBuild = Some(false),
+    ignoreJavadoc = Some(true)
   )
 
   val Sample = Configuration(
@@ -52,7 +59,8 @@ object Configuration {
     startsWith = StartsWithConfiguration.Sample,
     allowedInCycle = Paths.get("detangler-allowed-in-cycle.txt"),
     ignoreFiles = Seq(Paths.get("ignore-file.jar")),
-    canFailBuild = Some(true))
+    canFailBuild = Some(true),
+    ignoreJavadoc = Some(true))
 
   val SampleAllowedInCycles = Seq(Seq("branch"), Seq("tree"), Seq("leaf"))
 }

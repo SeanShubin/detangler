@@ -35,7 +35,8 @@ trait AfterConfigurationWiring {
     level,
     startsWithInclude,
     startsWithExclude,
-    startsWithDrop)
+    startsWithDrop,
+    ignoreJavadoc)
   lazy val acceptNameFunction: String => Boolean = new AcceptNameFunction(stringToStandaloneFunction)
   lazy val zipScanner: ZipScanner = new ZipScannerImpl(
     filesContract,
@@ -86,4 +87,6 @@ trait AfterConfigurationWiring {
   def ignoreFiles: Seq[Path]
 
   def canFailBuild: Boolean
+
+  def ignoreJavadoc: Boolean
 }
