@@ -12,6 +12,7 @@ class GraphGeneratorImpl extends GraphGenerator {
         SingleGenerator(key)
       }
     }
+
     def addDependency(soFar: Accumulator, key: String): Accumulator = {
       val generators = for {
         value <- dependsOn(key).toSeq.sorted
@@ -39,6 +40,7 @@ class GraphGeneratorImpl extends GraphGenerator {
       val newAlreadyProcessed = soFar.alreadyProcessed + key
       Accumulator(newAlreadyProcessed, newGenerators)
     }
+
     val accumulator = sortedKeys.foldLeft(Accumulator.Empty)(addDependency)
     val generators = Seq(HeaderGenerator) ++ singleKeys ++ accumulator.generators ++ Seq(FooterGenerator)
     val lines = generators.flatMap(_.generate)
