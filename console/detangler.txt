@@ -9,6 +9,10 @@
     drop [[com seanshubin detangler]]
     exclude []
   }
-  allowedInCycle console/detangler-allowed-in-cycle.txt
+  ignoreFiles []
   canFailBuild true
+  ignoreJavadoc true
+  logTiming false
+  logEffectiveConfiguration false
+  allowedInCycle console/detangler-allowed-in-cycle.txt
 }

@@ -9,6 +9,8 @@ case class Configuration(reportDir: Path,
                          ignoreFiles: Seq[Path],
                          canFailBuild: Option[Boolean],
                          ignoreJavadoc: Option[Boolean],
+                         logTiming: Option[Boolean],
+                         logEffectiveConfiguration: Option[Boolean],
                          allowedInCycle: Path) {
   def replaceNullsWithDefaults(): Configuration = {
     val newReportDir = Option(reportDir).getOrElse(Configuration.Default.reportDir)
@@ -28,6 +30,14 @@ case class Configuration(reportDir: Path,
       case Some(_) => ignoreJavadoc
       case None => Configuration.Default.ignoreJavadoc
     }
+    val newLogTiming = logTiming match {
+      case Some(_) => logTiming
+      case None => Configuration.Default.logTiming
+    }
+    val newLogEffectiveConfiguration = logEffectiveConfiguration match {
+      case Some(_) => logEffectiveConfiguration
+      case None => Configuration.Default.logEffectiveConfiguration
+    }
     Configuration(
       newReportDir,
       newSearchPaths,
@@ -36,6 +46,8 @@ case class Configuration(reportDir: Path,
       newIgnoreFiles,
       newCanFailBuild,
       newIgnoreJavadoc,
+      newLogTiming,
+      newLogEffectiveConfiguration,
       newAllowedInCycle)
   }
 }
@@ -49,7 +61,9 @@ object Configuration {
     allowedInCycle = Paths.get("detangler-allowed-in-cycle.txt"),
     ignoreFiles = Seq(),
     canFailBuild = Some(false),
-    ignoreJavadoc = Some(true)
+    ignoreJavadoc = Some(true),
+    logTiming = Some(true),
+    logEffectiveConfiguration = Some(true)
   )
 
   val Sample = Configuration(
@@ -60,7 +74,9 @@ object Configuration {
     allowedInCycle = Paths.get("detangler-allowed-in-cycle.txt"),
     ignoreFiles = Seq(Paths.get("ignore-file.jar")),
     canFailBuild = Some(true),
-    ignoreJavadoc = Some(true))
+    ignoreJavadoc = Some(true),
+    logTiming = Some(true),
+    logEffectiveConfiguration = Some(true))
 
   val SampleAllowedInCycles = Seq(Seq("branch"), Seq("tree"), Seq("leaf"))
 }

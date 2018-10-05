@@ -38,6 +38,8 @@ trait TopLevelWiring {
       override def canFailBuild: Boolean = configuration.canFailBuild.get
 
       override def ignoreJavadoc: Boolean = configuration.ignoreJavadoc.get
+
+      override def logTiming: Boolean = configuration.logTiming.get
     }.analyzer
   lazy val launcher: Runnable = new TopLevelRunnerImpl(
     commandLineArguments, configurationFactory, createRunner, notifications)
