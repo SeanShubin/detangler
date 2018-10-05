@@ -23,8 +23,7 @@ class Reporter(detangled: Detangled,
                graphGenerator: GraphGenerator,
                createProcessBuilder: Seq[String] => ProcessBuilderContract,
                configurationLines: Seq[String],
-               allowCyclesConfigurationLines: Seq[Seq[String]] => Seq[String],
-               notifyNewCycleParts: Seq[Standalone] => Unit) extends (() => ReportResult) {
+               allowCyclesConfigurationLines: Seq[Seq[String]] => Seq[String]) extends (() => ReportResult) {
 
   val summaryTemplate = loadTemplate("summary.html")
   val pageTemplate = loadTemplate("report.html")
@@ -149,14 +148,13 @@ class Reporter(detangled: Detangled,
     val cycles = detangled.cycles()
     val cycleParts = cycles.flatMap(_.parts)
     val newCycleParts = cycleParts.filterNot(allowedCycles.contains)
-    notifyNewCycleParts(newCycleParts)
     val reportIndex = directory.resolve("index.html")
     if (newCycleParts.size == 1) {
-      ReportResult.Failure(reportIndex, "1 new cycle part")
+      ReportResult.Failure(reportIndex, "1 new cycle part", newCycleParts)
     } else if (newCycleParts.nonEmpty) {
-      ReportResult.Failure(reportIndex, s"${newCycleParts.size} new cycle parts")
+      ReportResult.Failure(reportIndex, s"${newCycleParts.size} new cycle parts", newCycleParts)
     } else {
-      ReportResult.Success(reportIndex)
+      ReportResult.Success(reportIndex, newCycleParts)
     }
   }
 }

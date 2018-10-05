@@ -42,8 +42,7 @@ trait ReporterWiring {
     graphGenerator,
     createProcessBuilder,
     configurationWriter.configurationLines(),
-    configurationWriter.configurationLinesAllowCycles,
-    notifications.newCycleParts)
+    configurationWriter.configurationLinesAllowCycles)
 
   def detangled: Detangled
 

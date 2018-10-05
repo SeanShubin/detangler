@@ -6,7 +6,7 @@ import java.time.Duration
 import com.seanshubin.detangler.model.Standalone
 
 trait Notifications {
-  def reportGenerated(indexPath: Path): Unit
+  def reportGenerated(indexPath: Path, cycleParts: Seq[Standalone]): Unit
 
   def effectiveConfiguration(configuration: Configuration)
 
@@ -19,6 +19,4 @@ trait Notifications {
   def endTiming(caption: String, duration: Duration)
 
   def warnNoRelevantClassesInPath(path: Path)
-
-  def newCycleParts(cycleParts: Seq[Standalone])
 }

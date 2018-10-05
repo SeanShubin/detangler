@@ -52,8 +52,6 @@ class ReporterTest extends FunSuite {
       command => ProcessBuilderStub(command, process)
     val allowedInCycles: Seq[Standalone] = Seq()
 
-    def notifyNewCycleParts(newCycleParts: Seq[Standalone]): Unit = {}
-
     val reporter: () => ReportResult = new Reporter(
       SampleData.detangled,
       allowedInCycles,
@@ -68,8 +66,7 @@ class ReporterTest extends FunSuite {
       graphGenerator,
       createProcessBuilder,
       configurationLines,
-      allowCyclesConfigurationLines,
-      notifyNewCycleParts)
+      allowCyclesConfigurationLines)
 
     //when
     reporter.apply()

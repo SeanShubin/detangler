@@ -6,7 +6,7 @@ import java.time.Duration
 import com.seanshubin.detangler.model.Standalone
 
 class NotificationsNotImplemented extends Notifications {
-  override def reportGenerated(indexPath: Path): Unit = ???
+  override def reportGenerated(indexPath: Path, cycleParts: Seq[Standalone]): Unit = ???
 
   override def effectiveConfiguration(configuration: Configuration): Unit = ???
 
@@ -19,6 +19,4 @@ class NotificationsNotImplemented extends Notifications {
   override def endTiming(caption: String, duration: Duration): Unit = ???
 
   override def warnNoRelevantClassesInPath(path: Path): Unit = ???
-
-  override def newCycleParts(cycleParts: Seq[Standalone]): Unit = ???
 }
