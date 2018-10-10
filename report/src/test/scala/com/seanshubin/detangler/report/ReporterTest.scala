@@ -16,6 +16,7 @@ class ReporterTest extends FunSuite {
     val summaryTemplateText = "summary template text"
     val graphTemplateText = "graph template text"
     val reportTemplateText = "report template text"
+    val tableOfContentsTemplateText = "table of contents template text"
     val path = Paths.get("generated", getClass.getSimpleName)
     val charset = StandardCharsets.UTF_8
     val filesStub = new FilesStub(charset)
@@ -27,7 +28,8 @@ class ReporterTest extends FunSuite {
       "style.css" -> "style text",
       "template.html" -> pageTemplateText,
       "summary.html" -> summaryTemplateText,
-      "report.html" -> reportTemplateText
+      "report.html" -> reportTemplateText,
+      "table-of-contents.html" -> tableOfContentsTemplateText
     )
     val configurationLines = Seq("configuration line")
 
@@ -86,6 +88,7 @@ class ReporterTest extends FunSuite {
       "graph--group-b--package-e.html",
       "graph--group-b.html",
       "graph.html",
+      "table-of-contents.html",
       "style.css"
     ))
     assert(setDifference.isSame, setDifference.messageLines.mkString("\n"))
@@ -96,5 +99,7 @@ class ReporterTest extends FunSuite {
     assert(filesStub.stringContentsOf("report--group-a--package-d.html") === "<p>d text</p>")
     assert(filesStub.stringContentsOf("report--group-b--package-e.html") === "<p>e text</p>")
     assert(filesStub.directoriesCreated === Seq(Paths.get("generated", "ReporterTest")))
+    assert(tableOfContentsRules.invocations.size === 1)
+    assert(tableOfContentsRules.invocations(0).text() === "table of contents template text")
   }
 }
