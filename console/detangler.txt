@@ -15,4 +15,6 @@
   logTiming false
   logEffectiveConfiguration false
   allowedInCycle console/detangler-allowed-in-cycle.txt
+  pathsRelativeToCurrentDirectory true
+  pathsRelativeToConfigurationDirectory false
 }

@@ -11,7 +11,9 @@ case class Configuration(reportDir: Path,
                          ignoreJavadoc: Boolean,
                          logTiming: Boolean,
                          logEffectiveConfiguration: Boolean,
-                         allowedInCycle: Path)
+                         allowedInCycle: Path,
+                         pathsRelativeToCurrentDirectory: Boolean,
+                         pathsRelativeToConfigurationDirectory:Boolean)
 
 
 object Configuration {
@@ -25,7 +27,9 @@ object Configuration {
     canFailBuild = false,
     ignoreJavadoc = true,
     logTiming = true,
-    logEffectiveConfiguration = true
+    logEffectiveConfiguration = true,
+    pathsRelativeToCurrentDirectory = true,
+    pathsRelativeToConfigurationDirectory = false
   )
 
   val Sample = Configuration(
@@ -38,7 +42,9 @@ object Configuration {
     canFailBuild = true,
     ignoreJavadoc = true,
     logTiming = true,
-    logEffectiveConfiguration = true)
+    logEffectiveConfiguration = true,
+    pathsRelativeToCurrentDirectory = true,
+    pathsRelativeToConfigurationDirectory = false)
 
   val SampleAllowedInCycles = Seq(Seq("branch"), Seq("tree"), Seq("leaf"))
 }

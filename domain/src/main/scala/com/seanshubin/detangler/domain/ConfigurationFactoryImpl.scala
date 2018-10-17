@@ -20,7 +20,7 @@ class ConfigurationFactoryImpl(files: FilesContract,
       val text = new String(bytes.toArray, charset)
       val devon = devonMarshaller.fromString(text)
       val configWithPossiblyEmpty = devonMarshaller.toValue(devon, classOf[RawConfiguration])
-      val config = configWithPossiblyEmpty.replaceEmptyWithDefaults()
+      val config = configWithPossiblyEmpty.replaceEmptyWithDefaults(configFilePath)
       validateAllowedCycles(config)
     } catch {
       case ex: Throwable =>
