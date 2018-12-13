@@ -61,4 +61,5 @@
     console com.seanshubin.detangler.console.ConsoleApplication
   }
   mavenPlugin [ maven-plugin ]
+  deployableToMavenCentral true
 }
