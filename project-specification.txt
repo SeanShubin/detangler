@@ -2,7 +2,7 @@
   prefix [com seanshubin]
   name [detangler]
   description 'Analyzes dependency structure and cycles'
-  version 0.9.2
+  version 0.9.4
   developer {
     name 'Sean Shubin'
     githubName SeanShubin
@@ -61,4 +61,6 @@
     console com.seanshubin.detangler.console.ConsoleApplication
   }
   mavenPlugin [ maven-plugin ]
+  javaVersion 1.8
+  deployableToMavenCentral true
 }

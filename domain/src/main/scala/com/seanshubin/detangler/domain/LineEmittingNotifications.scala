@@ -46,21 +46,14 @@ class LineEmittingNotifications(devonMarshaller: DevonMarshaller,
     emit(s"WARNING: no relevant classes found in $path, this probably warrants configuring your includes, excludes, or ignored files")
   }
 
-  override def newCycleParts(cycleParts: Seq[Standalone]): Unit = {
+  override def reportGenerated(indexPath: Path, cycleParts: Seq[Standalone]): Unit = {
     if (cycleParts.isEmpty) {
-      emit("SUCCESS: no new cycles")
+      emit(s"SUCCESS: see report at $indexPath")
     } else {
       val cycleName = if (cycleParts.size == 1) "cycle" else "cycles"
       emit(s"FAILURE: ${cycleParts.size} new $cycleName")
       cycleParts.map(_.toString).foreach(emit)
     }
-  }
-
-
-  override def reportGenerated(indexPath: Path): Unit = {
-    emit("")
-    emit("Detangler finished, see report at:")
-    emit(indexPath.toString)
   }
 
   private def exceptionLines(ex: Throwable): Seq[String] = {

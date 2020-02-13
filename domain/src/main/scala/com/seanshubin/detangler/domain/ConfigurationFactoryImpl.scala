@@ -1,34 +1,39 @@
 package com.seanshubin.detangler.domain
 
 import java.nio.charset.Charset
-import java.nio.file.Paths
+import java.nio.file.{Path, Paths}
 
 import com.seanshubin.detangler.contract.FilesContract
 import com.seanshubin.devon.domain.DevonMarshaller
+
+import scala.collection.JavaConverters._
 
 class ConfigurationFactoryImpl(files: FilesContract,
                                devonMarshaller: DevonMarshaller,
                                charset: Charset) extends ConfigurationFactory {
   override def validate(args: Seq[String]): Either[Seq[String], (Configuration, Seq[Seq[String]])] = {
-    if (args.length == 1) {
-      val configFilePath = Paths.get(args(0))
-      try {
-        if (files.exists(configFilePath)) {
-          val bytes = files.readAllBytes(configFilePath)
-          val text = new String(bytes.toArray, charset)
-          val devon = devonMarshaller.fromString(text)
-          val configWithNulls = devonMarshaller.toValue(devon, classOf[Configuration])
-          val config = configWithNulls.replaceNullsWithDefaults()
-          validateAllowedCycles(config)
-        } else {
-          createError(s"Configuration file named '$configFilePath' not found")
-        }
-      } catch {
-        case ex: Throwable =>
-          createError(s"There was a problem reading the configuration file '$configFilePath': ${ex.getMessage}")
-      }
-    } else {
-      createError("Expected exactly one argument, the name of the configuration file")
+    val configFileName = if (args.length < 1) "detangler.txt" else args(0)
+    val configFilePath = Paths.get(configFileName)
+    try {
+      handleMissingConfiguration(configFilePath)
+      val bytes = files.readAllBytes(configFilePath)
+      val text = new String(bytes.toArray, charset)
+      val devon = devonMarshaller.fromString(text)
+      val configWithPossiblyEmpty = devonMarshaller.toValue(devon, classOf[RawConfiguration])
+      val config = configWithPossiblyEmpty.replaceEmptyWithDefaults(configFilePath)
+      validateAllowedCycles(config)
+    } catch {
+      case ex: Throwable =>
+        createError(s"There was a problem reading the configuration file '$configFilePath': ${ex.getMessage}")
+    }
+  }
+
+  private def handleMissingConfiguration(configFilePath: Path) = {
+    if (!files.exists(configFilePath)) {
+      files.createFile(configFilePath)
+      val configuration = Configuration.Default
+      val lines = devonMarshaller.valueToPretty(configuration)
+      files.write(configFilePath, lines.asJava)
     }
   }
 

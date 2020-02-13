@@ -13,6 +13,7 @@ object Compare {
     def newLessThan(x: T, y: T): Boolean = {
       compareFunction(x, y) < 0
     }
+
     newLessThan
   }
 
@@ -29,9 +30,11 @@ object Compare {
         }
       }
     }
+
     def mergedCompareFunction(x: T, y: T): Int = {
       recursiveCompare(compareFunctions.toList, x, y)
     }
+
     mergedCompareFunction
   }
 
@@ -50,6 +53,7 @@ object Compare {
           }
       }
     }
+
     compareSeqFunction
   }
 

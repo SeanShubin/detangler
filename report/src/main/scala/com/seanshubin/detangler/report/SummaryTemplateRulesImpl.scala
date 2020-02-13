@@ -20,13 +20,13 @@ class SummaryTemplateRulesImpl(detangled: Detangled, allowedCycles: Seq[Standalo
     empty.
       replaceOrRemove("#new-cycle-parts", newCyclesFragment).
       replaceOrRemove("#no-longer-part-of-cycle", removedCyclesFragment).
-      replace("#table-of-contents", tableOfContentsFragment).
+      replace("#summary", tableOfContentsFragment).
       replace("#entry-points", entryPointsFragment).
       replace("#cycles", cyclesFragment)
   }
 
   private def generateTableOfContents(template: HtmlElement): HtmlElement = {
-    val tableOfContentsFragment = template.select("#table-of-contents")
+    val tableOfContentsFragment = template.select("#summary")
     val rootLink = HtmlRender.reportPageLink(Standalone.Root)
     val rootName = HtmlRender.reportPageLinkName(Standalone.Root)
     tableOfContentsFragment.anchor(".root", rootLink, rootName)
@@ -38,7 +38,9 @@ class SummaryTemplateRulesImpl(detangled: Detangled, allowedCycles: Seq[Standalo
     } else {
       val emptyTemplate = template.remove(".new-cycle-part")
       val rowTemplate = template.select(".new-cycle-part")
+
       def generateNewCycleFunction(standalone: Standalone): HtmlElement = generateNewCycle(rowTemplate, standalone)
+
       val fragments = cycleParts.map(generateNewCycleFunction)
       val cyclesFragment = emptyTemplate.append(".append-new-cycle-part", fragments).text(".caption", caption)
       Some(cyclesFragment)
@@ -72,7 +74,9 @@ class SummaryTemplateRulesImpl(detangled: Detangled, allowedCycles: Seq[Standalo
   private def generateCycles(template: HtmlElement, cycles: Seq[Cycle]): HtmlElement = {
     val emptyCyclesFragment = template.select("#cycles").remove(".cycle")
     val cycleTemplate = template.select(".cycle")
+
     def generateCycleFunction(cycle: Cycle): HtmlElement = generateCycle(cycleTemplate, cycle)
+
     val cycleFragments = cycles.map(generateCycleFunction)
     val cyclesFragment = emptyCyclesFragment.append(".append-cycle", cycleFragments)
     cyclesFragment
@@ -81,7 +85,9 @@ class SummaryTemplateRulesImpl(detangled: Detangled, allowedCycles: Seq[Standalo
   private def generateCycle(cycleTemplate: HtmlElement, cycle: Cycle): HtmlElement = {
     val emptyCycleTemplate = cycleTemplate.remove(".cycle-part")
     val cyclePartTemplate = cycleTemplate.select(".cycle-part")
+
     def generateCyclePartFunction(cyclePart: Standalone): HtmlElement = generateCyclePart(cyclePartTemplate, cyclePart)
+
     val cyclePartFragments = cycle.parts.toSeq.sortWith(Compare.lessThan(Standalone.compare)).map(generateCyclePartFunction)
     val parentLink = HtmlRender.reportPageLink(cycle.parent)
     val parentName = HtmlRender.standaloneLinkQualifiedName(cycle.parent)
@@ -117,6 +123,7 @@ class SummaryTemplateRulesImpl(detangled: Detangled, allowedCycles: Seq[Standalo
     def generateEntryPointFunction(standalone: Standalone): HtmlElement = {
       generateEntryPoint(template, standalone)
     }
+
     entryPoints.map(generateEntryPointFunction)
   }
 

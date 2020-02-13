@@ -10,7 +10,9 @@ class ScannerImpl(directoryScanner: DirectoryScanner,
                   timer: Timer) extends Scanner {
   override def scanDependencies(): Iterable[(String, Seq[String])] = {
     val files: Iterable[Path] = directoryScanner.findFiles()
+
     def scanFile(file: Path): Iterable[Seq[Byte]] = fileScanner.loadBytes(file)
+
     val classBytesSeq = timer.measureTime("load bytes")(files.flatMap(scanFile))
     val dependencies = timer.measureTime("parse classes")(classBytesSeq.map(classBytesScanner.parseDependencies))
     dependencies

@@ -33,12 +33,15 @@ class TreeTest extends FunSuite {
 
   test("map function over tree") {
     val tree = Tree.Empty.add(classF).add(classG).add(classH).add(classI)
+
     def composeName(value: Unit, path: Seq[String]): String = {
       def modifyPathPart(pathPart: String): String = {
         pathPart.dropWhile(_ != '/').tail
       }
+
       path.map(modifyPathPart).mkString("(", "", ")")
     }
+
     val actual = tree.mapOverTree(composeName)
     assert(actual.value(root) === "()")
     assert(actual.value(groupA) === "(a)")
@@ -54,12 +57,15 @@ class TreeTest extends FunSuite {
 
   test("breadth first") {
     val tree = Tree.Empty.add(classF).add(classG).add(classH).add(classI)
+
     def composeName(value: Unit, path: Seq[String]): String = {
       def modifyPathPart(pathPart: String): String = {
         pathPart.dropWhile(_ != '/').tail
       }
+
       path.map(modifyPathPart).mkString("(", "", ")")
     }
+
     val actual = tree.breadthFirst()
     val expected = Seq(
       root,

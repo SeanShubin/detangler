@@ -11,7 +11,7 @@ class ConfigurationWriterDevon(configuration: Configuration,
     val compareSeqFunction = Compare.composeCompareSeqFunction(Ordering.String.compare)
     val seqLessThanFunction = Compare.lessThan(compareSeqFunction)
     val sortedAllowedInCycle = listify(allowedInCycle).sortWith(seqLessThanFunction)
-    devonMarshaller.valueToPretty(sortedAllowedInCycle)
+    sortedAllowedInCycle.flatMap(x => devonMarshaller.valueToPretty(x))
   }
 
   private def listify(seq: Seq[Seq[String]]): List[List[String]] = seq.map(_.toList).toList

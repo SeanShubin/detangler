@@ -32,7 +32,9 @@ class CycleTemplateRulesImpl(detangled: Detangled,
 
   def generateDetail(detailTemplate: HtmlElement, context: Standalone, cycle: Cycle): HtmlElement = {
     val cyclePartTemplate = detailTemplate.select(".cycle-part")
+
     def generateCyclePartFunction(part: Standalone) = generateCyclePart(cyclePartTemplate, context, part)
+
     val cycleParts = detangled.cycleParts(cycle).map(generateCyclePartFunction)
     val result = detailTemplate.remove(".cycle-part").append(".append-cycle-part", cycleParts)
     result

@@ -4,6 +4,7 @@ case class DependencyAccumulator[T](dependencies: Map[T, Set[T]]) {
   def addValues(target: T, dependsOn: Seq[T]): DependencyAccumulator[T] = {
     if (dependencies.contains(target)) {
       def addParameterValue(soFar: DependencyAccumulator[T], parameterValue: T) = soFar.addValue(target, parameterValue)
+
       dependsOn.foldLeft(this)(addParameterValue)
     } else {
       addKey(target).addValues(target, dependsOn)
@@ -13,11 +14,14 @@ case class DependencyAccumulator[T](dependencies: Map[T, Set[T]]) {
   def transpose(): DependencyAccumulator[T] = {
     def transposeAndAddValues(accumulator: DependencyAccumulator[T], entry: (T, Set[T])): DependencyAccumulator[T] = {
       val (key, values) = entry
+
       def transposeAndAddValue(accumulator: DependencyAccumulator[T], value: T): DependencyAccumulator[T] = {
         accumulator.addValue(value, key)
       }
+
       values.foldLeft(accumulator)(transposeAndAddValue)
     }
+
     dependencies.foldLeft(keysOnly)(transposeAndAddValues)
   }
 
@@ -52,6 +56,7 @@ object DependencyAccumulator {
       val (key, values) = entry
       accumulator.addValues(key, values)
     }
+
     val emptyMap: Map[T, Set[T]] = Map()
     val empty: DependencyAccumulator[T] = DependencyAccumulator(emptyMap)
     iterable.foldLeft(empty)(addEntry)

@@ -35,7 +35,8 @@ trait AfterConfigurationWiring {
     level,
     startsWithInclude,
     startsWithExclude,
-    startsWithDrop)
+    startsWithDrop,
+    ignoreJavadoc)
   lazy val acceptNameFunction: String => Boolean = new AcceptNameFunction(stringToStandaloneFunction)
   lazy val zipScanner: ZipScanner = new ZipScannerImpl(
     filesContract,
@@ -43,7 +44,7 @@ trait AfterConfigurationWiring {
     acceptNameFunction,
     notifications.warnNoRelevantClassesInPath)
   lazy val classScanner: ClassScanner = new ClassScannerImpl(filesContract)
-  lazy val timer: Timer = new TimerImpl(clock, notifications.startTiming, notifications.endTiming)
+  lazy val timer: Timer = new TimerImpl(clock, logTiming, notifications.startTiming, notifications.endTiming)
   lazy val fileScanner: FileScanner = new FileScannerImpl(zipScanner, classScanner, timer)
   lazy val classParser: ClassParser = new ClassParserImpl
   lazy val classBytesScanner: ClassBytesScanner = new ClassBytesScannerImpl(classParser)
@@ -86,4 +87,8 @@ trait AfterConfigurationWiring {
   def ignoreFiles: Seq[Path]
 
   def canFailBuild: Boolean
+
+  def ignoreJavadoc: Boolean
+
+  def logTiming: Boolean
 }

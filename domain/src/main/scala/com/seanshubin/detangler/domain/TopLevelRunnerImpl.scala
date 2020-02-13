@@ -9,7 +9,9 @@ class TopLevelRunnerImpl(args: Seq[String],
     errorOrConfiguration match {
       case Left(error) => notifications.configurationError(error)
       case Right((configuration, allowedCycles)) =>
-        notifications.effectiveConfiguration(configuration)
+        if (configuration.logEffectiveConfiguration) {
+          notifications.effectiveConfiguration(configuration)
+        }
         createRunner(configuration, allowedCycles).run()
     }
   }

@@ -37,7 +37,9 @@ class ZipContentsIteratorTest extends FunSuite {
         |data.zip/zip-a.zip/dir-a/zip-f.zip/dir-f/file-k.txt
         |  Hello K!
         |data.zip/zip-g.zip/dir-g/""".stripMargin.split( """\r\n|\r|\n""")
+
     def isZip(name: String) = name.endsWith(".zip")
+
     def operateOnCursor(cursor: ZipContents): Seq[String] = {
       val ZipContents(path, zipEntry, bytes) = cursor
       val pathString = (path :+ zipEntry.getName).mkString("/")
@@ -48,6 +50,7 @@ class ZipContentsIteratorTest extends FunSuite {
         Seq(pathString, "  " + content)
       }
     }
+
     val name = "data.zip"
     val inputStream = getClass.getClassLoader.getResourceAsStream(name)
     val iterator = new ZipContentsIterator(inputStream, name, isZip, ZipContentsIterator.AcceptAll)

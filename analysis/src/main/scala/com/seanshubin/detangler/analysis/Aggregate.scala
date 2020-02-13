@@ -41,6 +41,7 @@ case class Aggregate(modules: Map[Module, Metrics],
       partOfCycle = None
     )
     val cycleEntry = (cycle, metrics)
+
     def createMetricsEntryForCyclePart(cyclePart: Standalone): (Module, Metrics) = {
       val directDependencies = dependsOnMap(cyclePart)
       val cyclePartsNotMe = cycleParts.diff(Set(cyclePart))
@@ -57,6 +58,7 @@ case class Aggregate(modules: Map[Module, Metrics],
       )
       (cyclePart, metrics)
     }
+
     val cyclePartEntries = cycleParts.map(createMetricsEntryForCyclePart)
     val newEntries = cycleEntry +: cyclePartEntries.toSeq
     this.copy(modules = modules ++ newEntries)

@@ -11,6 +11,7 @@ object SeqDifference {
         val isSame = false
         DifferenceResult(isSame, messageLines)
       }
+
       (remainA, remainB) match {
         case (headA :: tailA, headB :: tailB) =>
           if (headA == headB) {
@@ -28,6 +29,7 @@ object SeqDifference {
           DifferenceResult(isSame, messageLines)
       }
     }
+
     buildSeqDifference(0, Nil, a.toList, b.toList)
   }
 

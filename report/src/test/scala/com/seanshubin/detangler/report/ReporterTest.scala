@@ -16,20 +16,25 @@ class ReporterTest extends FunSuite {
     val summaryTemplateText = "summary template text"
     val graphTemplateText = "graph template text"
     val reportTemplateText = "report template text"
+    val tableOfContentsTemplateText = "table of contents template text"
     val path = Paths.get("generated", getClass.getSimpleName)
     val charset = StandardCharsets.UTF_8
     val filesStub = new FilesStub(charset)
     val graphTarget = Seq("graph target")
     val graphTemplateElement = HtmlElement.fragmentFromString("<p>graph</p>")
+    val tableOfContentsTemplateElement = HtmlElement.fragmentFromString("<p>table-of-contents</p>")
     val resourceMap = Map(
       "graph.html" -> graphTemplateText,
       "style.css" -> "style text",
       "template.html" -> pageTemplateText,
       "summary.html" -> summaryTemplateText,
-      "report.html" -> reportTemplateText
+      "report.html" -> reportTemplateText,
+      "table-of-contents.html" -> tableOfContentsTemplateText
     )
     val configurationLines = Seq("configuration line")
+
     def allowCyclesConfigurationLines(cycles: Seq[Seq[String]]): Seq[String] = Seq("allow cycles configuration line")
+
     val classLoader = new ClassLoaderStub(resourceMap, charset)
     val pageTextMap = Map(
       SampleData.root -> "<p>index text</p>",
@@ -41,13 +46,13 @@ class ReporterTest extends FunSuite {
     )
     val pageTemplateRules = new PageTemplateRulesStub(pageTextMap, charset)
     val graphTemplateRules = new GraphTemplateRulesStub(graphTemplateElement)
+    val tableOfContentsRules = new TableOfContentsTemplateRulesStub(tableOfContentsTemplateElement)
     val summaryTemplateRules = new SummaryTemplateRulesStub()
     val graphGenerator: GraphGenerator = new GraphGeneratorStub(graphTarget)
     val process = new ProcessStub
     val createProcessBuilder: Seq[String] => ProcessBuilderContract =
-      (command) => new ProcessBuilderStub(command, process)
+      command => ProcessBuilderStub(command, process)
     val allowedInCycles: Seq[Standalone] = Seq()
-    def notifyNewCycleParts(newCycleParts: Seq[Standalone]): Unit = {}
 
     val reporter: () => ReportResult = new Reporter(
       SampleData.detangled,
@@ -59,11 +64,11 @@ class ReporterTest extends FunSuite {
       summaryTemplateRules,
       pageTemplateRules,
       graphTemplateRules,
+      tableOfContentsRules,
       graphGenerator,
       createProcessBuilder,
       configurationLines,
-      allowCyclesConfigurationLines,
-      notifyNewCycleParts)
+      allowCyclesConfigurationLines)
 
     //when
     reporter.apply()
@@ -83,6 +88,7 @@ class ReporterTest extends FunSuite {
       "graph--group-b--package-e.html",
       "graph--group-b.html",
       "graph.html",
+      "table-of-contents.html",
       "style.css"
     ))
     assert(setDifference.isSame, setDifference.messageLines.mkString("\n"))
@@ -93,5 +99,7 @@ class ReporterTest extends FunSuite {
     assert(filesStub.stringContentsOf("report--group-a--package-d.html") === "<p>d text</p>")
     assert(filesStub.stringContentsOf("report--group-b--package-e.html") === "<p>e text</p>")
     assert(filesStub.directoriesCreated === Seq(Paths.get("generated", "ReporterTest")))
+    assert(tableOfContentsRules.invocations.size === 1)
+    assert(tableOfContentsRules.invocations(0).text() === "table of contents template text")
   }
 }

@@ -47,12 +47,14 @@ object LinesDifference {
 
   private def createLineFormatter(lineCount: Int): ((String, Int)) => String = {
     val width = lineCount.toString.length
+
     def formatLine(lineWithIndex: (String, Int)): String = {
       val (line, index) = lineWithIndex
       val lineNumber = index + 1
       val formattedLineNumber = f"($lineNumber%1d)"
       s"$formattedLineNumber $line"
     }
+
     formatLine
   }
 

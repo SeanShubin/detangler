@@ -13,6 +13,7 @@ class DependencyTemplateRulesImpl(detangled: Detangled, dependencyDirection: Dep
       None
     } else {
       def generateRowFunction(x: Standalone) = generateRow(dependencyRowTemplate, context, module, x)
+
       val rows = childModules.map(generateRowFunction)
       val result = baseTemplate.
         text(".caption", s"${dependencyDirection.caption} (${childModules.size})").

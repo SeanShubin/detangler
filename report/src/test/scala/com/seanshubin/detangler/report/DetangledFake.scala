@@ -51,6 +51,8 @@ class DetangledFake(theRoot: Standalone, map: Map[Module, ModuleInfo], val level
     reasonsFor(parts, parts)
   }
 
+  override def allStandalone(): Seq[Standalone] = ???
+
   private def reasonsFor(leftParts: Seq[Standalone], rightParts: Seq[Standalone]): Seq[Reason] = {
     for {
       fromPart <- leftParts
